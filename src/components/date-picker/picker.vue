@@ -393,7 +393,7 @@
                             return [d.getFullYear(), d.getMonth(), d.getDate()].slice(0, sliceIndex).join('-');
                         };
                         const dateIsValid = panels.find(({cells}) => {
-                            return cells.find(({date, disabled}) => compareDate(date) === compareDate(this.focusedDate) && !disabled);
+                            return cells.find(({date, disabled, type}) => !disabled && type !== 'weekLabel' && compareDate(date) === compareDate(this.focusedDate));
                         });
                         if (dateIsValid) this.onPick(this.focusedDate, false, 'date');
                     }
