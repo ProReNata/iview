@@ -514,8 +514,7 @@
                         }
                     } else if (nextDay > lastOfMonth){
                         if (direction.match(/left|right/)) {
-                            focusedDate.setMonth(focusedDate.getMonth() - 1);
-                            focusedDate.setDate(nextDay);
+                            focusedDate.setDate(1);
                         } else {
                             focusedDate.setDate(startDay % 7);
                         }
