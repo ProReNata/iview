@@ -44,10 +44,7 @@
                         tabindex="0"
                         @focus="handleFocus('min')"
                         @blur="handleBlur('min')"
-                        @keydown.left="onKeyLeft($event, 'min')"
-                        @keydown.down="onKeyLeft($event, 'min')"
-                        @keydown.right="onKeyRight($event, 'min')"
-                        @keydown.up="onKeyRight($event, 'min')"
+                        @keydown="onKeydown($event, 'min')"
                     ></div>
                 </Tooltip>
             </div>
@@ -69,10 +66,7 @@
                         tabindex="0"
                         @focus="handleFocus('max')"
                         @blur="handleBlur('max')"
-                        @keydown.left="onKeyLeft($event, 'max')"
-                        @keydown.down="onKeyLeft($event, 'max')"
-                        @keydown.right="onKeyRight($event, 'max')"
-                        @keydown.up="onKeyRight($event, 'max')"
+                        @keydown="onKeydown($event, 'max')"
                     ></div>
                 </Tooltip>
             </div>
@@ -389,6 +383,20 @@
 
             handleBlur (type) {
                 this.$refs[`${type}Tooltip`].handleClosePopper();
+            },
+
+            onKeydown(event, range) {
+                const {key} = event;
+
+                if (oneOf(key, ['Up', 'ArrowUp'])) {
+                    this.onKeyRight(event, range);
+                } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+                    this.onKeyLeft(event, range);
+                } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+                    this.onKeyLeft(event, range);
+                } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+                    this.onKeyRight(event, range);
+                }
             }
         },
         mounted () {

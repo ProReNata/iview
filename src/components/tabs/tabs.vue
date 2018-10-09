@@ -6,7 +6,7 @@
                 :class="[prefixCls + '-nav-container']"
                 tabindex="0"
                 ref="navContainer"
-                @keydown="handleTabKeyNavigation"
+                @keydown="onKeydown"
                 @keydown.space.prevent="handleTabKeyboardSelect(false)"
             >
                 <div ref="navWrap" :class="[prefixCls + '-nav-wrap', scrollable ? prefixCls + '-nav-scrollable' : '']">
@@ -51,7 +51,7 @@
         try {element.focus();}
         catch(err) {} // eslint-disable-line no-empty
 
-        if (document.activeElement == element && element !== root) return true;
+        if (document.activeElement === element && element !== root) return true;
 
         const candidates = element.children;
         for (let candidate of candidates) {
@@ -387,6 +387,16 @@
                         }, transitionTime);
                     }
                 });
+            },
+            onKeydown(event) {
+                const {key} = event;
+
+                if (oneOf(key, [' ', 'Space', 'Spacebar'])) {
+                    event.preventDefault();
+                    this.handleTabKeyboardSelect(false);
+                } else {
+                    this.handleTabKeyNavigation(event);
+                }
             }
         },
         watch: {

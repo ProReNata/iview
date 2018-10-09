@@ -3,7 +3,7 @@
         tabindex="0"
         :class="wrapClasses"
         @click="toggle"
-        @keydown.space="toggle"
+        @keydown="onKeydown"
     >
         <input type="hidden" :name="name" :value="currentValue">
         <span :class="innerClasses">
@@ -80,6 +80,11 @@
                 this.$emit('input', checked);
                 this.$emit('on-change', checked);
                 this.dispatch('FormItem', 'on-form-change', checked);
+            },
+            onKeydown(event) {
+                if (oneOf(event.key, [' ', 'Space', 'Spacebar'])) {
+                    this.toggle(event);
+                }
             }
         },
         watch: {

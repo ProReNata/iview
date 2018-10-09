@@ -1,12 +1,12 @@
 <template>
-    <div :class="[prefixCls + '-confirm']" @keydown.tab.capture="handleTab">
+    <div ref="confirm" :class="[prefixCls + '-confirm']" @keydown.capture="onKeydown">
         <i-button :class="timeClasses" size="small" type="text" :disabled="timeDisabled" v-if="showTime" @click="handleToggleTime">
             {{labels.time}}
         </i-button>
-        <i-button size="small" type="ghost" @click.native="handleClear" @keydown.enter.native="handleClear">
+        <i-button ref="clear" size="small" type="ghost" @click.native="handleClear" @keydown.native="onKeydown">
             {{labels.clear}}
         </i-button>
-        <i-button size="small" type="primary" @click.native="handleSuccess" @keydown.enter.native="handleSuccess">
+        <i-button ref="success" size="small" type="primary" @click.native="handleSuccess" @keydown.native="onKeydown">
             {{labels.ok}}
         </i-button>
     </div>
@@ -64,6 +64,19 @@
                     e.preventDefault();
                     e.stopPropagation();
                     this.dispatch('CalendarPicker', 'focus-input');
+                }
+            },
+            onKeydown(event) {
+                const {key, target} = event;
+
+                if (key === 'Tab' && target === this.$refs.confirm) {
+                    this.handleTab(event);
+                } else if (key === 'Enter') {
+                    if (target === this.$refs.clear) {
+                        this.handleClear(event);
+                    } else if (target === this.$refs.success) {
+                        this.handleSuccess(event);
+                    }
                 }
             }
         }

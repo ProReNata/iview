@@ -3,11 +3,7 @@
         :class="[prefixCls + '-alpha']"
         tabindex="0"
         @click="$el.focus()"
-        @keydown.esc="handleEscape"
-        @keydown.left="handleLeft"
-        @keydown.right="handleRight"
-        @keydown.up="handleUp"
-        @keydown.down="handleDown"
+        @keydown="onKeydown"
     >
         <div :class="[prefixCls + '-alpha-checkboard-wrap']">
             <div :class="[prefixCls + '-alpha-checkerboard']"></div>
@@ -34,6 +30,7 @@
 import HSAMixin from './hsaMixin';
 import Prefixes from './prefixMixin';
 import {clamp, toRGBAString} from './utils';
+import { oneOf } from '../../utils/assist';
 
 export default {
     name: 'Alpha',
@@ -97,6 +94,21 @@ export default {
             }
 
             this.change(Math.round(left * 100 / clientWidth) / 100);
+        },
+        onKeydown(event) {
+            const {key} = event;
+
+            if (oneOf(key, ['Esc', 'Escape'])) {
+                this.handleEscape(event);
+            } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+                this.handleUp(event);
+            } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+                this.handleDown(event);
+            } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+                this.handleLeft(event);
+            } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+                this.handleRight(event);
+            }
         },
     },
 };

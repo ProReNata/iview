@@ -8,23 +8,24 @@
             :class="singleDisplayClasses"
             v-show="singleDisplayValue"
         >{{ singleDisplayValue }}</span>
-        <input
-            :id="inputElementId"
-            type="text"
-            v-if="filterable"
-            v-model="query"
-            :disabled="disabled"
-            :class="[prefixCls + '-input']"
-            :placeholder="showPlaceholder ? localePlaceholder : ''"
-            :style="inputStyle"
-            autocomplete="off"
-            spellcheck="false"
-            @keydown="resetInputState"
-            @keydown.delete="handleInputDelete"
-            @focus="onInputFocus"
-            @blur="onInputFocus"
+        <label>
+            <input
+                :id="inputElementId"
+                type="text"
+                v-if="filterable"
+                v-model="query"
+                :disabled="disabled"
+                :class="[prefixCls + '-input']"
+                :placeholder="showPlaceholder ? localePlaceholder : ''"
+                :style="inputStyle"
+                autocomplete="off"
+                spellcheck="false"
+                @keydown="onKeydown"
+                @focus="onInputFocus"
+                @blur="onInputFocus"
 
-            ref="input">
+                ref="input">
+        </label>
         <Icon type="ios-close" :class="[prefixCls + '-arrow']" v-if="resetSelect" @click.native.stop="onClear"></Icon>
         <Icon type="arrow-down-b" :class="[prefixCls + '-arrow']" v-if="!resetSelect && !remote && !disabled"></Icon>
     </div>
@@ -33,6 +34,7 @@
     import Icon from '../icon';
     import Emitter from '../../mixins/emitter';
     import Locale from '../../mixins/locale';
+    import {oneOf} from '../../utils/assist';
 
     const prefixCls = 'ivu-select';
 
@@ -168,6 +170,13 @@
             },
             onClear(){
                 this.$emit('on-clear');
+            },
+            onKeydown(event) {
+                if (oneOf(event.key, ['Backspace', 'Delete'])) {
+                    this.handleInputDelete(event);
+                }
+
+                this.resetInputState(event);
             }
         },
         watch: {

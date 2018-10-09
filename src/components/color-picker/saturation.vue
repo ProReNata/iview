@@ -2,12 +2,8 @@
     <div
         :class="[prefixCls + '-saturation-wrapper']"
         tabindex="0"
-        @keydown.esc="handleEscape"
         @click="$el.focus()"
-        @keydown.left="handleLeft"
-        @keydown.right="handleRight"
-        @keydown.up="handleUp"
-        @keydown.down="handleDown"
+        @keydown="onKeydown"
     >
         <div
             ref="container"
@@ -30,6 +26,7 @@ import HSAMixin from './hsaMixin';
 import Prefixes from './prefixMixin';
 import {clamp, getIncrement} from './utils';
 import { on, off } from '../../utils/dom';
+import { oneOf } from '../../utils/assist';
 
 export default {
     name: 'Saturation',
@@ -95,6 +92,21 @@ export default {
             HSAMixin.methods.unbindEventListeners.call(this, e);
 //            window.removeEventListener('mouseup', this.handleChange);
             off(window, 'mouseup', this.handleChange);
+        },
+        onKeydown(event) {
+            const {key} = event;
+
+            if (oneOf(key, ['Esc', 'Escape'])) {
+                this.handleEscape(event);
+            } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+                this.handleUp(event);
+            } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+                this.handleDown(event);
+            } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+                this.handleLeft(event);
+            } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+                this.handleRight(event);
+            }
         },
     },
 };

@@ -7,56 +7,58 @@
             <transition name="fade">
                 <i class="ivu-icon ivu-icon-load-c ivu-load-loop" :class="[prefixCls + '-icon', prefixCls + '-icon-validate']" v-if="!icon"></i>
             </transition>
-            <input
+            <label>
+                <input
+                    :id="elementId"
+                    :autocomplete="autocomplete"
+                    :spellcheck="spellcheck"
+                    ref="input"
+                    :type="type"
+                    :class="inputClasses"
+                    :placeholder="placeholder"
+                    :disabled="disabled"
+                    :maxlength="maxlength"
+                    :readonly="readonly"
+                    :name="name"
+                    :value="currentValue"
+                    :number="number"
+                    :autofocus="autofocus"
+                    @keyup="onKeyup"
+                    @keypress="handleKeypress"
+                    @keydown="handleKeydown"
+                    @focus="handleFocus"
+                    @blur="handleBlur"
+                    @input="handleInput"
+                    @change="handleChange">
+            </label>
+            <div :class="[prefixCls + '-group-append']" v-if="append" v-show="slotReady"><slot name="append"></slot></div>
+        </template>
+        <label>
+            <textarea
+                v-else
                 :id="elementId"
+                :wrap="wrap"
                 :autocomplete="autocomplete"
                 :spellcheck="spellcheck"
-                ref="input"
-                :type="type"
-                :class="inputClasses"
+                ref="textarea"
+                :class="textareaClasses"
+                :style="textareaStyles"
                 :placeholder="placeholder"
                 :disabled="disabled"
+                :rows="rows"
                 :maxlength="maxlength"
                 :readonly="readonly"
                 :name="name"
                 :value="currentValue"
-                :number="number"
                 :autofocus="autofocus"
-                @keyup.enter="handleEnter"
-                @keyup="handleKeyup"
+                @keyup="onKeyup"
                 @keypress="handleKeypress"
                 @keydown="handleKeydown"
                 @focus="handleFocus"
                 @blur="handleBlur"
-                @input="handleInput"
-                @change="handleChange">
-            <div :class="[prefixCls + '-group-append']" v-if="append" v-show="slotReady"><slot name="append"></slot></div>
-        </template>
-        <textarea
-            v-else
-            :id="elementId"
-            :wrap="wrap"
-            :autocomplete="autocomplete"
-            :spellcheck="spellcheck"
-            ref="textarea"
-            :class="textareaClasses"
-            :style="textareaStyles"
-            :placeholder="placeholder"
-            :disabled="disabled"
-            :rows="rows"
-            :maxlength="maxlength"
-            :readonly="readonly"
-            :name="name"
-            :value="currentValue"
-            :autofocus="autofocus"
-            @keyup.enter="handleEnter"
-            @keyup="handleKeyup"
-            @keypress="handleKeypress"
-            @keydown="handleKeydown"
-            @focus="handleFocus"
-            @blur="handleBlur"
-            @input="handleInput">
-        </textarea>
+                @input="handleInput">
+            </textarea>
+        </label>
     </div>
 </template>
 <script>
@@ -262,6 +264,13 @@
                 this.$emit('input', '');
                 this.setCurrentValue('');
                 this.$emit('on-change', e);
+            },
+            onKeyup(event) {
+                if (event.key === 'Enter') {
+                    this.handleEnter(event);
+                } else {
+                    this.handleKeyup(event);
+                }
             }
         },
         watch: {

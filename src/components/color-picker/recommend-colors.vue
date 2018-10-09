@@ -3,12 +3,7 @@
         ref="reference"
         tabindex="0"
         @click="handleClick"
-        @keydown.esc="handleEscape"
-        @keydown.enter="handleEnter"
-        @keydown.left="handleArrow($event, 'x', left)"
-        @keydown.right="handleArrow($event, 'x', right)"
-        @keydown.up="handleArrow($event, 'y', up)"
-        @keydown.down="handleArrow($event, 'y', down)"
+        @keydown="onKeydown"
         @blur="blurColor"
         @focus="focusColor"
     >
@@ -36,6 +31,7 @@ import Emitter from '../../mixins/emitter';
 import HandleEscapeMixin from './handleEscapeMixin';
 import Prefixes from './prefixMixin';
 import {clamp} from './utils';
+import { oneOf } from '../../utils/assist';
 
 export default {
     name: 'RecommendedColors',
@@ -147,6 +143,23 @@ export default {
             const nextIndex = index + 1;
 
             return nextIndex < list.length && nextIndex % this.columns === 0;
+        },
+        onKeydown(event) {
+            const {key} = event;
+
+            if (oneOf(key, ['Esc', 'Escape'])) {
+                this.handleEscape(event);
+            } else if (key === 'Enter') {
+                this.handleEnter(event);
+            } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+                this.handleArrow(event, 'y', this.up);
+            } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+                this.handleArrow(event, 'y', this.down);
+            } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+                this.handleArrow(event, 'x', this.left);
+            } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+                this.handleArrow(event, 'x', this.right);
+            }
         },
     },
 };

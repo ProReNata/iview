@@ -14,13 +14,7 @@
             @focus="toggleHeaderFocus"
 
             @click="toggleMenu"
-            @keydown.esc="handleKeydown"
-            @keydown.enter="handleKeydown"
-            @keydown.up.prevent="handleKeydown"
-            @keydown.down.prevent="handleKeydown"
-            @keydown.tab="handleKeydown"
-            @keydown.delete="handleKeydown"
-
+            @keydown="onKeydown"
 
             @mouseenter="hasMouseHoverHead = true"
             @mouseleave="hasMouseHoverHead = false"
@@ -525,39 +519,41 @@
                 this.values = [];
             },
             handleKeydown (e) {
-                if (e.key === 'Backspace'){
+                const {key} = e;
+
+                if (oneOf(key, ['Backspace', 'Delete'])) {
                     return; // so we don't call preventDefault
                 }
 
                 if (this.visible) {
                     e.preventDefault();
-                    if (e.key === 'Tab'){
+                    if (key === 'Tab'){
                         e.stopPropagation();
                     }
 
                     // Esc slide-up
-                    if (e.key === 'Escape') {
+                    if (oneOf(key, ['Esc', 'Escape'])) {
                         e.stopPropagation();
                         this.hideMenu();
                     }
                     // next
-                    if (e.key === 'ArrowUp') {
+                    if (oneOf(key, ['Up', 'ArrowUp'])) {
                         this.navigateOptions(-1);
                     }
                     // prev
-                    if (e.key === 'ArrowDown') {
+                    if (oneOf(key, ['Down', 'ArrowDown'])) {
                         this.navigateOptions(1);
                     }
                     // enter
-                    if (e.key === 'Enter') {
+                    if (key === 'Enter') {
                         if (this.focusIndex === -1) return this.hideMenu();
                         const optionComponent = this.flatOptions[this.focusIndex];
                         const option = this.getOptionData(optionComponent.componentOptions.propsData.value);
                         this.onOptionClick(option);
                     }
                 } else {
-                    const keysThatCanOpenSelect = ['ArrowUp', 'ArrowDown'];
-                    if (keysThatCanOpenSelect.includes(e.key)) this.toggleMenu(null, true);
+                    const keysThatCanOpenSelect = ['Up', 'ArrowUp', 'Down', 'ArrowDown'];
+                    if (keysThatCanOpenSelect.includes(key)) this.toggleMenu(null, true);
                 }
 
 
@@ -640,6 +636,25 @@
             checkUpdateStatus() {
                 if (this.getInitialValue().length > 0 && this.selectOptions.length === 0) {
                     this.hasExpectedValue = true;
+                }
+            },
+            onKeydown(event) {
+                const {key} = event;
+
+                if (oneOf(key, ['Esc', 'Escape'])) {
+                    this.handleKeydown(event);
+                } else if (key === 'Enter') {
+                    this.handleKeydown(event);
+                } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+                    event.preventDefault();
+                    this.handleKeydown(event);
+                } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+                    event.preventDefault();
+                    this.handleKeydown(event);
+                } else if (key === 'Tab') {
+                    this.handleKeydown(event);
+                } else if (oneOf(key, ['Backspace', 'Delete'])) {
+                    this.handleKeydown(event);
                 }
             }
         },

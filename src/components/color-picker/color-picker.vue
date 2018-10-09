@@ -16,10 +16,7 @@
                 ref="input"
                 :tabindex="disabled ? undefined : 0"
                 :class="inputClasses"
-                @keydown.tab="onTab"
-                @keydown.esc="onEscape"
-                @keydown.up="onArrow"
-                @keydown.down="onArrow"
+                @keydown="onKeydown"
             >
                 <div :class="[prefixCls + '-color']">
                     <div
@@ -53,7 +50,7 @@
                                     v-model="saturationColors"
                                     :focused="visible"
                                     @change="childChange"
-                                    @keydown.native.tab="handleFirstTab"
+                                    @keydown.native="handleFirstTab"
                                 ></Saturation>
                             </div>
                             <div
@@ -89,8 +86,8 @@
                                 size="small"
                                 type="ghost"
                                 @click.native="handleClear"
-                                @keydown.enter="handleClear"
-                                @keydown.native.esc="closer"
+                                @keydown="onClear"
+                                @keydown.native="onClearNative"
                             >{{t('i.datepicker.clear')}}</i-button>
                             <i-button
                                 ref="ok"
@@ -98,9 +95,8 @@
                                 size="small"
                                 type="primary"
                                 @click.native="handleSuccess"
-                                @keydown.native.tab="handleLastTab"
-                                @keydown.enter="handleSuccess"
-                                @keydown.native.esc="closer"
+                                @keydown="onOk"
+                                @keydown.native="onOkNative"
                             >{{t('i.datepicker.ok')}}</i-button>
                         </div>
                     </div>
@@ -418,7 +414,7 @@ export default {
             this.$emit('on-active-change', this.formatColor);
         },
         handleFirstTab(event) {
-            if (event.shiftKey) {
+            if (event.key === 'Tab' && event.shiftKey) {
                 event.preventDefault();
                 event.stopPropagation();
                 this.$refs.ok.$el.focus();
@@ -446,6 +442,43 @@ export default {
                 event.preventDefault();
                 event.stopPropagation();
                 this.visible = true;
+            }
+        },
+        onKeydown(event) {
+            const {key} = event;
+
+            if (oneOf(key, ['Esc', 'Escape'])) {
+                this.onEscape(event);
+            } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+                this.onArrow(event);
+            } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+                this.onArrow(event);
+            } else if (key === 'Tab') {
+                this.onTab(event);
+            }
+        },
+        onClear(event) {
+            if (event.key === 'Enter') {
+                this.handleClear(event);
+            }
+        },
+        onClearNative(event) {
+            if (oneOf(event.key, ['Esc', 'Escape'])) {
+                this.closer(event);
+            }
+        },
+        onOk(event) {
+            if (event.key === 'Enter') {
+                this.handleSuccess(event);
+            }
+        },
+        onOkNative(event) {
+            const {key} = event;
+
+            if (key === 'Tab') {
+                this.handleLastTab(event);
+            } else if (oneOf(key,['Esc', 'Escape'] )) {
+                this.closer(event);
             }
         },
     },

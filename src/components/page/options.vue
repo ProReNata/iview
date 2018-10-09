@@ -7,13 +7,15 @@
         </div>
         <div v-if="showElevator" :class="ElevatorClasses">
             {{ t('i.page.goto') }}
-            <input
-              type="text"
-              :value="_current"
-              autocomplete="off"
-              spellcheck="false"
-              @keyup.enter="changePage"
-            >
+            <label>
+                <input
+                  type="text"
+                  :value="_current"
+                  autocomplete="off"
+                  spellcheck="false"
+                  @keyup="onKeyup"
+                >
+            </label>
             {{ t('i.page.p') }}
         </div>
     </div>
@@ -102,6 +104,11 @@
                     this.$emit('on-page', page);
                     event.target.value = page;
                 }
+            }
+        },
+        onKeyup(event) {
+            if (event.key === 'Enter') {
+                this.changePage(event);
             }
         }
     };

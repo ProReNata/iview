@@ -3,11 +3,7 @@
         :class="[prefixCls + '-hue']"
         tabindex="0"
         @click="$el.focus()"
-        @keydown.esc="handleEscape"
-        @keydown.left="handleLeft"
-        @keydown.right="handleRight"
-        @keydown.up="handleUp"
-        @keydown.down="handleDown"
+        @keydown="onKeydown"
     >
         <div
             ref="container"
@@ -28,6 +24,7 @@
 import HASMixin from './hsaMixin';
 import Prefixes from './prefixMixin';
 import {clamp} from './utils';
+import { oneOf } from '../../utils/assist';
 
 export default {
     name: 'Hue',
@@ -95,6 +92,21 @@ export default {
             }
 
             this.change(left * 100 / clientWidth);
+        },
+        onKeydown(event) {
+            const {key} = event;
+
+            if (oneOf(key, ['Esc', 'Escape'])) {
+                this.handleEscape(event);
+            } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+                this.handleUp(event);
+            } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+                this.handleDown(event);
+            } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+                this.handleLeft(event);
+            } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+                this.handleRight(event);
+            }
         },
     },
 };
