@@ -14,16 +14,14 @@ const createElm = function() {
   return elm;
 };
 
-const pad = (nr) => nr < 10 ? '0' + nr : nr;
+const pad = (nr) => (nr < 10 ? '0' + nr : nr);
 
 /**
  * 回收 vm
  * @param  {Object} vm
  */
 exports.destroyVM = function(vm) {
-  vm.$el &&
-  vm.$el.parentNode &&
-  vm.$el.parentNode.removeChild(vm.$el);
+  vm.$el && vm.$el.parentNode && vm.$el.parentNode.removeChild(vm.$el);
 };
 
 /**
@@ -36,7 +34,7 @@ exports.createVue = function(Compo, mounted = false) {
   const elm = createElm();
 
   if (Object.prototype.toString.call(Compo) === '[object String]') {
-    Compo = { template: Compo };
+    Compo = {template: Compo};
   }
   return new Vue(Compo).$mount(mounted === false ? null : elm);
 };
@@ -56,7 +54,7 @@ exports.createTest = function(Compo, propsData = {}, mounted = false) {
   }
   const elm = createElm();
   const Ctor = Vue.extend(Compo);
-  return new Ctor({ propsData }).$mount(mounted === false ? null : elm);
+  return new Ctor({propsData}).$mount(mounted === false ? null : elm);
 };
 
 /**
@@ -81,11 +79,10 @@ exports.dateToString = function(d) {
  * Transform Date to HH:MM:SS string
  * @param {Date}
  */
-exports.dateToTimeString = function(d){
+exports.dateToTimeString = function(d) {
   const date = new Date(d);
   return [date.getHours(), date.getMinutes(), date.getSeconds()].map(pad).join(':');
-
-}
+};
 
 /**
  * 触发一个事件
@@ -107,28 +104,26 @@ exports.triggerEvent = function(elm, name, ...opts) {
   const evt = document.createEvent(eventName);
 
   evt.initEvent(name, ...opts);
-  elm.dispatchEvent
-    ? elm.dispatchEvent(evt)
-    : elm.fireEvent('on' + name, evt);
+  elm.dispatchEvent ? elm.dispatchEvent(evt) : elm.fireEvent('on' + name, evt);
 
   return elm;
 };
 
 /**
-* Wait for components inner async process, when this.$nextTick is not enough
-* @param {Function} the condition to verify before calling the callback
-* @param {Function} the callback to call when condition is true
-*/
+ * Wait for components inner async process, when this.$nextTick is not enough
+ * @param {Function} the condition to verify before calling the callback
+ * @param {Function} the callback to call when condition is true
+ */
 exports.waitForIt = function waitForIt(condition, callback) {
   if (condition()) callback();
   else setTimeout(() => waitForIt(condition, callback), 50);
 };
 
 /**
-* Call a components .$nextTick in a promissified way
-* @param {Vue Component} the component to work with
-*/
-exports.promissedTick = component => {
+ * Call a components .$nextTick in a promissified way
+ * @param {Vue Component} the component to work with
+ */
+exports.promissedTick = (component) => {
   return new Promise((resolve, reject) => {
     component.$nextTick(resolve);
   });

@@ -1,4 +1,4 @@
-import { createVue, destroyVM } from '../util';
+import {createVue, destroyVM} from '../util';
 
 describe('TimePicker.vue', () => {
   let vm;
@@ -6,7 +6,7 @@ describe('TimePicker.vue', () => {
     destroyVM(vm);
   });
 
-  it('should create a TimePicker component with hours, minutes and seconds', done => {
+  it('should create a TimePicker component with hours, minutes and seconds', (done) => {
     vm = createVue(`
       <Time-Picker></Time-Picker>
     `);
@@ -23,7 +23,7 @@ describe('TimePicker.vue', () => {
     });
   });
 
-  it('should create a TimePicker component with only hours and minutes', done => {
+  it('should create a TimePicker component with only hours and minutes', (done) => {
     vm = createVue(`
       <Time-Picker format="HH:mm"></Time-Picker>
     `);
@@ -32,14 +32,14 @@ describe('TimePicker.vue', () => {
 
     vm.$nextTick(() => {
       const spiners = picker.$el.querySelectorAll('.ivu-time-picker-cells-list');
-      expect([...spiners].filter(el => el.style.display != 'none').length).to.equal(2); // hh:mm
+      expect([...spiners].filter((el) => el.style.display != 'none').length).to.equal(2); // hh:mm
       expect(spiners[0].querySelectorAll('.ivu-time-picker-cells-cell').length).to.equal(24);
       expect(spiners[1].querySelectorAll('.ivu-time-picker-cells-cell').length).to.equal(60);
       done();
     });
   });
 
-  it('should create a TimePicker component with steps of 15 minutes', done => {
+  it('should create a TimePicker component with steps of 15 minutes', (done) => {
     vm = createVue(`
 	    <Time-Picker :steps="[1, 15]"></Time-Picker>
 	  `);
@@ -51,7 +51,7 @@ describe('TimePicker.vue', () => {
       const minutesList = [...spiners[1].querySelectorAll('.ivu-time-picker-cells-cell')];
 
       expect(spiners[0].querySelectorAll('.ivu-time-picker-cells-cell').length).to.equal(24);
-      expect(minutesList.map(el => el.textContent).join(',')).to.equal('00,15,30,45');
+      expect(minutesList.map((el) => el.textContent.trim()).join(',')).to.equal('00,15,30,45');
       expect(spiners[1].querySelectorAll('.ivu-time-picker-cells-cell').length).to.equal(4);
       expect(spiners[2].querySelectorAll('.ivu-time-picker-cells-cell').length).to.equal(60);
       done();

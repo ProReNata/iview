@@ -1,54 +1,54 @@
 const path = require('path');
 const webpack = require('webpack');
-const entry = require('./locale');
 const TerserPlugin = require('terser-webpack-plugin');
+const entry = require('./locale');
 
 process.env.NODE_ENV = 'production';
 
 module.exports = {
-    devtool: 'source-map',
-    mode: process.env.NODE_ENV,
-    entry,
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                options: {
-                    sourceMap: true,
-                },
-                exclude: /node_modules/
-            }
-        ]
+  devtool: 'source-map',
+  mode: process.env.NODE_ENV,
+  entry,
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: {
+          sourceMap: true,
+        },
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  output: {
+    path: path.resolve(__dirname, '../dist/locale'),
+    publicPath: '/dist/locale/',
+    filename: '[name].js',
+    library: 'iview/locale',
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
+  },
+  externals: {
+    vue: {
+      root: 'Vue',
+      commonjs: 'vue',
+      commonjs2: 'vue',
+      amd: 'vue',
     },
-    output: {
-        path: path.resolve(__dirname, '../dist/locale'),
-        publicPath: '/dist/locale/',
-        filename: '[name].js',
-        library: 'iview/locale',
-        libraryTarget: 'umd',
-        umdNamedDefine: true
-    },
-    externals: {
-        vue: {
-            root: 'Vue',
-            commonjs: 'vue',
-            commonjs2: 'vue',
-            amd: 'vue'
-        }
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-            }
-        }),
-        new TerserPlugin({
-            parallel: true,
-            sourceMap: true,
-            terserOptions: {
-                ecma: 5,
-            },
-        })
-    ]
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      },
+    }),
+    new TerserPlugin({
+      parallel: true,
+      sourceMap: true,
+      terserOptions: {
+        ecma: 5,
+      },
+    }),
+  ],
 };

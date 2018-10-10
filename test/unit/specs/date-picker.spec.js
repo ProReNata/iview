@@ -1,4 +1,4 @@
-import { createVue, destroyVM, stringToDate, dateToString, dateToTimeString, promissedTick } from '../util';
+import {createVue, destroyVM, stringToDate, dateToString, dateToTimeString, promissedTick} from '../util';
 
 describe('DatePicker.vue', () => {
   let vm;
@@ -6,15 +6,13 @@ describe('DatePicker.vue', () => {
     destroyVM(vm);
   });
 
-  it('should create a DatePicker component and open the calendar with the current month', done => {
-    vm = createVue(`
-      <Date-Picker></Date-Picker>
-    `);
+  it('should create a DatePicker component and open the calendar with the current month', (done) => {
+    vm = createVue(`<Date-Picker></Date-Picker>`);
     const picker = vm.$children[0];
     picker.$el.querySelector('input.ivu-input').focus();
     vm.$nextTick(() => {
       const calendarBody = vm.$el.querySelector('.ivu-picker-panel-body .ivu-date-picker-cells:first-of-type');
-      const calendarCells = [...calendarBody.querySelectorAll('.ivu-date-picker-cells-cell')].filter(el => {
+      const calendarCells = [...calendarBody.querySelectorAll('.ivu-date-picker-cells-cell')].filter((el) => {
         const prevMonth = el.classList.contains('ivu-date-picker-cells-cell-prev-month');
         const nextMonth = el.classList.contains('ivu-date-picker-cells-cell-next-month');
         return !prevMonth && !nextMonth;
@@ -26,7 +24,7 @@ describe('DatePicker.vue', () => {
     });
   });
 
-  it('should pass correct arguments to on-change event', done => {
+  it('should pass correct arguments to on-change event', (done) => {
     const now = new Date();
     const nowDate = dateToString(now);
     const nowTime = dateToTimeString(now);
@@ -34,8 +32,9 @@ describe('DatePicker.vue', () => {
     const nextWeek = new Date(now.getTime() + 6048e5);
 
     let dateValue, dateRangeValue, timeValue, timeRangeValue;
-    vm = createVue({
-      template: `
+    vm = createVue(
+      {
+        template: `
         <div>
           <date-picker type="date" @on-change="onChangeDate"></date-picker>
           <date-picker type="daterange" @on-change="onChangeDateRange"></date-picker>
@@ -43,40 +42,41 @@ describe('DatePicker.vue', () => {
           <time-picker type="timerange" @on-change="onChangeTimeRange"></time-picker>
         </div>
       `,
-      methods: {
-        onChangeDate(val) {
-          dateValue = val;
+        methods: {
+          onChangeDate(val) {
+            dateValue = val;
+          },
+          onChangeDateRange(val) {
+            dateRangeValue = val;
+          },
+          onChangeTime(val) {
+            timeValue = val;
+          },
+          onChangeTimeRange(val) {
+            timeRangeValue = val;
+          },
         },
-        onChangeDateRange(val) {
-          dateRangeValue = val;
-        },
-        onChangeTime(val) {
-          timeValue = val;
-        },
-        onChangeTimeRange(val) {
-          timeRangeValue = val;
-        },
-      }
-    }, true);
+      },
+      true,
+    );
 
     vm.$nextTick(() => {
       const [datePicker, dateRangePicker, timePicker, timeRangePicker] = vm.$children;
 
       datePicker.handleInputChange({target: {value: nowDate}});
-      dateRangePicker.handleInputChange({target: {value: [
-          nowDate,
-          dateToString(nextWeek)
-        ].join(' - ')
-      }});
+      dateRangePicker.handleInputChange({
+        target: {
+          value: [nowDate, dateToString(nextWeek)].join(' - '),
+        },
+      });
 
       timePicker.handleInputChange({target: {value: nowTime}});
-      const timeRangeString = [
-          nowTime,
-          nextHour
-      ].join(' - ');
-      timeRangePicker.handleInputChange({target: {
-        value: timeRangeString
-      }});
+      const timeRangeString = [nowTime, nextHour].join(' - ');
+      timeRangePicker.handleInputChange({
+        target: {
+          value: timeRangeString,
+        },
+      });
 
       vm.$nextTick(() => {
         // DATE
@@ -100,7 +100,7 @@ describe('DatePicker.vue', () => {
     });
   });
 
-  it('should create a DatePicker component of type="datetimerange"', done => {
+  it('should create a DatePicker component of type="datetimerange"', (done) => {
     vm = createVue(`
       <Date-Picker type="datetimerange"></Date-Picker>
     `);
@@ -110,7 +110,7 @@ describe('DatePicker.vue', () => {
     done();
   });
 
-  it('should create a datetimerange component and pick 2 dates in the current month', done => {
+  it('should create a datetimerange component and pick 2 dates in the current month', (done) => {
     vm = createVue(`
       <Date-picker type="datetimerange"></Date-picker>
     `);
@@ -121,7 +121,7 @@ describe('DatePicker.vue', () => {
       const displayField = vm.$el.querySelector('.ivu-input');
       const clickableCells = vm.$el.querySelectorAll('.ivu-date-picker-cells-cell');
       const lastMonthClass = 'ivu-date-picker-cells-cell-prev-month';
-      const firstDayInMonthIndex = [...clickableCells].findIndex(cell => !cell.classList.contains(lastMonthClass));
+      const firstDayInMonthIndex = [...clickableCells].findIndex((cell) => !cell.classList.contains(lastMonthClass));
 
       clickableCells[firstDayInMonthIndex].firstElementChild.click();
       vm.$nextTick(() => {
@@ -157,15 +157,15 @@ describe('DatePicker.vue', () => {
     });
   });
 
-  it('should change type progamatically', done => {
+  it('should change type progamatically', (done) => {
     // https://jsfiddle.net/hq7cLz83/
     vm = createVue({
       template: '<Date-picker :type="dateType"></Date-picker>',
       data() {
         return {
-          dateType: 'month'
+          dateType: 'month',
         };
-      }
+      },
     });
 
     const picker = vm.$children[0];
@@ -202,24 +202,25 @@ describe('DatePicker.vue', () => {
           expect(picker.selectionMode).to.equal('date');
 
           done();
-        }).catch(err => console.log(err));
+        })
+        .catch((err) => console.log(err));
     });
   });
 
-  it('should fire `on-change` when reseting value', done => {
+  it('should fire `on-change` when reseting value', (done) => {
     const now = new Date();
     const nowDate = dateToString(now);
     let onChangeCalled = false;
     vm = createVue({
       template: '<date-picker :value="date" type="date" @on-change="onChange"></date-picker>',
-      data(){
-        return { date: now };
+      data() {
+        return {date: now};
       },
       methods: {
         onChange() {
           onChangeCalled = true;
-        }
-      }
+        },
+      },
     });
 
     vm.$nextTick(() => {
@@ -237,7 +238,7 @@ describe('DatePicker.vue', () => {
     });
   });
 
-  it('should have same behavior after a reset as before the reset', done => {
+  it('should have same behavior after a reset as before the reset', (done) => {
     vm = createVue(`
       <Date-picker type="datetimerange"></Date-picker>
     `);
@@ -248,7 +249,7 @@ describe('DatePicker.vue', () => {
       const displayField = vm.$el.querySelector('.ivu-input');
       const clickableCells = vm.$el.querySelectorAll('.ivu-date-picker-cells-cell');
       const lastMonthClass = 'ivu-date-picker-cells-cell-prev-month';
-      const firstDayInMonthIndex = [...clickableCells].findIndex(cell => !cell.classList.contains(lastMonthClass));
+      const firstDayInMonthIndex = [...clickableCells].findIndex((cell) => !cell.classList.contains(lastMonthClass));
 
       // choose first date
       clickableCells[firstDayInMonthIndex].firstElementChild.click();
@@ -266,11 +267,10 @@ describe('DatePicker.vue', () => {
             // it should be closed by now
             expect(picker.visible).to.equal(false);
             // open picker again
-              picker.handleFocus({type: 'focus'});
-              picker.visible = true;
+            picker.handleFocus({type: 'focus'});
+            picker.visible = true;
 
-
-              vm.$nextTick(() => {
+            vm.$nextTick(() => {
               expect(picker.visible).to.equal(true);
               expect(JSON.stringify(picker.internalValue)).to.equal('[null,null]');
               expect(displayField.value).to.equal('');
@@ -297,12 +297,12 @@ describe('DatePicker.vue', () => {
     });
   });
 
-  it('should accept a empty string as input v-model value', done => {
+  it('should accept a empty string as input v-model value', (done) => {
     vm = createVue({
       template: '<date-picker v-model="value" type="date"></date-picker>',
-      data(){
+      data() {
         return {value: ''};
-      }
+      },
     });
 
     vm.$nextTick(() => {
@@ -311,7 +311,7 @@ describe('DatePicker.vue', () => {
     });
   });
 
-  it('should convert strings to Date objects', done => {
+  it('should convert strings to Date objects', (done) => {
     vm = createVue({
       template: `
         <div>
@@ -326,9 +326,9 @@ describe('DatePicker.vue', () => {
           value1: ['2017-10-10', '2017-10-20'],
           value2: [new Date(), new Date()],
           value3: '2017-10-10 10:00:00',
-          value4: ['2027-10-10 10:00:00', '2027-10-20 10:00:00']
+          value4: ['2027-10-10 10:00:00', '2027-10-20 10:00:00'],
         };
-      }
+      },
     });
 
     vm.$nextTick(() => {
@@ -351,38 +351,49 @@ describe('DatePicker.vue', () => {
     });
   });
 
-  it('should render date-picker label correctly in zh-CN', done => {
-    vm = createVue(`
-      <Date-picker type="date"></Date-picker>
-    `);
+  it('should render date-picker label correctly in zh-CN', (done) => {
+    vm = createVue(`<Date-picker type="date"></Date-picker>`);
 
     const picker = vm.$children[0];
     picker.handleFocus({type: 'focus'});
     vm.$nextTick(() => {
       const now = new Date();
       const labels = vm.$el.querySelectorAll('.ivu-picker-panel-body .ivu-date-picker-header-label');
-      const labelText = [...labels].map(el => el.textContent).join(' ');
+      const labelText = [...labels].map((el) => el.textContent.trim()).join(' ');
       expect(labelText).to.equal([now.getFullYear() + '年', now.getMonth() + 1 + '月'].join(' '));
       done();
     });
   });
 
-  it('Should format labels correctly', done => {
+  it('Should format labels correctly', (done) => {
     const formater = require('../../../src/components/date-picker/util').formatDateLabels;
     const expectedResults = require('./assets/locale-expects.js').default;
     const locales = [
-      'de-DE', 'en-US', 'es-ES', 'fr-FR', 'id-ID', 'ja-JP', 'ko-KR', 'pt-BR',
-      'pt-PT', 'ru-RU', 'sv-SE', 'tr-TR', 'vi-VN', 'zh-CN', 'zh-TW'
+      'de-DE',
+      'en-US',
+      'es-ES',
+      'fr-FR',
+      'id-ID',
+      'ja-JP',
+      'ko-KR',
+      'pt-BR',
+      'pt-PT',
+      'ru-RU',
+      'sv-SE',
+      'tr-TR',
+      'vi-VN',
+      'zh-CN',
+      'zh-TW',
     ].reduce((obj, locale) => {
       obj[locale] = require('../../../src/locale/lang/' + locale).default;
       return obj;
     }, {});
     const testDate = new Date(2030, 9); // October 2030
 
-    Object.keys(locales).forEach(locale => {
+    Object.keys(locales).forEach((locale) => {
       const format = locales[locale].i.datepicker.datePanelLabel;
       const f = formater(locale, format, testDate);
-      const labelText = f.labels.map(obj => obj.label).join(f.separator);
+      const labelText = f.labels.map((obj) => obj.label).join(f.separator);
       expect(labelText).to.equal(expectedResults[locale]);
     });
     expect(Object.keys(locales).length > 0).to.equal(true);

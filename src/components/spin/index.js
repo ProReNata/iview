@@ -1,33 +1,38 @@
-import Spin from './spin.js';
+import Spin from './spin';
 
 let spinInstance;
 
-function getSpinInstance (render = undefined) {
-    spinInstance = spinInstance || Spin.newInstance({
-        render: render
+function getSpinInstance(render = undefined) {
+  spinInstance =
+    spinInstance ||
+    Spin.newInstance({
+      render,
     });
 
-    return spinInstance;
+  return spinInstance;
 }
 
-function loading (options) {
-    const render = ('render' in options) ? options.render : undefined;
-    let instance  = getSpinInstance(render);
+function loading(options) {
+  const render = 'render' in options ? options.render : undefined;
+  const instance = getSpinInstance(render);
 
-    instance.show(options);
+  instance.show(options);
 }
 
-Spin.show = function (props = {}) {
-    return loading(props);
+Spin.show = function(props = {}) {
+  return loading(props);
 };
-Spin.hide = function () {
-    if (!spinInstance) return false;
 
-    const instance = getSpinInstance();
+Spin.hide = function() {
+  if (!spinInstance) {
+    return false;
+  }
 
-    instance.remove(() => {
-        spinInstance = null;
-    });
+  const instance = getSpinInstance();
+
+  instance.remove(() => {
+    spinInstance = null;
+  });
 };
 
 export default Spin;

@@ -4,8 +4,19 @@
       <span>{{ parentItem.name }}</span>
     </template>
     <template v-for="item in children">
-      <custem-menu-item v-if="item.children && item.children.length !== 0" :key="`menu-${item.name}`" :parent-item="item"></custem-menu-item>
-      <menu-item v-else :name="`${item.name}`" :key="`menu-${item.name}`">{{ item.name }}</menu-item>
+      <custem-menu-item 
+        v-if="item.children && item.children.length !== 0" 
+        :key="`menu-${item.name}`" 
+        :parent-item="item"
+      >
+      </custem-menu-item>
+      <menu-item 
+        v-else 
+        :key="`menu-${item.name}`" 
+        :name="`${item.name}`"
+      >
+        {{ item.name }}
+      </menu-item>
     </template>
   </Submenu>
 </template>
@@ -15,18 +26,18 @@ export default {
   props: {
     parentItem: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     theme: String,
-    iconSize: Number
+    iconSize: Number,
   },
   computed: {
-    parentName () {
-      return this.parentItem.name
+    parentName() {
+      return this.parentItem.name;
     },
-    children () {
-      return this.parentItem.children
-    }
-  }
-}
+    children() {
+      return this.parentItem.children;
+    },
+  },
+};
 </script>

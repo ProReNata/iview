@@ -1,63 +1,68 @@
 <template>
-    <div :class="prefixCls" v-show="show"><slot></slot></div>
+  <div 
+    v-show="show" 
+    :class="prefixCls"
+  >
+    <slot></slot>
+  </div>
 </template>
 <script>
-    const prefixCls = 'ivu-tabs-tabpane';
+const prefixCls = 'ivu-tabs-tabpane';
 
-    export default {
-        name: 'TabPane',
-        props: {
-            name: {
-                type: String
-            },
-            label: {
-                type: [String, Function],
-                default: ''
-            },
-            icon: {
-                type: String
-            },
-            disabled: {
-                type: Boolean,
-                default: false
-            },
-            closable: {
-                type: Boolean,
-                default: null
-            }
-        },
-        data () {
-            return {
-                prefixCls: prefixCls,
-                show: true,
-                currentName: this.name
-            };
-        },
-        methods: {
-            updateNav () {
-                this.$parent.updateNav();
-            }
-        },
-        watch: {
-            name (val) {
-                this.currentName = val;
-                this.updateNav();
-            },
-            label () {
-                this.updateNav();
-            },
-            icon () {
-                this.updateNav();
-            },
-            disabled () {
-                this.updateNav();
-            }
-        },
-        mounted () {
-            this.updateNav();
-        },
-        destroyed () {
-            this.updateNav();
-        }
+export default {
+  name: 'TabPane',
+  props: {
+    name: {
+      type: String,
+    },
+    label: {
+      type: [String, Function],
+      default: '',
+    },
+    icon: {
+      type: String,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    closable: {
+      type: Boolean,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      prefixCls,
+      show: true,
+      currentName: this.name,
     };
+  },
+  watch: {
+    name(val) {
+      this.currentName = val;
+      this.updateNav();
+    },
+    label() {
+      this.updateNav();
+    },
+    icon() {
+      this.updateNav();
+    },
+    disabled() {
+      this.updateNav();
+    },
+  },
+  mounted() {
+    this.updateNav();
+  },
+  destroyed() {
+    this.updateNav();
+  },
+  methods: {
+    updateNav() {
+      this.$parent.updateNav();
+    },
+  },
+};
 </script>

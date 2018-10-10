@@ -7,15 +7,15 @@ const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.base.config.js');
 
 const webpackConfig = merge(webpackBaseConfig, {
-    devtool: 'source-map',
-    mode: 'production',
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: '"testing"'
-            }
-        })
-    ]
+  devtool: 'source-map',
+  mode: 'production',
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"testing"',
+      },
+    }),
+  ],
 });
 
 // no need for app entry during tests

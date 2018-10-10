@@ -4,74 +4,74 @@ export const csvA = {
       title: '名称',
       key: 'name',
       fixed: 'left',
-      width: 200
+      width: 200,
     },
     {
       title: '展示',
       key: 'show',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '唤醒',
       key: 'weak',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '登录',
       key: 'signin',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '点击',
       key: 'click',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '激活',
       key: 'active',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '7日留存',
       key: 'day7',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '30日留存',
       key: 'day30',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '次日留存',
       key: 'tomorrow',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '日活跃',
       key: 'day',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '周活跃',
       key: 'week',
       width: 150,
-      sortable: true
+      sortable: true,
     },
     {
       title: '月活跃',
       key: 'month',
       width: 150,
-      sortable: true
-    }
+      sortable: true,
+    },
   ],
   data: [
     {
@@ -87,7 +87,7 @@ export const csvA = {
       tomorrow: 1727,
       day: 558,
       week: 4440,
-      month: 5610
+      month: 5610,
     },
     {
       name: '推广名称2',
@@ -102,7 +102,7 @@ export const csvA = {
       tomorrow: 1684,
       day: 2593,
       week: 2507,
-      month: 1537
+      month: 1537,
     },
     {
       name: '推广名称3',
@@ -117,7 +117,7 @@ export const csvA = {
       tomorrow: 377,
       day: 1561,
       week: 3219,
-      month: 1588
+      month: 1588,
     },
     {
       name: '推广名称4',
@@ -132,7 +132,7 @@ export const csvA = {
       tomorrow: 7278,
       day: 5309,
       week: 1655,
-      month: 9043
+      month: 9043,
     },
     {
       name: '推广名称5',
@@ -147,7 +147,7 @@ export const csvA = {
       tomorrow: 8285,
       day: 1230,
       week: 4840,
-      month: 9908
+      month: 9908,
     },
     {
       name: '推广名称6',
@@ -162,7 +162,7 @@ export const csvA = {
       tomorrow: 1920,
       day: 1966,
       week: 904,
-      month: 6851
+      month: 6851,
     },
     {
       name: '推广名称7',
@@ -177,7 +177,7 @@ export const csvA = {
       tomorrow: 7632,
       day: 4061,
       week: 4359,
-      month: 3676
+      month: 3676,
     },
     {
       name: '推广名称8',
@@ -192,7 +192,7 @@ export const csvA = {
       tomorrow: 9408,
       day: 2481,
       week: 1479,
-      month: 2346
+      month: 2346,
     },
     {
       name: '推广名称9',
@@ -207,7 +207,7 @@ export const csvA = {
       tomorrow: 6641,
       day: 1611,
       week: 5534,
-      month: 3190
+      month: 3190,
     },
     {
       name: '推广名称10',
@@ -222,8 +222,8 @@ export const csvA = {
       tomorrow: 428,
       day: 9768,
       week: 2864,
-      month: 5811
-    }
+      month: 5811,
+    },
   ],
   expected: `
       名称,展示,唤醒,登录,点击,激活,7日留存,30日留存,次日留存,日活跃,周活跃,月活跃
@@ -237,45 +237,45 @@ export const csvA = {
       推广名称8,862,6520,6696,3209,6801,6364,6850,9408,2481,1479,2346
       推广名称9,567,5859,128,6593,1971,7596,3546,6641,1611,5534,3190
       推广名称10,3651,1819,4595,7499,7405,8710,5518,428,9768,2864,5811
-  `
+  `,
 };
 
 export const csvB = {
   columns: [
     {
       title: '姓名',
-      key: 'name'
+      key: 'name',
     },
     {
       title: '年龄',
-      key: 'age'
+      key: 'age',
     },
     {
       title: '地址',
-      key: 'address'
-    }
+      key: 'address',
+    },
   ],
   data: [
     {
       name: '王小明',
       age: 18,
-      address: '北京市朝\n阳区芍药居'
+      address: '北京市朝\n阳区芍药居',
     },
     {
       name: '张小刚',
       age: 25,
-      address: '北京市海,淀区西二旗'
+      address: '北京市海,淀区西二旗',
     },
     {
       name: '李小红',
       age: 30,
-      address: '上海市浦东\r新区世纪大道'
+      address: '上海市浦东\r新区世纪大道',
     },
     {
       name: '周小伟',
       age: 26,
-      address: '深圳市南山区深南大道'
-    }
+      address: '深圳市南山区深南大道',
+    },
   ],
   expected: `
     "姓名";"年龄";"地址"
@@ -283,5 +283,5 @@ export const csvB = {
     "张小刚";"25";"北京市海,淀区西二旗"
     "李小红";"30";"上海市浦东\r新区世纪大道"
     "周小伟";"26";"深圳市南山区深南大道"
-  `
+  `,
 };

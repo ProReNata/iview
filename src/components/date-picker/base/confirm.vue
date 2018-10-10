@@ -1,84 +1,112 @@
 <template>
-    <div ref="confirm" :class="[prefixCls + '-confirm']" @keydown.capture="onKeydown">
-        <i-button :class="timeClasses" size="small" type="text" :disabled="timeDisabled" v-if="showTime" @click="handleToggleTime">
-            {{labels.time}}
-        </i-button>
-        <i-button ref="clear" size="small" type="ghost" @click.native="handleClear" @keydown.native="onKeydown">
-            {{labels.clear}}
-        </i-button>
-        <i-button ref="success" size="small" type="primary" @click.native="handleSuccess" @keydown.native="onKeydown">
-            {{labels.ok}}
-        </i-button>
-    </div>
+  <div 
+    ref="confirm" 
+    :class="[prefixCls + '-confirm']" 
+    @keydown.capture="onKeydown"
+  >
+    <i-button 
+      v-if="showTime" 
+      :class="timeClasses" 
+      size="small" 
+      type="text" 
+      :disabled="timeDisabled" 
+      @click="handleToggleTime"
+    >
+      {{ labels.time }}
+    </i-button>
+    <i-button 
+      ref="clear" 
+      size="small" 
+      type="ghost" 
+      @click.native="handleClear" 
+      @keydown.native="onKeydown"
+    >
+      {{ labels.clear }}
+    </i-button>
+    <i-button 
+      ref="success" 
+      size="small" 
+      type="primary" 
+      @click.native="handleSuccess" 
+      @keydown.native="onKeydown"
+    >
+      {{ labels.ok }}
+    </i-button>
+  </div>
 </template>
 <script>
-    import iButton from '../../button/button.vue';
-    import Locale from '../../../mixins/locale';
-    import Emitter from '../../../mixins/emitter';
+import iButton from '../../button/button.vue';
+import Locale from '../../../mixins/locale';
+import Emitter from '../../../mixins/emitter';
 
-    const prefixCls = 'ivu-picker';
+const prefixCls = 'ivu-picker';
 
-    export default {
-        mixins: [Locale, Emitter],
-        components: {iButton},
-        props: {
-            showTime: false,
-            isTime: false,
-            timeDisabled: false
-        },
-        data() {
-            return {
-                prefixCls: prefixCls
-            };
-        },
-        computed: {
-            timeClasses () {
-                return  `${prefixCls}-confirm-time`;
-            },
-            labels(){
-                const labels = ['time', 'clear', 'ok'];
-                const values = [(this.isTime ? 'selectDate' : 'selectTime'), 'clear', 'ok'];
-                return labels.reduce((obj, key, i) => {
-                    obj[key] = this.t('i.datepicker.' + values[i]);
-                    return obj;
-                }, {});
-            }
-        },
-        methods: {
-            handleClear () {
-                this.$emit('on-pick-clear');
-            },
-            handleSuccess () {
-                this.$emit('on-pick-success');
-            },
-            handleToggleTime () {
-                if (this.timeDisabled) return;
-                this.$emit('on-pick-toggle-time');
-                this.dispatch('CalendarPicker', 'focus-input');
-            },
-            handleTab(e) {
-                const tabbables = [...this.$el.children];
-                const expectedFocus = tabbables[e.shiftKey ? 'shift' : 'pop']();
-
-                if (document.activeElement === expectedFocus) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.dispatch('CalendarPicker', 'focus-input');
-                }
-            },
-            onKeydown(event) {
-                const {key, target} = event;
-
-                if (key === 'Tab' && target === this.$refs.confirm) {
-                    this.handleTab(event);
-                } else if (key === 'Enter') {
-                    if (target === this.$refs.clear) {
-                        this.handleClear(event);
-                    } else if (target === this.$refs.success) {
-                        this.handleSuccess(event);
-                    }
-                }
-            }
-        }
+export default {
+  components: {iButton},
+  mixins: [Locale, Emitter],
+  props: {
+    showTime: false,
+    isTime: false,
+    timeDisabled: false,
+  },
+  data() {
+    return {
+      prefixCls,
     };
+  },
+  computed: {
+    timeClasses() {
+      return `${prefixCls}-confirm-time`;
+    },
+    labels() {
+      const labels = ['time', 'clear', 'ok'];
+      const values = [this.isTime ? 'selectDate' : 'selectTime', 'clear', 'ok'];
+
+      return labels.reduce((obj, key, i) => {
+        obj[key] = this.t(`i.datepicker.${values[i]}`);
+
+        return obj;
+      }, {});
+    },
+  },
+  methods: {
+    handleClear() {
+      this.$emit('on-pick-clear');
+    },
+    handleSuccess() {
+      this.$emit('on-pick-success');
+    },
+    handleToggleTime() {
+      if (this.timeDisabled) {
+        return;
+      }
+
+      this.$emit('on-pick-toggle-time');
+      this.dispatch('CalendarPicker', 'focus-input');
+    },
+    handleTab(e) {
+      const tabbables = [...this.$el.children];
+      const expectedFocus = tabbables[e.shiftKey ? 'shift' : 'pop']();
+
+      if (document.activeElement === expectedFocus) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.dispatch('CalendarPicker', 'focus-input');
+      }
+    },
+    onKeydown(event) {
+      const {key, target} = event;
+
+      if (key === 'Tab' && target === this.$refs.confirm) {
+        this.handleTab(event);
+      } else if (key === 'Enter') {
+        if (target === this.$refs.clear) {
+          this.handleClear(event);
+        } else if (target === this.$refs.success) {
+          this.handleSuccess(event);
+        }
+      }
+    },
+  },
+};
 </script>

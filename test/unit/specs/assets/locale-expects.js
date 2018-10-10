@@ -13,5 +13,5 @@ export default {
   'tr-TR': 'Ekim 2030',
   'vi-VN': 'Tháng 10/2030',
   'zh-CN': '2030年 10月',
-  'zh-TW': '2030年 10月'
+  'zh-TW': '2030年 10月',
 };
