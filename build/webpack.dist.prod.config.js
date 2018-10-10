@@ -8,6 +8,8 @@ const webpackBaseConfig = require('./webpack.base.config.js');
 process.env.NODE_ENV = 'production';
 
 const getGlobal = function() {
+  'use strict';
+
   if (typeof self !== 'undefined') {
     return self;
   }
