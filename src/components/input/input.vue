@@ -33,32 +33,33 @@
             </label>
             <div :class="[prefixCls + '-group-append']" v-if="append" v-show="slotReady"><slot name="append"></slot></div>
         </template>
-        <label>
-            <textarea
-                v-else
-                :id="elementId"
-                :wrap="wrap"
-                :autocomplete="autocomplete"
-                :spellcheck="spellcheck"
-                ref="textarea"
-                :class="textareaClasses"
-                :style="textareaStyles"
-                :placeholder="placeholder"
-                :disabled="disabled"
-                :rows="rows"
-                :maxlength="maxlength"
-                :readonly="readonly"
-                :name="name"
-                :value="currentValue"
-                :autofocus="autofocus"
-                @keyup="onKeyup"
-                @keypress="handleKeypress"
-                @keydown="handleKeydown"
-                @focus="handleFocus"
-                @blur="handleBlur"
-                @input="handleInput">
-            </textarea>
-        </label>
+        <template v-else>
+            <label>
+                <textarea
+                    :id="elementId"
+                    :wrap="wrap"
+                    :autocomplete="autocomplete"
+                    :spellcheck="spellcheck"
+                    ref="textarea"
+                    :class="textareaClasses"
+                    :style="textareaStyles"
+                    :placeholder="placeholder"
+                    :disabled="disabled"
+                    :rows="rows"
+                    :maxlength="maxlength"
+                    :readonly="readonly"
+                    :name="name"
+                    :value="currentValue"
+                    :autofocus="autofocus"
+                    @keyup="onKeyup"
+                    @keypress="handleKeypress"
+                    @keydown="handleKeydown"
+                    @focus="handleFocus"
+                    @blur="handleBlur"
+                    @input="handleInput">
+                </textarea>
+            </label>
+        </template>
     </div>
 </template>
 <script>

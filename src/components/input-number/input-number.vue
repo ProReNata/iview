@@ -15,23 +15,26 @@
             </a>
         </div>
         <div :class="inputWrapClasses">
-            <input
-                :id="elementId"
-                :class="inputClasses"
-                :disabled="disabled"
-                autocomplete="off"
-                spellcheck="false"
-                :autofocus="autofocus"
-                @focus="focus"
-                @blur="blur"
-                @keydown.stop="keyDown"
-                @input="change"
-                @mouseup="preventDefault"
-                @change="change"
-                :readonly="readonly || !editable"
-                :name="name"
-                :value="formatterValue"
-                :placeholder="placeholder">
+            <label>
+                <input
+                    :id="elementId"
+                    :class="inputClasses"
+                    :disabled="disabled"
+                    autocomplete="off"
+                    spellcheck="false"
+                    :autofocus="autofocus"
+                    @focus="focus"
+                    @blur="blur"
+                    @keydown.stop="keyDown"
+                    @input="change"
+                    @mouseup="preventDefault"
+                    @change="change"
+                    :readonly="readonly || !editable"
+                    :name="name"
+                    :value="formatterValue"
+                    :placeholder="placeholder">
+            </label>
+
         </div>
     </div>
 </template>
@@ -198,14 +201,14 @@
             },
             up (e) {
                 const targetVal = Number(e.target.value);
-                if (this.upDisabled && isNaN(targetVal)) {
+                if (this.upDisabled && Number.isNaN(targetVal)) {
                     return false;
                 }
                 this.changeStep('up', e);
             },
             down (e) {
                 const targetVal = Number(e.target.value);
-                if (this.downDisabled && isNaN(targetVal)) {
+                if (this.downDisabled && Number.isNaN(targetVal)) {
                     return false;
                 }
                 this.changeStep('down', e);
@@ -218,12 +221,12 @@
                 const targetVal = Number(e.target.value);
                 let val = Number(this.currentValue);
                 const step = Number(this.step);
-                if (isNaN(val)) {
+                if (Number.isNaN(val)) {
                     return false;
                 }
 
                 // input a number, and key up or down
-                if (!isNaN(targetVal)) {
+                if (!Number.isNaN(targetVal)) {
                     if (type === 'up') {
                         if (addNum(targetVal, step) <= this.max) {
                             val = targetVal;
@@ -248,7 +251,7 @@
             },
             setValue (val) {
                 // 如果 step 是小数，且没有设置 precision，是有问题的
-                if (val && !isNaN(this.precision)) val = Number(Number(val).toFixed(this.precision));
+                if (val && !Number.isNaN(this.precision)) val = Number(Number(val).toFixed(this.precision));
 
                 this.$nextTick(() => {
                     this.currentValue = val;
@@ -280,7 +283,7 @@
                     val = this.parser(val);
                 }
 
-                if (event.type == 'input' && val.match(/^\-?\.?$|\.$/)) return; // prevent fire early if decimal. If no more input the change event will fire later
+                if (event.type === 'input' && val.match(/^-?\.?$|\.$/)) return; // prevent fire early if decimal. If no more input the change event will fire later
 
                 const {min, max} = this;
                 const isEmptyString = val.length === 0;
@@ -290,14 +293,14 @@
                     this.setValue(null);
                     return;
                 }
-                if (event.type == 'change'){
+                if (event.type === 'change'){
                     if (val === this.currentValue && val > min && val < max) return; // already fired change for input event
                 }
 
-                if (!isNaN(val) && !isEmptyString) {
+                if (!Number.isNaN(val) && !isEmptyString) {
                     this.currentValue = val;
 
-                    if (event.type == 'input' && val < min) return; // prevent fire early in case user is typing a bigger number. Change will handle this otherwise.
+                    if (event.type === 'input' && val < min) return; // prevent fire early in case user is typing a bigger number. Change will handle this otherwise.
                     if (val > max) {
                         this.setValue(max);
                     } else if (val < min) {
@@ -311,7 +314,7 @@
             },
             changeVal (val) {
                 val = Number(val);
-                if (!isNaN(val)) {
+                if (!Number.isNaN(val)) {
                     const step = this.step;
 
                     this.upDisabled = val + step > this.max;
