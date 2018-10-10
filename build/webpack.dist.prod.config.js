@@ -3,16 +3,34 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.base.config.js');
 const CompressionPlugin = require('compression-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 process.env.NODE_ENV = 'production';
 
+
+const getGlobal = function() {
+    'use strict';
+
+    if (typeof self !== 'undefined') {
+        return self;
+    }
+    if (typeof window !== 'undefined') {
+        return window;
+    }
+    if (typeof global !== 'undefined') {
+        return global;
+    }
+    return Function('return this')();
+};
+
 module.exports = merge(webpackBaseConfig, {
     devtool: 'source-map',
+    mode: process.env.NODE_ENV,
     entry: {
         main: './src/index.js'
     },
     output: {
+        globalObject: `(${getGlobal.toString()}())`, // https://github.com/webpack/webpack/issues/6525
         path: path.resolve(__dirname, '../dist'),
         publicPath: '/dist/',
         filename: 'iview.min.js',
@@ -31,14 +49,17 @@ module.exports = merge(webpackBaseConfig, {
     plugins: [
         // @todo
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"production"'
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
         }),
-        new UglifyJsPlugin({
+        new TerserPlugin({
             parallel: true,
             sourceMap: true,
+            terserOptions: {
+                ecma: 5,
+            },
         }),
         new CompressionPlugin({
-            asset: '[path].gz[query]',
+            filename: '[path].gz[query]',
             algorithm: 'gzip',
             test: /\.(js|css)$/,
             threshold: 10240,
