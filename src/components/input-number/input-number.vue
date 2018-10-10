@@ -290,7 +290,14 @@
                 val = Number(val);
 
                 if(isEmptyString){
-                    this.setValue(null);
+                    if (min === -Infinity && max === Infinity) {
+                        this.setValue(null);
+                    } else if (min !== -Infinity) {
+                        this.setValue(min);
+                    } else if (max !== Infinity) {
+                        this.setValue(max);
+                    }
+
                     return;
                 }
                 if (event.type === 'change'){
