@@ -17,8 +17,8 @@ export default {
   name: 'Search',
   components: {iInput},
   props: {
-    prefixCls: String,
     placeholder: String,
+    prefixCls: String,
     query: String,
   },
   data() {
@@ -32,11 +32,11 @@ export default {
     },
   },
   watch: {
-    query(val) {
-      this.currentQuery = val;
-    },
     currentQuery(val) {
       this.$emit('on-query-change', val);
+    },
+    query(val) {
+      this.currentQuery = val;
     },
   },
   methods: {

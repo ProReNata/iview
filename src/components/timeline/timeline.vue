@@ -10,8 +10,8 @@ export default {
   name: 'Timeline',
   props: {
     pending: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
   },
   computed: {

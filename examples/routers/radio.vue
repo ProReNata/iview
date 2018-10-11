@@ -93,9 +93,9 @@
 export default {
   data() {
     return {
-      single: true,
-      phone: '',
       button2: '北京',
+      phone: '',
+      single: true,
     };
   },
   methods: {},

@@ -18,6 +18,23 @@ function has(browser) {
 }
 
 const csv = {
+  _getDownloadUrl(text) {
+    const BOM = '\uFEFF';
+
+    // Add BOM to text for open in excel correctly
+    if (window.Blob && window.URL && window.URL.createObjectURL) {
+      const csvData = new Blob([BOM + text], {type: 'text/csv'});
+
+      return URL.createObjectURL(csvData);
+    }
+
+    return `data:attachment/csv;charset=utf-8,${BOM}${encodeURIComponent(text)}`;
+  },
+
+  _isEdge() {
+    return /Edge/.test(navigator.userAgent);
+  },
+
   _isIE11() {
     let iev = 0;
     const ieold = /MSIE (\d+\.\d+);/.test(navigator.userAgent);
@@ -37,23 +54,6 @@ const csv = {
     }
 
     return iev === 11;
-  },
-
-  _isEdge() {
-    return /Edge/.test(navigator.userAgent);
-  },
-
-  _getDownloadUrl(text) {
-    const BOM = '\uFEFF';
-
-    // Add BOM to text for open in excel correctly
-    if (window.Blob && window.URL && window.URL.createObjectURL) {
-      const csvData = new Blob([BOM + text], {type: 'text/csv'});
-
-      return URL.createObjectURL(csvData);
-    }
-
-    return `data:attachment/csv;charset=utf-8,${BOM}${encodeURIComponent(text)}`;
   },
 
   download(filename, text) {

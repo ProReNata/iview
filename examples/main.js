@@ -20,193 +20,193 @@ const router = new VueRouter({
   esModule: false,
   routes: [
     {
-      path: '/layout',
       component: (resolve) => require(['./routers/layout.vue'], resolve),
+      path: '/layout',
     },
     {
-      path: '/affix',
       component: (resolve) => require(['./routers/affix.vue'], resolve),
+      path: '/affix',
     },
     {
-      path: '/grid',
       component: (resolve) => require(['./routers/grid.vue'], resolve),
+      path: '/grid',
     },
     {
-      path: '/button',
       component: (resolve) => require(['./routers/button.vue'], resolve),
+      path: '/button',
     },
     {
-      path: '/input',
       component: (resolve) => require(['./routers/input.vue'], resolve),
+      path: '/input',
     },
     {
-      path: '/radio',
       component: (resolve) => require(['./routers/radio.vue'], resolve),
+      path: '/radio',
     },
     {
-      path: '/checkbox',
       component: (resolve) => require(['./routers/checkbox.vue'], resolve),
+      path: '/checkbox',
     },
     {
-      path: '/steps',
       component: (resolve) => require(['./routers/steps.vue'], resolve),
+      path: '/steps',
     },
     {
-      path: '/timeline',
       component: (resolve) => require(['./routers/timeline.vue'], resolve),
+      path: '/timeline',
     },
     {
-      path: '/switch',
       component: (resolve) => require(['./routers/switch.vue'], resolve),
+      path: '/switch',
     },
     {
-      path: '/alert',
       component: (resolve) => require(['./routers/alert.vue'], resolve),
+      path: '/alert',
     },
     {
-      path: '/badge',
       component: (resolve) => require(['./routers/badge.vue'], resolve),
+      path: '/badge',
     },
     {
-      path: '/tag',
       component: (resolve) => require(['./routers/tag.vue'], resolve),
+      path: '/tag',
     },
     {
-      path: '/input-number',
       component: (resolve) => require(['./routers/input-number.vue'], resolve),
+      path: '/input-number',
     },
     {
-      path: '/upload',
       component: (resolve) => require(['./routers/upload.vue'], resolve),
+      path: '/upload',
     },
     {
-      path: '/progress',
       component: (resolve) => require(['./routers/progress.vue'], resolve),
+      path: '/progress',
     },
     {
-      path: '/collapse',
       component: (resolve) => require(['./routers/collapse.vue'], resolve),
+      path: '/collapse',
     },
     {
-      path: '/carousel',
       component: (resolve) => require(['./routers/carousel.vue'], resolve),
+      path: '/carousel',
     },
     {
-      path: '/card',
       component: (resolve) => require(['./routers/card.vue'], resolve),
+      path: '/card',
     },
     {
-      path: '/tree',
       component: (resolve) => require(['./routers/tree.vue'], resolve),
+      path: '/tree',
     },
     {
-      path: '/rate',
       component: (resolve) => require(['./routers/rate.vue'], resolve),
+      path: '/rate',
     },
     {
-      path: '/circle',
       component: (resolve) => require(['./routers/circle.vue'], resolve),
+      path: '/circle',
     },
     {
-      path: '/tabs',
       component: (resolve) => require(['./routers/tabs.vue'], resolve),
+      path: '/tabs',
     },
     {
-      path: '/tooltip',
       component: (resolve) => require(['./routers/tooltip.vue'], resolve),
+      path: '/tooltip',
     },
     {
-      path: '/poptip',
       component: (resolve) => require(['./routers/poptip.vue'], resolve),
+      path: '/poptip',
     },
     {
-      path: '/slider',
       component: (resolve) => require(['./routers/slider.vue'], resolve),
+      path: '/slider',
     },
     {
-      path: '/dropdown',
       component: (resolve) => require(['./routers/dropdown.vue'], resolve),
+      path: '/dropdown',
     },
     {
-      path: '/breadcrumb',
       component: (resolve) => require(['./routers/breadcrumb.vue'], resolve),
+      path: '/breadcrumb',
     },
     {
-      path: '/menu',
       component: (resolve) => require(['./routers/menu.vue'], resolve),
+      path: '/menu',
     },
     {
-      path: '/spin',
       component: (resolve) => require(['./routers/spin.vue'], resolve),
+      path: '/spin',
     },
     {
-      path: '/cascader',
       component: (resolve) => require(['./routers/cascader.vue'], resolve),
+      path: '/cascader',
     },
     {
-      path: '/select',
       component: (resolve) => require(['./routers/select.vue'], resolve),
+      path: '/select',
     },
     {
-      path: '/backtop',
       component: (resolve) => require(['./routers/back-top.vue'], resolve),
+      path: '/backtop',
     },
     {
-      path: '/page',
       component: (resolve) => require(['./routers/page.vue'], resolve),
+      path: '/page',
     },
     {
-      path: '/transfer',
       component: (resolve) => require(['./routers/transfer.vue'], resolve),
+      path: '/transfer',
     },
     {
-      path: '/date',
       component: (resolve) => require(['./routers/date.vue'], resolve),
+      path: '/date',
     },
     {
-      path: '/form',
       component: (resolve) => require(['./routers/form.vue'], resolve),
+      path: '/form',
     },
     {
-      path: '/table',
       component: (resolve) => require(['./routers/table.vue'], resolve),
+      path: '/table',
     },
     {
-      path: '/loading-bar',
       component: (resolve) => require(['./routers/loading-bar.vue'], resolve),
+      path: '/loading-bar',
     },
     {
-      path: '/modal',
       component: (resolve) => require(['./routers/modal.vue'], resolve),
+      path: '/modal',
     },
     {
-      path: '/message',
       component: (resolve) => require(['./routers/message.vue'], resolve),
+      path: '/message',
     },
     {
-      path: '/notice',
       component: (resolve) => require(['./routers/notice.vue'], resolve),
+      path: '/notice',
     },
     {
-      path: '/avatar',
       component: (resolve) => require(['./routers/avatar.vue'], resolve),
+      path: '/avatar',
     },
     {
-      path: '/color-picker',
       component: (resolve) => require(['./routers/color-picker.vue'], resolve),
+      path: '/color-picker',
     },
     {
-      path: '/auto-complete',
       component: (resolve) => require(['./routers/auto-complete.vue'], resolve),
+      path: '/auto-complete',
     },
     {
-      path: '/scroll',
       component: (resolve) => require(['./routers/scroll.vue'], resolve),
+      path: '/scroll',
     },
   ],
 });
 
 export default new Vue({
-  router,
   render: (h) => h(App),
+  router,
 }).$mount('#app');

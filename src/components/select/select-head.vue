@@ -65,89 +65,54 @@ export default {
   components: {Icon},
   mixins: [Emitter, Locale],
   props: {
-    disabled: {
-      type: Boolean,
+    clearable: {
       default: false,
+      type: [Function, Boolean],
+    },
+    disabled: {
+      default: false,
+      type: Boolean,
     },
     filterable: {
-      type: Boolean,
       default: false,
-    },
-    multiple: {
       type: Boolean,
-      default: false,
-    },
-    remote: {
-      type: Boolean,
-      default: false,
     },
     initialLabel: {
       type: [String, Number, Array],
     },
-    values: {
-      type: Array,
-      default: () => [],
-    },
-    clearable: {
-      type: [Function, Boolean],
-      default: false,
-    },
     inputElementId: {
       type: String,
+    },
+    multiple: {
+      default: false,
+      type: Boolean,
     },
     placeholder: {
       type: String,
     },
     queryProp: {
-      type: String,
       default: '',
+      type: String,
+    },
+    remote: {
+      default: false,
+      type: Boolean,
+    },
+    values: {
+      default: () => [],
+      type: Array,
     },
   },
   data() {
     return {
-      prefixCls,
-      query: '',
       inputLength: 20,
-      remoteInitialLabel: this.initialLabel,
+      prefixCls,
       preventRemoteCall: false,
+      query: '',
+      remoteInitialLabel: this.initialLabel,
     };
   },
   computed: {
-    singleDisplayClasses() {
-      const {filterable, multiple, showPlaceholder} = this;
-
-      return [
-        {
-          [`${prefixCls}-placeholder`]: showPlaceholder && !filterable,
-          [`${prefixCls}-selected-value`]: !showPlaceholder && !multiple && !filterable,
-        },
-      ];
-    },
-    singleDisplayValue() {
-      if ((this.multiple && this.values.length > 0) || this.filterable) {
-        return '';
-      }
-
-      return `${this.selectedSingle}` || this.localePlaceholder;
-    },
-    showPlaceholder() {
-      let status = false;
-
-      if (!this.multiple) {
-        const value = this.values[0];
-
-        if (typeof value === 'undefined' || String(value).trim() === '') {
-          status = !this.remoteInitialLabel;
-        }
-      } else if (!this.values.length > 0) {
-        status = true;
-      }
-
-      return status;
-    },
-    resetSelect() {
-      return !this.showPlaceholder && this.clearable;
-    },
     inputStyle() {
       const style = {};
 
@@ -168,16 +133,65 @@ export default {
 
       return this.placeholder;
     },
+    resetSelect() {
+      return !this.showPlaceholder && this.clearable;
+    },
+    selectedMultiple() {
+      return this.multiple ? this.values : [];
+    },
     selectedSingle() {
       const selected = this.values[0];
 
       return selected ? selected.label : this.remoteInitialLabel || '';
     },
-    selectedMultiple() {
-      return this.multiple ? this.values : [];
+    showPlaceholder() {
+      let status = false;
+
+      if (!this.multiple) {
+        const value = this.values[0];
+
+        if (typeof value === 'undefined' || String(value).trim() === '') {
+          status = !this.remoteInitialLabel;
+        }
+      } else if (!this.values.length > 0) {
+        status = true;
+      }
+
+      return status;
+    },
+    singleDisplayClasses() {
+      const {filterable, multiple, showPlaceholder} = this;
+
+      return [
+        {
+          [`${prefixCls}-placeholder`]: showPlaceholder && !filterable,
+          [`${prefixCls}-selected-value`]: !showPlaceholder && !multiple && !filterable,
+        },
+      ];
+    },
+    singleDisplayValue() {
+      if ((this.multiple && this.values.length > 0) || this.filterable) {
+        return '';
+      }
+
+      return `${this.selectedSingle}` || this.localePlaceholder;
     },
   },
   watch: {
+    query(val) {
+      if (this.preventRemoteCall) {
+        this.preventRemoteCall = false;
+
+        return;
+      }
+
+      this.$emit('on-query-change', val);
+    },
+    queryProp(query) {
+      if (query !== this.query) {
+        this.query = query;
+      }
+    },
     values([value]) {
       if (!this.filterable) {
         return;
@@ -203,24 +217,30 @@ export default {
         this.preventRemoteCall = false;
       }); // this should be after the query change setter above
     },
-    query(val) {
-      if (this.preventRemoteCall) {
-        this.preventRemoteCall = false;
-
-        return;
-      }
-
-      this.$emit('on-query-change', val);
-    },
-    queryProp(query) {
-      if (query !== this.query) {
-        this.query = query;
-      }
-    },
   },
   methods: {
+    handleInputDelete() {
+      if (this.multiple && this.selectedMultiple.length && this.query === '') {
+        this.removeTag(this.selectedMultiple[this.selectedMultiple.length - 1]);
+      }
+    },
+    onClear() {
+      this.$emit('on-clear');
+    },
+    onHeaderClick(e) {
+      if (this.filterable && e.target === this.$el) {
+        this.$refs.input.focus();
+      }
+    },
     onInputFocus(e) {
       this.$emit(e.type === 'focus' ? 'on-input-focus' : 'on-input-blur');
+    },
+    onKeydown(event) {
+      if (oneOf(event.key, ['Backspace', 'Delete'])) {
+        this.handleInputDelete(event);
+      }
+
+      this.resetInputState(event);
     },
     removeTag(value) {
       if (this.disabled) {
@@ -231,26 +251,6 @@ export default {
     },
     resetInputState() {
       this.inputLength = this.$refs.input.value.length * 12 + 20;
-    },
-    handleInputDelete() {
-      if (this.multiple && this.selectedMultiple.length && this.query === '') {
-        this.removeTag(this.selectedMultiple[this.selectedMultiple.length - 1]);
-      }
-    },
-    onHeaderClick(e) {
-      if (this.filterable && e.target === this.$el) {
-        this.$refs.input.focus();
-      }
-    },
-    onClear() {
-      this.$emit('on-clear');
-    },
-    onKeydown(event) {
-      if (oneOf(event.key, ['Backspace', 'Delete'])) {
-        this.handleInputDelete(event);
-      }
-
-      this.resetInputState(event);
     },
   },
 };

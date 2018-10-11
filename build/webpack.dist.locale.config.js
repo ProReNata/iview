@@ -7,35 +7,35 @@ process.env.NODE_ENV = 'production';
 
 module.exports = {
   devtool: 'source-map',
-  mode: process.env.NODE_ENV,
   entry,
+  externals: {
+    vue: {
+      amd: 'vue',
+      commonjs: 'vue',
+      commonjs2: 'vue',
+      root: 'Vue',
+    },
+  },
+  mode: process.env.NODE_ENV,
   module: {
     rules: [
       {
-        test: /\.js$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
           sourceMap: true,
         },
-        exclude: /node_modules/,
+        test: /\.js$/,
       },
     ],
   },
   output: {
-    path: path.resolve(__dirname, '../dist/locale'),
-    publicPath: '/dist/locale/',
     filename: '[name].js',
     library: 'iview/locale',
     libraryTarget: 'umd',
+    path: path.resolve(__dirname, '../dist/locale'),
+    publicPath: '/dist/locale/',
     umdNamedDefine: true,
-  },
-  externals: {
-    vue: {
-      root: 'Vue',
-      commonjs: 'vue',
-      commonjs2: 'vue',
-      amd: 'vue',
-    },
   },
   plugins: [
     new webpack.DefinePlugin({

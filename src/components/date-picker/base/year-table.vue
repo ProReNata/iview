@@ -23,18 +23,12 @@ export default {
     /* in mixin */
   },
   computed: {
-    classes() {
-      return [`${prefixCls}`, `${prefixCls}-year`];
-    },
-    startYear() {
-      return Math.floor(this.tableDate.getFullYear() / 10) * 10;
-    },
     cells() {
       const cells = [];
       const cell_tmpl = {
-        text: '',
-        selected: false,
         disabled: false,
+        selected: false,
+        text: '',
       };
 
       const selectedDays = this.dates.filter(Boolean).map((date) => clearHours(new Date(date.getFullYear(), 0, 1)));
@@ -51,6 +45,12 @@ export default {
       }
 
       return cells;
+    },
+    classes() {
+      return [`${prefixCls}`, `${prefixCls}-year`];
+    },
+    startYear() {
+      return Math.floor(this.tableDate.getFullYear() / 10) * 10;
     },
   },
   methods: {

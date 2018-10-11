@@ -150,58 +150,48 @@ import {changeColor, toRGBAString} from './utils';
 export default {
   name: 'ColorPicker',
 
-  components: {Drop, RecommendColors, Saturation, Hue, Alpha},
+  components: {Alpha, Drop, Hue, RecommendColors, Saturation},
 
   directives: {clickOutside, TransferDom},
 
   mixins: [Emitter, Locale, Prefixes],
 
   props: {
-    value: {
-      type: String,
-      default: undefined,
-    },
-    hue: {
-      type: Boolean,
-      default: true,
-    },
     alpha: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
-    recommend: {
-      type: Boolean,
+    colors: {
+      default() {
+        return [];
+      },
+      type: Array,
+    },
+    disabled: {
       default: false,
+      type: Boolean,
     },
     format: {
+      default: undefined,
       type: String,
       validator(value) {
         return oneOf(value, ['hsl', 'hsv', 'hex', 'rgb']);
       },
-      default: undefined,
-    },
-    colors: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String,
-      validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
-      },
-      default: 'default',
     },
     hideDropDown: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    hue: {
+      default: true,
+      type: Boolean,
+    },
+    name: {
+      default: undefined,
+      type: String,
     },
     placement: {
+      default: 'bottom',
       type: String,
       validator(value) {
         return oneOf(value, [
@@ -219,24 +209,32 @@ export default {
           'right-end',
         ]);
       },
-      default: 'bottom',
+    },
+    recommend: {
+      default: false,
+      type: Boolean,
+    },
+    size: {
+      default: 'default',
+      type: String,
+      validator(value) {
+        return oneOf(value, ['small', 'large', 'default']);
+      },
     },
     transfer: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
-    name: {
-      type: String,
+    value: {
       default: undefined,
+      type: String,
     },
   },
 
   data() {
     return {
-      val: changeColor(this.value),
       currentValue: this.value,
       dragging: false,
-      visible: false,
       recommendedColor: [
         '#2d8cf0',
         '#19be6b',
@@ -263,6 +261,8 @@ export default {
         '#000000',
         '#ffffff',
       ],
+      val: changeColor(this.value),
+      visible: false,
     };
   },
 
@@ -275,18 +275,6 @@ export default {
         `${this.inputPrefixCls}-icon-normal`,
       ];
     },
-    transition() {
-      return oneOf(this.placement, ['bottom-start', 'bottom', 'bottom-end']) ? 'slide-up' : 'fade';
-    },
-    saturationColors: {
-      get() {
-        return this.val;
-      },
-      set(newVal) {
-        this.val = newVal;
-        this.$emit('on-active-change', this.formatColor);
-      },
-    },
     classes() {
       return [
         `${this.prefixCls}`,
@@ -295,27 +283,8 @@ export default {
         },
       ];
     },
-    wrapClasses() {
-      return [
-        `${this.prefixCls}-rel`,
-        `${this.prefixCls}-${this.size}`,
-        `${this.inputPrefixCls}-wrapper`,
-        `${this.inputPrefixCls}-wrapper-${this.size}`,
-        {
-          [`${this.prefixCls}-disabled`]: this.disabled,
-        },
-      ];
-    },
-    inputClasses() {
-      return [
-        `${this.prefixCls}-input`,
-        `${this.inputPrefixCls}`,
-        `${this.inputPrefixCls}-${this.size}`,
-        {
-          [`${this.prefixCls}-focused`]: this.visible,
-          [`${this.prefixCls}-disabled`]: this.disabled,
-        },
-      ];
+    displayedColorStyle() {
+      return {backgroundColor: toRGBAString(this.visible ? this.saturationColors.rgba : tinycolor(this.value).toRgb())};
     },
     dropClasses() {
       return [
@@ -325,9 +294,6 @@ export default {
           [`${this.prefixCls}-hide-drop`]: this.hideDropDown,
         },
       ];
-    },
-    displayedColorStyle() {
-      return {backgroundColor: toRGBAString(this.visible ? this.saturationColors.rgba : tinycolor(this.value).toRgb())};
     },
     formatColor() {
       const {format, saturationColors} = this;
@@ -354,6 +320,40 @@ export default {
 
       return saturationColors.hex;
     },
+    inputClasses() {
+      return [
+        `${this.prefixCls}-input`,
+        `${this.inputPrefixCls}`,
+        `${this.inputPrefixCls}-${this.size}`,
+        {
+          [`${this.prefixCls}-focused`]: this.visible,
+          [`${this.prefixCls}-disabled`]: this.disabled,
+        },
+      ];
+    },
+    saturationColors: {
+      get() {
+        return this.val;
+      },
+      set(newVal) {
+        this.val = newVal;
+        this.$emit('on-active-change', this.formatColor);
+      },
+    },
+    transition() {
+      return oneOf(this.placement, ['bottom-start', 'bottom', 'bottom-end']) ? 'slide-up' : 'fade';
+    },
+    wrapClasses() {
+      return [
+        `${this.prefixCls}-rel`,
+        `${this.prefixCls}-${this.size}`,
+        `${this.inputPrefixCls}-wrapper`,
+        `${this.inputPrefixCls}-wrapper-${this.size}`,
+        {
+          [`${this.prefixCls}-disabled`]: this.disabled,
+        },
+      ];
+    },
   },
 
   watch: {
@@ -373,8 +373,32 @@ export default {
   },
 
   methods: {
-    setDragging(value) {
-      this.dragging = value;
+    childChange(data) {
+      this.colorChange(data);
+    },
+    closer(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      this.visible = false;
+      this.$refs.input.focus();
+    },
+    colorChange(data, oldHue) {
+      this.oldHue = this.saturationColors.hsl.h;
+      this.saturationColors = changeColor(data, oldHue || this.oldHue);
+    },
+    handleButtons(event, value) {
+      this.currentValue = value;
+      this.$emit('input', value);
+      this.$emit('on-change', value);
+      this.dispatch('FormItem', 'on-form-change', value);
+      this.closer(event);
+    },
+    handleClear(event) {
+      this.handleButtons(event, '');
+      this.$emit('on-pick-clear');
     },
     handleClose(event) {
       if (this.visible) {
@@ -399,49 +423,6 @@ export default {
 
       this.visible = false;
     },
-    toggleVisible() {
-      if (this.disabled) {
-        return;
-      }
-
-      this.visible = !this.visible;
-      this.$refs.input.focus();
-    },
-    childChange(data) {
-      this.colorChange(data);
-    },
-    colorChange(data, oldHue) {
-      this.oldHue = this.saturationColors.hsl.h;
-      this.saturationColors = changeColor(data, oldHue || this.oldHue);
-    },
-    closer(event) {
-      if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-
-      this.visible = false;
-      this.$refs.input.focus();
-    },
-    handleButtons(event, value) {
-      this.currentValue = value;
-      this.$emit('input', value);
-      this.$emit('on-change', value);
-      this.dispatch('FormItem', 'on-form-change', value);
-      this.closer(event);
-    },
-    handleSuccess(event) {
-      this.handleButtons(event, this.formatColor);
-      this.$emit('on-pick-success');
-    },
-    handleClear(event) {
-      this.handleButtons(event, '');
-      this.$emit('on-pick-clear');
-    },
-    handleSelectColor(color) {
-      this.val = changeColor(color);
-      this.$emit('on-active-change', this.formatColor);
-    },
     handleFirstTab(event) {
       if (event.key === 'Tab' && event.shiftKey) {
         event.preventDefault();
@@ -456,21 +437,34 @@ export default {
         this.$refs.saturation.$el.focus();
       }
     },
-    onTab(event) {
-      if (this.visible) {
-        event.preventDefault();
-      }
+    handleSelectColor(color) {
+      this.val = changeColor(color);
+      this.$emit('on-active-change', this.formatColor);
     },
-    onEscape(event) {
-      if (this.visible) {
-        this.closer(event);
-      }
+    handleSuccess(event) {
+      this.handleButtons(event, this.formatColor);
+      this.$emit('on-pick-success');
     },
     onArrow(event) {
       if (!this.visible) {
         event.preventDefault();
         event.stopPropagation();
         this.visible = true;
+      }
+    },
+    onClear(event) {
+      if (event.key === 'Enter') {
+        this.handleClear(event);
+      }
+    },
+    onClearNative(event) {
+      if (oneOf(event.key, ['Esc', 'Escape'])) {
+        this.closer(event);
+      }
+    },
+    onEscape(event) {
+      if (this.visible) {
+        this.closer(event);
       }
     },
     onKeydown(event) {
@@ -486,16 +480,6 @@ export default {
         this.onTab(event);
       }
     },
-    onClear(event) {
-      if (event.key === 'Enter') {
-        this.handleClear(event);
-      }
-    },
-    onClearNative(event) {
-      if (oneOf(event.key, ['Esc', 'Escape'])) {
-        this.closer(event);
-      }
-    },
     onOk(event) {
       if (event.key === 'Enter') {
         this.handleSuccess(event);
@@ -509,6 +493,22 @@ export default {
       } else if (oneOf(key, ['Esc', 'Escape'])) {
         this.closer(event);
       }
+    },
+    onTab(event) {
+      if (this.visible) {
+        event.preventDefault();
+      }
+    },
+    setDragging(value) {
+      this.dragging = value;
+    },
+    toggleVisible() {
+      if (this.disabled) {
+        return;
+      }
+
+      this.visible = !this.visible;
+      this.$refs.input.focus();
     },
   },
 };

@@ -3,6 +3,21 @@
 import {addClass, removeClass} from '../../utils/assist';
 
 const Transition = {
+  afterEnter(el) {
+    // for safari: remove class then reset height is necessary
+    removeClass(el, 'collapse-transition');
+    el.style.height = '';
+    el.style.overflow = el.dataset.oldOverflow;
+  },
+
+  afterLeave(el) {
+    removeClass(el, 'collapse-transition');
+    el.style.height = '';
+    el.style.overflow = el.dataset.oldOverflow;
+    el.style.paddingTop = el.dataset.oldPaddingTop;
+    el.style.paddingBottom = el.dataset.oldPaddingBottom;
+  },
+
   beforeEnter(el) {
     addClass(el, 'collapse-transition');
 
@@ -16,6 +31,19 @@ const Transition = {
     el.style.height = '0';
     el.style.paddingTop = 0;
     el.style.paddingBottom = 0;
+  },
+
+  beforeLeave(el) {
+    if (!el.dataset) {
+      el.dataset = {};
+    }
+
+    el.dataset.oldPaddingTop = el.style.paddingTop;
+    el.dataset.oldPaddingBottom = el.style.paddingBottom;
+    el.dataset.oldOverflow = el.style.overflow;
+
+    el.style.height = `${el.scrollHeight}px`;
+    el.style.overflow = 'hidden';
   },
 
   enter(el) {
@@ -34,26 +62,6 @@ const Transition = {
     el.style.overflow = 'hidden';
   },
 
-  afterEnter(el) {
-    // for safari: remove class then reset height is necessary
-    removeClass(el, 'collapse-transition');
-    el.style.height = '';
-    el.style.overflow = el.dataset.oldOverflow;
-  },
-
-  beforeLeave(el) {
-    if (!el.dataset) {
-      el.dataset = {};
-    }
-
-    el.dataset.oldPaddingTop = el.style.paddingTop;
-    el.dataset.oldPaddingBottom = el.style.paddingBottom;
-    el.dataset.oldOverflow = el.style.overflow;
-
-    el.style.height = `${el.scrollHeight}px`;
-    el.style.overflow = 'hidden';
-  },
-
   leave(el) {
     if (el.scrollHeight !== 0) {
       // for safari: add class after set height, or it will jump to zero height suddenly, weired
@@ -63,19 +71,11 @@ const Transition = {
       el.style.paddingBottom = 0;
     }
   },
-
-  afterLeave(el) {
-    removeClass(el, 'collapse-transition');
-    el.style.height = '';
-    el.style.overflow = el.dataset.oldOverflow;
-    el.style.paddingTop = el.dataset.oldPaddingTop;
-    el.style.paddingBottom = el.dataset.oldPaddingBottom;
-  },
 };
 
 export default {
-  name: 'CollapseTransition',
   functional: true,
+  name: 'CollapseTransition',
   render(h, {children}) {
     const data = {
       on: Transition,

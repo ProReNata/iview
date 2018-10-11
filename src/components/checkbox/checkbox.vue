@@ -45,59 +45,48 @@ export default {
   mixins: [Emitter],
   props: {
     disabled: {
+      default: false,
       type: Boolean,
-      default: false,
-    },
-    value: {
-      type: [String, Number, Boolean],
-      default: false,
-    },
-    trueValue: {
-      type: [String, Number, Boolean],
-      default: true,
     },
     falseValue: {
-      type: [String, Number, Boolean],
       default: false,
+      type: [String, Number, Boolean],
+    },
+    indeterminate: {
+      default: false,
+      type: Boolean,
     },
     label: {
       type: [String, Number, Boolean],
     },
-    indeterminate: {
-      type: Boolean,
-      default: false,
+    name: {
+      type: String,
     },
     size: {
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
-    name: {
-      type: String,
+    trueValue: {
+      default: true,
+      type: [String, Number, Boolean],
+    },
+    value: {
+      default: false,
+      type: [String, Number, Boolean],
     },
   },
   data() {
     return {
-      model: [],
       currentValue: this.value,
-      group: false,
-      showSlot: true,
-      parent: findComponentUpward(this, 'CheckboxGroup'),
       focusInner: false,
+      group: false,
+      model: [],
+      parent: findComponentUpward(this, 'CheckboxGroup'),
+      showSlot: true,
     };
   },
   computed: {
-    wrapClasses() {
-      return [
-        `${prefixCls}-wrapper`,
-        {
-          [`${prefixCls}-group-item`]: this.group,
-          [`${prefixCls}-wrapper-checked`]: this.currentValue,
-          [`${prefixCls}-wrapper-disabled`]: this.disabled,
-          [`${prefixCls}-${this.size}`]: !!this.size,
-        },
-      ];
-    },
     checkboxClasses() {
       return [
         `${prefixCls}`,
@@ -118,6 +107,17 @@ export default {
     },
     inputClasses() {
       return `${prefixCls}-input`;
+    },
+    wrapClasses() {
+      return [
+        `${prefixCls}-wrapper`,
+        {
+          [`${prefixCls}-group-item`]: this.group,
+          [`${prefixCls}-wrapper-checked`]: this.currentValue,
+          [`${prefixCls}-wrapper-disabled`]: this.disabled,
+          [`${prefixCls}-${this.size}`]: !!this.size,
+        },
+      ];
     },
   },
   watch: {
@@ -162,14 +162,14 @@ export default {
         this.dispatch('FormItem', 'on-form-change', value);
       }
     },
-    updateModel() {
-      this.currentValue = this.value === this.trueValue;
-    },
     onBlur() {
       this.focusInner = false;
     },
     onFocus() {
       this.focusInner = true;
+    },
+    updateModel() {
+      this.currentValue = this.value === this.trueValue;
     },
   },
 };

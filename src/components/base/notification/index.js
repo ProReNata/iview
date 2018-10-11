@@ -17,18 +17,18 @@ Notification.newInstance = (properties) => {
   const notification = Instance.$children[0];
 
   return {
-    notice(noticeProps) {
-      notification.add(noticeProps);
-    },
-    remove(name) {
-      notification.close(name);
-    },
     component: notification,
     destroy(element) {
       notification.closeAll();
       setTimeout(() => {
         document.body.removeChild(document.getElementsByClassName(element)[0]);
       }, 500);
+    },
+    notice(noticeProps) {
+      notification.add(noticeProps);
+    },
+    remove(name) {
+      notification.close(name);
     },
   };
 };

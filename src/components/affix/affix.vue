@@ -51,23 +51,30 @@ function getOffset(element) {
 export default {
   name: 'Affix',
   props: {
-    offsetTop: {
-      type: Number,
-      default: 0,
-    },
     offsetBottom: {
+      type: Number,
+    },
+    offsetTop: {
+      default: 0,
       type: Number,
     },
   },
   data() {
     return {
       affix: false,
-      styles: {},
       slot: false,
       slotStyle: {},
+      styles: {},
     };
   },
   computed: {
+    classes() {
+      return [
+        {
+          [`${prefixCls}`]: this.affix,
+        },
+      ];
+    },
     offsetType() {
       let type = 'top';
 
@@ -76,13 +83,6 @@ export default {
       }
 
       return type;
-    },
-    classes() {
-      return [
-        {
-          [`${prefixCls}`]: this.affix,
-        },
-      ];
     },
   },
   mounted() {
@@ -109,13 +109,13 @@ export default {
       if (elOffset.top - this.offsetTop < scrollTop && this.offsetType === 'top' && !affix) {
         this.affix = true;
         this.slotStyle = {
-          width: `${this.$refs.point.clientWidth}px`,
           height: `${this.$refs.point.clientHeight}px`,
+          width: `${this.$refs.point.clientWidth}px`,
         };
         this.slot = true;
         this.styles = {
-          top: `${this.offsetTop}px`,
           left: `${elOffset.left}px`,
+          top: `${this.offsetTop}px`,
           width: `${this.$el.offsetWidth}px`,
         };
 

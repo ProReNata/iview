@@ -64,54 +64,35 @@ const returnFalse = () => false;
 
 export default {
   name: 'TimePickerPanel',
-  components: {TimeSpinner, Confirm},
+  components: {Confirm, TimeSpinner},
   mixins: [Mixin, Locale, Options],
   props: {
     disabledDate: {
-      type: Function,
       default: returnFalse,
-    },
-    steps: {
-      type: Array,
-      default: () => [],
+      type: Function,
     },
     format: {
-      type: String,
       default: 'HH:mm:ss',
+      type: String,
+    },
+    steps: {
+      default: () => [],
+      type: Array,
     },
     value: {
-      type: Array,
       required: true,
+      type: Array,
     },
   },
   data() {
     return {
-      prefixCls,
-      timePrefixCls,
       date: this.value[0] || initTimeDate(),
+      prefixCls,
       showDate: false,
+      timePrefixCls,
     };
   },
   computed: {
-    showSeconds() {
-      return !(this.format || '').match(/mm$/);
-    },
-    visibleDate() {
-      // TODO
-      const {date} = this;
-      const month = date.getMonth() + 1;
-      const tYear = this.t('i.datepicker.year');
-      const tMonth = this.t(`i.datepicker.month${month}`);
-
-      return `${date.getFullYear()}${tYear} ${tMonth}`;
-    },
-    timeSlots() {
-      if (!this.value[0]) {
-        return [];
-      }
-
-      return ['getHours', 'getMinutes', 'getSeconds'].map((slot) => this.date[slot]());
-    },
     disabledHMS() {
       const disabledTypes = ['disabledHours', 'disabledMinutes', 'disabledSeconds'];
 
@@ -139,6 +120,25 @@ export default {
       });
 
       return disabledTypes.reduce((obj, type, i) => ((obj[type] = disabledHMS[i]), obj), {});
+    },
+    showSeconds() {
+      return !(this.format || '').match(/mm$/);
+    },
+    timeSlots() {
+      if (!this.value[0]) {
+        return [];
+      }
+
+      return ['getHours', 'getMinutes', 'getSeconds'].map((slot) => this.date[slot]());
+    },
+    visibleDate() {
+      // TODO
+      const {date} = this;
+      const month = date.getMonth() + 1;
+      const tYear = this.t('i.datepicker.year');
+      const tMonth = this.t(`i.datepicker.month${month}`);
+
+      return `${date.getFullYear()}${tYear} ${tMonth}`;
     },
   },
   watch: {

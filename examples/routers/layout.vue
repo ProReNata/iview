@@ -73,19 +73,19 @@ export default {
     };
   },
   watch: {
-    isCollapsed(/* val */) {
-      // console.log(val)
-    },
+    // isCollapsed(val) {
+    //   console.log(val);
+    // },
   },
   methods: {
-    toggleCollapse() {
-      this.$refs.side.toggleCollapse();
-    },
     change() {
       this.isCollapsed = !this.isCollapsed;
     },
     changed(res) {
       console.log(res);
+    },
+    toggleCollapse() {
+      this.$refs.side.toggleCollapse();
     },
   },
 };

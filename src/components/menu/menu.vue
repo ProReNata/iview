@@ -16,34 +16,34 @@ export default {
   name: 'Menu',
   mixins: [Emitter],
   props: {
-    mode: {
-      validator(value) {
-        return oneOf(value, ['horizontal', 'vertical']);
-      },
-      default: 'vertical',
-    },
-    theme: {
-      validator(value) {
-        return oneOf(value, ['light', 'dark', 'primary']);
-      },
-      default: 'light',
+    accordion: {
+      default: false,
+      type: Boolean,
     },
     activeName: {
       type: [String, Number],
     },
+    mode: {
+      default: 'vertical',
+      validator(value) {
+        return oneOf(value, ['horizontal', 'vertical']);
+      },
+    },
     openNames: {
-      type: Array,
       default() {
         return [];
       },
+      type: Array,
     },
-    accordion: {
-      type: Boolean,
-      default: false,
+    theme: {
+      default: 'light',
+      validator(value) {
+        return oneOf(value, ['light', 'dark', 'primary']);
+      },
     },
     width: {
-      type: String,
       default: '240px',
+      type: String,
     },
   },
   data() {
@@ -79,14 +79,14 @@ export default {
     },
   },
   watch: {
-    openNames(names) {
-      this.openedNames = names;
-    },
     activeName(val) {
       this.currentActiveName = val;
     },
     currentActiveName() {
       this.updateActiveName();
+    },
+    openNames(names) {
+      this.openedNames = names;
     },
   },
   mounted() {
@@ -106,6 +106,19 @@ export default {
 
       this.broadcast('Submenu', 'on-update-active-name', false);
       this.broadcast('MenuItem', 'on-update-active-name', this.currentActiveName);
+    },
+    updateOpened() {
+      const items = findComponentsDownward(this, 'Submenu');
+
+      if (items.length) {
+        items.forEach((item) => {
+          if (this.openedNames.indexOf(item.name) > -1) {
+            item.opened = true;
+          } else {
+            item.opened = false;
+          }
+        });
+      }
     },
     updateOpenKeys(name) {
       const names = [...this.openedNames];
@@ -155,19 +168,6 @@ export default {
         .map((item) => item.name);
       this.openedNames = [...openedNames];
       this.$emit('on-open-change', openedNames);
-    },
-    updateOpened() {
-      const items = findComponentsDownward(this, 'Submenu');
-
-      if (items.length) {
-        items.forEach((item) => {
-          if (this.openedNames.indexOf(item.name) > -1) {
-            item.opened = true;
-          } else {
-            item.opened = false;
-          }
-        });
-      }
     },
   },
 };

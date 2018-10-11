@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import noop from 'lodash/noop';
 import Modal from './modal.vue';
 import Button from '../button/button.vue';
 import Locale from '../../mixins/locale';
@@ -13,34 +14,27 @@ Modal.newInstance = (properties) => {
     data: {
       ..._props,
       ...{
+        body: '',
+        buttonLoading: false,
+        cancelText: undefined,
+        closable: false,
+        iconName: '',
+        iconType: '',
+        loading: false,
+        okText: undefined,
+        scrollable: false,
+        showCancel: false,
+        title: '',
         visible: false,
         width: 416,
-        title: '',
-        body: '',
-        iconType: '',
-        iconName: '',
-        okText: undefined,
-        cancelText: undefined,
-        showCancel: false,
-        loading: false,
-        buttonLoading: false,
-        scrollable: false,
-        closable: false,
       },
     },
     computed: {
-      iconTypeCls() {
-        return [`${prefixCls}-body-icon`, `${prefixCls}-body-icon-${this.iconType}`];
-      },
       iconNameCls() {
         return ['ivu-icon', `ivu-icon-${this.iconName}`];
       },
-      localeOkText() {
-        if (this.okText) {
-          return this.okText;
-        }
-
-        return this.t('i.modal.okText');
+      iconTypeCls() {
+        return [`${prefixCls}-body-icon`, `${prefixCls}-body-icon-${this.iconType}`];
       },
       localeCancelText() {
         if (this.cancelText) {
@@ -49,6 +43,13 @@ Modal.newInstance = (properties) => {
 
         return this.t('i.modal.cancelText');
       },
+      localeOkText() {
+        if (this.okText) {
+          return this.okText;
+        }
+
+        return this.t('i.modal.okText');
+      },
     },
     methods: {
       cancel() {
@@ -56,6 +57,11 @@ Modal.newInstance = (properties) => {
         this.buttonLoading = false;
         this.onCancel();
         this.remove();
+      },
+      destroy() {
+        this.$destroy();
+        document.body.removeChild(this.$el);
+        this.onRemove();
       },
       ok() {
         if (this.loading) {
@@ -67,19 +73,14 @@ Modal.newInstance = (properties) => {
 
         this.onOk();
       },
+      onCancel: noop,
+      onOk: noop,
+      onRemove: noop,
       remove() {
         setTimeout(() => {
           this.destroy();
         }, 300);
       },
-      destroy() {
-        this.$destroy();
-        document.body.removeChild(this.$el);
-        this.onRemove();
-      },
-      onOk() {},
-      onCancel() {},
-      onRemove() {},
     },
     render(h) {
       const footerVNodes = [];
@@ -89,12 +90,12 @@ Modal.newInstance = (properties) => {
           h(
             Button,
             {
-              props: {
-                type: 'text',
-                size: 'large',
-              },
               on: {
                 click: this.cancel,
+              },
+              props: {
+                size: 'large',
+                type: 'text',
               },
             },
             this.localeCancelText,
@@ -106,13 +107,13 @@ Modal.newInstance = (properties) => {
         h(
           Button,
           {
-            props: {
-              type: 'primary',
-              size: 'large',
-              loading: this.buttonLoading,
-            },
             on: {
               click: this.ok,
+            },
+            props: {
+              loading: this.buttonLoading,
+              size: 'large',
+              type: 'primary',
             },
           },
           this.localeOkText,
@@ -164,20 +165,20 @@ Modal.newInstance = (properties) => {
       return h(
         Modal,
         {
-          props: {
-            ..._props,
-            ...{
-              width: this.width,
-              scrollable: this.scrollable,
-              closable: this.closable,
-            },
-          },
           domProps: {
             value: this.visible,
           },
           on: {
             input: (status) => {
               this.visible = status;
+            },
+          },
+          props: {
+            ..._props,
+            ...{
+              closable: this.closable,
+              scrollable: this.scrollable,
+              width: this.width,
             },
           },
         },
@@ -230,6 +231,12 @@ Modal.newInstance = (properties) => {
   const modal = Instance.$children[0];
 
   return {
+    component: modal,
+    remove() {
+      modal.visible = false;
+      modal.$parent.buttonLoading = false;
+      modal.$parent.remove();
+    },
     show(props) {
       modal.$parent.showCancel = props.showCancel;
       modal.$parent.iconType = props.icon;
@@ -304,12 +311,6 @@ Modal.newInstance = (properties) => {
 
       modal.visible = true;
     },
-    remove() {
-      modal.visible = false;
-      modal.$parent.buttonLoading = false;
-      modal.$parent.remove();
-    },
-    component: modal,
   };
 };
 

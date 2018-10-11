@@ -20,10 +20,10 @@ export default {
       const mockData = [];
       for (let i = 1; i <= 20; i++) {
         mockData.push({
-          key: i.toString(),
-          label: `内容${i}`,
           description: `内容${i}的描述信息`,
           disabled: Math.random() * 3 < 1,
+          key: i.toString(),
+          label: `内容${i}`,
         });
       }
 
@@ -34,14 +34,14 @@ export default {
         .filter(() => Math.random() * 2 > 1)
         .map((item) => item.key);
     },
-    render1(item) {
-      return item.label;
-    },
     handleChange1(newTargetKeys, direction, moveKeys) {
       console.log(newTargetKeys);
       console.log(direction);
       console.log(moveKeys);
       this.targetKeys1 = newTargetKeys;
+    },
+    render1(item) {
+      return item.label;
     },
   },
 };

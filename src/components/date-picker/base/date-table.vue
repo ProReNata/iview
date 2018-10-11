@@ -32,8 +32,8 @@ export default {
   props: {
     /* more props in mixin */
     showWeekNumbers: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
   },
   data() {
@@ -42,27 +42,10 @@ export default {
     };
   },
   computed: {
-    classes() {
-      return [
-        `${prefixCls}`,
-        {
-          [`${prefixCls}-show-week-numbers`]: this.showWeekNumbers,
-        },
-      ];
-    },
     calendar() {
       const weekStartDay = Number(this.t('i.datepicker.weekStartDay'));
 
       return new jsCalendar.Generator({onlyDays: !this.showWeekNumbers, weekStart: weekStartDay});
-    },
-    headerDays() {
-      const weekStartDay = Number(this.t('i.datepicker.weekStartDay'));
-      const translatedDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map((item) =>
-        this.t(`i.datepicker.weeks.${item}`),
-      );
-      const weekDays = translatedDays.splice(weekStartDay, 7 - weekStartDay).concat(translatedDays.splice(0, weekStartDay));
-
-      return this.showWeekNumbers ? [''].concat(weekDays) : weekDays;
     },
     cells() {
       const tableYear = this.tableDate.getFullYear();
@@ -87,14 +70,31 @@ export default {
 
         return {
           ...cell,
-          type: time === today ? 'today' : cell.type,
-          selected: dateIsInCurrentMonth && selectedDays.includes(time),
           disabled: cell.date && disabledTestFn && disabledTestFn(new Date(time)),
-          range: dateIsInCurrentMonth && isRange && isInRange(time, rangeStart, rangeEnd),
-          start: dateIsInCurrentMonth && isRange && time === minDay,
           end: dateIsInCurrentMonth && isRange && time === maxDay,
+          range: dateIsInCurrentMonth && isRange && isInRange(time, rangeStart, rangeEnd),
+          selected: dateIsInCurrentMonth && selectedDays.includes(time),
+          start: dateIsInCurrentMonth && isRange && time === minDay,
+          type: time === today ? 'today' : cell.type,
         };
       }).cells.slice(this.showWeekNumbers ? 8 : 0);
+    },
+    classes() {
+      return [
+        `${prefixCls}`,
+        {
+          [`${prefixCls}-show-week-numbers`]: this.showWeekNumbers,
+        },
+      ];
+    },
+    headerDays() {
+      const weekStartDay = Number(this.t('i.datepicker.weekStartDay'));
+      const translatedDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map((item) =>
+        this.t(`i.datepicker.weeks.${item}`),
+      );
+      const weekDays = translatedDays.splice(weekStartDay, 7 - weekStartDay).concat(translatedDays.splice(0, weekStartDay));
+
+      return this.showWeekNumbers ? [''].concat(weekDays) : weekDays;
     },
   },
   methods: {

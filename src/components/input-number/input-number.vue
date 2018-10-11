@@ -85,48 +85,17 @@ export default {
   name: 'InputNumber',
   mixins: [Emitter],
   props: {
-    max: {
-      type: Number,
-      default: Infinity,
-    },
-    min: {
-      type: Number,
-      default: -Infinity,
-    },
-    step: {
-      type: Number,
-      default: 1,
-    },
-    value: {
-      type: Number,
-      default: 1,
-    },
-    size: {
-      validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
-      },
+    autofocus: {
+      default: false,
+      type: Boolean,
     },
     disabled: {
-      type: Boolean,
       default: false,
-    },
-    autofocus: {
       type: Boolean,
-      default: false,
-    },
-    readonly: {
-      type: Boolean,
-      default: false,
     },
     editable: {
-      type: Boolean,
       default: true,
-    },
-    name: {
-      type: String,
-    },
-    precision: {
-      type: Number,
+      type: Boolean,
     },
     elementId: {
       type: String,
@@ -134,35 +103,92 @@ export default {
     formatter: {
       type: Function,
     },
+    max: {
+      default: Infinity,
+      type: Number,
+    },
+    min: {
+      default: -Infinity,
+      type: Number,
+    },
+    name: {
+      type: String,
+    },
     parser: {
       type: Function,
     },
     placeholder: {
-      type: String,
       default: '',
+      type: String,
+    },
+    precision: {
+      type: Number,
+    },
+    readonly: {
+      default: false,
+      type: Boolean,
+    },
+    size: {
+      validator(value) {
+        return oneOf(value, ['small', 'large', 'default']);
+      },
+    },
+    step: {
+      default: 1,
+      type: Number,
+    },
+    value: {
+      default: 1,
+      type: Number,
     },
   },
   data() {
     return {
+      currentValue: this.value,
+      downDisabled: false,
       focused: false,
       upDisabled: false,
-      downDisabled: false,
-      currentValue: this.value,
     };
   },
   computed: {
-    wrapClasses() {
+    downClasses() {
       return [
-        `${prefixCls}`,
+        `${prefixCls}-handler`,
+        `${prefixCls}-handler-down`,
         {
-          [`${prefixCls}-${this.size}`]: !!this.size,
-          [`${prefixCls}-disabled`]: this.disabled,
-          [`${prefixCls}-focused`]: this.focused,
+          [`${prefixCls}-handler-down-disabled`]: this.downDisabled,
         },
       ];
     },
+    formatterValue() {
+      if (this.formatter && this.precisionValue !== null) {
+        return this.formatter(this.precisionValue);
+      }
+
+      return this.precisionValue;
+    },
     handlerClasses() {
       return `${prefixCls}-handler-wrap`;
+    },
+    innerDownClasses() {
+      return `${prefixCls}-handler-down-inner ${iconPrefixCls} ${iconPrefixCls}-ios-arrow-down`;
+    },
+    innerUpClasses() {
+      return `${prefixCls}-handler-up-inner ${iconPrefixCls} ${iconPrefixCls}-ios-arrow-up`;
+    },
+    inputClasses() {
+      return `${prefixCls}-input`;
+    },
+    inputWrapClasses() {
+      return `${prefixCls}-input-wrap`;
+    },
+    precisionValue() {
+      // can not display 1.0
+      if (!this.currentValue) {
+        return this.currentValue;
+      }
+
+      return this.precision ? this.currentValue.toFixed(this.precision) : this.currentValue;
     },
     upClasses() {
       return [
@@ -173,149 +199,38 @@ export default {
         },
       ];
     },
-    innerUpClasses() {
-      return `${prefixCls}-handler-up-inner ${iconPrefixCls} ${iconPrefixCls}-ios-arrow-up`;
-    },
-    downClasses() {
+    wrapClasses() {
       return [
-        `${prefixCls}-handler`,
-        `${prefixCls}-handler-down`,
+        `${prefixCls}`,
         {
-          [`${prefixCls}-handler-down-disabled`]: this.downDisabled,
+          [`${prefixCls}-${this.size}`]: !!this.size,
+          [`${prefixCls}-disabled`]: this.disabled,
+          [`${prefixCls}-focused`]: this.focused,
         },
       ];
     },
-    innerDownClasses() {
-      return `${prefixCls}-handler-down-inner ${iconPrefixCls} ${iconPrefixCls}-ios-arrow-down`;
-    },
-    inputWrapClasses() {
-      return `${prefixCls}-input-wrap`;
-    },
-    inputClasses() {
-      return `${prefixCls}-input`;
-    },
-    precisionValue() {
-      // can not display 1.0
-      if (!this.currentValue) {
-        return this.currentValue;
-      }
-
-      return this.precision ? this.currentValue.toFixed(this.precision) : this.currentValue;
-    },
-    formatterValue() {
-      if (this.formatter && this.precisionValue !== null) {
-        return this.formatter(this.precisionValue);
-      }
-
-      return this.precisionValue;
-    },
   },
   watch: {
-    value(val) {
-      this.currentValue = val;
-    },
     currentValue(val) {
       this.changeVal(val);
+    },
+    max() {
+      this.changeVal(this.currentValue);
     },
     min() {
       this.changeVal(this.currentValue);
     },
-    max() {
-      this.changeVal(this.currentValue);
+    value(val) {
+      this.currentValue = val;
     },
   },
   mounted() {
     this.changeVal(this.currentValue);
   },
   methods: {
-    preventDefault(e) {
-      e.preventDefault();
-    },
-    up(e) {
-      const targetVal = Number(e.target.value);
-
-      if (this.upDisabled && Number.isNaN(targetVal)) {
-        return false;
-      }
-
-      this.changeStep('up', e);
-    },
-    down(e) {
-      const targetVal = Number(e.target.value);
-
-      if (this.downDisabled && Number.isNaN(targetVal)) {
-        return false;
-      }
-
-      this.changeStep('down', e);
-    },
-    changeStep(type, e) {
-      if (this.disabled || this.readonly) {
-        return false;
-      }
-
-      const targetVal = Number(e.target.value);
-      let val = Number(this.currentValue);
-      const step = Number(this.step);
-
-      if (Number.isNaN(val)) {
-        return false;
-      }
-
-      // input a number, and key up or down
-      if (!Number.isNaN(targetVal)) {
-        if (type === 'up') {
-          if (addNum(targetVal, step) <= this.max) {
-            val = targetVal;
-          } else {
-            return false;
-          }
-        } else if (type === 'down') {
-          if (addNum(targetVal, -step) >= this.min) {
-            val = targetVal;
-          } else {
-            return false;
-          }
-        }
-      }
-
-      if (type === 'up') {
-        val = addNum(val, step);
-      } else if (type === 'down') {
-        val = addNum(val, -step);
-      }
-
-      this.setValue(val);
-    },
-    setValue(val) {
-      // 如果 step 是小数，且没有设置 precision，是有问题的
-      if (val && !Number.isNaN(this.precision)) {
-        val = Number(Number(val).toFixed(this.precision));
-      }
-
-      this.$nextTick(() => {
-        this.currentValue = val;
-        this.$emit('input', val);
-        this.$emit('on-change', val);
-        this.dispatch('FormItem', 'on-form-change', val);
-      });
-    },
-    focus(event) {
-      this.focused = true;
-      this.$emit('on-focus', event);
-    },
     blur() {
       this.focused = false;
       this.$emit('on-blur');
-    },
-    keyDown(e) {
-      if (e.keyCode === 38) {
-        e.preventDefault();
-        this.up(e);
-      } else if (e.keyCode === 40) {
-        e.preventDefault();
-        this.down(e);
-      }
     },
     change(event) {
       let val = event.target.value.trim();
@@ -368,6 +283,44 @@ export default {
         event.target.value = this.currentValue;
       }
     },
+    changeStep(type, e) {
+      if (this.disabled || this.readonly) {
+        return false;
+      }
+
+      const targetVal = Number(e.target.value);
+      let val = Number(this.currentValue);
+      const step = Number(this.step);
+
+      if (Number.isNaN(val)) {
+        return false;
+      }
+
+      // input a number, and key up or down
+      if (!Number.isNaN(targetVal)) {
+        if (type === 'up') {
+          if (addNum(targetVal, step) <= this.max) {
+            val = targetVal;
+          } else {
+            return false;
+          }
+        } else if (type === 'down') {
+          if (addNum(targetVal, -step) >= this.min) {
+            val = targetVal;
+          } else {
+            return false;
+          }
+        }
+      }
+
+      if (type === 'up') {
+        val = addNum(val, step);
+      } else if (type === 'down') {
+        val = addNum(val, -step);
+      }
+
+      this.setValue(val);
+    },
     changeVal(val) {
       val = Number(val);
 
@@ -380,6 +333,53 @@ export default {
         this.upDisabled = true;
         this.downDisabled = true;
       }
+    },
+    down(e) {
+      const targetVal = Number(e.target.value);
+
+      if (this.downDisabled && Number.isNaN(targetVal)) {
+        return false;
+      }
+
+      this.changeStep('down', e);
+    },
+    focus(event) {
+      this.focused = true;
+      this.$emit('on-focus', event);
+    },
+    keyDown(e) {
+      if (e.keyCode === 38) {
+        e.preventDefault();
+        this.up(e);
+      } else if (e.keyCode === 40) {
+        e.preventDefault();
+        this.down(e);
+      }
+    },
+    preventDefault(e) {
+      e.preventDefault();
+    },
+    setValue(val) {
+      // 如果 step 是小数，且没有设置 precision，是有问题的
+      if (val && !Number.isNaN(this.precision)) {
+        val = Number(Number(val).toFixed(this.precision));
+      }
+
+      this.$nextTick(() => {
+        this.currentValue = val;
+        this.$emit('input', val);
+        this.$emit('on-change', val);
+        this.dispatch('FormItem', 'on-form-change', val);
+      });
+    },
+    up(e) {
+      const targetVal = Number(e.target.value);
+
+      if (this.upDisabled && Number.isNaN(targetVal)) {
+        return false;
+      }
+
+      this.changeStep('up', e);
     },
   },
 };

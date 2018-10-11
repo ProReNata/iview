@@ -54,28 +54,28 @@
 export default {
   data() {
     return {
-      modal9: false,
-      modal10: false,
       modal1: false,
+      modal10: false,
+      modal9: false,
       scrollable: false,
     };
   },
   methods: {
-    ok() {
-      this.$nextTick(() => {
-        this.modal1 = true;
-      });
-      this.$Message.info('点击了确定');
-    },
     cancel() {
       this.$Message.info('点击了取消');
     },
     instance(scrollable) {
       this.$Modal.info({
-        title: 'test',
         content: 'test',
         scrollable,
+        title: 'test',
       });
+    },
+    ok() {
+      this.$nextTick(() => {
+        this.modal1 = true;
+      });
+      this.$Message.info('点击了确定');
     },
   },
 };

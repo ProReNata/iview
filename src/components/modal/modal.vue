@@ -88,89 +88,91 @@ const prefixCls = 'ivu-modal';
 
 export default {
   name: 'Modal',
-  components: {Icon, iButton},
+  components: {iButton, Icon},
   directives: {TransferDom},
   mixins: [Locale, Emitter, ScrollbarMixins],
   props: {
-    value: {
-      type: Boolean,
-      default: false,
-    },
-    closable: {
-      type: Boolean,
-      default: true,
-    },
-    maskClosable: {
-      type: Boolean,
-      default: true,
-    },
-    title: {
-      type: String,
-    },
-    width: {
-      type: [Number, String],
-      default: 520,
-    },
-    okText: {
-      type: String,
-    },
     cancelText: {
       type: String,
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    styles: {
-      type: Object,
     },
     className: {
       type: String,
     },
+    closable: {
+      default: true,
+      type: Boolean,
+    },
     // for instance
     footerHide: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    loading: {
+      default: false,
+      type: Boolean,
+    },
+    maskClosable: {
+      default: true,
+      type: Boolean,
+    },
+    okText: {
+      type: String,
     },
     scrollable: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    styles: {
+      type: Object,
+    },
+    title: {
+      type: String,
+    },
+    transfer: {
+      default: true,
+      type: Boolean,
     },
     transitionNames: {
-      type: Array,
       default() {
         return ['ease', 'fade'];
       },
+      type: Array,
     },
-    transfer: {
+    value: {
+      default: false,
       type: Boolean,
-      default: true,
+    },
+    width: {
+      default: 520,
+      type: [Number, String],
     },
   },
   data() {
     return {
-      prefixCls,
-      wrapShow: false,
-      showHead: true,
       buttonLoading: false,
+      prefixCls,
+      showHead: true,
       visible: this.value,
+      wrapShow: false,
     };
   },
   computed: {
-    wrapClasses() {
-      return [
-        `${prefixCls}-wrap`,
-        {
-          [`${prefixCls}-hidden`]: !this.wrapShow,
-          [`${this.className}`]: !!this.className,
-        },
-      ];
-    },
-    maskClasses() {
-      return `${prefixCls}-mask`;
-    },
     classes() {
       return `${prefixCls}`;
+    },
+    localeCancelText() {
+      if (this.cancelText === undefined) {
+        return this.t('i.modal.cancelText');
+      }
+
+      return this.cancelText;
+    },
+    localeOkText() {
+      if (this.okText === undefined) {
+        return this.t('i.modal.okText');
+      }
+
+      return this.okText;
     },
     mainStyles() {
       const style = {};
@@ -186,22 +188,37 @@ export default {
 
       return style;
     },
-    localeOkText() {
-      if (this.okText === undefined) {
-        return this.t('i.modal.okText');
-      }
-
-      return this.okText;
+    maskClasses() {
+      return `${prefixCls}-mask`;
     },
-    localeCancelText() {
-      if (this.cancelText === undefined) {
-        return this.t('i.modal.cancelText');
-      }
-
-      return this.cancelText;
+    wrapClasses() {
+      return [
+        `${prefixCls}-wrap`,
+        {
+          [`${prefixCls}-hidden`]: !this.wrapShow,
+          [`${this.className}`]: !!this.className,
+        },
+      ];
     },
   },
   watch: {
+    loading(val) {
+      if (!val) {
+        this.buttonLoading = false;
+      }
+    },
+    scrollable(val) {
+      if (!val) {
+        this.addScrollEffect();
+      } else {
+        this.removeScrollEffect();
+      }
+    },
+    title(val) {
+      if (this.$slots.header === undefined) {
+        this.showHead = !!val;
+      }
+    },
     value(val) {
       this.visible = val;
     },
@@ -228,23 +245,6 @@ export default {
       this.broadcast('Slider', 'on-visible-change', val); // #2852
       this.$emit('on-visible-change', val);
     },
-    loading(val) {
-      if (!val) {
-        this.buttonLoading = false;
-      }
-    },
-    scrollable(val) {
-      if (!val) {
-        this.addScrollEffect();
-      } else {
-        this.removeScrollEffect();
-      }
-    },
-    title(val) {
-      if (this.$slots.header === undefined) {
-        this.showHead = !!val;
-      }
-    },
   },
   mounted() {
     if (this.visible) {
@@ -267,14 +267,22 @@ export default {
     this.removeScrollEffect();
   },
   methods: {
+    animationFinish() {
+      this.$emit('on-hidden');
+    },
+    cancel() {
+      this.close();
+    },
     close() {
       this.visible = false;
       this.$emit('input', false);
       this.$emit('on-cancel');
     },
-    mask() {
-      if (this.maskClosable) {
-        this.close();
+    EscClose(e) {
+      if (this.visible && this.closable) {
+        if (e.keyCode === 27) {
+          this.close();
+        }
       }
     },
     handleWrapClick(event) {
@@ -285,8 +293,10 @@ export default {
         this.mask();
       }
     },
-    cancel() {
-      this.close();
+    mask() {
+      if (this.maskClosable) {
+        this.close();
+      }
     },
     ok() {
       if (this.loading) {
@@ -297,16 +307,6 @@ export default {
       }
 
       this.$emit('on-ok');
-    },
-    EscClose(e) {
-      if (this.visible && this.closable) {
-        if (e.keyCode === 27) {
-          this.close();
-        }
-      }
-    },
-    animationFinish() {
-      this.$emit('on-hidden');
     },
   },
 };

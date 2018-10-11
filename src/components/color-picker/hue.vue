@@ -39,12 +39,12 @@ export default {
     const jumpStep = 20 * normalStep;
 
     return {
+      down: -jumpStep,
       left: -normalStep,
+      percent: clamp((this.value.hsl.h * 100) / 360, 0, 100),
+      powerKey: 'shiftKey',
       right: normalStep,
       up: jumpStep,
-      down: -jumpStep,
-      powerKey: 'shiftKey',
-      percent: clamp((this.value.hsl.h * 100) / 360, 0, 100),
     };
   },
 
@@ -62,20 +62,8 @@ export default {
       const newHue = clamp((percent / 100) * 360, 0, 360);
 
       if (h !== newHue) {
-        this.$emit('change', {h: newHue, s, l, a, source: 'hsl'});
+        this.$emit('change', {a, h: newHue, l, s, source: 'hsl'});
       }
-    },
-    handleSlide(e, direction) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (e[this.powerKey]) {
-        this.change(direction < 0 ? 0 : 100);
-
-        return;
-      }
-
-      this.change(this.percent + direction);
     },
     handleChange(e) {
       e.preventDefault();
@@ -98,6 +86,18 @@ export default {
       }
 
       this.change((left * 100) / clientWidth);
+    },
+    handleSlide(e, direction) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (e[this.powerKey]) {
+        this.change(direction < 0 ? 0 : 100);
+
+        return;
+      }
+
+      this.change(this.percent + direction);
     },
     onKeydown(event) {
       const {key} = event;

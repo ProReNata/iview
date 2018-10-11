@@ -4,19 +4,6 @@ import {getTouches} from './utils';
 import {on, off} from '../../utils/dom';
 
 export default {
-  mixins: [Emitter, handleEscapeMixin],
-
-  props: {
-    focused: {
-      type: Boolean,
-      default: false,
-    },
-    value: {
-      type: Object,
-      default: undefined,
-    },
-  },
-
   beforeDestroy() {
     this.unbindEventListeners();
   },
@@ -28,38 +15,6 @@ export default {
   },
 
   methods: {
-    handleLeft(e) {
-      this.handleSlide(e, this.left, 'left');
-    },
-    handleRight(e) {
-      this.handleSlide(e, this.right, 'right');
-    },
-    handleUp(e) {
-      this.handleSlide(e, this.up, 'up');
-    },
-    handleDown(e) {
-      this.handleSlide(e, this.down, 'down');
-    },
-    handleMouseDown(e) {
-      this.dispatch('ColorPicker', 'on-dragging', true);
-      this.handleChange(e, true);
-      // window.addEventListener('mousemove', this.handleChange, false);
-      // window.addEventListener('mouseup', this.handleMouseUp, false);
-      on(window, 'mousemove', this.handleChange);
-      on(window, 'mouseup', this.handleMouseUp);
-    },
-    handleMouseUp() {
-      this.unbindEventListeners();
-    },
-    unbindEventListeners() {
-      // window.removeEventListener('mousemove', this.handleChange);
-      // window.removeEventListener('mouseup', this.handleMouseUp);
-      off(window, 'mousemove', this.handleChange);
-      off(window, 'mouseup', this.handleMouseUp);
-      // This timeout is required so that the click handler for click-outside
-      // has the chance to run before the mouseup removes the dragging flag.
-      setTimeout(() => this.dispatch('ColorPicker', 'on-dragging', false), 1);
-    },
     getLeft(e) {
       const {container} = this.$refs;
       const xOffset = container.getBoundingClientRect().left + window.pageXOffset;
@@ -73,6 +28,51 @@ export default {
       const pageY = e.pageY || getTouches(e, 'PageY');
 
       return pageY - yOffset;
+    },
+    handleDown(e) {
+      this.handleSlide(e, this.down, 'down');
+    },
+    handleLeft(e) {
+      this.handleSlide(e, this.left, 'left');
+    },
+    handleMouseDown(e) {
+      this.dispatch('ColorPicker', 'on-dragging', true);
+      this.handleChange(e, true);
+      // window.addEventListener('mousemove', this.handleChange, false);
+      // window.addEventListener('mouseup', this.handleMouseUp, false);
+      on(window, 'mousemove', this.handleChange);
+      on(window, 'mouseup', this.handleMouseUp);
+    },
+    handleMouseUp() {
+      this.unbindEventListeners();
+    },
+    handleRight(e) {
+      this.handleSlide(e, this.right, 'right');
+    },
+    handleUp(e) {
+      this.handleSlide(e, this.up, 'up');
+    },
+    unbindEventListeners() {
+      // window.removeEventListener('mousemove', this.handleChange);
+      // window.removeEventListener('mouseup', this.handleMouseUp);
+      off(window, 'mousemove', this.handleChange);
+      off(window, 'mouseup', this.handleMouseUp);
+      // This timeout is required so that the click handler for click-outside
+      // has the chance to run before the mouseup removes the dragging flag.
+      setTimeout(() => this.dispatch('ColorPicker', 'on-dragging', false), 1);
+    },
+  },
+
+  mixins: [Emitter, handleEscapeMixin],
+
+  props: {
+    focused: {
+      default: false,
+      type: Boolean,
+    },
+    value: {
+      default: undefined,
+      type: Object,
     },
   },
 };

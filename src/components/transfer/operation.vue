@@ -28,9 +28,9 @@ export default {
   name: 'Operation',
   components: {iButton, Icon},
   props: {
-    prefixCls: String,
-    operations: Array,
     leftActive: Boolean,
+    operations: Array,
+    prefixCls: String,
     rightActive: Boolean,
   },
   methods: {

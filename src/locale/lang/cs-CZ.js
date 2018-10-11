@@ -2,29 +2,15 @@ import setLang from '../lang';
 
 const lang = {
   i: {
-    locale: 'cs-CZ',
-    select: {
-      placeholder: 'Vybrat',
-      noMatch: 'Nenalezeny žádné položky',
-      loading: 'Nahrávám',
-    },
-    table: {
-      noDataText: 'Žádná data',
-      noFilteredDataText: 'Nenalezeny žádné položky',
-      confirmFilter: 'Potvrdit',
-      resetFilter: 'Reset',
-      clearFilter: 'Vše',
-    },
     datepicker: {
-      selectDate: 'Vybrat datum',
-      selectTime: 'Vybrat čas',
-      startTime: 'Začátek',
-      endTime: 'Konec',
       clear: 'Vymazat',
-      ok: 'OK',
       datePanelLabel: '[mmmm] [yyyy]',
+      endTime: 'Konec',
       month: 'Měsíc',
       month1: 'Leden',
+      month10: 'Říjen',
+      month11: 'Listopad',
+      month12: 'Prosinec',
       month2: 'Únor',
       month3: 'Březen',
       month4: 'Duben',
@@ -33,22 +19,11 @@ const lang = {
       month7: 'Červenec',
       month8: 'Srpen',
       month9: 'Září',
-      month10: 'Říjen',
-      month11: 'Listopad',
-      month12: 'Prosinec',
-      year: 'Rok',
-      weekStartDay: '1',
-      weeks: {
-        sun: 'Ne',
-        mon: 'Po',
-        tue: 'Út',
-        wed: 'St',
-        thu: 'Čt',
-        fri: 'Pá',
-        sat: 'So',
-      },
       months: {
         m1: 'Led',
+        m10: 'Říj',
+        m11: 'Lis',
+        m12: 'Pro',
         m2: 'Úno',
         m3: 'Bře',
         m4: 'Dub',
@@ -57,42 +32,48 @@ const lang = {
         m7: 'Čnc',
         m8: 'Srp',
         m9: 'Zář',
-        m10: 'Říj',
-        m11: 'Lis',
-        m12: 'Pro',
       },
-    },
-    transfer: {
-      titles: {
-        source: 'Zdroj',
-        target: 'Cíl',
+      ok: 'OK',
+      selectDate: 'Vybrat datum',
+      selectTime: 'Vybrat čas',
+      startTime: 'Začátek',
+      weeks: {
+        fri: 'Pá',
+        mon: 'Po',
+        sat: 'So',
+        sun: 'Ne',
+        thu: 'Čt',
+        tue: 'Út',
+        wed: 'St',
       },
-      filterPlaceholder: 'Hledat',
-      notFoundText: 'Nenalezeno',
+      weekStartDay: '1',
+      year: 'Rok',
     },
+    locale: 'cs-CZ',
     modal: {
-      okText: 'OK',
       cancelText: 'Zrušit',
-    },
-    poptip: {
       okText: 'OK',
-      cancelText: 'Zrušit',
     },
     page: {
-      prev: 'Následující',
-      next: 'Předchozí',
-      total: 'Celkem',
+      goto: 'Jít na',
       item: 'položka',
       /* TODO: add third plural form for Czech,
              * If there is 2-4 items the translation should be "položky"
              */
 
-      items: 'položek', // Plural form for 5 or more items
-      prev5: 'Předchozích 5 stránek',
+      // Plural form for 5 or more items
+      items: 'položek',
+      next: 'Předchozí',
       next5: 'Následujících 5 stránek',
-      page: 'na stránku',
-      goto: 'Jít na',
       p: '',
+      page: 'na stránku',
+      prev: 'Následující',
+      prev5: 'Předchozích 5 stránek',
+      total: 'Celkem',
+    },
+    poptip: {
+      cancelText: 'Zrušit',
+      okText: 'OK',
     },
     rate: {
       star: 'hvězda',
@@ -100,6 +81,26 @@ const lang = {
       /* TODO: add third plural form for Czech,
              * If there is 5 or more items the translation should be "hvězd"
              */
+    },
+    select: {
+      loading: 'Nahrávám',
+      noMatch: 'Nenalezeny žádné položky',
+      placeholder: 'Vybrat',
+    },
+    table: {
+      clearFilter: 'Vše',
+      confirmFilter: 'Potvrdit',
+      noDataText: 'Žádná data',
+      noFilteredDataText: 'Nenalezeny žádné položky',
+      resetFilter: 'Reset',
+    },
+    transfer: {
+      filterPlaceholder: 'Hledat',
+      notFoundText: 'Nenalezeno',
+      titles: {
+        source: 'Zdroj',
+        target: 'Cíl',
+      },
     },
     tree: {
       emptyText: 'Žádná data',

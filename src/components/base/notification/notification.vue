@@ -36,24 +36,24 @@ function getUuid() {
 export default {
   components: {Notice},
   props: {
-    prefixCls: {
+    className: {
       type: String,
-      default: prefixCls,
-    },
-    styles: {
-      type: Object,
-      default() {
-        return {
-          top: '65px',
-          left: '50%',
-        };
-      },
     },
     content: {
       type: String,
     },
-    className: {
+    prefixCls: {
+      default: prefixCls,
       type: String,
+    },
+    styles: {
+      default() {
+        return {
+          left: '50%',
+          top: '65px',
+        };
+      },
+      type: Object,
     },
   },
   data() {
@@ -77,13 +77,13 @@ export default {
 
       const _notice = {
         ...{
+          closable: false,
+          content: '',
+          duration: 1.5,
+          name,
           styles: {
             right: '50%',
           },
-          content: '',
-          duration: 1.5,
-          closable: false,
-          name,
         },
         ...notice,
       };

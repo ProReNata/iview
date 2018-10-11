@@ -44,8 +44,8 @@ export default {
 
   props: {
     list: {
-      type: Array,
       default: undefined,
+      type: Array,
     },
   },
 
@@ -55,30 +55,36 @@ export default {
     const normalStep = 1;
 
     return {
-      left: -normalStep,
-      right: normalStep,
-      up: -normalStep,
-      down: normalStep,
-      powerKey: 'shiftKey',
-      grid: {x: 1, y: 1},
-      rows,
       columns,
+      down: normalStep,
+      grid: {x: 1, y: 1},
+      left: -normalStep,
+      powerKey: 'shiftKey',
+      right: normalStep,
+      rows,
+      up: -normalStep,
     };
   },
 
   computed: {
+    currentCircle() {
+      return this.$refs[`color-circle-${this.linearIndex}`][0];
+    },
     hideClass() {
       return `${this.prefixCls}-hide`;
     },
     linearIndex() {
       return this.getLinearIndex(this.grid);
     },
-    currentCircle() {
-      return this.$refs[`color-circle-${this.linearIndex}`][0];
-    },
   },
 
   methods: {
+    blurColor() {
+      this.currentCircle.classList.add(this.hideClass);
+    },
+    focusColor() {
+      this.currentCircle.classList.remove(this.hideClass);
+    },
     getLinearIndex(grid) {
       return this.columns * (grid.y - 1) + grid.x - 1;
     },
@@ -111,15 +117,6 @@ export default {
 
       this.focusColor();
     },
-    blurColor() {
-      this.currentCircle.classList.add(this.hideClass);
-    },
-    focusColor() {
-      this.currentCircle.classList.remove(this.hideClass);
-    },
-    handleEnter(e) {
-      this.handleClick(e, this.currentCircle);
-    },
     handleClick(e, circle) {
       e.preventDefault();
       e.stopPropagation();
@@ -138,6 +135,9 @@ export default {
         this.$emit('picker-color', this.list[colorId]);
         this.$emit('change', {hex: this.list[colorId], source: 'hex'});
       }
+    },
+    handleEnter(e) {
+      this.handleClick(e, this.currentCircle);
     },
     lineBreak(list, index) {
       if (!index) {

@@ -1,36 +1,6 @@
 import {clearHours} from '../util';
 
 export default {
-  name: 'PanelTable',
-  props: {
-    tableDate: {
-      type: Date,
-      required: true,
-    },
-    disabledDate: {
-      type: Function,
-    },
-    selectionMode: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: Array,
-      required: true,
-    },
-    rangeState: {
-      type: Object,
-      default: () => ({
-        from: null,
-        to: null,
-        selecting: false,
-      }),
-    },
-    focusedDate: {
-      type: Date,
-      required: true,
-    },
-  },
   computed: {
     dates() {
       const {selectionMode, value, rangeState} = this;
@@ -61,6 +31,36 @@ export default {
 
       const newDate = cell.date;
       this.$emit('on-change-range', newDate);
+    },
+  },
+  name: 'PanelTable',
+  props: {
+    disabledDate: {
+      type: Function,
+    },
+    focusedDate: {
+      required: true,
+      type: Date,
+    },
+    rangeState: {
+      default: () => ({
+        from: null,
+        selecting: false,
+        to: null,
+      }),
+      type: Object,
+    },
+    selectionMode: {
+      required: true,
+      type: String,
+    },
+    tableDate: {
+      required: true,
+      type: Date,
+    },
+    value: {
+      required: true,
+      type: Array,
     },
   },
 };

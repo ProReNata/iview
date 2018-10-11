@@ -42,13 +42,8 @@ export default {
   directives: {clickOutside, TransferDom},
   components: {Drop},
   props: {
-    trigger: {
-      validator(value) {
-        return oneOf(value, ['click', 'hover', 'custom']);
-      },
-      default: 'hover',
-    },
     placement: {
+      default: 'bottom',
       validator(value) {
         return oneOf(value, [
           'top',
@@ -65,37 +60,39 @@ export default {
           'right-end',
         ]);
       },
-      default: 'bottom',
-    },
-    visible: {
-      type: Boolean,
-      default: false,
     },
     transfer: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    trigger: {
+      default: 'hover',
+      validator(value) {
+        return oneOf(value, ['click', 'hover', 'custom']);
+      },
+    },
+    visible: {
+      default: false,
+      type: Boolean,
     },
   },
   data() {
     return {
-      prefixCls,
       currentVisible: this.visible,
+      prefixCls,
     };
   },
   computed: {
-    transition() {
-      return ['bottom-start', 'bottom', 'bottom-end'].indexOf(this.placement) > -1 ? 'slide-up' : 'fade';
-    },
     dropdownCls() {
       return {
         [`${prefixCls}-transfer`]: this.transfer,
       };
     },
+    transition() {
+      return ['bottom-start', 'bottom', 'bottom-end'].indexOf(this.placement) > -1 ? 'slide-up' : 'fade';
+    },
   },
   watch: {
-    visible(val) {
-      this.currentVisible = val;
-    },
     currentVisible(val) {
       if (val) {
         this.$refs.drop.update();
@@ -104,6 +101,9 @@ export default {
       }
 
       this.$emit('on-visible-change', val);
+    },
+    visible(val) {
+      this.currentVisible = val;
     },
   },
   mounted() {
@@ -163,6 +163,17 @@ export default {
 
       this.currentVisible = !this.currentVisible;
     },
+    handleClose() {
+      if (this.trigger === 'custom') {
+        return false;
+      }
+
+      if (this.trigger !== 'click') {
+        return false;
+      }
+
+      this.currentVisible = false;
+    },
     handleMouseenter() {
       if (this.trigger === 'custom') {
         return false;
@@ -196,24 +207,6 @@ export default {
         }, 150);
       }
     },
-    onClickoutside(e) {
-      this.handleClose();
-
-      if (this.currentVisible) {
-        this.$emit('on-clickoutside', e);
-      }
-    },
-    handleClose() {
-      if (this.trigger === 'custom') {
-        return false;
-      }
-
-      if (this.trigger !== 'click') {
-        return false;
-      }
-
-      this.currentVisible = false;
-    },
     hasParent() {
       //                const $parent = this.$parent.$parent.$parent;
       const $parent = findComponentUpward(this, 'Dropdown');
@@ -223,6 +216,13 @@ export default {
       }
 
       return false;
+    },
+    onClickoutside(e) {
+      this.handleClose();
+
+      if (this.currentVisible) {
+        this.$emit('on-clickoutside', e);
+      }
     },
   },
 };

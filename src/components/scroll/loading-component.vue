@@ -24,10 +24,6 @@ const prefixCls = 'ivu-scroll';
 
 export default {
   props: {
-    text: {
-      default: '',
-      type: String,
-    },
     active: {
       default: false,
       type: Boolean,
@@ -36,8 +32,21 @@ export default {
       default: null,
       type: [Number, String],
     },
+    text: {
+      default: '',
+      type: String,
+    },
   },
   computed: {
+    iconClasses() {
+      return `${prefixCls}-spinner-icon`;
+    },
+    spinnerClasses() {
+      return `${prefixCls}-spinner`;
+    },
+    textClasses() {
+      return `${prefixCls}-loader-text`;
+    },
     wrapperClasses() {
       return [
         `${prefixCls}-loader-wrapper`,
@@ -45,15 +54,6 @@ export default {
           [`${prefixCls}-loader-wrapper-active`]: this.active,
         },
       ];
-    },
-    spinnerClasses() {
-      return `${prefixCls}-spinner`;
-    },
-    iconClasses() {
-      return `${prefixCls}-spinner-icon`;
-    },
-    textClasses() {
-      return `${prefixCls}-loader-text`;
     },
   },
 };

@@ -103,7 +103,6 @@ export default {
       color: 'rgba(12,34,255,.85)',
       color2: '',
       color7: '#19be6b',
-      openState: false,
       colors: [
         '#2d8cf0',
         '#19be6b',
@@ -149,6 +148,7 @@ export default {
         '#5d4037',
       ],
       hideDropDown: false,
+      openState: false,
     };
   },
 
@@ -159,23 +159,23 @@ export default {
   },
 
   methods: {
-    setColor() {
-      this.color = '#26bc77';
-    },
     c1(d) {
       console.log(d);
     },
     c2(d) {
       console.log(d);
     },
-    onOpenChange(state) {
-      this.openState = state;
+    onActiveChange(d) {
+      console.log(d);
     },
     onChange(d) {
       console.log(d);
     },
-    onActiveChange(d) {
-      console.log(d);
+    onOpenChange(state) {
+      this.openState = state;
+    },
+    setColor() {
+      this.color = '#26bc77';
     },
     toggleShowHide() {
       this.hideDropDown = !this.hideDropDown;

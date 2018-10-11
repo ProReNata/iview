@@ -60,33 +60,35 @@ export default {
   mixins: [Options],
   props: {
     hours: {
-      type: [Number, String],
       default: NaN,
+      type: [Number, String],
     },
     minutes: {
-      type: [Number, String],
       default: NaN,
+      type: [Number, String],
     },
     seconds: {
-      type: [Number, String],
       default: NaN,
+      type: [Number, String],
     },
     showSeconds: {
-      type: Boolean,
       default: true,
+      type: Boolean,
     },
     steps: {
-      type: Array,
       default: () => [],
+      type: Array,
     },
   },
   data() {
     return {
-      spinerSteps: [1, 1, 1].map((one, i) => Math.abs(this.steps[i]) || one),
-      prefixCls,
       compiled: false,
-      focusedColumn: -1, // which column inside the picker
-      focusedTime: [0, 0, 0], // the values array into [hh, mm, ss]
+      // which column inside the picker
+      focusedColumn: -1,
+      // the values array into [hh, mm, ss]
+      focusedTime: [0, 0, 0],
+      prefixCls,
+      spinerSteps: [1, 1, 1].map((one, i) => Math.abs(this.steps[i]) || one),
     };
   },
   computed: {
@@ -103,10 +105,10 @@ export default {
       const step = this.spinerSteps[0];
       const focusedHour = this.focusedColumn === 0 && this.focusedTime[0];
       const hour_tmpl = {
-        text: 0,
-        selected: false,
         disabled: false,
         hide: false,
+        selected: false,
+        text: 0,
       };
 
       for (let i = 0; i < 24; i += step) {
@@ -136,10 +138,10 @@ export default {
       const step = this.spinerSteps[1];
       const focusedMinute = this.focusedColumn === 1 && this.focusedTime[1];
       const minute_tmpl = {
-        text: 0,
-        selected: false,
         disabled: false,
         hide: false,
+        selected: false,
+        text: 0,
       };
 
       for (let i = 0; i < 60; i += step) {
@@ -169,10 +171,10 @@ export default {
       const step = this.spinerSteps[2];
       const focusedMinute = this.focusedColumn === 2 && this.focusedTime[2];
       const second_tmpl = {
-        text: 0,
-        selected: false,
         disabled: false,
         hide: false,
+        selected: false,
+        text: 0,
       };
 
       for (let i = 0; i < 60; i += step) {
@@ -199,6 +201,16 @@ export default {
     },
   },
   watch: {
+    focusedTime(updated, old) {
+      timeParts.forEach((part, i) => {
+        if (updated[i] === old[i] || typeof updated[i] === 'undefined') {
+          return;
+        }
+
+        const valueIndex = this[`${part}List`].findIndex((obj) => obj.text === updated[i]);
+        this.scroll(part, valueIndex);
+      });
+    },
     hours(val) {
       if (!this.compiled) {
         return;
@@ -220,16 +232,6 @@ export default {
 
       this.scroll('seconds', this.secondsList.findIndex((obj) => obj.text === val));
     },
-    focusedTime(updated, old) {
-      timeParts.forEach((part, i) => {
-        if (updated[i] === old[i] || typeof updated[i] === 'undefined') {
-          return;
-        }
-
-        const valueIndex = this[`${part}List`].findIndex((obj) => obj.text === updated[i]);
-        this.scroll(part, valueIndex);
-      });
-    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -237,16 +239,6 @@ export default {
     });
   },
   methods: {
-    getCellCls(cell) {
-      return [
-        `${prefixCls}-cell`,
-        {
-          [`${prefixCls}-cell-selected`]: cell.selected,
-          [`${prefixCls}-cell-focused`]: cell.focused,
-          [`${prefixCls}-cell-disabled`]: cell.disabled,
-        },
-      ];
-    },
     chooseValue(values) {
       const changes = timeParts.reduce((obj, part, i) => {
         const value = values[i];
@@ -265,22 +257,22 @@ export default {
         this.emitChange(changes);
       }
     },
-    handleClick(type, cell) {
-      if (cell.disabled) {
-        return;
-      }
-
-      const data = {[type]: cell.text};
-      this.emitChange(data);
-    },
     emitChange(changes) {
       this.$emit('on-change', changes);
       this.$emit('on-pick-click');
     },
-    scroll(type, index) {
-      const from = this.$refs[type].scrollTop;
-      const to = 24 * this.getScrollIndex(type, index);
-      scrollTop(this.$refs[type], from, to, 500);
+    formatTime(text) {
+      return text < 10 ? `0${text}` : text;
+    },
+    getCellCls(cell) {
+      return [
+        `${prefixCls}-cell`,
+        {
+          [`${prefixCls}-cell-selected`]: cell.selected,
+          [`${prefixCls}-cell-focused`]: cell.focused,
+          [`${prefixCls}-cell-disabled`]: cell.disabled,
+        },
+      ];
     },
     getScrollIndex(type, index) {
       const Type = firstUpperCase(type);
@@ -294,19 +286,29 @@ export default {
 
       return index;
     },
+    handleClick(type, cell) {
+      if (cell.disabled) {
+        return;
+      }
+
+      const data = {[type]: cell.text};
+      this.emitChange(data);
+    },
+    scroll(type, index) {
+      const from = this.$refs[type].scrollTop;
+      const to = 24 * this.getScrollIndex(type, index);
+      scrollTop(this.$refs[type], from, to, 500);
+    },
+    updateFocusedTime(col, time) {
+      this.focusedColumn = col;
+      this.focusedTime = time.slice();
+    },
     updateScroll() {
       this.$nextTick(() => {
         timeParts.forEach((type) => {
           this.$refs[type].scrollTop = 24 * this[`${type}List`].findIndex((obj) => obj.text === this[type]);
         });
       });
-    },
-    formatTime(text) {
-      return text < 10 ? `0${text}` : text;
-    },
-    updateFocusedTime(col, time) {
-      this.focusedColumn = col;
-      this.focusedTime = time.slice();
     },
   },
 };

@@ -1,16 +1,16 @@
 <template>
-  <div 
-    ref="cell" 
+  <div
+    ref="cell"
     :class="classes"
   >
     <template v-if="renderType === 'index'">
       <span>{{ naturalIndex + 1 }}</span>
     </template>
     <template v-if="renderType === 'selection'">
-      <Checkbox 
-        :value="checked" 
-        :disabled="disabled" 
-        @click.native.stop="handleClick" 
+      <Checkbox
+        :value="checked"
+        :disabled="disabled"
+        @click.native.stop="handleClick"
         @on-change="toggleSelect"
       >
       </Checkbox>
@@ -23,8 +23,8 @@
       <span>{{ row[column.key] }}</span>
     </template>
     <template v-if="renderType === 'expand' && !row._disableExpand">
-      <div 
-        :class="expandCls" 
+      <div
+        :class="expandCls"
         @click="toggleExpand"
       >
         <Icon type="ios-arrow-right">
@@ -42,32 +42,35 @@
   </div>
 </template>
 <script>
+import noop from 'lodash/noop';
 import Cell from './expand';
 import Icon from '../icon/icon.vue';
 import Checkbox from '../checkbox/checkbox.vue';
 
 export default {
   name: 'TableCell',
-  components: {Icon, Checkbox, Cell},
+  components: {Cell, Checkbox, Icon},
   props: {
-    prefixCls: String,
-    row: Object,
-    column: Object,
-    naturalIndex: Number, // index of rebuildData
-    index: Number, // _index of data
     checked: Boolean,
+    column: Object,
     disabled: Boolean,
     expanded: Boolean,
     fixed: {
-      type: [Boolean, String],
       default: false,
+      type: [Boolean, String],
     },
+    // _index of data
+    index: Number,
+    // index of rebuildData
+    naturalIndex: Number,
+    prefixCls: String,
+    row: Object,
   },
   data() {
     return {
+      context: this.$parent.$parent.$parent.currentContext,
       renderType: '',
       uid: -1,
-      context: this.$parent.$parent.$parent.currentContext,
     };
   },
   computed: {
@@ -107,14 +110,15 @@ export default {
     }
   },
   methods: {
-    toggleSelect() {
-      this.$parent.$parent.$parent.toggleSelect(this.index);
-    },
+    handleClick: noop,
+    // handleClick() {
+    //   // 放置 Checkbox 冒泡
+    // },
     toggleExpand() {
       this.$parent.$parent.$parent.toggleExpand(this.index);
     },
-    handleClick() {
-      // 放置 Checkbox 冒泡
+    toggleSelect() {
+      this.$parent.$parent.$parent.toggleSelect(this.index);
     },
   },
 };

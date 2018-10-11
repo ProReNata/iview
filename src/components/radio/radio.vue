@@ -26,45 +26,65 @@ export default {
   name: 'Radio',
   mixins: [Emitter],
   props: {
-    value: {
-      type: [String, Number, Boolean],
+    disabled: {
       default: false,
-    },
-    trueValue: {
-      type: [String, Number, Boolean],
-      default: true,
+      type: Boolean,
     },
     falseValue: {
-      type: [String, Number, Boolean],
       default: false,
+      type: [String, Number, Boolean],
     },
     label: {
       type: [String, Number],
     },
-    disabled: {
-      type: Boolean,
-      default: false,
+    name: {
+      type: String,
     },
     size: {
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
-    name: {
-      type: String,
+    trueValue: {
+      default: true,
+      type: [String, Number, Boolean],
+    },
+    value: {
+      default: false,
+      type: [String, Number, Boolean],
     },
   },
   data() {
     return {
       currentValue: this.value,
+      focusInner: false,
+      focusWrapper: false,
       group: false,
       groupName: this.name,
       parent: findComponentUpward(this, 'RadioGroup'),
-      focusWrapper: false,
-      focusInner: false,
     };
   },
   computed: {
+    innerClasses() {
+      return [
+        `${prefixCls}-inner`,
+        {
+          [`${prefixCls}-focus`]: this.focusInner,
+        },
+      ];
+    },
+    inputClasses() {
+      return `${prefixCls}-input`;
+    },
+    radioClasses() {
+      return [
+        `${prefixCls}`,
+        {
+          [`${prefixCls}-checked`]: this.currentValue,
+          [`${prefixCls}-disabled`]: this.disabled,
+        },
+      ];
+    },
     wrapClasses() {
       return [
         `${prefixCls}-wrapper`,
@@ -76,26 +96,6 @@ export default {
           [`${prefixCls}-focus`]: this.focusWrapper,
         },
       ];
-    },
-    radioClasses() {
-      return [
-        `${prefixCls}`,
-        {
-          [`${prefixCls}-checked`]: this.currentValue,
-          [`${prefixCls}-disabled`]: this.disabled,
-        },
-      ];
-    },
-    innerClasses() {
-      return [
-        `${prefixCls}-inner`,
-        {
-          [`${prefixCls}-focus`]: this.focusInner,
-        },
-      ];
-    },
-    inputClasses() {
-      return `${prefixCls}-input`;
     },
   },
   watch: {
@@ -143,17 +143,14 @@ export default {
       if (this.group) {
         if (this.label !== undefined) {
           this.parent.change({
-            value: this.label,
             checked: this.value,
+            value: this.label,
           });
         }
       } else {
         this.$emit('on-change', value);
         this.dispatch('FormItem', 'on-form-change', value);
       }
-    },
-    updateValue() {
-      this.currentValue = this.value === this.trueValue;
     },
     onBlur() {
       this.focusWrapper = false;
@@ -165,6 +162,9 @@ export default {
       } else {
         this.focusInner = true;
       }
+    },
+    updateValue() {
+      this.currentValue = this.value === this.trueValue;
     },
   },
 };

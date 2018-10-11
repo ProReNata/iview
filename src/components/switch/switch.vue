@@ -34,29 +34,29 @@ export default {
   name: 'iSwitch',
   mixins: [Emitter],
   props: {
-    value: {
-      type: [String, Number, Boolean],
+    disabled: {
       default: false,
-    },
-    trueValue: {
-      type: [String, Number, Boolean],
-      default: true,
+      type: Boolean,
     },
     falseValue: {
+      default: false,
       type: [String, Number, Boolean],
-      default: false,
     },
-    disabled: {
-      type: Boolean,
-      default: false,
+    name: {
+      type: String,
     },
     size: {
       validator(value) {
         return oneOf(value, ['large', 'small', 'default']);
       },
     },
-    name: {
-      type: String,
+    trueValue: {
+      default: true,
+      type: [String, Number, Boolean],
+    },
+    value: {
+      default: false,
+      type: [String, Number, Boolean],
     },
   },
   data() {
@@ -65,6 +65,9 @@ export default {
     };
   },
   computed: {
+    innerClasses() {
+      return `${prefixCls}-inner`;
+    },
     wrapClasses() {
       return [
         `${prefixCls}`,
@@ -74,9 +77,6 @@ export default {
           [`${prefixCls}-${this.size}`]: !!this.size,
         },
       ];
-    },
-    innerClasses() {
-      return `${prefixCls}-inner`;
     },
   },
   watch: {
@@ -89,6 +89,11 @@ export default {
     },
   },
   methods: {
+    onKeydown(event) {
+      if (oneOf(event.key, [' ', 'Space', 'Spacebar'])) {
+        this.toggle(event);
+      }
+    },
     toggle(event) {
       event.preventDefault();
 
@@ -102,11 +107,6 @@ export default {
       this.$emit('input', checked);
       this.$emit('on-change', checked);
       this.dispatch('FormItem', 'on-form-change', checked);
-    },
-    onKeydown(event) {
-      if (oneOf(event.key, [' ', 'Space', 'Spacebar'])) {
-        this.toggle(event);
-      }
     },
   },
 };

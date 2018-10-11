@@ -269,8 +269,8 @@ module.exports = {
   data() {
     return {};
   },
-  mounted() {},
-  beforeDestroy() {},
+  // mounted() {},
+  // beforeDestroy() {},
   methods: {},
 };
 </script>

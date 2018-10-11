@@ -40,64 +40,64 @@
 <script>
 export default {
   methods: {
-    normal(nodesc) {
-      this.$Notice.open({
-        title: 'google',
-        duration: 0,
+    destroy() {
+      this.$Notice.destroy();
+    },
+    error(nodesc) {
+      this.$Notice.error({
         desc: nodesc
           ? ''
           : '这里是通知描述这里,是通知描述这里是通知描述这里,是通知描述这里,是通知描述这里是通知描述这里是通知描述',
-        render(h) {
-          return h('span', {}, 'sdsdfsdf');
-        },
+        title: '这是通知标题',
       });
     },
     info(nodesc) {
       this.$Notice.info({
-        // title: '这是通知标题',
-        duration: 0,
         desc: nodesc
           ? ''
           : '这里是通知描述这里,是通知描述这里是通知描述这里,是通知描述这里,是通知描述这里是通知描述这里是通知描述',
+        // title: '这是通知标题',
+        duration: 0,
         render(h) {
           return h('span', {}, 'sdsdfsdf');
         },
       });
     },
+    normal(nodesc) {
+      this.$Notice.open({
+        desc: nodesc
+          ? ''
+          : '这里是通知描述这里,是通知描述这里是通知描述这里,是通知描述这里,是通知描述这里是通知描述这里是通知描述',
+        duration: 0,
+        render(h) {
+          return h('span', {}, 'sdsdfsdf');
+        },
+        title: 'google',
+      });
+    },
     success() {
       this.$Notice.success({
-        title: '这是通知标题',
         desc: '当你定义了render之后，这个描述会被覆盖',
-        render: (h) => h('span', {}, ['这是', h('Button', {props: {type: 'text'}}, 'render'), '函数渲染的']),
         duration: 0,
-      });
-    },
-    warning(nodesc) {
-      this.$Notice.warning({
+        render: (h) => h('span', {}, ['这是', h('Button', {props: {type: 'text'}}, 'render'), '函数渲染的']),
         title: '这是通知标题',
-        desc: nodesc
-          ? ''
-          : '这里是通知描述这里,是通知描述这里是通知描述这里,是通知描述这里,是通知描述这里是通知描述这里是通知描述',
-      });
-    },
-    error(nodesc) {
-      this.$Notice.error({
-        title: '这是通知标题',
-        desc: nodesc
-          ? ''
-          : '这里是通知描述这里,是通知描述这里是通知描述这里,是通知描述这里,是通知描述这里是通知描述这里是通知描述',
       });
     },
     testRender() {
       this.$Notice.info({
-        title: '这是通知标题',
         duration: 0,
         // desc: '当你定义了render之后，这个描述会被覆盖',
         render: (h) => h('span', {}, ['这是', h('Button', {props: {type: 'text'}}, 'render'), '函数渲染的']),
+        title: '这是通知标题',
       });
     },
-    destroy() {
-      this.$Notice.destroy();
+    warning(nodesc) {
+      this.$Notice.warning({
+        desc: nodesc
+          ? ''
+          : '这里是通知描述这里,是通知描述这里是通知描述这里,是通知描述这里,是通知描述这里是通知描述这里是通知描述',
+        title: '这是通知标题',
+      });
     },
   },
 };

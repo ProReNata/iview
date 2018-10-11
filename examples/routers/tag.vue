@@ -235,20 +235,20 @@
 export default {
   data() {
     return {
-      show: true,
       count: [0, 1, 2],
+      show: true,
     };
   },
   methods: {
-    handleClose() {
-      this.show = false;
-    },
     handleAdd() {
       if (this.count.length) {
         this.count.push(this.count[this.count.length - 1] + 1);
       } else {
         this.count.push(0);
       }
+    },
+    handleClose() {
+      this.show = false;
     },
     handleClose2(event, name) {
       const index = this.count.indexOf(name);

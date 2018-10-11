@@ -14,26 +14,26 @@ const prefixCls = 'ivu-row';
 export default {
   name: 'Row',
   props: {
-    type: {
-      validator(value) {
-        return oneOf(value, ['flex']);
-      },
-    },
     align: {
       validator(value) {
         return oneOf(value, ['top', 'middle', 'bottom']);
       },
+    },
+    className: String,
+    gutter: {
+      default: 0,
+      type: Number,
     },
     justify: {
       validator(value) {
         return oneOf(value, ['start', 'end', 'center', 'space-around', 'space-between']);
       },
     },
-    gutter: {
-      type: Number,
-      default: 0,
+    type: {
+      validator(value) {
+        return oneOf(value, ['flex']);
+      },
     },
-    className: String,
   },
   computed: {
     classes() {

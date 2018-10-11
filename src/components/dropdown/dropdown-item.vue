@@ -14,20 +14,20 @@ const prefixCls = 'ivu-dropdown-item';
 export default {
   name: 'DropdownItem',
   props: {
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
+    divided: {
+      default: false,
+      type: Boolean,
+    },
     name: {
       type: [String, Number],
     },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
     selected: {
-      type: Boolean,
       default: false,
-    },
-    divided: {
       type: Boolean,
-      default: false,
     },
   },
   computed: {

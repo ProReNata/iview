@@ -1,4 +1,5 @@
 // https://github.com/ElemeFE/element/blob/dev/packages/upload/src/ajax.js
+import has from 'lodash/has';
 
 function getError(action, option, xhr) {
   const msg = `fail to post ${action} ${xhr.status}'`;
@@ -77,7 +78,7 @@ export default function upload(option) {
   // }
 
   for (const item in headers) {
-    if (headers.hasOwnProperty(item) && headers[item] !== null) {
+    if (has(headers, item) && headers[item] !== null) {
       xhr.setRequestHeader(item, headers[item]);
     }
   }

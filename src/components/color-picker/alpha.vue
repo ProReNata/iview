@@ -48,19 +48,19 @@ export default {
     const jumpStep = 10;
 
     return {
+      down: -jumpStep,
       left: -normalStep,
+      powerKey: 'shiftKey',
       right: normalStep,
       up: jumpStep,
-      down: -jumpStep,
-      powerKey: 'shiftKey',
     };
   },
 
   computed: {
     gradientStyle() {
       const {r, g, b} = this.value.rgba;
-      const start = toRGBAString({r, g, b, a: 0});
-      const finish = toRGBAString({r, g, b, a: 1});
+      const start = toRGBAString({a: 0, b, g, r});
+      const finish = toRGBAString({a: 1, b, g, r});
 
       return {background: `linear-gradient(to right, ${start} 0%, ${finish} 100%)`};
     },
@@ -72,14 +72,8 @@ export default {
       const {a} = this.value;
 
       if (a !== newAlpha) {
-        this.$emit('change', {h, s, l, a: newAlpha, source: 'rgba'});
+        this.$emit('change', {a: newAlpha, h, l, s, source: 'rgba'});
       }
-    },
-    handleSlide(e, direction) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      this.change(clamp(e[this.powerKey] ? direction : Math.round(this.value.hsl.a * 100 + direction) / 100, 0, 1));
     },
     handleChange(e) {
       e.preventDefault();
@@ -102,6 +96,12 @@ export default {
       }
 
       this.change(Math.round((left * 100) / clientWidth) / 100);
+    },
+    handleSlide(e, direction) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      this.change(clamp(e[this.powerKey] ? direction : Math.round(this.value.hsl.a * 100 + direction) / 100, 0, 1));
     },
     onKeydown(event) {
       const {key} = event;

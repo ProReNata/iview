@@ -1,3 +1,4 @@
+import isNil from 'lodash/isNil';
 import tinycolor from 'tinycolor2';
 import {oneOf} from '../../utils/assist';
 
@@ -5,7 +6,7 @@ function setAlpha(data, alpha) {
   const color = tinycolor(data);
   const {_a} = color;
 
-  if (_a === undefined || _a === null) {
+  if (isNil(_a)) {
     color.setAlpha(alpha || 1);
   }
 
@@ -54,13 +55,13 @@ export function changeColor(data, oldHue) {
   }
 
   return {
-    hsl,
+    a: colorData.a || color.getAlpha(),
     hex: color.toHexString().toUpperCase(),
-    rgba: color.toRgb(),
+    hsl,
     hsv,
     oldHue: colorData.h || oldHue || hsl.h,
+    rgba: color.toRgb(),
     source: colorData.source,
-    a: colorData.a || color.getAlpha(),
   };
 }
 

@@ -44,42 +44,32 @@ export default {
   name: 'Step',
   mixins: [Emitter],
   props: {
-    status: {
-      validator(value) {
-        return oneOf(value, ['wait', 'process', 'finish', 'error']);
-      },
-    },
-    title: {
-      type: String,
-      default: '',
-    },
     content: {
       type: String,
     },
     icon: {
       type: String,
     },
+    status: {
+      validator(value) {
+        return oneOf(value, ['wait', 'process', 'finish', 'error']);
+      },
+    },
+    title: {
+      default: '',
+      type: String,
+    },
   },
   data() {
     return {
+      currentStatus: '',
+      nextError: false,
       prefixCls,
       stepNumber: '',
-      nextError: false,
       total: 1,
-      currentStatus: '',
     };
   },
   computed: {
-    wrapClasses() {
-      return [
-        `${prefixCls}-item`,
-        `${prefixCls}-status-${this.currentStatus}`,
-        {
-          [`${prefixCls}-custom`]: !!this.icon,
-          [`${prefixCls}-next-error`]: this.nextError,
-        },
-      ];
-    },
     iconClasses() {
       let icon = '';
 
@@ -103,6 +93,16 @@ export default {
       return {
         width: `${(1 / this.total) * 100}%`,
       };
+    },
+    wrapClasses() {
+      return [
+        `${prefixCls}-item`,
+        `${prefixCls}-status-${this.currentStatus}`,
+        {
+          [`${prefixCls}-custom`]: !!this.icon,
+          [`${prefixCls}-next-error`]: this.nextError,
+        },
+      ];
     },
   },
   watch: {

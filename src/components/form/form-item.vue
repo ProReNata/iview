@@ -27,6 +27,7 @@
   </div>
 </template>
 <script>
+import noop from 'lodash/noop';
 import AsyncValidator from 'async-validator';
 import Emitter from '../../mixins/emitter';
 
@@ -61,9 +62,15 @@ export default {
   name: 'FormItem',
   mixins: [Emitter],
   props: {
-    label: {
+    error: {
       type: String,
+    },
+    label: {
       default: '',
+      type: String,
+    },
+    labelFor: {
+      type: String,
     },
     labelWidth: {
       type: Number,
@@ -72,33 +79,27 @@ export default {
       type: String,
     },
     required: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
     rules: {
       type: [Object, Array],
     },
-    error: {
-      type: String,
+    showMessage: {
+      default: true,
+      type: Boolean,
     },
     validateStatus: {
       type: Boolean,
     },
-    showMessage: {
-      type: Boolean,
-      default: true,
-    },
-    labelFor: {
-      type: String,
-    },
   },
   data() {
     return {
-      prefixCls,
       isRequired: false,
-      validateState: '',
-      validateMessage: '',
+      prefixCls,
       validateDisabled: false,
+      validateMessage: '',
+      validateState: '',
       validator: {},
     };
   },
@@ -112,6 +113,16 @@ export default {
           [`${prefixCls}-validating`]: this.validateState === 'validating',
         },
       ];
+    },
+    contentStyles() {
+      const style = {};
+      const labelWidth = this.labelWidth || this.form.labelWidth;
+
+      if (labelWidth) {
+        style.marginLeft = `${labelWidth}px`;
+      }
+
+      return style;
     },
     // form() {
     //    let parent = this.$parent;
@@ -144,16 +155,6 @@ export default {
 
       if (labelWidth) {
         style.width = `${labelWidth}px`;
-      }
-
-      return style;
-    },
-    contentStyles() {
-      const style = {};
-      const labelWidth = this.labelWidth || this.form.labelWidth;
-
-      if (labelWidth) {
-        style.marginLeft = `${labelWidth}px`;
       }
 
       return style;
@@ -196,6 +197,11 @@ export default {
     this.dispatch('iForm', 'on-form-item-remove', this);
   },
   methods: {
+    getFilteredRule(trigger) {
+      const rules = this.getRules();
+
+      return rules.filter((rule) => !rule.trigger || rule.trigger.indexOf(trigger) !== -1);
+    },
     getRules() {
       let formRules = this.form.rules;
       const selfRules = this.rules;
@@ -204,37 +210,17 @@ export default {
 
       return [].concat(selfRules || formRules || []);
     },
-    getFilteredRule(trigger) {
-      const rules = this.getRules();
-
-      return rules.filter((rule) => !rule.trigger || rule.trigger.indexOf(trigger) !== -1);
+    onFieldBlur() {
+      this.validate('blur');
     },
-    validate(trigger, callback = function() {}) {
-      const rules = this.getFilteredRule(trigger);
+    onFieldChange() {
+      if (this.validateDisabled) {
+        this.validateDisabled = false;
 
-      if (!rules || rules.length === 0) {
-        callback();
-
-        return true;
+        return;
       }
 
-      this.validateState = 'validating';
-
-      const descriptor = {};
-      descriptor[this.prop] = rules;
-
-      const validator = new AsyncValidator(descriptor);
-      const model = {};
-
-      model[this.prop] = this.fieldValue;
-
-      validator.validate(model, {firstFields: true}, (errors) => {
-        this.validateState = !errors ? 'success' : 'error';
-        this.validateMessage = errors ? errors[0].message : '';
-
-        callback(this.validateMessage);
-      });
-      this.validateDisabled = false;
+      this.validate('change');
     },
     resetField() {
       this.validateState = '';
@@ -265,17 +251,32 @@ export default {
         prop.o[prop.k] = this.initialValue;
       }
     },
-    onFieldBlur() {
-      this.validate('blur');
-    },
-    onFieldChange() {
-      if (this.validateDisabled) {
-        this.validateDisabled = false;
+    validate(trigger, callback = noop) {
+      const rules = this.getFilteredRule(trigger);
 
-        return;
+      if (!rules || rules.length === 0) {
+        callback();
+
+        return true;
       }
 
-      this.validate('change');
+      this.validateState = 'validating';
+
+      const descriptor = {};
+      descriptor[this.prop] = rules;
+
+      const validator = new AsyncValidator(descriptor);
+      const model = {};
+
+      model[this.prop] = this.fieldValue;
+
+      validator.validate(model, {firstFields: true}, (errors) => {
+        this.validateState = !errors ? 'success' : 'error';
+        this.validateMessage = errors ? errors[0].message : '';
+
+        callback(this.validateMessage);
+      });
+      this.validateDisabled = false;
     },
   },
 };

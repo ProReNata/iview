@@ -41,51 +41,35 @@ export default {
   components: {Icon},
   props: {
     bordered: {
-      type: Boolean,
       default: true,
+      type: Boolean,
     },
     disHover: {
-      type: Boolean,
       default: false,
-    },
-    shadow: {
       type: Boolean,
-      default: false,
-    },
-    padding: {
-      type: Number,
-      default: defaultPadding,
-    },
-    title: {
-      type: String,
     },
     icon: {
+      type: String,
+    },
+    padding: {
+      default: defaultPadding,
+      type: Number,
+    },
+    shadow: {
+      default: false,
+      type: Boolean,
+    },
+    title: {
       type: String,
     },
   },
   data() {
     return {
-      showHead: true,
       showExtra: true,
+      showHead: true,
     };
   },
   computed: {
-    classes() {
-      return [
-        `${prefixCls}`,
-        {
-          [`${prefixCls}-bordered`]: this.bordered && !this.shadow,
-          [`${prefixCls}-dis-hover`]: this.disHover || this.shadow,
-          [`${prefixCls}-shadow`]: this.shadow,
-        },
-      ];
-    },
-    headClasses() {
-      return `${prefixCls}-head`;
-    },
-    extraClasses() {
-      return `${prefixCls}-extra`;
-    },
     bodyClasses() {
       return `${prefixCls}-body`;
     },
@@ -97,6 +81,22 @@ export default {
       }
 
       return '';
+    },
+    classes() {
+      return [
+        `${prefixCls}`,
+        {
+          [`${prefixCls}-bordered`]: this.bordered && !this.shadow,
+          [`${prefixCls}-dis-hover`]: this.disHover || this.shadow,
+          [`${prefixCls}-shadow`]: this.shadow,
+        },
+      ];
+    },
+    extraClasses() {
+      return `${prefixCls}-extra`;
+    },
+    headClasses() {
+      return `${prefixCls}-head`;
     },
   },
   mounted() {

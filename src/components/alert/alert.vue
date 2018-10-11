@@ -43,23 +43,23 @@ export default {
   name: 'Alert',
   components: {Icon},
   props: {
+    banner: {
+      default: false,
+      type: Boolean,
+    },
+    closable: {
+      default: false,
+      type: Boolean,
+    },
+    showIcon: {
+      default: false,
+      type: Boolean,
+    },
     type: {
+      default: 'info',
       validator(value) {
         return oneOf(value, ['success', 'info', 'warning', 'error']);
       },
-      default: 'info',
-    },
-    closable: {
-      type: Boolean,
-      default: false,
-    },
-    showIcon: {
-      type: Boolean,
-      default: false,
-    },
-    banner: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {
@@ -69,25 +69,11 @@ export default {
     };
   },
   computed: {
-    wrapClasses() {
-      return [
-        `${prefixCls}`,
-        `${prefixCls}-${this.type}`,
-        {
-          [`${prefixCls}-with-icon`]: this.showIcon,
-          [`${prefixCls}-with-desc`]: this.desc,
-          [`${prefixCls}-with-banner`]: this.banner,
-        },
-      ];
-    },
-    messageClasses() {
-      return `${prefixCls}-message`;
+    closeClasses() {
+      return `${prefixCls}-close`;
     },
     descClasses() {
       return `${prefixCls}-desc`;
-    },
-    closeClasses() {
-      return `${prefixCls}-close`;
     },
     iconClasses() {
       return `${prefixCls}-icon`;
@@ -116,6 +102,20 @@ export default {
       }
 
       return type;
+    },
+    messageClasses() {
+      return `${prefixCls}-message`;
+    },
+    wrapClasses() {
+      return [
+        `${prefixCls}`,
+        `${prefixCls}-${this.type}`,
+        {
+          [`${prefixCls}-with-icon`]: this.showIcon,
+          [`${prefixCls}-with-desc`]: this.desc,
+          [`${prefixCls}-with-banner`]: this.banner,
+        },
+      ];
     },
   },
   mounted() {

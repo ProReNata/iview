@@ -133,69 +133,51 @@ export default {
   components: {Icon, Render},
   mixins: [Emitter],
   props: {
-    value: {
-      type: [String, Number],
+    animated: {
+      default: true,
+      type: Boolean,
     },
-    type: {
-      validator(value) {
-        return oneOf(value, ['line', 'card']);
-      },
-      default: 'line',
+    captureFocus: {
+      default: false,
+      type: Boolean,
+    },
+    closable: {
+      default: false,
+      type: Boolean,
     },
     size: {
+      default: 'default',
       validator(value) {
         return oneOf(value, ['small', 'default']);
       },
-      default: 'default',
     },
-    animated: {
-      type: Boolean,
-      default: true,
+    type: {
+      default: 'line',
+      validator(value) {
+        return oneOf(value, ['line', 'card']);
+      },
     },
-    captureFocus: {
-      type: Boolean,
-      default: false,
-    },
-    closable: {
-      type: Boolean,
-      default: false,
+    value: {
+      type: [String, Number],
     },
   },
   data() {
     return {
-      prefixCls,
-      navList: [],
-      barWidth: 0,
-      barOffset: 0,
       activeKey: this.value,
+      barOffset: 0,
+      barWidth: 0,
       focusedKey: this.value,
-      showSlot: false,
+      navList: [],
       navStyle: {
         transform: '',
       },
+      prefixCls,
       scrollable: false,
+      showSlot: false,
       transitioning: false,
     };
   },
   computed: {
-    classes() {
-      return [
-        `${prefixCls}`,
-        {
-          [`${prefixCls}-card`]: this.type === 'card',
-          [`${prefixCls}-mini`]: this.size === 'small' && this.type === 'line',
-          [`${prefixCls}-no-animation`]: !this.animated,
-        },
-      ];
-    },
-    contentClasses() {
-      return [
-        `${prefixCls}-content`,
-        {
-          [`${prefixCls}-content-animated`]: this.animated,
-        },
-      ];
-    },
     barClasses() {
       return [
         `${prefixCls}-ink-bar`,
@@ -203,20 +185,6 @@ export default {
           [`${prefixCls}-ink-bar-animated`]: this.animated,
         },
       ];
-    },
-    contentStyle() {
-      const x = this.getTabIndex(this.activeKey);
-      const p = x === 0 ? '0%' : `-${x}00%`;
-
-      let style = {};
-
-      if (x > -1) {
-        style = {
-          transform: `translateX(${p}) translateZ(0px)`,
-        };
-      }
-
-      return style;
     },
     barStyle() {
       const style = {
@@ -236,12 +204,40 @@ export default {
 
       return style;
     },
+    classes() {
+      return [
+        `${prefixCls}`,
+        {
+          [`${prefixCls}-card`]: this.type === 'card',
+          [`${prefixCls}-mini`]: this.size === 'small' && this.type === 'line',
+          [`${prefixCls}-no-animation`]: !this.animated,
+        },
+      ];
+    },
+    contentClasses() {
+      return [
+        `${prefixCls}-content`,
+        {
+          [`${prefixCls}-content-animated`]: this.animated,
+        },
+      ];
+    },
+    contentStyle() {
+      const x = this.getTabIndex(this.activeKey);
+      const p = x === 0 ? '0%' : `-${x}00%`;
+
+      let style = {};
+
+      if (x > -1) {
+        style = {
+          transform: `translateX(${p}) translateZ(0px)`,
+        };
+      }
+
+      return style;
+    },
   },
   watch: {
-    value(val) {
-      this.activeKey = val;
-      this.focusedKey = val;
-    },
     activeKey(val) {
       this.focusedKey = val;
       this.updateBar();
@@ -254,6 +250,10 @@ export default {
       // update visibility
       const nextIndex = Math.max(this.getTabIndex(this.focusedKey), 0);
       this.updateVisibility(nextIndex);
+    },
+    value(val) {
+      this.activeKey = val;
+      this.focusedKey = val;
     },
   },
   mounted() {
@@ -272,10 +272,10 @@ export default {
       });
 
       this.mutationObserver.observe(hiddenParentNode, {
-        attributes: true,
-        childList: true,
-        characterData: true,
         attributeFilter: ['style'],
+        attributes: true,
+        characterData: true,
+        childList: true,
       });
     }
 
@@ -290,76 +290,16 @@ export default {
     }
   },
   methods: {
+    getCurrentScrollOffset() {
+      const {navStyle} = this;
+
+      return navStyle.transform ? Number(navStyle.transform.match(/translateX\(-(\d+(\.\d+)*)px\)/)[1]) : 0;
+    },
+    getTabIndex(name) {
+      return this.navList.findIndex((nav) => nav.name === name);
+    },
     getTabs() {
       return this.$children.filter((item) => item.$options.name === 'TabPane');
-    },
-    updateNav() {
-      this.navList = [];
-      this.getTabs().forEach((pane, index) => {
-        this.navList.push({
-          labelType: typeof pane.label,
-          label: pane.label,
-          icon: pane.icon || '',
-          name: pane.currentName || index,
-          disabled: pane.disabled,
-          closable: pane.closable,
-        });
-
-        if (!pane.currentName) {
-          pane.currentName = index;
-        }
-
-        if (index === 0) {
-          if (!this.activeKey) {
-            this.activeKey = pane.currentName || index;
-          }
-        }
-      });
-      this.updateStatus();
-      this.updateBar();
-    },
-    updateBar() {
-      this.$nextTick(() => {
-        const index = this.getTabIndex(this.activeKey);
-
-        if (!this.$refs.nav) {
-          return;
-        } // 页面销毁时，这里会报错，为了解决 #2100
-
-        const prevTabs = this.$refs.nav.querySelectorAll(`.${prefixCls}-tab`);
-        const tab = prevTabs[index];
-        this.barWidth = tab ? parseFloat(tab.offsetWidth) : 0;
-
-        if (index > 0) {
-          let offset = 0;
-          const gutter = this.size === 'small' ? 0 : 16;
-          for (let i = 0; i < index; i++) {
-            offset += parseFloat(prevTabs[i].offsetWidth) + gutter;
-          }
-
-          this.barOffset = offset;
-        } else {
-          this.barOffset = 0;
-        }
-
-        this.updateNavScroll();
-      });
-    },
-    updateStatus() {
-      const tabs = this.getTabs();
-      tabs.forEach((tab) => {
-        tab.show = tab.currentName === this.activeKey || this.animated;
-      });
-    },
-    tabCls(item) {
-      return [
-        `${prefixCls}-tab`,
-        {
-          [`${prefixCls}-tab-disabled`]: item.disabled,
-          [`${prefixCls}-tab-active`]: item.name === this.activeKey,
-          [`${prefixCls}-tab-focused`]: item.name === this.focusedKey,
-        },
-      ];
     },
     handleChange(index) {
       if (this.transitioning) {
@@ -380,24 +320,6 @@ export default {
       this.activeKey = nav.name;
       this.$emit('input', nav.name);
       this.$emit('on-click', nav.name);
-    },
-    handleTabKeyNavigation(e) {
-      if (e.keyCode !== 37 && e.keyCode !== 39) {
-        return;
-      }
-
-      const direction = e.keyCode === 39 ? 1 : -1;
-      const nextTab = getNextTab(this.navList, this.focusedKey, direction);
-      this.focusedKey = nextTab.name;
-    },
-    handleTabKeyboardSelect(init = false) {
-      if (init) {
-        return;
-      }
-
-      const focused = this.focusedKey || 0;
-      const index = this.getTabIndex(focused);
-      this.handleChange(index);
     },
     handleRemove(index) {
       const tabs = this.getTabs();
@@ -428,28 +350,48 @@ export default {
       this.$emit('on-tab-remove', tab.currentName);
       this.updateNav();
     },
-    showClose(item) {
-      if (this.type === 'card') {
-        if (item.closable !== null) {
-          return item.closable;
+    handleResize() {
+      this.updateNavScroll();
+    },
+    handleTabKeyboardSelect(init = false) {
+      if (init) {
+        return;
+      }
+
+      const focused = this.focusedKey || 0;
+      const index = this.getTabIndex(focused);
+      this.handleChange(index);
+    },
+    handleTabKeyNavigation(e) {
+      if (e.keyCode !== 37 && e.keyCode !== 39) {
+        return;
+      }
+
+      const direction = e.keyCode === 39 ? 1 : -1;
+      const nextTab = getNextTab(this.navList, this.focusedKey, direction);
+      this.focusedKey = nextTab.name;
+    },
+    isInsideHiddenElement() {
+      let {parentNode} = this.$el;
+      while (parentNode && parentNode !== document.body) {
+        if (parentNode.style && parentNode.style.display === 'none') {
+          return parentNode;
         }
 
-        return this.closable;
+        parentNode = parentNode.parentNode;
       }
 
       return false;
     },
-    scrollPrev() {
-      const containerWidth = this.$refs.navScroll.offsetWidth;
-      const currentOffset = this.getCurrentScrollOffset();
+    onKeydown(event) {
+      const {key} = event;
 
-      if (!currentOffset) {
-        return;
+      if (oneOf(key, [' ', 'Space', 'Spacebar'])) {
+        event.preventDefault();
+        this.handleTabKeyboardSelect(false);
+      } else {
+        this.handleTabKeyNavigation(event);
       }
-
-      const newOffset = currentOffset > containerWidth ? currentOffset - containerWidth : 0;
-
-      this.setOffset(newOffset);
     },
     scrollNext() {
       const navWidth = this.$refs.nav.offsetWidth;
@@ -465,16 +407,17 @@ export default {
 
       this.setOffset(newOffset);
     },
-    getCurrentScrollOffset() {
-      const {navStyle} = this;
+    scrollPrev() {
+      const containerWidth = this.$refs.navScroll.offsetWidth;
+      const currentOffset = this.getCurrentScrollOffset();
 
-      return navStyle.transform ? Number(navStyle.transform.match(/translateX\(-(\d+(\.\d+)*)px\)/)[1]) : 0;
-    },
-    getTabIndex(name) {
-      return this.navList.findIndex((nav) => nav.name === name);
-    },
-    setOffset(value) {
-      this.navStyle.transform = `translateX(-${value}px)`;
+      if (!currentOffset) {
+        return;
+      }
+
+      const newOffset = currentOffset > containerWidth ? currentOffset - containerWidth : 0;
+
+      this.setOffset(newOffset);
     },
     scrollToActiveTab() {
       if (!this.scrollable) {
@@ -509,6 +452,82 @@ export default {
         this.setOffset(Math.max(newOffset, 0));
       }
     },
+    setOffset(value) {
+      this.navStyle.transform = `translateX(-${value}px)`;
+    },
+    showClose(item) {
+      if (this.type === 'card') {
+        if (item.closable !== null) {
+          return item.closable;
+        }
+
+        return this.closable;
+      }
+
+      return false;
+    },
+    tabCls(item) {
+      return [
+        `${prefixCls}-tab`,
+        {
+          [`${prefixCls}-tab-disabled`]: item.disabled,
+          [`${prefixCls}-tab-active`]: item.name === this.activeKey,
+          [`${prefixCls}-tab-focused`]: item.name === this.focusedKey,
+        },
+      ];
+    },
+    updateBar() {
+      this.$nextTick(() => {
+        const index = this.getTabIndex(this.activeKey);
+
+        if (!this.$refs.nav) {
+          return;
+        } // 页面销毁时，这里会报错，为了解决 #2100
+
+        const prevTabs = this.$refs.nav.querySelectorAll(`.${prefixCls}-tab`);
+        const tab = prevTabs[index];
+        this.barWidth = tab ? parseFloat(tab.offsetWidth) : 0;
+
+        if (index > 0) {
+          let offset = 0;
+          const gutter = this.size === 'small' ? 0 : 16;
+          for (let i = 0; i < index; i++) {
+            offset += parseFloat(prevTabs[i].offsetWidth) + gutter;
+          }
+
+          this.barOffset = offset;
+        } else {
+          this.barOffset = 0;
+        }
+
+        this.updateNavScroll();
+      });
+    },
+    updateNav() {
+      this.navList = [];
+      this.getTabs().forEach((pane, index) => {
+        this.navList.push({
+          closable: pane.closable,
+          disabled: pane.disabled,
+          icon: pane.icon || '',
+          label: pane.label,
+          labelType: typeof pane.label,
+          name: pane.currentName || index,
+        });
+
+        if (!pane.currentName) {
+          pane.currentName = index;
+        }
+
+        if (index === 0) {
+          if (!this.activeKey) {
+            this.activeKey = pane.currentName || index;
+          }
+        }
+      });
+      this.updateStatus();
+      this.updateBar();
+    },
     updateNavScroll() {
       const navWidth = this.$refs.nav.offsetWidth;
       const containerWidth = this.$refs.navScroll.offsetWidth;
@@ -528,20 +547,11 @@ export default {
         }
       }
     },
-    handleResize() {
-      this.updateNavScroll();
-    },
-    isInsideHiddenElement() {
-      let {parentNode} = this.$el;
-      while (parentNode && parentNode !== document.body) {
-        if (parentNode.style && parentNode.style.display === 'none') {
-          return parentNode;
-        }
-
-        parentNode = parentNode.parentNode;
-      }
-
-      return false;
+    updateStatus() {
+      const tabs = this.getTabs();
+      tabs.forEach((tab) => {
+        tab.show = tab.currentName === this.activeKey || this.animated;
+      });
     },
     updateVisibility(index) {
       [...this.$refs.panes.children].forEach((el, i) => {
@@ -561,16 +571,6 @@ export default {
           }, transitionTime);
         }
       });
-    },
-    onKeydown(event) {
-      const {key} = event;
-
-      if (oneOf(key, [' ', 'Space', 'Spacebar'])) {
-        event.preventDefault();
-        this.handleTabKeyboardSelect(false);
-      } else {
-        this.handleTabKeyNavigation(event);
-      }
     },
   },
 };

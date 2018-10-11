@@ -55,27 +55,30 @@ const prefixCls = 'ivu-menu';
 
 export default {
   name: 'Submenu',
-  components: {Icon, Drop, CollapseTransition},
+  components: {CollapseTransition, Drop, Icon},
   mixins: [Emitter, mixin],
   props: {
-    name: {
-      type: [String, Number],
-      required: true,
-    },
     disabled: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    name: {
+      required: true,
+      type: [String, Number],
     },
   },
   data() {
     return {
-      prefixCls,
       active: false,
-      opened: false,
       dropWidth: parseFloat(getStyle(this.$el, 'width')),
+      opened: false,
+      prefixCls,
     };
   },
   computed: {
+    accordion() {
+      return this.menu.accordion;
+    },
     classes() {
       return [
         `${prefixCls}-submenu`,
@@ -87,9 +90,6 @@ export default {
           [`${prefixCls}-child-item-active`]: this.active,
         },
       ];
-    },
-    accordion() {
-      return this.menu.accordion;
     },
     dropStyle() {
       const style = {};
@@ -153,6 +153,28 @@ export default {
     });
   },
   methods: {
+    handleClick() {
+      if (this.disabled) {
+        return;
+      }
+
+      if (this.mode === 'horizontal') {
+        return;
+      }
+
+      const {opened} = this;
+
+      if (this.accordion) {
+        this.$parent.$children.forEach((item) => {
+          if (item.$options.name === 'Submenu') {
+            item.opened = false;
+          }
+        });
+      }
+
+      this.opened = !opened;
+      this.menu.updateOpenKeys(this.name);
+    },
     handleMouseenter() {
       if (this.disabled) {
         return;
@@ -182,28 +204,6 @@ export default {
         this.menu.updateOpenKeys(this.name);
         this.opened = false;
       }, 150);
-    },
-    handleClick() {
-      if (this.disabled) {
-        return;
-      }
-
-      if (this.mode === 'horizontal') {
-        return;
-      }
-
-      const {opened} = this;
-
-      if (this.accordion) {
-        this.$parent.$children.forEach((item) => {
-          if (item.$options.name === 'Submenu') {
-            item.opened = false;
-          }
-        });
-      }
-
-      this.opened = !opened;
-      this.menu.updateOpenKeys(this.name);
     },
   },
 };

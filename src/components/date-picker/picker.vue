@@ -133,66 +133,53 @@ const extractTime = (date) => {
 };
 
 export default {
-  components: {iInput, Drop},
+  components: {Drop, iInput},
   directives: {clickOutside, TransferDom},
   mixins: [Emitter],
   props: {
+    clearable: {
+      default: true,
+      type: Boolean,
+    },
+    confirm: {
+      default: false,
+      type: Boolean,
+    },
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
+    editable: {
+      default: true,
+      type: Boolean,
+    },
+    elementId: {
+      type: String,
+    },
     format: {
       type: String,
     },
-    readonly: {
-      type: Boolean,
+    multiple: {
       default: false,
-    },
-    disabled: {
       type: Boolean,
-      default: false,
     },
-    editable: {
-      type: Boolean,
-      default: true,
-    },
-    clearable: {
-      type: Boolean,
-      default: true,
-    },
-    confirm: {
-      type: Boolean,
-      default: false,
+    name: {
+      type: String,
     },
     open: {
-      type: Boolean,
       default: null,
-    },
-    multiple: {
       type: Boolean,
-      default: false,
     },
-    timePickerOptions: {
+    options: {
       default: () => ({}),
       type: Object,
     },
-    splitPanels: {
-      type: Boolean,
-      default: false,
-    },
-    showWeekNumbers: {
-      type: Boolean,
-      default: false,
-    },
-    startDate: {
-      type: Date,
-    },
-    size: {
-      validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
-      },
-    },
     placeholder: {
-      type: String,
       default: '',
+      type: String,
     },
     placement: {
+      default: 'bottom-start',
       validator(value) {
         return oneOf(value, [
           'top',
@@ -209,28 +196,41 @@ export default {
           'right-end',
         ]);
       },
-      default: 'bottom-start',
     },
-    transfer: {
-      type: Boolean,
+    readonly: {
       default: false,
+      type: Boolean,
     },
-    name: {
-      type: String,
+    showWeekNumbers: {
+      default: false,
+      type: Boolean,
     },
-    elementId: {
-      type: String,
+    size: {
+      validator(value) {
+        return oneOf(value, ['small', 'large', 'default']);
+      },
+    },
+    splitPanels: {
+      default: false,
+      type: Boolean,
+    },
+    startDate: {
+      type: Date,
     },
     steps: {
-      type: Array,
       default: () => [],
+      type: Array,
+    },
+    timePickerOptions: {
+      default: () => ({}),
+      type: Object,
+    },
+    transfer: {
+      default: false,
+      type: Boolean,
     },
     value: {
       type: [Date, String, Array],
-    },
-    options: {
-      type: Object,
-      default: () => ({}),
     },
   },
   data() {
@@ -240,33 +240,60 @@ export default {
     const focusedTime = initialValue.map(extractTime);
 
     return {
-      prefixCls,
-      showClose: false,
-      visible: false,
-      internalValue: initialValue,
-      disableClickOutSide: false, // fixed when click a date,trigger clickoutside to close picker
-      disableCloseUnderTransfer: false, // transfer 模式下，点击Drop也会触发关闭,
-      selectionMode: this.onSelectionModeChange(this.type),
-      forceInputRerender: 1,
-      isFocused: false,
+      // fixed when click a date,trigger clickoutside to close picker
+      disableClickOutSide: false,
+      // transfer 模式下，点击Drop也会触发关闭,
+      disableCloseUnderTransfer: false,
       focusedDate: initialValue[0] || this.startDate || new Date(),
       focusedTime: {
+        active: false,
         column: 0, // which column inside the picker
         picker: 0, // which picker
-        time: focusedTime, // the values array into [hh, mm, ss],
-        active: false,
+        // the values array into [hh, mm, ss],
+        time: focusedTime,
       },
+      forceInputRerender: 1,
       internalFocus: false,
+      internalValue: initialValue,
+      isFocused: false,
+      prefixCls,
+      selectionMode: this.onSelectionModeChange(this.type),
+      showClose: false,
+      visible: false,
     };
   },
   computed: {
-    wrapperClasses() {
-      return [
-        prefixCls,
-        {
-          [`${prefixCls}-focused`]: this.isFocused,
-        },
-      ];
+    iconType() {
+      let icon = 'ios-calendar-outline';
+
+      if (this.type === 'time' || this.type === 'timerange') {
+        icon = 'ios-clock-outline';
+      }
+
+      if (this.showClose) {
+        icon = 'ios-close';
+      }
+
+      return icon;
+    },
+    isConfirm() {
+      return this.confirm || this.type === 'datetime' || this.type === 'datetimerange' || this.multiple;
+    },
+    opened() {
+      return this.open === null ? this.visible : this.open;
+    },
+    publicStringValue() {
+      const {formatDate, publicVModelValue, type} = this;
+
+      if (type.match(/^time/)) {
+        return publicVModelValue;
+      }
+
+      if (this.multiple) {
+        return formatDate(publicVModelValue);
+      }
+
+      return Array.isArray(publicVModelValue) ? publicVModelValue.map(formatDate) : formatDate(publicVModelValue);
     },
     publicVModelValue() {
       if (this.multiple) {
@@ -282,35 +309,6 @@ export default {
 
       return isRange || this.multiple ? val : val[0];
     },
-    publicStringValue() {
-      const {formatDate, publicVModelValue, type} = this;
-
-      if (type.match(/^time/)) {
-        return publicVModelValue;
-      }
-
-      if (this.multiple) {
-        return formatDate(publicVModelValue);
-      }
-
-      return Array.isArray(publicVModelValue) ? publicVModelValue.map(formatDate) : formatDate(publicVModelValue);
-    },
-    opened() {
-      return this.open === null ? this.visible : this.open;
-    },
-    iconType() {
-      let icon = 'ios-calendar-outline';
-
-      if (this.type === 'time' || this.type === 'timerange') {
-        icon = 'ios-clock-outline';
-      }
-
-      if (this.showClose) {
-        icon = 'ios-close';
-      }
-
-      return icon;
-    },
     transition() {
       const bottomPlaced = this.placement.match(/^bottom/);
 
@@ -319,27 +317,18 @@ export default {
     visualValue() {
       return this.formatDate(this.internalValue);
     },
-    isConfirm() {
-      return this.confirm || this.type === 'datetime' || this.type === 'datetimerange' || this.multiple;
+    wrapperClasses() {
+      return [
+        prefixCls,
+        {
+          [`${prefixCls}-focused`]: this.isFocused,
+        },
+      ];
     },
   },
   watch: {
-    visible(state) {
-      if (state === false) {
-        this.$refs.drop.destroy();
-      }
-
-      this.$refs.drop.update();
-      this.$emit('on-open-change', state);
-    },
-    value(val) {
-      this.internalValue = this.parseDate(val);
-    },
     open(val) {
       this.visible = val === true;
-    },
-    type(type) {
-      this.onSelectionModeChange(type);
     },
     publicVModelValue(now, before) {
       const newValue = JSON.stringify(now);
@@ -349,6 +338,20 @@ export default {
       if (shouldEmitInput) {
         this.$emit('input', now);
       } // to update v-model
+    },
+    type(type) {
+      this.onSelectionModeChange(type);
+    },
+    value(val) {
+      this.internalValue = this.parseDate(val);
+    },
+    visible(state) {
+      if (state === false) {
+        this.$refs.drop.destroy();
+      }
+
+      this.$refs.drop.update();
+      this.$emit('on-open-change', state);
     },
   },
   mounted() {
@@ -367,20 +370,59 @@ export default {
     this.$on('focus-input', () => this.focus());
   },
   methods: {
-    onSelectionModeChange(type) {
-      if (type.match(/^date/)) {
-        type = 'date';
-      }
-
-      this.selectionMode = oneOf(type, ['year', 'month', 'date', 'time']) && type;
-
-      return this.selectionMode;
+    emitChange(type) {
+      this.$nextTick(() => {
+        this.$emit('on-change', this.publicStringValue, type);
+        this.dispatch('FormItem', 'on-form-change', this.publicStringValue);
+      });
     },
-    // 开启 transfer 时，点击 Drop 即会关闭，这里不让其关闭
-    handleTransferClick() {
-      if (this.transfer) {
-        this.disableCloseUnderTransfer = true;
+    focus() {
+      this.$refs.input && this.$refs.input.focus();
+    },
+    formatDate(value) {
+      const format = DEFAULT_FORMATS[this.type];
+
+      if (this.multiple) {
+        const {formatter} = TYPE_VALUE_RESOLVER_MAP.multiple;
+
+        return formatter(value, this.format || format);
       }
+
+      const {formatter} = TYPE_VALUE_RESOLVER_MAP[this.type] || TYPE_VALUE_RESOLVER_MAP.default;
+
+      return formatter(value, this.format || format);
+    },
+    handleBlur(e) {
+      if (this.internalFocus) {
+        this.internalFocus = false;
+
+        return;
+      }
+
+      if (this.visible) {
+        e.preventDefault();
+
+        return;
+      }
+
+      this.isFocused = false;
+      this.onSelectionModeChange(this.type);
+      this.internalValue = this.internalValue.slice(); // trigger panel watchers to reset views
+      this.reset();
+      this.$refs.pickerPanel.onToggleVisibility(false);
+    },
+    handleClear() {
+      this.visible = false;
+      this.internalValue = this.internalValue.map(() => null);
+      this.$emit('on-clear');
+      this.dispatch('FormItem', 'on-form-change', '');
+      this.emitChange(this.type);
+      this.reset();
+
+      setTimeout(
+        () => this.onSelectionModeChange(this.type),
+        500, // delay to improve dropdown close visual effect
+      );
     },
     handleClose(e) {
       if (this.disableCloseUnderTransfer) {
@@ -428,24 +470,41 @@ export default {
         this.visible = true;
       }
     },
-    handleBlur(e) {
-      if (this.internalFocus) {
-        this.internalFocus = false;
+    handleIconClick() {
+      if (this.showClose) {
+        this.handleClear();
+      } else if (!this.disabled) {
+        this.handleFocus();
+      }
+    },
+    handleInputChange(event) {
+      const isArrayValue = this.type.includes('range') || this.multiple;
+      const oldValue = this.visualValue;
+      const newValue = event.target.value;
+      const newDate = this.parseDate(newValue);
+      const disabledDateFn = this.options && typeof this.options.disabledDate === 'function' && this.options.disabledDate;
+      const valueToTest = isArrayValue ? newDate : newDate[0];
+      const isDisabled = disabledDateFn && disabledDateFn(valueToTest);
+      const isValidDate = newDate.reduce((valid, date) => valid && date instanceof Date, true);
 
+      if (newValue !== oldValue && !isDisabled && isValidDate) {
+        this.emitChange(this.type);
+        this.internalValue = newDate;
+      } else {
+        this.forceInputRerender++;
+      }
+    },
+    handleInputMouseenter() {
+      if (this.readonly || this.disabled) {
         return;
       }
 
-      if (this.visible) {
-        e.preventDefault();
-
-        return;
+      if (this.visualValue && this.clearable) {
+        this.showClose = true;
       }
-
-      this.isFocused = false;
-      this.onSelectionModeChange(this.type);
-      this.internalValue = this.internalValue.slice(); // trigger panel watchers to reset views
-      this.reset();
-      this.$refs.pickerPanel.onToggleVisibility(false);
+    },
+    handleInputMouseleave() {
+      this.showClose = false;
     },
     handleKeydown(e) {
       const {keyCode} = e;
@@ -535,72 +594,10 @@ export default {
 
       this.navigateDatePanel(keyValueMapper[keyCode], e.shiftKey);
     },
-    reset() {
-      this.$refs.pickerPanel.reset && this.$refs.pickerPanel.reset();
-    },
-    navigateTimePanel(direction) {
-      this.focusedTime.active = true;
-      const horizontal = direction.match(/left|right/);
-      const vertical = direction.match(/up|down/);
-      const timePickers = findComponentsDownward(this, 'TimeSpinner');
-
-      const maxNrOfColumns = (timePickers[0].showSeconds ? 3 : 2) * timePickers.length;
-      const column = ((currentColumn) => {
-        const incremented = currentColumn + (horizontal ? (direction === 'left' ? -1 : 1) : 0);
-
-        return (incremented + maxNrOfColumns) % maxNrOfColumns;
-      })(this.focusedTime.column);
-
-      const columnsPerPicker = maxNrOfColumns / timePickers.length;
-      const pickerIndex = Math.floor(column / columnsPerPicker);
-      const col = column % columnsPerPicker;
-
-      if (horizontal) {
-        const time = this.internalValue.map(extractTime);
-
-        this.focusedTime = {
-          ...this.focusedTime,
-          column,
-          time,
-        };
-        timePickers.forEach((instance, i) => {
-          if (i === pickerIndex) {
-            instance.updateFocusedTime(col, time[pickerIndex]);
-          } else {
-            instance.updateFocusedTime(-1, instance.focusedTime);
-          }
-        });
-      }
-
-      if (vertical) {
-        const increment = direction === 'up' ? 1 : -1;
-        const timeParts = ['hours', 'minutes', 'seconds'];
-
-        const pickerPossibleValues = timePickers[pickerIndex][`${timeParts[col]}List`];
-        const nextIndex =
-          pickerPossibleValues.findIndex(({text}) => this.focusedTime.time[pickerIndex][col] === text) + increment;
-        const nextValue = pickerPossibleValues[nextIndex % pickerPossibleValues.length].text;
-        const times = this.focusedTime.time.map((time, i) => {
-          if (i !== pickerIndex) {
-            return time;
-          }
-
-          time[col] = nextValue;
-
-          return time;
-        });
-        this.focusedTime = {
-          ...this.focusedTime,
-          time: times,
-        };
-
-        timePickers.forEach((instance, i) => {
-          if (i === pickerIndex) {
-            instance.updateFocusedTime(col, times[i]);
-          } else {
-            instance.updateFocusedTime(-1, instance.focusedTime);
-          }
-        });
+    // 开启 transfer 时，点击 Drop 即会关闭，这里不让其关闭
+    handleTransferClick() {
+      if (this.transfer) {
+        this.disableCloseUnderTransfer = true;
       }
     },
     navigateDatePanel(direction, shift) {
@@ -677,108 +674,70 @@ export default {
 
       this.focusedDate = focusedDate;
     },
-    handleInputChange(event) {
-      const isArrayValue = this.type.includes('range') || this.multiple;
-      const oldValue = this.visualValue;
-      const newValue = event.target.value;
-      const newDate = this.parseDate(newValue);
-      const disabledDateFn = this.options && typeof this.options.disabledDate === 'function' && this.options.disabledDate;
-      const valueToTest = isArrayValue ? newDate : newDate[0];
-      const isDisabled = disabledDateFn && disabledDateFn(valueToTest);
-      const isValidDate = newDate.reduce((valid, date) => valid && date instanceof Date, true);
+    navigateTimePanel(direction) {
+      this.focusedTime.active = true;
+      const horizontal = direction.match(/left|right/);
+      const vertical = direction.match(/up|down/);
+      const timePickers = findComponentsDownward(this, 'TimeSpinner');
 
-      if (newValue !== oldValue && !isDisabled && isValidDate) {
-        this.emitChange(this.type);
-        this.internalValue = newDate;
-      } else {
-        this.forceInputRerender++;
-      }
-    },
-    handleInputMouseenter() {
-      if (this.readonly || this.disabled) {
-        return;
-      }
+      const maxNrOfColumns = (timePickers[0].showSeconds ? 3 : 2) * timePickers.length;
+      const column = ((currentColumn) => {
+        const incremented = currentColumn + (horizontal ? (direction === 'left' ? -1 : 1) : 0);
 
-      if (this.visualValue && this.clearable) {
-        this.showClose = true;
-      }
-    },
-    handleInputMouseleave() {
-      this.showClose = false;
-    },
-    handleIconClick() {
-      if (this.showClose) {
-        this.handleClear();
-      } else if (!this.disabled) {
-        this.handleFocus();
-      }
-    },
-    handleClear() {
-      this.visible = false;
-      this.internalValue = this.internalValue.map(() => null);
-      this.$emit('on-clear');
-      this.dispatch('FormItem', 'on-form-change', '');
-      this.emitChange(this.type);
-      this.reset();
+        return (incremented + maxNrOfColumns) % maxNrOfColumns;
+      })(this.focusedTime.column);
 
-      setTimeout(
-        () => this.onSelectionModeChange(this.type),
-        500, // delay to improve dropdown close visual effect
-      );
-    },
-    emitChange(type) {
-      this.$nextTick(() => {
-        this.$emit('on-change', this.publicStringValue, type);
-        this.dispatch('FormItem', 'on-form-change', this.publicStringValue);
-      });
-    },
-    parseDate(val) {
-      const {type} = this;
-      const isRange = type.includes('range');
-      const {parser} = TYPE_VALUE_RESOLVER_MAP[type] || TYPE_VALUE_RESOLVER_MAP.default;
-      const format = this.format || DEFAULT_FORMATS[type];
-      const multipleParser = TYPE_VALUE_RESOLVER_MAP.multiple.parser;
+      const columnsPerPicker = maxNrOfColumns / timePickers.length;
+      const pickerIndex = Math.floor(column / columnsPerPicker);
+      const col = column % columnsPerPicker;
 
-      if (val && type === 'time' && !(val instanceof Date)) {
-        val = parser(val, format);
-      } else if (this.multiple && val) {
-        val = multipleParser(val, format);
-      } else if (isRange) {
-        if (!val) {
-          val = [null, null];
-        } else if (typeof val === 'string') {
-          val = parser(val, format);
-        } else if (type === 'timerange') {
-          val = parser(val, format).map((v) => v || '');
-        } else {
-          const [start, end] = val;
+      if (horizontal) {
+        const time = this.internalValue.map(extractTime);
 
-          if (start instanceof Date && end instanceof Date) {
-            val = val.map((date) => new Date(date));
-          } else if (typeof start === 'string' && typeof end === 'string') {
-            val = parser(val.join(RANGE_SEPARATOR), format);
-          } else if (!start || !end) {
-            val = [null, null];
+        this.focusedTime = {
+          ...this.focusedTime,
+          column,
+          time,
+        };
+        timePickers.forEach((instance, i) => {
+          if (i === pickerIndex) {
+            instance.updateFocusedTime(col, time[pickerIndex]);
+          } else {
+            instance.updateFocusedTime(-1, instance.focusedTime);
           }
-        }
-      } else if (typeof val === 'string' && type.indexOf('time') !== 0) {
-        val = parser(val, format) || null;
+        });
       }
 
-      return isRange || this.multiple ? val || [] : [val];
-    },
-    formatDate(value) {
-      const format = DEFAULT_FORMATS[this.type];
+      if (vertical) {
+        const increment = direction === 'up' ? 1 : -1;
+        const timeParts = ['hours', 'minutes', 'seconds'];
 
-      if (this.multiple) {
-        const {formatter} = TYPE_VALUE_RESOLVER_MAP.multiple;
+        const pickerPossibleValues = timePickers[pickerIndex][`${timeParts[col]}List`];
+        const nextIndex =
+          pickerPossibleValues.findIndex(({text}) => this.focusedTime.time[pickerIndex][col] === text) + increment;
+        const nextValue = pickerPossibleValues[nextIndex % pickerPossibleValues.length].text;
+        const times = this.focusedTime.time.map((time, i) => {
+          if (i !== pickerIndex) {
+            return time;
+          }
 
-        return formatter(value, this.format || format);
+          time[col] = nextValue;
+
+          return time;
+        });
+        this.focusedTime = {
+          ...this.focusedTime,
+          time: times,
+        };
+
+        timePickers.forEach((instance, i) => {
+          if (i === pickerIndex) {
+            instance.updateFocusedTime(col, times[i]);
+          } else {
+            instance.updateFocusedTime(-1, instance.focusedTime);
+          }
+        });
       }
-
-      const {formatter} = TYPE_VALUE_RESOLVER_MAP[this.type] || TYPE_VALUE_RESOLVER_MAP.default;
-
-      return formatter(value, this.format || format);
     },
     onPick(dates, visible = false, type) {
       if (this.multiple) {
@@ -819,8 +778,52 @@ export default {
       this.focus();
       this.reset();
     },
-    focus() {
-      this.$refs.input && this.$refs.input.focus();
+    onSelectionModeChange(type) {
+      if (type.match(/^date/)) {
+        type = 'date';
+      }
+
+      this.selectionMode = oneOf(type, ['year', 'month', 'date', 'time']) && type;
+
+      return this.selectionMode;
+    },
+    parseDate(val) {
+      const {type} = this;
+      const isRange = type.includes('range');
+      const {parser} = TYPE_VALUE_RESOLVER_MAP[type] || TYPE_VALUE_RESOLVER_MAP.default;
+      const format = this.format || DEFAULT_FORMATS[type];
+      const multipleParser = TYPE_VALUE_RESOLVER_MAP.multiple.parser;
+
+      if (val && type === 'time' && !(val instanceof Date)) {
+        val = parser(val, format);
+      } else if (this.multiple && val) {
+        val = multipleParser(val, format);
+      } else if (isRange) {
+        if (!val) {
+          val = [null, null];
+        } else if (typeof val === 'string') {
+          val = parser(val, format);
+        } else if (type === 'timerange') {
+          val = parser(val, format).map((v) => v || '');
+        } else {
+          const [start, end] = val;
+
+          if (start instanceof Date && end instanceof Date) {
+            val = val.map((date) => new Date(date));
+          } else if (typeof start === 'string' && typeof end === 'string') {
+            val = parser(val.join(RANGE_SEPARATOR), format);
+          } else if (!start || !end) {
+            val = [null, null];
+          }
+        }
+      } else if (typeof val === 'string' && type.indexOf('time') !== 0) {
+        val = parser(val, format) || null;
+      }
+
+      return isRange || this.multiple ? val || [] : [val];
+    },
+    reset() {
+      this.$refs.pickerPanel.reset && this.$refs.pickerPanel.reset();
     },
   },
 };

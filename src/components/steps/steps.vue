@@ -31,25 +31,25 @@ export default {
   name: 'Steps',
   props: {
     current: {
-      type: Number,
       default: 0,
+      type: Number,
     },
-    status: {
+    direction: {
+      default: 'horizontal',
       validator(value) {
-        return oneOf(value, ['wait', 'process', 'finish', 'error']);
+        return oneOf(value, ['horizontal', 'vertical']);
       },
-      default: 'process',
     },
     size: {
       validator(value) {
         return oneOf(value, ['small']);
       },
     },
-    direction: {
+    status: {
+      default: 'process',
       validator(value) {
-        return oneOf(value, ['horizontal', 'vertical']);
+        return oneOf(value, ['wait', 'process', 'finish', 'error']);
       },
-      default: 'horizontal',
     },
   },
   computed: {
@@ -77,6 +77,18 @@ export default {
     this.$on('remove', this.debouncedAppendRemove());
   },
   methods: {
+    debouncedAppendRemove() {
+      return debounce(function() {
+        this.updateSteps();
+      });
+    },
+    setNextError() {
+      this.$children.forEach((child, index) => {
+        if (child.currentStatus === 'error' && index !== 0) {
+          this.$children[index - 1].nextError = true;
+        }
+      });
+    },
     updateChildProps(isInit) {
       const total = this.$children.length;
       this.$children.forEach((child, index) => {
@@ -105,13 +117,6 @@ export default {
         }
       });
     },
-    setNextError() {
-      this.$children.forEach((child, index) => {
-        if (child.currentStatus === 'error' && index !== 0) {
-          this.$children[index - 1].nextError = true;
-        }
-      });
-    },
     updateCurrent(isInit) {
       // 防止溢出边界
       if (this.current < 0 || this.current >= this.$children.length) {
@@ -127,11 +132,6 @@ export default {
       } else {
         this.$children[this.current].currentStatus = this.status;
       }
-    },
-    debouncedAppendRemove() {
-      return debounce(function() {
-        this.updateSteps();
-      });
     },
     updateSteps() {
       this.updateChildProps(true);

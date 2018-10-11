@@ -3,9 +3,7 @@ module.exports = {
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#specifying-environments|env}
    */
-  env: {
-    amd: true,
-  },
+  env: {},
 
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#extending-configuration-files|extends}
@@ -59,8 +57,8 @@ module.exports = {
    * @see {@link https://eslint.org/docs/user-guide/configuring#configuring-rules|rules
    */
   rules: {
-    'array-callback-return': 'off',
     camelcase: 'off',
+    'import/no-dynamic-require': 'off',
     'consistent-return': 'off',
     'func-names': 'off',
     'global-require': 'off',
@@ -72,7 +70,6 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'no-restricted-syntax': 'off',
     'no-shadow': 'off',
-    'no-prototype-builtins': 'off',
     'no-unused-expressions': 'off',
     'no-nested-ternary': 'off',
     'no-return-assign': 'off',
@@ -80,8 +77,7 @@ module.exports = {
     'no-restricted-properties': 'off',
     'no-sequences': 'off',
     'prefer-destructuring': 'off',
-    'import/no-named-as-default-member': 'off',
-    'import/no-dynamic-require': 'off',
+    'array-callback-return': 'off',
     'babel/no-invalid-this': 'off',
     'babel/new-cap': 'off',
     'babel/no-unused-expressions': 'off',
@@ -90,9 +86,6 @@ module.exports = {
     'promise/always-return': 'off',
     'promise/avoid-new': 'off',
     'promise/catch-or-return': 'off',
-    'lodash/import-scope': 'off',
-    'lodash/prefer-noop': 'off',
-    'lodash/prefer-is-nil': 'off',
     'vue/require-default-prop': 'off',
     'vue/require-v-for-key': 'off',
     'vue/valid-v-model': 'off',
@@ -102,7 +95,6 @@ module.exports = {
     'vue/no-unused-components': 'off',
     'vue/no-parsing-error': 'off',
     'vue/no-v-html': 'off',
-    'vue/no-template-shadow': 'off',
     'vue/require-prop-type-constructor': 'off', // New rule currently buggy in 5.0.0.beta.3
   },
 

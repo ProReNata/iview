@@ -6,22 +6,8 @@ import Options from '../time-mixins';
 import {findComponentsDownward, oneOf} from '../../../utils/assist';
 
 export default {
-  mixins: [Picker, Options],
-  components: {TimePickerPanel, RangeTimePickerPanel},
-  props: {
-    type: {
-      validator(value) {
-        return oneOf(value, ['time', 'timerange']);
-      },
-      default: 'time',
-    },
-  },
+  components: {RangeTimePickerPanel, TimePickerPanel},
   computed: {
-    panel() {
-      const isRange = this.type === 'timerange';
-
-      return isRange ? 'RangeTimePickerPanel' : 'TimePickerPanel';
-    },
     ownPickerProps() {
       return {
         disabledHours: this.disabledHours,
@@ -29,6 +15,20 @@ export default {
         disabledSeconds: this.disabledSeconds,
         hideDisabledOptions: this.hideDisabledOptions,
       };
+    },
+    panel() {
+      const isRange = this.type === 'timerange';
+
+      return isRange ? 'RangeTimePickerPanel' : 'TimePickerPanel';
+    },
+  },
+  mixins: [Picker, Options],
+  props: {
+    type: {
+      default: 'time',
+      validator(value) {
+        return oneOf(value, ['time', 'timerange']);
+      },
     },
   },
   watch: {

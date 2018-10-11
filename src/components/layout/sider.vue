@@ -36,71 +36,59 @@ setMatchMedia();
 export default {
   name: 'Sider',
   props: {
-    value: {
-      // if it's collpased now
-      type: Boolean,
-      default: false,
-    },
-    width: {
-      type: [Number, String],
-      default: 200,
-    },
-    collapsedWidth: {
-      type: [Number, String],
-      default: 64,
-    },
-    hideTrigger: {
-      type: Boolean,
-      default: false,
-    },
     breakpoint: {
       type: String,
       validator(val) {
         return oneOf(val, ['xs', 'sm', 'md', 'lg', 'xl']);
       },
     },
+    collapsedWidth: {
+      default: 64,
+      type: [Number, String],
+    },
     collapsible: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
     defaultCollapsed: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    hideTrigger: {
+      default: false,
+      type: Boolean,
     },
     reverseArrow: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    value: {
+      default: false,
+      // if it's collpased now
+      type: Boolean,
+    },
+    width: {
+      default: 200,
+      type: [Number, String],
     },
   },
   data() {
     return {
-      prefixCls,
       mediaMatched: false,
+      prefixCls,
     };
   },
   computed: {
-    wrapClasses() {
-      return [`${prefixCls}`, this.siderWidth ? '' : `${prefixCls}-zero-width`, this.value ? `${prefixCls}-collapsed` : ''];
-    },
-    wrapStyles() {
-      return {
-        width: `${this.siderWidth}px`,
-        minWidth: `${this.siderWidth}px`,
-        maxWidth: `${this.siderWidth}px`,
-        flex: `0 0 ${this.siderWidth}px`,
-      };
-    },
-    triggerClasses() {
-      return [`${prefixCls}-trigger`, this.value ? `${prefixCls}-trigger-collapsed` : ''];
-    },
     childClasses() {
       return `${this.prefixCls}-children`;
     },
-    zeroWidthTriggerClasses() {
-      return [`${prefixCls}-zero-width-trigger`, this.reverseArrow ? `${prefixCls}-zero-width-trigger-left` : ''];
+    showBottomTrigger() {
+      return this.collapsible ? !this.mediaMatched && !this.hideTrigger : false;
     },
-    triggerIconClasses() {
-      return ['ivu-icon', `ivu-icon-chevron-${this.reverseArrow ? 'right' : 'left'}`, `${prefixCls}-trigger-icon`];
+    showZeroTrigger() {
+      return this.collapsible
+        ? (this.mediaMatched && !this.hideTrigger) || (parseInt(this.collapsedWidth, 10) === 0 && this.value && !this.hideTrigger)
+        : false;
     },
     siderWidth() {
       return this.collapsible
@@ -111,13 +99,25 @@ export default {
           : parseInt(this.width, 10)
         : this.width;
     },
-    showZeroTrigger() {
-      return this.collapsible
-        ? (this.mediaMatched && !this.hideTrigger) || (parseInt(this.collapsedWidth, 10) === 0 && this.value && !this.hideTrigger)
-        : false;
+    triggerClasses() {
+      return [`${prefixCls}-trigger`, this.value ? `${prefixCls}-trigger-collapsed` : ''];
     },
-    showBottomTrigger() {
-      return this.collapsible ? !this.mediaMatched && !this.hideTrigger : false;
+    triggerIconClasses() {
+      return ['ivu-icon', `ivu-icon-chevron-${this.reverseArrow ? 'right' : 'left'}`, `${prefixCls}-trigger-icon`];
+    },
+    wrapClasses() {
+      return [`${prefixCls}`, this.siderWidth ? '' : `${prefixCls}-zero-width`, this.value ? `${prefixCls}-collapsed` : ''];
+    },
+    wrapStyles() {
+      return {
+        flex: `0 0 ${this.siderWidth}px`,
+        maxWidth: `${this.siderWidth}px`,
+        minWidth: `${this.siderWidth}px`,
+        width: `${this.siderWidth}px`,
+      };
+    },
+    zeroWidthTriggerClasses() {
+      return [`${prefixCls}-zero-width-trigger`, this.reverseArrow ? `${prefixCls}-zero-width-trigger-left` : ''];
     },
   },
   watch: {
@@ -141,10 +141,6 @@ export default {
     }
   },
   methods: {
-    toggleCollapse() {
-      const value = this.collapsible ? !this.value : false;
-      this.$emit('input', value);
-    },
     matchMedia() {
       let matchMedia;
 
@@ -161,6 +157,10 @@ export default {
     },
     onWindowResize() {
       this.matchMedia();
+    },
+    toggleCollapse() {
+      const value = this.collapsible ? !this.value : false;
+      this.$emit('input', value);
     },
   },
 };

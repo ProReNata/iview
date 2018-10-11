@@ -9,28 +9,29 @@
 </template>
 <script>
 import Vue from 'vue';
+import noop from 'lodash/noop';
 import {getStyle} from '../../utils/assist';
 
 const isServer = Vue.prototype.$isServer;
 
-const Popper = isServer ? function() {} : require('popper.js/dist/umd/popper.js');
+const Popper = isServer ? noop : require('popper.js/dist/umd/popper.js');
 
 export default {
   name: 'Drop',
   props: {
-    placement: {
-      type: String,
-      default: 'bottom-start',
-    },
     className: {
+      type: String,
+    },
+    placement: {
+      default: 'bottom-start',
       type: String,
     },
   },
   data() {
     return {
       popper: null,
-      width: '',
       popperStatus: false,
+      width: '',
     };
   },
   computed: {
@@ -54,44 +55,6 @@ export default {
     }
   },
   methods: {
-    update() {
-      if (isServer) {
-        return;
-      }
-
-      if (this.popper) {
-        this.$nextTick(() => {
-          this.popper.update();
-          this.popperStatus = true;
-        });
-      } else {
-        this.$nextTick(() => {
-          this.popper = new Popper(this.$parent.$refs.reference, this.$el, {
-            placement: this.placement,
-            modifiers: {
-              computeStyle: {
-                gpuAcceleration: false,
-              },
-              preventOverflow: {
-                boundariesElement: 'window',
-              },
-            },
-            onCreate: () => {
-              this.resetTransformOrigin();
-              this.$nextTick(this.popper.update());
-            },
-            onUpdate: () => {
-              this.resetTransformOrigin();
-            },
-          });
-        });
-      }
-
-      // set a height for parent is Modal and Select's width is 100%
-      if (this.$parent.$options.name === 'iSelect') {
-        this.width = parseInt(getStyle(this.$parent.$el, 'width'), 10);
-      }
-    },
     destroy() {
       if (this.popper) {
         setTimeout(() => {
@@ -118,6 +81,44 @@ export default {
       if (!leftOrRight) {
         this.popper.popper.style.transformOrigin =
           placementStart === 'bottom' || (placementStart !== 'top' && placementEnd === 'start') ? 'center top' : 'center bottom';
+      }
+    },
+    update() {
+      if (isServer) {
+        return;
+      }
+
+      if (this.popper) {
+        this.$nextTick(() => {
+          this.popper.update();
+          this.popperStatus = true;
+        });
+      } else {
+        this.$nextTick(() => {
+          this.popper = new Popper(this.$parent.$refs.reference, this.$el, {
+            modifiers: {
+              computeStyle: {
+                gpuAcceleration: false,
+              },
+              preventOverflow: {
+                boundariesElement: 'window',
+              },
+            },
+            onCreate: () => {
+              this.resetTransformOrigin();
+              this.$nextTick(this.popper.update());
+            },
+            onUpdate: () => {
+              this.resetTransformOrigin();
+            },
+            placement: this.placement,
+          });
+        });
+      }
+
+      // set a height for parent is Modal and Select's width is 100%
+      if (this.$parent.$options.name === 'iSelect') {
+        this.width = parseInt(getStyle(this.$parent.$el, 'width'), 10);
       }
     },
   },

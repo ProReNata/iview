@@ -11,70 +11,70 @@ export default {
   mixins: [Emitter, Locale],
   props: {
     data: {
-      type: Array,
       default() {
         return [];
       },
-    },
-    renderFormat: {
-      type: Function,
-      default(item) {
-        return item.label || item.key;
-      },
-    },
-    targetKeys: {
       type: Array,
-      default() {
-        return [];
-      },
-    },
-    selectedKeys: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-    listStyle: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-    titles: {
-      type: Array,
-    },
-    operations: {
-      type: Array,
-      default() {
-        return [];
-      },
     },
     filterable: {
-      type: Boolean,
       default: false,
-    },
-    filterPlaceholder: {
-      type: String,
+      type: Boolean,
     },
     filterMethod: {
-      type: Function,
       default(data, query) {
         const type = 'label' in data ? 'label' : 'key';
 
         return data[type].indexOf(query) > -1;
       },
+      type: Function,
+    },
+    filterPlaceholder: {
+      type: String,
+    },
+    listStyle: {
+      default() {
+        return {};
+      },
+      type: Object,
     },
     notFoundText: {
       type: String,
     },
+    operations: {
+      default() {
+        return [];
+      },
+      type: Array,
+    },
+    renderFormat: {
+      default(item) {
+        return item.label || item.key;
+      },
+      type: Function,
+    },
+    selectedKeys: {
+      default() {
+        return [];
+      },
+      type: Array,
+    },
+    targetKeys: {
+      default() {
+        return [];
+      },
+      type: Array,
+    },
+    titles: {
+      type: Array,
+    },
   },
   data() {
     return {
-      prefixCls,
-      leftData: [],
-      rightData: [],
       leftCheckedKeys: [],
+      leftData: [],
+      prefixCls,
       rightCheckedKeys: [],
+      rightData: [],
     };
   },
   computed: {
@@ -83,9 +83,6 @@ export default {
     },
     leftValidKeysCount() {
       return this.getValidKeys('left').length;
-    },
-    rightValidKeysCount() {
-      return this.getValidKeys('right').length;
     },
     localeFilterPlaceholder() {
       if (this.filterPlaceholder === undefined) {
@@ -108,12 +105,15 @@ export default {
 
       return this.titles;
     },
+    rightValidKeysCount() {
+      return this.getValidKeys('right').length;
+    },
   },
   watch: {
-    targetKeys() {
+    data() {
       this.splitData(false);
     },
-    data() {
+    targetKeys() {
       this.splitData(false);
     },
   },
@@ -125,6 +125,34 @@ export default {
       return this[`${direction}Data`]
         .filter((data) => !data.disabled && this[`${direction}CheckedKeys`].indexOf(data.key) > -1)
         .map((data) => data.key);
+    },
+    handleCheckedKeys() {
+      const sourceSelectedKeys = this.getValidKeys('left');
+      const targetSelectedKeys = this.getValidKeys('right');
+      this.$emit('on-selected-change', sourceSelectedKeys, targetSelectedKeys);
+    },
+    handleLeftCheckedKeysChange(keys) {
+      this.leftCheckedKeys = keys;
+    },
+    handleRightCheckedKeysChange(keys) {
+      this.rightCheckedKeys = keys;
+    },
+    moveTo(direction) {
+      const {targetKeys} = this;
+      const opposite = direction === 'left' ? 'right' : 'left';
+      const moveKeys = this.getValidKeys(opposite);
+      const newTargetKeys =
+        direction === 'right'
+          ? moveKeys.concat(targetKeys)
+          : targetKeys.filter((targetKey) => !moveKeys.some((checkedKey) => targetKey === checkedKey));
+
+      this.$refs[opposite].toggleSelectAll(false);
+      this.$emit('on-change', newTargetKeys, direction, moveKeys);
+      this.dispatch('FormItem', 'on-form-change', {
+        direction,
+        moveKeys,
+        tarketKeys: newTargetKeys,
+      });
     },
     splitData(init = false) {
       this.leftData = [...this.data];
@@ -160,34 +188,6 @@ export default {
         this.rightCheckedKeys = this.rightData.filter((data) => selectedKeys.indexOf(data.key) > -1).map((data) => data.key);
       }
     },
-    moveTo(direction) {
-      const {targetKeys} = this;
-      const opposite = direction === 'left' ? 'right' : 'left';
-      const moveKeys = this.getValidKeys(opposite);
-      const newTargetKeys =
-        direction === 'right'
-          ? moveKeys.concat(targetKeys)
-          : targetKeys.filter((targetKey) => !moveKeys.some((checkedKey) => targetKey === checkedKey));
-
-      this.$refs[opposite].toggleSelectAll(false);
-      this.$emit('on-change', newTargetKeys, direction, moveKeys);
-      this.dispatch('FormItem', 'on-form-change', {
-        tarketKeys: newTargetKeys,
-        direction,
-        moveKeys,
-      });
-    },
-    handleLeftCheckedKeysChange(keys) {
-      this.leftCheckedKeys = keys;
-    },
-    handleRightCheckedKeysChange(keys) {
-      this.rightCheckedKeys = keys;
-    },
-    handleCheckedKeys() {
-      const sourceSelectedKeys = this.getValidKeys('left');
-      const targetSelectedKeys = this.getValidKeys('right');
-      this.$emit('on-selected-change', sourceSelectedKeys, targetSelectedKeys);
-    },
   },
   render(h) {
     function cloneVNode(vnode) {
@@ -217,32 +217,32 @@ export default {
         h(
           List,
           {
-            ref: 'left',
-            props: {
-              prefixCls: `${this.prefixCls}-list`,
-              data: this.leftData,
-              renderFormat: this.renderFormat,
-              checkedKeys: this.leftCheckedKeys,
-              validKeysCount: this.leftValidKeysCount,
-              listStyle: this.listStyle,
-              title: this.localeTitles[0],
-              filterable: this.filterable,
-              filterPlaceholder: this.localeFilterPlaceholder,
-              filterMethod: this.filterMethod,
-              notFoundText: this.localeNotFoundText,
-            },
             on: {
               'on-checked-keys-change': this.handleLeftCheckedKeysChange,
             },
+            props: {
+              checkedKeys: this.leftCheckedKeys,
+              data: this.leftData,
+              filterable: this.filterable,
+              filterMethod: this.filterMethod,
+              filterPlaceholder: this.localeFilterPlaceholder,
+              listStyle: this.listStyle,
+              notFoundText: this.localeNotFoundText,
+              prefixCls: `${this.prefixCls}-list`,
+              renderFormat: this.renderFormat,
+              title: this.localeTitles[0],
+              validKeysCount: this.leftValidKeysCount,
+            },
+            ref: 'left',
           },
           vNodes,
         ),
 
         h(Operation, {
           props: {
-            prefixCls: this.prefixCls,
-            operations: this.operations,
             leftActive: this.leftValidKeysCount > 0,
+            operations: this.operations,
+            prefixCls: this.prefixCls,
             rightActive: this.rightValidKeysCount > 0,
           },
         }),
@@ -250,23 +250,23 @@ export default {
         h(
           List,
           {
-            ref: 'right',
-            props: {
-              prefixCls: `${this.prefixCls}-list`,
-              data: this.rightData,
-              renderFormat: this.renderFormat,
-              checkedKeys: this.rightCheckedKeys,
-              validKeysCount: this.rightValidKeysCount,
-              listStyle: this.listStyle,
-              title: this.localeTitles[1],
-              filterable: this.filterable,
-              filterPlaceholder: this.localeFilterPlaceholder,
-              filterMethod: this.filterMethod,
-              notFoundText: this.localeNotFoundText,
-            },
             on: {
               'on-checked-keys-change': this.handleRightCheckedKeysChange,
             },
+            props: {
+              checkedKeys: this.rightCheckedKeys,
+              data: this.rightData,
+              filterable: this.filterable,
+              filterMethod: this.filterMethod,
+              filterPlaceholder: this.localeFilterPlaceholder,
+              listStyle: this.listStyle,
+              notFoundText: this.localeNotFoundText,
+              prefixCls: `${this.prefixCls}-list`,
+              renderFormat: this.renderFormat,
+              title: this.localeTitles[1],
+              validKeysCount: this.rightValidKeysCount,
+            },
+            ref: 'right',
           },
           clonedVNodes,
         ),

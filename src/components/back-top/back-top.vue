@@ -20,21 +20,21 @@ const prefixCls = 'ivu-back-top';
 
 export default {
   props: {
-    height: {
-      type: Number,
-      default: 400,
-    },
     bottom: {
-      type: Number,
       default: 30,
-    },
-    right: {
       type: Number,
-      default: 30,
     },
     duration: {
-      type: Number,
       default: 1000,
+      type: Number,
+    },
+    height: {
+      default: 400,
+      type: Number,
+    },
+    right: {
+      default: 30,
+      type: Number,
     },
   },
   data() {
@@ -51,14 +51,14 @@ export default {
         },
       ];
     },
+    innerClasses() {
+      return `${prefixCls}-inner`;
+    },
     styles() {
       return {
         bottom: `${this.bottom}px`,
         right: `${this.right}px`,
       };
-    },
-    innerClasses() {
-      return `${prefixCls}-inner`;
     },
   },
   mounted() {
@@ -74,13 +74,13 @@ export default {
     off(window, 'resize', this.handleScroll);
   },
   methods: {
-    handleScroll() {
-      this.backTop = window.pageYOffset >= this.height;
-    },
     back() {
       const sTop = document.documentElement.scrollTop || document.body.scrollTop;
       scrollTop(window, sTop, 0, this.duration);
       this.$emit('on-click');
+    },
+    handleScroll() {
+      this.backTop = window.pageYOffset >= this.height;
     },
   },
 };

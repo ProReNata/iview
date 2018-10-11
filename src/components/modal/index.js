@@ -7,8 +7,8 @@ function getModalInstance(render = undefined) {
     modalInstance ||
     Modal.newInstance({
       closable: false,
-      maskClosable: false,
       footerHide: true,
+      maskClosable: false,
       render,
     });
 

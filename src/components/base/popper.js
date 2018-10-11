@@ -2,73 +2,26 @@
  * https://github.com/freeze-component/vue-popper
  * */
 import Vue from 'vue';
+import noop from 'lodash/noop';
+import has from 'lodash/has';
 
 const isServer = Vue.prototype.$isServer;
-const Popper = isServer ? function() {} : require('popper.js/dist/umd/popper.js');
+const Popper = isServer ? noop : require('popper.js/dist/umd/popper.js');
 
 export default {
-  props: {
-    placement: {
-      type: String,
-      default: 'bottom',
-    },
-    boundariesPadding: {
-      type: Number,
-      default: 5,
-    },
-    reference: Object,
-    popper: Object,
-    offset: {
-      default: 0,
-    },
-    value: {
-      type: Boolean,
-      default: false,
-    },
-    transition: String,
-    options: {
-      type: Object,
-      default() {
-        return {
-          modifiers: {
-            computeStyle: {
-              gpuAcceleration: false,
-            },
-            preventOverflow: {
-              boundariesElement: 'window',
-            },
-          },
-        };
-      },
-    },
-    // visible: {
-    //     type: Boolean,
-    //     default: false
-    // }
+  beforeDestroy() {
+    if (isServer) {
+      return;
+    }
+
+    if (this.popperJS) {
+      this.popperJS.destroy();
+    }
   },
   data() {
     return {
       visible: this.value,
     };
-  },
-  watch: {
-    value: {
-      immediate: true,
-      handler(val) {
-        this.visible = val;
-        this.$emit('input', val);
-      },
-    },
-    visible(val) {
-      if (val) {
-        this.updatePopper();
-        this.$emit('on-popper-show');
-      } else {
-        this.$emit('on-popper-hide');
-      }
-
-      this.$emit('input', val);
-    },
   },
   methods: {
     createPopper() {
@@ -88,7 +41,7 @@ export default {
         return;
       }
 
-      if (this.popperJS && this.popperJS.hasOwnProperty('destroy')) {
+      if (this.popperJS && has(this.popperJS, 'destroy')) {
         this.popperJS.destroy();
       }
 
@@ -106,13 +59,6 @@ export default {
 
       this.popperJS = new Popper(reference, popper, options);
     },
-    updatePopper() {
-      if (isServer) {
-        return;
-      }
-
-      this.popperJS ? this.popperJS.update() : this.createPopper();
-    },
     doDestroy() {
       if (isServer) {
         return;
@@ -125,17 +71,73 @@ export default {
       this.popperJS.destroy();
       this.popperJS = null;
     },
+    updatePopper() {
+      if (isServer) {
+        return;
+      }
+
+      this.popperJS ? this.popperJS.update() : this.createPopper();
+    },
+  },
+  props: {
+    boundariesPadding: {
+      default: 5,
+      type: Number,
+    },
+    offset: {
+      default: 0,
+    },
+    // visible: {
+    //     type: Boolean,
+    //     default: false
+    // }
+    options: {
+      default() {
+        return {
+          modifiers: {
+            computeStyle: {
+              gpuAcceleration: false,
+            },
+            preventOverflow: {
+              boundariesElement: 'window',
+            },
+          },
+        };
+      },
+      type: Object,
+    },
+    placement: {
+      default: 'bottom',
+      type: String,
+    },
+    popper: Object,
+    reference: Object,
+    transition: String,
+    value: {
+      default: false,
+      type: Boolean,
+    },
   },
   updated() {
     this.$nextTick(() => this.updatePopper());
   },
-  beforeDestroy() {
-    if (isServer) {
-      return;
-    }
+  watch: {
+    value: {
+      handler(val) {
+        this.visible = val;
+        this.$emit('input', val);
+      },
+      immediate: true,
+    },
+    visible(val) {
+      if (val) {
+        this.updatePopper();
+        this.$emit('on-popper-show');
+      } else {
+        this.$emit('on-popper-hide');
+      }
 
-    if (this.popperJS) {
-      this.popperJS.destroy();
-    }
+      this.$emit('input', val);
+    },
   },
 };

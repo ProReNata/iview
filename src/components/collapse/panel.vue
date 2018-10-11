@@ -29,7 +29,7 @@ const prefixCls = 'ivu-collapse';
 
 export default {
   name: 'Panel',
-  components: {Icon, CollapseTransition},
+  components: {CollapseTransition, Icon},
   props: {
     name: {
       type: String,
@@ -42,6 +42,15 @@ export default {
     };
   },
   computed: {
+    boxClasses() {
+      return `${prefixCls}-content-box`;
+    },
+    contentClasses() {
+      return `${prefixCls}-content`;
+    },
+    headerClasses() {
+      return `${prefixCls}-header`;
+    },
     itemClasses() {
       return [
         `${prefixCls}-item`,
@@ -50,21 +59,12 @@ export default {
         },
       ];
     },
-    headerClasses() {
-      return `${prefixCls}-header`;
-    },
-    contentClasses() {
-      return `${prefixCls}-content`;
-    },
-    boxClasses() {
-      return `${prefixCls}-content-box`;
-    },
   },
   methods: {
     toggle() {
       this.$parent.toggle({
-        name: this.name || this.index,
         isActive: this.isActive,
+        name: this.name || this.index,
       });
     },
   },

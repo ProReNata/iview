@@ -204,11 +204,9 @@ export default {
   },
   data() {
     return {
-      openNames: ['1'],
-      openNames2: [],
+      activeName: '1',
       menuList: [
         {
-          name: '111',
           children: [
             {
               name: '111-111',
@@ -217,21 +215,19 @@ export default {
               name: '111-222',
             },
           ],
+          name: '111',
         },
         {
-          name: '222',
           children: [
             {
               name: '222-111',
             },
             {
-              name: '222-222',
               children: [
                 {
                   name: '222-222-111',
                 },
                 {
-                  name: '222-222-222',
                   children: [
                     {
                       name: '222-222-222-111',
@@ -240,14 +236,14 @@ export default {
                       name: '222-222-222-222',
                     },
                   ],
+                  name: '222-222-222',
                 },
               ],
+              name: '222-222',
             },
             {
-              name: '222-333',
               children: [
                 {
-                  name: '222-333-111',
                   children: [
                     {
                       name: '222-333-111-111',
@@ -256,9 +252,9 @@ export default {
                       name: '222-333-111-222',
                     },
                   ],
+                  name: '222-333-111',
                 },
                 {
-                  name: '222-333-222',
                   children: [
                     {
                       name: '222-333-222-111',
@@ -267,18 +263,38 @@ export default {
                       name: '222-333-222-222',
                     },
                   ],
+                  name: '222-333-222',
                 },
               ],
+              name: '222-333',
             },
           ],
+          name: '222',
         },
       ],
-      activeName: '1',
+      openNames: ['1'],
+      openNames2: [],
     };
   },
   methods: {
+    addNewItem() {
+      this.menuList[1].children[1].children.push({
+        children: [
+          {
+            name: '222-222-333-111',
+          },
+        ],
+        name: '222-222-333',
+      });
+    },
+    changeActive() {
+      this.activeName = String(Number(this.activeName) + 1);
+    },
     handleOpenChange(name) {
       console.log(name);
+    },
+    hc(data) {
+      console.log(data);
     },
     setOpenNames() {
       this.openNames = ['2', '3'];
@@ -287,22 +303,6 @@ export default {
         this.$refs.menu.updateOpened();
         this.$refs.menu2.updateOpened();
       });
-    },
-    addNewItem() {
-      this.menuList[1].children[1].children.push({
-        name: '222-222-333',
-        children: [
-          {
-            name: '222-222-333-111',
-          },
-        ],
-      });
-    },
-    changeActive() {
-      this.activeName = String(Number(this.activeName) + 1);
-    },
-    hc(data) {
-      console.log(data);
     },
   },
 };

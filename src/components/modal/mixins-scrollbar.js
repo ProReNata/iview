@@ -3,6 +3,16 @@ import {getScrollBarSize} from '../../utils/assist';
 
 export default {
   methods: {
+    addScrollEffect() {
+      this.checkScrollBar();
+      this.setScrollBar();
+      document.body.style.overflow = 'hidden';
+    },
+    checkMaskInVisible() {
+      const masks = document.getElementsByClassName('ivu-modal-mask') || [];
+
+      return Array.from(masks).every((m) => m.style.display === 'none' || m.classList.contains('fade-leave-to'));
+    },
     checkScrollBar() {
       let fullWindowWidth = window.innerWidth;
 
@@ -18,28 +28,18 @@ export default {
         this.scrollBarWidth = getScrollBarSize();
       }
     },
-    checkMaskInVisible() {
-      const masks = document.getElementsByClassName('ivu-modal-mask') || [];
-
-      return Array.from(masks).every((m) => m.style.display === 'none' || m.classList.contains('fade-leave-to'));
-    },
-    setScrollBar() {
-      if (this.bodyIsOverflowing && this.scrollBarWidth !== undefined) {
-        document.body.style.paddingRight = `${this.scrollBarWidth}px`;
+    removeScrollEffect() {
+      if (this.checkMaskInVisible()) {
+        document.body.style.overflow = '';
+        this.resetScrollBar();
       }
     },
     resetScrollBar() {
       document.body.style.paddingRight = '';
     },
-    addScrollEffect() {
-      this.checkScrollBar();
-      this.setScrollBar();
-      document.body.style.overflow = 'hidden';
-    },
-    removeScrollEffect() {
-      if (this.checkMaskInVisible()) {
-        document.body.style.overflow = '';
-        this.resetScrollBar();
+    setScrollBar() {
+      if (this.bodyIsOverflowing && this.scrollBarWidth !== undefined) {
+        document.body.style.paddingRight = `${this.scrollBarWidth}px`;
       }
     },
   },

@@ -102,122 +102,81 @@ export default {
   components: {InputNumber, Tooltip},
   mixins: [Emitter],
   props: {
-    min: {
-      type: Number,
-      default: 0,
-    },
-    max: {
-      type: Number,
-      default: 100,
-    },
-    step: {
-      type: Number,
-      default: 1,
-    },
-    range: {
-      type: Boolean,
-      default: false,
-    },
-    value: {
-      type: [Number, Array],
-      default: 0,
-    },
     disabled: {
-      type: Boolean,
       default: false,
-    },
-    showInput: {
       type: Boolean,
-      default: false,
     },
     inputSize: {
-      type: String,
       default: 'default',
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
-    showStops: {
-      type: Boolean,
-      default: false,
+    max: {
+      default: 100,
+      type: Number,
     },
-    tipFormat: {
-      type: Function,
-      default(val) {
-        return val;
-      },
+    min: {
+      default: 0,
+      type: Number,
+    },
+    name: {
+      type: String,
+    },
+    range: {
+      default: false,
+      type: Boolean,
+    },
+    showInput: {
+      default: false,
+      type: Boolean,
+    },
+    showStops: {
+      default: false,
+      type: Boolean,
     },
     showTip: {
-      type: String,
       default: 'hover',
+      type: String,
       validator(value) {
         return oneOf(value, ['hover', 'always', 'never']);
       },
     },
-    name: {
-      type: String,
+    step: {
+      default: 1,
+      type: Number,
+    },
+    tipFormat: {
+      default(val) {
+        return val;
+      },
+      type: Function,
+    },
+    value: {
+      default: 0,
+      type: [Number, Array],
     },
   },
   data() {
     const val = this.checkLimits(Array.isArray(this.value) ? this.value : [this.value]);
 
     return {
-      prefixCls,
       currentValue: val,
-      dragging: false,
-      pointerDown: '',
-      startX: 0,
       currentX: 0,
-      startPos: 0,
+      dragging: false,
       oldValue: [...val],
+      pointerDown: '',
+      prefixCls,
+      startPos: 0,
+      startX: 0,
       valueIndex: {
-        min: 0,
         max: 1,
+        min: 0,
       },
     };
   },
   computed: {
-    classes() {
-      return [
-        `${prefixCls}`,
-        {
-          [`${prefixCls}-input`]: this.showInput && !this.range,
-          [`${prefixCls}-range`]: this.range,
-          [`${prefixCls}-disabled`]: this.disabled,
-        },
-      ];
-    },
-    minButtonClasses() {
-      return [
-        `${prefixCls}-button`,
-        {
-          [`${prefixCls}-button-dragging`]: this.pointerDown === 'min',
-        },
-      ];
-    },
-    maxButtonClasses() {
-      return [
-        `${prefixCls}-button`,
-        {
-          [`${prefixCls}-button-dragging`]: this.pointerDown === 'max',
-        },
-      ];
-    },
-    exportValue() {
-      const decimalCases = (String(this.step).split('.')[1] || '').length;
-
-      return this.currentValue.map((nr) => Number(nr.toFixed(decimalCases)));
-    },
-    minPosition() {
-      const val = this.currentValue;
-
-      return ((val[0] - this.min) / this.valueRange) * 100;
-    },
-    maxPosition() {
-      const val = this.currentValue;
-
-      return ((val[1] - this.min) / this.valueRange) * 100;
-    },
     barStyle() {
       const style = {
         width: `${((this.currentValue[0] - this.min) / this.valueRange) * 100}%`,
@@ -230,6 +189,50 @@ export default {
 
       return style;
     },
+    classes() {
+      return [
+        `${prefixCls}`,
+        {
+          [`${prefixCls}-input`]: this.showInput && !this.range,
+          [`${prefixCls}-range`]: this.range,
+          [`${prefixCls}-disabled`]: this.disabled,
+        },
+      ];
+    },
+    exportValue() {
+      const decimalCases = (String(this.step).split('.')[1] || '').length;
+
+      return this.currentValue.map((nr) => Number(nr.toFixed(decimalCases)));
+    },
+    maxButtonClasses() {
+      return [
+        `${prefixCls}-button`,
+        {
+          [`${prefixCls}-button-dragging`]: this.pointerDown === 'max',
+        },
+      ];
+    },
+    maxPosition() {
+      const val = this.currentValue;
+
+      return ((val[1] - this.min) / this.valueRange) * 100;
+    },
+    minButtonClasses() {
+      return [
+        `${prefixCls}-button`,
+        {
+          [`${prefixCls}-button-dragging`]: this.pointerDown === 'min',
+        },
+      ];
+    },
+    minPosition() {
+      const val = this.currentValue;
+
+      return ((val[0] - this.min) / this.valueRange) * 100;
+    },
+    sliderWidth() {
+      return parseInt(getStyle(this.$refs.slider, 'width'), 10);
+    },
     stops() {
       const stopCount = this.valueRange / this.step;
       const result = [];
@@ -240,9 +243,6 @@ export default {
 
       return result;
     },
-    sliderWidth() {
-      return parseInt(getStyle(this.$refs.slider, 'width'), 10);
-    },
     tipDisabled() {
       return this.tipFormat(this.currentValue[0]) === null || this.showTip === 'never';
     },
@@ -251,13 +251,6 @@ export default {
     },
   },
   watch: {
-    value(val) {
-      val = this.checkLimits(Array.isArray(val) ? val : [val]);
-
-      if (val[0] !== this.currentValue[0] || val[1] !== this.currentValue[1]) {
-        this.currentValue = val;
-      }
-    },
     exportValue(values) {
       this.$nextTick(() => {
         this.$refs.minTooltip.updatePopper();
@@ -269,6 +262,13 @@ export default {
       const value = this.range ? values : values[0];
       this.$emit('input', value);
       this.$emit('on-input', value);
+    },
+    value(val) {
+      val = this.checkLimits(Array.isArray(val) ? val : [val]);
+
+      if (val[0] !== this.currentValue[0] || val[1] !== this.currentValue[1]) {
+        this.currentValue = val;
+      }
     },
   },
   mounted() {
@@ -292,85 +292,6 @@ export default {
     });
   },
   methods: {
-    getPointerX(e) {
-      return e.type.indexOf('touch') !== -1 ? e.touches[0].clientX : e.clientX;
-    },
-    checkLimits([min, max]) {
-      min = Math.max(this.min, min);
-      min = Math.min(this.max, min);
-
-      max = Math.max(this.min, min, max);
-      max = Math.min(this.max, max);
-
-      return [min, max];
-    },
-    getCurrentValue(event, type) {
-      if (this.disabled) {
-        return;
-      }
-
-      const index = this.valueIndex[type];
-
-      if (typeof index === 'undefined') {
-        return;
-      }
-
-      return this.currentValue[index];
-    },
-    onKeyLeft(event, type) {
-      const value = this.getCurrentValue(event, type);
-
-      if (Number.isFinite(value)) {
-        this.changeButtonPosition(value - this.step, type);
-      }
-    },
-    onKeyRight(event, type) {
-      const value = this.getCurrentValue(event, type);
-
-      if (Number.isFinite(value)) {
-        this.changeButtonPosition(value + this.step, type);
-      }
-    },
-    onPointerDown(event, type) {
-      if (this.disabled) {
-        return;
-      }
-
-      event.preventDefault();
-      this.pointerDown = type;
-
-      this.onPointerDragStart(event);
-      on(window, 'mousemove', this.onPointerDrag);
-      on(window, 'touchmove', this.onPointerDrag);
-      on(window, 'mouseup', this.onPointerDragEnd);
-      on(window, 'touchend', this.onPointerDragEnd);
-    },
-    onPointerDragStart(event) {
-      this.dragging = false;
-      this.startX = this.getPointerX(event);
-      this.startPos = (this[`${this.pointerDown}Position`] * this.valueRange) / 100 + this.min;
-    },
-    onPointerDrag(event) {
-      this.dragging = true;
-      this.$refs[`${this.pointerDown}Tooltip`].visible = true;
-      this.currentX = this.getPointerX(event);
-      const diff = ((this.currentX - this.startX) / this.sliderWidth) * this.valueRange;
-
-      this.changeButtonPosition(this.startPos + diff);
-    },
-    onPointerDragEnd() {
-      if (this.dragging) {
-        this.dragging = false;
-        this.$refs[`${this.pointerDown}Tooltip`].visible = false;
-        this.emitChange();
-      }
-
-      this.pointerDown = '';
-      off(window, 'mousemove', this.onPointerDrag);
-      off(window, 'touchmove', this.onPointerDrag);
-      off(window, 'mouseup', this.onPointerDragEnd);
-      off(window, 'touchend', this.onPointerDragEnd);
-    },
     changeButtonPosition(newPos, forceType) {
       const type = forceType || this.pointerDown;
       const index = type === 'min' ? 0 : 1;
@@ -393,6 +314,39 @@ export default {
         }
       }
     },
+    checkLimits([min, max]) {
+      min = Math.max(this.min, min);
+      min = Math.min(this.max, min);
+
+      max = Math.max(this.min, min, max);
+      max = Math.min(this.max, max);
+
+      return [min, max];
+    },
+    emitChange() {
+      const value = this.range ? this.exportValue : this.exportValue[0];
+      this.$emit('on-change', value);
+      this.dispatch('FormItem', 'on-form-change', value);
+    },
+    getCurrentValue(event, type) {
+      if (this.disabled) {
+        return;
+      }
+
+      const index = this.valueIndex[type];
+
+      if (typeof index === 'undefined') {
+        return;
+      }
+
+      return this.currentValue[index];
+    },
+    getPointerX(e) {
+      return e.type.indexOf('touch') !== -1 ? e.touches[0].clientX : e.clientX;
+    },
+    handleBlur(type) {
+      this.$refs[`${type}Tooltip`].handleClosePopper();
+    },
     handleDecimal(pos, step) {
       if (step < 1) {
         const sl = step.toString();
@@ -411,10 +365,83 @@ export default {
 
       return pos % step;
     },
-    emitChange() {
-      const value = this.range ? this.exportValue : this.exportValue[0];
-      this.$emit('on-change', value);
-      this.dispatch('FormItem', 'on-form-change', value);
+    handleFocus(type) {
+      this.$refs[`${type}Tooltip`].handleShowPopper();
+    },
+    handleInputChange(val) {
+      this.currentValue = [val, this.currentValue[1]];
+      this.emitChange();
+    },
+    onKeydown(event, range) {
+      const {key} = event;
+
+      if (oneOf(key, ['Up', 'ArrowUp'])) {
+        this.onKeyRight(event, range);
+      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+        this.onKeyLeft(event, range);
+      } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+        this.onKeyLeft(event, range);
+      } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+        this.onKeyRight(event, range);
+      }
+    },
+    onKeyLeft(event, type) {
+      const value = this.getCurrentValue(event, type);
+
+      if (Number.isFinite(value)) {
+        this.changeButtonPosition(value - this.step, type);
+      }
+    },
+    onKeyRight(event, type) {
+      const value = this.getCurrentValue(event, type);
+
+      if (Number.isFinite(value)) {
+        this.changeButtonPosition(value + this.step, type);
+      }
+    },
+
+    onPointerDown(event, type) {
+      if (this.disabled) {
+        return;
+      }
+
+      event.preventDefault();
+      this.pointerDown = type;
+
+      this.onPointerDragStart(event);
+      on(window, 'mousemove', this.onPointerDrag);
+      on(window, 'touchmove', this.onPointerDrag);
+      on(window, 'mouseup', this.onPointerDragEnd);
+      on(window, 'touchend', this.onPointerDragEnd);
+    },
+
+    onPointerDrag(event) {
+      this.dragging = true;
+      this.$refs[`${this.pointerDown}Tooltip`].visible = true;
+      this.currentX = this.getPointerX(event);
+      const diff = ((this.currentX - this.startX) / this.sliderWidth) * this.valueRange;
+
+      this.changeButtonPosition(this.startPos + diff);
+    },
+
+    onPointerDragEnd() {
+      if (this.dragging) {
+        this.dragging = false;
+        this.$refs[`${this.pointerDown}Tooltip`].visible = false;
+        this.emitChange();
+      }
+
+      this.pointerDown = '';
+      off(window, 'mousemove', this.onPointerDrag);
+      off(window, 'touchmove', this.onPointerDrag);
+      off(window, 'mouseup', this.onPointerDragEnd);
+      off(window, 'touchend', this.onPointerDragEnd);
+    },
+
+    onPointerDragStart(event) {
+      this.dragging = false;
+      this.startX = this.getPointerX(event);
+      this.startPos = (this[`${this.pointerDown}Position`] * this.valueRange) / 100 + this.min;
     },
 
     sliderClick(event) {
@@ -432,33 +459,6 @@ export default {
         this.changeButtonPosition(newPos, 'max');
       } else {
         this.changeButtonPosition(newPos, newPos - this.firstPosition <= this.secondPosition - newPos ? 'min' : 'max');
-      }
-    },
-
-    handleInputChange(val) {
-      this.currentValue = [val, this.currentValue[1]];
-      this.emitChange();
-    },
-
-    handleFocus(type) {
-      this.$refs[`${type}Tooltip`].handleShowPopper();
-    },
-
-    handleBlur(type) {
-      this.$refs[`${type}Tooltip`].handleClosePopper();
-    },
-
-    onKeydown(event, range) {
-      const {key} = event;
-
-      if (oneOf(key, ['Up', 'ArrowUp'])) {
-        this.onKeyRight(event, range);
-      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
-        this.onKeyLeft(event, range);
-      } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
-        this.onKeyLeft(event, range);
-      } else if (oneOf(key, ['Right', 'ArrowRight'])) {
-        this.onKeyRight(event, range);
       }
     },
   },

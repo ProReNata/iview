@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import deepmerge from 'deepmerge';
+import isNil from 'lodash/isNil';
 import Format from './format';
 import defaultLang from './lang/zh-CN';
 
@@ -23,7 +24,7 @@ export const t = function(...args) {
   const [path, options] = args;
   let value = i18nHandler.apply(this, args);
 
-  if (value !== null && value !== undefined) {
+  if (!isNil(value)) {
     return value;
   }
 
@@ -55,5 +56,3 @@ export const use = function(l) {
 export const i18n = function(fn) {
   i18nHandler = fn || i18nHandler;
 };
-
-export default {use, t, i18n};

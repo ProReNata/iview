@@ -1,9 +1,9 @@
 export default {
   data() {
     return {
-      prefixCls: 'ivu-color-picker',
-      inputPrefixCls: 'ivu-input',
       iconPrefixCls: 'ivu-icon',
+      inputPrefixCls: 'ivu-input',
+      prefixCls: 'ivu-color-picker',
       transferPrefixCls: 'ivu-transfer',
     };
   },

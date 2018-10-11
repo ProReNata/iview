@@ -1,21 +1,22 @@
 
 <script>
-const returnArrayFn = () => [];
+import noop from 'lodash/noop';
+import stubArray from 'lodash/stubArray';
 
 export default {
   functional: true,
   props: {
     options: {
+      default: stubArray,
       type: Array,
-      default: returnArrayFn,
     },
     slotOptions: {
+      default: stubArray,
       type: Array,
-      default: returnArrayFn,
     },
     slotUpdateHook: {
+      default: noop,
       type: Function,
-      default: () => {},
     },
   },
   render(h, {props, parent}) {

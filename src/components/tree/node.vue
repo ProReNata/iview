@@ -74,26 +74,26 @@ const prefixCls = 'ivu-tree';
 
 export default {
   name: 'TreeNode',
-  components: {Checkbox, Icon, CollapseTransition, Render},
+  components: {Checkbox, CollapseTransition, Icon, Render},
   mixins: [Emitter],
   props: {
+    childrenKey: {
+      default: 'children',
+      type: String,
+    },
     data: {
-      type: Object,
       default() {
         return {};
       },
+      type: Object,
     },
     multiple: {
-      type: Boolean,
       default: false,
-    },
-    childrenKey: {
-      type: String,
-      default: 'children',
+      type: Boolean,
     },
     showCheckbox: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
   },
   data() {
@@ -102,16 +102,6 @@ export default {
     };
   },
   computed: {
-    classes() {
-      return [`${prefixCls}-children`];
-    },
-    selectedCls() {
-      return [
-        {
-          [`${prefixCls}-node-selected`]: this.data.selected,
-        },
-      ];
-    },
     arrowClasses() {
       return [
         `${prefixCls}-arrow`,
@@ -121,35 +111,16 @@ export default {
         },
       ];
     },
-    titleClasses() {
-      return [
-        `${prefixCls}-title`,
-        {
-          [`${prefixCls}-title-selected`]: this.data.selected,
-        },
-      ];
+    children() {
+      return this.data[this.childrenKey];
     },
-    showArrow() {
-      return (
-        (this.data[this.childrenKey] && this.data[this.childrenKey].length) || ('loading' in this.data && !this.data.loading)
-      );
-    },
-    showLoading() {
-      return 'loading' in this.data && this.data.loading;
+    classes() {
+      return [`${prefixCls}-children`];
     },
     isParentRender() {
       const Tree = findComponentUpward(this, 'Tree');
 
       return Tree && Tree.render;
-    },
-    parentRender() {
-      const Tree = findComponentUpward(this, 'Tree');
-
-      if (Tree && Tree.render) {
-        return Tree.render;
-      }
-
-      return null;
     },
     node() {
       const Tree = findComponentUpward(this, 'Tree');
@@ -161,11 +132,51 @@ export default {
 
       return [];
     },
-    children() {
-      return this.data[this.childrenKey];
+    parentRender() {
+      const Tree = findComponentUpward(this, 'Tree');
+
+      if (Tree && Tree.render) {
+        return Tree.render;
+      }
+
+      return null;
+    },
+    selectedCls() {
+      return [
+        {
+          [`${prefixCls}-node-selected`]: this.data.selected,
+        },
+      ];
+    },
+    showArrow() {
+      return (
+        (this.data[this.childrenKey] && this.data[this.childrenKey].length) || ('loading' in this.data && !this.data.loading)
+      );
+    },
+    showLoading() {
+      return 'loading' in this.data && this.data.loading;
+    },
+    titleClasses() {
+      return [
+        `${prefixCls}-title`,
+        {
+          [`${prefixCls}-title-selected`]: this.data.selected,
+        },
+      ];
     },
   },
   methods: {
+    handleCheck() {
+      if (this.data.disabled) {
+        return;
+      }
+
+      const changes = {
+        checked: !this.data.checked && !this.data.indeterminate,
+        nodeKey: this.data.nodeKey,
+      };
+      this.dispatch('Tree', 'on-check', changes);
+    },
     handleExpand() {
       const item = this.data;
 
@@ -203,17 +214,6 @@ export default {
       }
 
       this.dispatch('Tree', 'on-selected', this.data.nodeKey);
-    },
-    handleCheck() {
-      if (this.data.disabled) {
-        return;
-      }
-
-      const changes = {
-        checked: !this.data.checked && !this.data.indeterminate,
-        nodeKey: this.data.nodeKey,
-      };
-      this.dispatch('Tree', 'on-check', changes);
     },
   },
 };

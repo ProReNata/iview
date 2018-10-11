@@ -19,22 +19,28 @@
 </template>
 <script>
 export default {
-  mounted() {
-    //            this.$Message.config({
-    //                top: 50,
-    //                duration: 3
-    //            });
-  },
+  // mounted() {
+  //   this.$Message.config({
+  //     top: 50,
+  //     duration: 3,
+  //   });
+  // },
   methods: {
+    destroy() {
+      this.$Message.destroy();
+    },
+    error() {
+      this.$Message.error('对方不想说话，并且向你抛出了一个异常');
+    },
     info() {
       //                this.$Message.info('这是一条普通提示');
       this.$Message.success({
+        closable: true,
         content: '这是一条普通提示2',
         duration: 500,
-        onClose() {
-          //                        console.log(123)
-        },
-        closable: true,
+        // onClose() {
+        //   console.log(123)
+        // },
         render(h) {
           return h(
             'Button',
@@ -56,12 +62,6 @@ export default {
     },
     warning() {
       this.$Message.warning('这是一条警告的提示');
-    },
-    error() {
-      this.$Message.error('对方不想说话，并且向你抛出了一个异常');
-    },
-    destroy() {
-      this.$Message.destroy();
     },
   },
 };

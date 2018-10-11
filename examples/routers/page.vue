@@ -98,11 +98,11 @@ export default {
     };
   },
   methods: {
-    subject() {
-      this.total -= 1;
-    },
     change() {
       this.current = 1;
+    },
+    subject() {
+      this.total -= 1;
     },
   },
 };

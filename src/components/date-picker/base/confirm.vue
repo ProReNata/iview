@@ -45,8 +45,8 @@ export default {
   components: {iButton},
   mixins: [Locale, Emitter],
   props: {
-    showTime: false,
     isTime: false,
+    showTime: false,
     timeDisabled: false,
   },
   data() {
@@ -55,9 +55,6 @@ export default {
     };
   },
   computed: {
-    timeClasses() {
-      return `${prefixCls}-confirm-time`;
-    },
     labels() {
       const labels = ['time', 'clear', 'ok'];
       const values = [this.isTime ? 'selectDate' : 'selectTime', 'clear', 'ok'];
@@ -68,6 +65,9 @@ export default {
         return obj;
       }, {});
     },
+    timeClasses() {
+      return `${prefixCls}-confirm-time`;
+    },
   },
   methods: {
     handleClear() {
@@ -75,14 +75,6 @@ export default {
     },
     handleSuccess() {
       this.$emit('on-pick-success');
-    },
-    handleToggleTime() {
-      if (this.timeDisabled) {
-        return;
-      }
-
-      this.$emit('on-pick-toggle-time');
-      this.dispatch('CalendarPicker', 'focus-input');
     },
     handleTab(e) {
       const tabbables = [...this.$el.children];
@@ -93,6 +85,14 @@ export default {
         e.stopPropagation();
         this.dispatch('CalendarPicker', 'focus-input');
       }
+    },
+    handleToggleTime() {
+      if (this.timeDisabled) {
+        return;
+      }
+
+      this.$emit('on-pick-toggle-time');
+      this.dispatch('CalendarPicker', 'focus-input');
     },
     onKeydown(event) {
       const {key, target} = event;

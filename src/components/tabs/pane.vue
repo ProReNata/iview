@@ -12,44 +12,44 @@ const prefixCls = 'ivu-tabs-tabpane';
 export default {
   name: 'TabPane',
   props: {
-    name: {
-      type: String,
+    closable: {
+      default: null,
+      type: Boolean,
     },
-    label: {
-      type: [String, Function],
-      default: '',
+    disabled: {
+      default: false,
+      type: Boolean,
     },
     icon: {
       type: String,
     },
-    disabled: {
-      type: Boolean,
-      default: false,
+    label: {
+      default: '',
+      type: [String, Function],
     },
-    closable: {
-      type: Boolean,
-      default: null,
+    name: {
+      type: String,
     },
   },
   data() {
     return {
+      currentName: this.name,
       prefixCls,
       show: true,
-      currentName: this.name,
     };
   },
   watch: {
-    name(val) {
-      this.currentName = val;
-      this.updateNav();
-    },
-    label() {
+    disabled() {
       this.updateNav();
     },
     icon() {
       this.updateNav();
     },
-    disabled() {
+    label() {
+      this.updateNav();
+    },
+    name(val) {
+      this.currentName = val;
       this.updateNav();
     },
   },

@@ -50,7 +50,7 @@ import Tree from './components/tree';
 import Upload from './components/upload';
 import {Row, Col} from './components/grid';
 import {Select, Option, OptionGroup} from './components/select';
-import locale from './locale/index';
+import * as locale from './locale/index';
 
 const components = {
   Affix,
@@ -84,9 +84,6 @@ const components = {
   Icon,
   Input,
   InputNumber,
-  Scroll,
-  Sider,
-  Submenu: Menu.Sub,
   Layout,
   LoadingBar,
   Menu,
@@ -105,14 +102,17 @@ const components = {
   RadioGroup: Radio.Group,
   Rate,
   Row,
+  Scroll,
   Select,
+  Sider,
   Slider,
   Spin,
   Step: Steps.Step,
   Steps,
+  Submenu: Menu.Sub,
   Table,
-  Tabs,
   TabPane: Tabs.Pane,
+  Tabs,
   Tag,
   Timeline,
   TimelineItem: Timeline.Item,
@@ -129,8 +129,8 @@ const iview = {
   iCircle: Circle,
   iCol: Col,
   iContent: Content,
-  iForm: Form,
   iFooter: Footer,
+  iForm: Form,
   iHeader: Header,
   iInput: Input,
   iMenu: Menu,
@@ -166,13 +166,13 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 const API = {
-  version: process.env.VERSION,
-  locale: locale.use,
+  ...components,
+  Circle,
   i18n: locale.i18n,
   install,
-  Circle,
+  locale: locale.use,
   Switch,
-  ...components,
+  version: process.env.VERSION,
 };
 
 API.lang = (code) => {

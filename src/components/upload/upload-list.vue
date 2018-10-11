@@ -39,10 +39,10 @@ export default {
   components: {Icon, iProgress},
   props: {
     files: {
-      type: Array,
       default() {
         return [];
       },
+      type: Array,
     },
   },
   data() {
@@ -58,15 +58,6 @@ export default {
           [`${prefixCls}-list-file-finish`]: file.status === 'finished',
         },
       ];
-    },
-    handleClick(file) {
-      this.$emit('on-file-click', file);
-    },
-    handlePreview(file) {
-      this.$emit('on-file-preview', file);
-    },
-    handleRemove(file) {
-      this.$emit('on-file-remove', file);
     },
     format(file) {
       const format =
@@ -101,6 +92,15 @@ export default {
       }
 
       return type;
+    },
+    handleClick(file) {
+      this.$emit('on-file-click', file);
+    },
+    handlePreview(file) {
+      this.$emit('on-file-preview', file);
+    },
+    handleRemove(file) {
+      this.$emit('on-file-remove', file);
     },
     parsePercentage(val) {
       return parseInt(val, 10);

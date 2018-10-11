@@ -185,104 +185,91 @@ export default {
   components: {Options},
   mixins: [Locale],
   props: {
-    current: {
-      type: Number,
-      default: 1,
+    className: {
+      type: String,
     },
-    total: {
+    current: {
+      default: 1,
       type: Number,
-      default: 0,
     },
     pageSize: {
-      type: Number,
       default: 10,
+      type: Number,
     },
     pageSizeOpts: {
-      type: Array,
       default() {
         return [10, 20, 30, 40];
       },
+      type: Array,
     },
     placement: {
+      default: 'bottom',
       validator(value) {
         return oneOf(value, ['top', 'bottom']);
       },
-      default: 'bottom',
     },
-    transfer: {
-      type: Boolean,
+    showElevator: {
       default: false,
+      type: Boolean,
+    },
+    showSizer: {
+      default: false,
+      type: Boolean,
+    },
+    showTotal: {
+      default: false,
+      type: Boolean,
+    },
+    simple: {
+      default: false,
+      type: Boolean,
     },
     size: {
       validator(value) {
         return oneOf(value, ['small']);
       },
     },
-    simple: {
-      type: Boolean,
-      default: false,
-    },
-    showTotal: {
-      type: Boolean,
-      default: false,
-    },
-    showElevator: {
-      type: Boolean,
-      default: false,
-    },
-    showSizer: {
-      type: Boolean,
-      default: false,
-    },
-    className: {
-      type: String,
-    },
     styles: {
       type: Object,
+    },
+    total: {
+      default: 0,
+      type: Number,
+    },
+    transfer: {
+      default: false,
+      type: Boolean,
     },
   },
   data() {
     return {
-      prefixCls,
       currentPage: this.current,
       currentPageSize: this.pageSize,
+      prefixCls,
     };
   },
   computed: {
-    isSmall() {
-      return !!this.size;
-    },
     allPages() {
       const allPage = Math.ceil(this.total / this.currentPageSize);
 
       return allPage === 0 ? 1 : allPage;
     },
-    simpleWrapClasses() {
+    firstPageClasses() {
       return [
-        `${prefixCls}`,
-        `${prefixCls}-simple`,
+        `${prefixCls}-item`,
         {
-          [`${this.className}`]: !!this.className,
+          [`${prefixCls}-item-active`]: this.currentPage === 1,
         },
       ];
     },
-    simplePagerClasses() {
-      return `${prefixCls}-simple-pager`;
+    isSmall() {
+      return !!this.size;
     },
-    wrapClasses() {
+    lastPageClasses() {
       return [
-        `${prefixCls}`,
+        `${prefixCls}-item`,
         {
-          [`${this.className}`]: !!this.className,
-          mini: !!this.size,
-        },
-      ];
-    },
-    prevClasses() {
-      return [
-        `${prefixCls}-prev`,
-        {
-          [`${prefixCls}-disabled`]: this.currentPage === 1,
+          [`${prefixCls}-item-active`]: this.currentPage === this.allPages,
         },
       ];
     },
@@ -294,36 +281,49 @@ export default {
         },
       ];
     },
-    firstPageClasses() {
+    prevClasses() {
       return [
-        `${prefixCls}-item`,
+        `${prefixCls}-prev`,
         {
-          [`${prefixCls}-item-active`]: this.currentPage === 1,
+          [`${prefixCls}-disabled`]: this.currentPage === 1,
         },
       ];
     },
-    lastPageClasses() {
+    simplePagerClasses() {
+      return `${prefixCls}-simple-pager`;
+    },
+    simpleWrapClasses() {
       return [
-        `${prefixCls}-item`,
+        `${prefixCls}`,
+        `${prefixCls}-simple`,
         {
-          [`${prefixCls}-item-active`]: this.currentPage === this.allPages,
+          [`${this.className}`]: !!this.className,
+        },
+      ];
+    },
+    wrapClasses() {
+      return [
+        `${prefixCls}`,
+        {
+          [`${this.className}`]: !!this.className,
+          mini: !!this.size,
         },
       ];
     },
   },
   watch: {
+    current(val) {
+      this.currentPage = val;
+    },
+    pageSize(val) {
+      this.currentPageSize = val;
+    },
     total(val) {
       const maxPage = Math.ceil(val / this.currentPageSize);
 
       if (maxPage < this.currentPage && maxPage > 0) {
         this.currentPage = maxPage;
       }
-    },
-    current(val) {
-      this.currentPage = val;
-    },
-    pageSize(val) {
-      this.currentPageSize = val;
     },
   },
   methods: {
@@ -332,33 +332,6 @@ export default {
         this.currentPage = page;
         this.$emit('update:current', page);
         this.$emit('on-change', page);
-      }
-    },
-    prev() {
-      const current = this.currentPage;
-
-      if (current <= 1) {
-        return false;
-      }
-
-      this.changePage(current - 1);
-    },
-    next() {
-      const current = this.currentPage;
-
-      if (current >= this.allPages) {
-        return false;
-      }
-
-      this.changePage(current + 1);
-    },
-    fastPrev() {
-      const page = this.currentPage - 5;
-
-      if (page > 0) {
-        this.changePage(page);
-      } else {
-        this.changePage(1);
       }
     },
     fastNext() {
@@ -370,13 +343,14 @@ export default {
         this.changePage(page);
       }
     },
-    onSize(pageSize) {
-      this.currentPageSize = pageSize;
-      this.$emit('on-page-size-change', pageSize);
-      this.changePage(1);
-    },
-    onPage(page) {
-      this.changePage(page);
+    fastPrev() {
+      const page = this.currentPage - 5;
+
+      if (page > 0) {
+        this.changePage(page);
+      } else {
+        this.changePage(1);
+      }
     },
     keyDown(e) {
       const key = e.keyCode;
@@ -408,6 +382,32 @@ export default {
         e.target.value = page;
         this.changePage(page);
       }
+    },
+    next() {
+      const current = this.currentPage;
+
+      if (current >= this.allPages) {
+        return false;
+      }
+
+      this.changePage(current + 1);
+    },
+    onPage(page) {
+      this.changePage(page);
+    },
+    onSize(pageSize) {
+      this.currentPageSize = pageSize;
+      this.$emit('on-page-size-change', pageSize);
+      this.changePage(1);
+    },
+    prev() {
+      const current = this.currentPage;
+
+      if (current <= 1) {
+        return false;
+      }
+
+      this.changePage(current - 1);
     },
   },
 };

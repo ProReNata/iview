@@ -22,8 +22,8 @@ export default {
   name: 'TimelineItem',
   props: {
     color: {
-      type: String,
       default: 'blue',
+      type: String,
     },
   },
   data() {
@@ -32,23 +32,8 @@ export default {
     };
   },
   computed: {
-    itemClasses() {
-      return `${prefixCls}-item`;
-    },
-    tailClasses() {
-      return `${prefixCls}-item-tail`;
-    },
-    headClasses() {
-      return [
-        `${prefixCls}-item-head`,
-        {
-          [`${prefixCls}-item-head-custom`]: this.dot,
-          [`${prefixCls}-item-head-${this.color}`]: this.headColorShow,
-        },
-      ];
-    },
-    headColorShow() {
-      return this.color === 'blue' || this.color === 'red' || this.color === 'green';
+    contentClasses() {
+      return `${prefixCls}-item-content`;
     },
     customColor() {
       let style = {};
@@ -64,8 +49,23 @@ export default {
 
       return style;
     },
-    contentClasses() {
-      return `${prefixCls}-item-content`;
+    headClasses() {
+      return [
+        `${prefixCls}-item-head`,
+        {
+          [`${prefixCls}-item-head-custom`]: this.dot,
+          [`${prefixCls}-item-head-${this.color}`]: this.headColorShow,
+        },
+      ];
+    },
+    headColorShow() {
+      return this.color === 'blue' || this.color === 'red' || this.color === 'green';
+    },
+    itemClasses() {
+      return `${prefixCls}-item`;
+    },
+    tailClasses() {
+      return `${prefixCls}-item-tail`;
     },
   },
   mounted() {

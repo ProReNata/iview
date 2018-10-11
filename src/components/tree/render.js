@@ -1,16 +1,16 @@
 export default {
-  name: 'RenderCell',
   functional: true,
+  name: 'RenderCell',
   props: {
-    render: Function,
     data: Object,
     node: Array,
+    render: Function,
   },
   render: (h, ctx) => {
     const params = {
-      root: ctx.props.node[0],
-      node: ctx.props.node[1],
       data: ctx.props.data,
+      node: ctx.props.node[1],
+      root: ctx.props.node[0],
     };
 
     return ctx.props.render(h, params);

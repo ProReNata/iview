@@ -6,8 +6,8 @@
 <script>
 export default {
   props: {
-    row: Object,
     prefixCls: String,
+    row: Object,
   },
   computed: {
     objData() {

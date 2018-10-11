@@ -23,15 +23,12 @@ export default {
     /* in mixin */
   },
   computed: {
-    classes() {
-      return [`${prefixCls}`, `${prefixCls}-month`];
-    },
     cells() {
       const cells = [];
       const cell_tmpl = {
-        text: '',
-        selected: false,
         disabled: false,
+        selected: false,
+        text: '',
       };
 
       const tableYear = this.tableDate.getFullYear();
@@ -50,6 +47,9 @@ export default {
       }
 
       return cells;
+    },
+    classes() {
+      return [`${prefixCls}`, `${prefixCls}-month`];
     },
   },
   methods: {

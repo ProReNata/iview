@@ -45,59 +45,6 @@ function clearTimer() {
 }
 
 export default {
-  start() {
-    if (timer) {
-      return;
-    }
-
-    let percent = 0;
-
-    update({
-      percent,
-      status: 'success',
-      show: true,
-    });
-
-    timer = setInterval(() => {
-      percent += Math.floor(Math.random() * 3 + 5);
-
-      if (percent > 95) {
-        clearTimer();
-      }
-
-      update({
-        percent,
-        status: 'success',
-        show: true,
-      });
-    }, 200);
-  },
-  update(percent) {
-    clearTimer();
-    update({
-      percent,
-      status: 'success',
-      show: true,
-    });
-  },
-  finish() {
-    clearTimer();
-    update({
-      percent: 100,
-      status: 'success',
-      show: true,
-    });
-    hide();
-  },
-  error() {
-    clearTimer();
-    update({
-      percent: 100,
-      status: 'error',
-      show: true,
-    });
-    hide();
-  },
   config(options) {
     if (options.color) {
       color = options.color;
@@ -116,5 +63,58 @@ export default {
     const instance = getLoadingBarInstance();
     loadingBarInstance = null;
     instance.destroy();
+  },
+  error() {
+    clearTimer();
+    update({
+      percent: 100,
+      show: true,
+      status: 'error',
+    });
+    hide();
+  },
+  finish() {
+    clearTimer();
+    update({
+      percent: 100,
+      show: true,
+      status: 'success',
+    });
+    hide();
+  },
+  start() {
+    if (timer) {
+      return;
+    }
+
+    let percent = 0;
+
+    update({
+      percent,
+      show: true,
+      status: 'success',
+    });
+
+    timer = setInterval(() => {
+      percent += Math.floor(Math.random() * 3 + 5);
+
+      if (percent > 95) {
+        clearTimer();
+      }
+
+      update({
+        percent,
+        show: true,
+        status: 'success',
+      });
+    }, 200);
+  },
+  update(percent) {
+    clearTimer();
+    update({
+      percent,
+      show: true,
+      status: 'success',
+    });
   },
 };

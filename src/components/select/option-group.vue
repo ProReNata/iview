@@ -23,14 +23,15 @@ export default {
   name: 'OptionGroup',
   props: {
     label: {
-      type: String,
       default: '',
+      type: String,
     },
   },
   data() {
     return {
+      // for search
+      hidden: false,
       prefixCls,
-      hidden: false, // for search
     };
   },
   mounted() {

@@ -1,3 +1,3 @@
-import locale from '../../locale/index';
+import {i18n} from '../../locale/index';
 
-export default locale.i18n;
+export default i18n;

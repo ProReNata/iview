@@ -17,26 +17,29 @@
   </div>
 </template>
 <script>
+import noop from 'lodash/noop';
+
 export default {
   props: {},
   data() {
     return {
-      value: '',
-      data: [],
       //                data: ['Burns Bay Road', 'Downing Street', 'Wall Street']
+      data: [],
+      value: '',
     };
   },
   computed: {},
   methods: {
-    handleSearch(value) {
-      this.data = !value ? [] : [`${value}@qq.com`, `${value}@sina.com`, `${value}@163.com`];
-    },
-    hc(/* v */) {
-      // console.log(v)
-    },
     fm(value, item) {
       return item.toUpperCase().indexOf(value.toUpperCase()) !== -1;
     },
+    handleSearch(value) {
+      this.data = !value ? [] : [`${value}@qq.com`, `${value}@sina.com`, `${value}@163.com`];
+    },
+    hc: noop,
+    // hc(v) {
+    //   console.log(v);
+    // },
   },
 };
 </script>

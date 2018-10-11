@@ -14,16 +14,16 @@ const prefixCls = 'ivu-col';
 export default {
   name: 'iCol',
   props: {
-    span: [Number, String],
-    order: [Number, String],
-    offset: [Number, String],
-    push: [Number, String],
-    pull: [Number, String],
     className: String,
-    xs: [Number, Object],
-    sm: [Number, Object],
-    md: [Number, Object],
     lg: [Number, Object],
+    md: [Number, Object],
+    offset: [Number, String],
+    order: [Number, String],
+    pull: [Number, String],
+    push: [Number, String],
+    sm: [Number, Object],
+    span: [Number, String],
+    xs: [Number, Object],
   },
   data() {
     return {

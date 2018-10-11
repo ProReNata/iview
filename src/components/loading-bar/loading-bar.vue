@@ -25,16 +25,16 @@ export default {
     //                default: 0
     //            },
     color: {
-      type: String,
       default: 'primary',
+      type: String,
     },
     failedColor: {
-      type: String,
       default: 'error',
+      type: String,
     },
     height: {
-      type: Number,
       default: 2,
+      type: Number,
     },
     //            status: {
     //                type: String,
@@ -51,11 +51,11 @@ export default {
   data() {
     return {
       percent: 0,
+      show: false,
       //                color: 'primary',
       //                failedColor: 'error',
       //                height: 2,
       status: 'success',
-      show: false,
     };
   },
   computed: {
@@ -78,8 +78,8 @@ export default {
     },
     styles() {
       const style = {
-        width: `${this.percent}%`,
         height: `${this.height}px`,
+        width: `${this.percent}%`,
       };
 
       if (this.color !== 'primary' && this.status === 'success') {

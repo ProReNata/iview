@@ -29,6 +29,7 @@
   </div>
 </template>
 <script>
+import noop from 'lodash/noop';
 import UploadList from './upload-list.vue';
 import ajax from './ajax';
 import {oneOf} from '../../utils/assist';
@@ -41,109 +42,109 @@ export default {
   components: {UploadList},
   mixins: [Emitter],
   props: {
-    action: {
+    accept: {
       type: String,
+    },
+    action: {
       required: true,
+      type: String,
     },
-    headers: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
+    beforeUpload: Function,
     data: {
       type: Object,
     },
-    name: {
-      type: String,
-      default: 'file',
-    },
-    withCredentials: {
-      type: Boolean,
-      default: false,
-    },
-    showUploadList: {
-      type: Boolean,
-      default: true,
-    },
-    type: {
-      type: String,
-      validator(value) {
-        return oneOf(value, ['select', 'drag']);
-      },
-      default: 'select',
-    },
-    format: {
-      type: Array,
+    defaultFileList: {
       default() {
         return [];
       },
+      type: Array,
     },
-    accept: {
-      type: String,
+    format: {
+      default() {
+        return [];
+      },
+      type: Array,
+    },
+    headers: {
+      default() {
+        return {};
+      },
+      type: Object,
     },
     maxSize: {
       type: Number,
     },
-    beforeUpload: Function,
-    onProgress: {
-      type: Function,
-      default() {
-        return {};
-      },
+    multiple: {
+      default: false,
+      type: Boolean,
     },
-    onSuccess: {
-      type: Function,
-      default() {
-        return {};
-      },
+    name: {
+      default: 'file',
+      type: String,
     },
     onError: {
-      type: Function,
       default() {
         return {};
       },
-    },
-    onRemove: {
       type: Function,
-      default() {
-        return {};
-      },
-    },
-    onPreview: {
-      type: Function,
-      default() {
-        return {};
-      },
     },
     onExceededSize: {
-      type: Function,
       default() {
         return {};
       },
+      type: Function,
     },
     onFormatError: {
-      type: Function,
       default() {
         return {};
       },
+      type: Function,
     },
-    defaultFileList: {
-      type: Array,
+    onPreview: {
       default() {
-        return [];
+        return {};
       },
+      type: Function,
+    },
+    onProgress: {
+      default() {
+        return {};
+      },
+      type: Function,
+    },
+    onRemove: {
+      default() {
+        return {};
+      },
+      type: Function,
+    },
+    onSuccess: {
+      default() {
+        return {};
+      },
+      type: Function,
+    },
+    showUploadList: {
+      default: true,
+      type: Boolean,
+    },
+    type: {
+      default: 'select',
+      type: String,
+      validator(value) {
+        return oneOf(value, ['select', 'drag']);
+      },
+    },
+    withCredentials: {
+      default: false,
+      type: Boolean,
     },
   },
   data() {
     return {
-      prefixCls,
       dragOver: false,
       fileList: [],
+      prefixCls,
       tempIndex: 1,
     };
   },
@@ -161,7 +162,6 @@ export default {
   },
   watch: {
     defaultFileList: {
-      immediate: true,
       handler(fileList) {
         this.fileList = fileList.map((item) => {
           item.status = 'finished';
@@ -171,11 +171,23 @@ export default {
           return item;
         });
       },
+      immediate: true,
     },
   },
   methods: {
-    handleClick() {
-      this.$refs.input.click();
+    clearFiles() {
+      this.fileList = [];
+    },
+    getFile(file) {
+      const {fileList} = this;
+      let target;
+      fileList.every((item) => {
+        target = file.uid === item.uid ? item : null;
+
+        return !target;
+      });
+
+      return target;
     },
     handleChange(e) {
       const {files} = e.target;
@@ -187,50 +199,65 @@ export default {
       this.uploadFiles(files);
       this.$refs.input.value = null;
     },
+    handleClick() {
+      this.$refs.input.click();
+    },
+    handleError(err, response, file) {
+      const _file = this.getFile(file);
+      const {fileList} = this;
+
+      _file.status = 'fail';
+
+      fileList.splice(fileList.indexOf(_file), 1);
+
+      this.onError(err, response, file);
+    },
+    handlePreview(file) {
+      if (file.status === 'finished') {
+        this.onPreview(file);
+      }
+    },
+    handleProgress(e, file) {
+      const _file = this.getFile(file);
+      this.onProgress(e, _file, this.fileList);
+      _file.percentage = e.percent || 0;
+    },
+    handleRemove(file) {
+      const {fileList} = this;
+      fileList.splice(fileList.indexOf(file), 1);
+      this.onRemove(file, fileList);
+    },
+    handleStart(file) {
+      file.uid = Date.now() + this.tempIndex++;
+      const _file = {
+        name: file.name,
+        percentage: 0,
+        showProgress: true,
+        size: file.size,
+        status: 'uploading',
+        uid: file.uid,
+      };
+
+      this.fileList.push(_file);
+    },
+    handleSuccess(res, file) {
+      const _file = this.getFile(file);
+
+      if (_file) {
+        _file.status = 'finished';
+        _file.response = res;
+
+        this.dispatch('FormItem', 'on-form-change', _file);
+        this.onSuccess(res, _file, this.fileList);
+
+        setTimeout(() => {
+          _file.showProgress = false;
+        }, 1000);
+      }
+    },
     onDrop(e) {
       this.dragOver = false;
       this.uploadFiles(e.dataTransfer.files);
-    },
-    uploadFiles(files) {
-      let postFiles = Array.prototype.slice.call(files);
-
-      if (!this.multiple) {
-        postFiles = postFiles.slice(0, 1);
-      }
-
-      if (postFiles.length === 0) {
-        return;
-      }
-
-      postFiles.forEach((file) => {
-        this.upload(file);
-      });
-    },
-    upload(file) {
-      if (!this.beforeUpload) {
-        return this.post(file);
-      }
-
-      const before = this.beforeUpload(file);
-
-      if (before && before.then) {
-        before.then(
-          (processedFile) => {
-            if (Object.prototype.toString.call(processedFile) === '[object File]') {
-              this.post(processedFile);
-            } else {
-              this.post(file);
-            }
-          },
-          () => {
-            // this.$emit('cancel', file);
-          },
-        );
-      } else if (before !== false) {
-        this.post(file);
-      } else {
-        // this.$emit('cancel', file);
-      }
     },
     post(file) {
       // check format
@@ -262,89 +289,64 @@ export default {
       formData.append(this.name, file);
 
       ajax({
-        headers: this.headers,
-        withCredentials: this.withCredentials,
-        file,
-        data: this.data,
-        filename: this.name,
         action: this.action,
+        data: this.data,
+        file,
+        filename: this.name,
+        headers: this.headers,
+        onError: (err, response) => {
+          this.handleError(err, response, file);
+        },
         onProgress: (e) => {
           this.handleProgress(e, file);
         },
         onSuccess: (res) => {
           this.handleSuccess(res, file);
         },
-        onError: (err, response) => {
-          this.handleError(err, response, file);
-        },
+        withCredentials: this.withCredentials,
       });
     },
-    handleStart(file) {
-      file.uid = Date.now() + this.tempIndex++;
-      const _file = {
-        status: 'uploading',
-        name: file.name,
-        size: file.size,
-        percentage: 0,
-        uid: file.uid,
-        showProgress: true,
-      };
+    upload(file) {
+      if (!this.beforeUpload) {
+        return this.post(file);
+      }
 
-      this.fileList.push(_file);
+      const before = this.beforeUpload(file);
+
+      if (before && before.then) {
+        before.then(
+          (processedFile) => {
+            if (Object.prototype.toString.call(processedFile) === '[object File]') {
+              this.post(processedFile);
+            } else {
+              this.post(file);
+            }
+          },
+          noop,
+          // () => {
+          //   this.$emit('cancel', file);
+          // },
+        );
+      } else if (before !== false) {
+        this.post(file);
+      } else {
+        // this.$emit('cancel', file);
+      }
     },
-    getFile(file) {
-      const {fileList} = this;
-      let target;
-      fileList.every((item) => {
-        target = file.uid === item.uid ? item : null;
+    uploadFiles(files) {
+      let postFiles = Array.prototype.slice.call(files);
 
-        return !target;
+      if (!this.multiple) {
+        postFiles = postFiles.slice(0, 1);
+      }
+
+      if (postFiles.length === 0) {
+        return;
+      }
+
+      postFiles.forEach((file) => {
+        this.upload(file);
       });
-
-      return target;
-    },
-    handleProgress(e, file) {
-      const _file = this.getFile(file);
-      this.onProgress(e, _file, this.fileList);
-      _file.percentage = e.percent || 0;
-    },
-    handleSuccess(res, file) {
-      const _file = this.getFile(file);
-
-      if (_file) {
-        _file.status = 'finished';
-        _file.response = res;
-
-        this.dispatch('FormItem', 'on-form-change', _file);
-        this.onSuccess(res, _file, this.fileList);
-
-        setTimeout(() => {
-          _file.showProgress = false;
-        }, 1000);
-      }
-    },
-    handleError(err, response, file) {
-      const _file = this.getFile(file);
-      const {fileList} = this;
-
-      _file.status = 'fail';
-
-      fileList.splice(fileList.indexOf(_file), 1);
-
-      this.onError(err, response, file);
-    },
-    handleRemove(file) {
-      const {fileList} = this;
-      fileList.splice(fileList.indexOf(file), 1);
-      this.onRemove(file, fileList);
-    },
-    handlePreview(file) {
-      if (file.status === 'finished') {
-        this.onPreview(file);
-      }
-    },
-    clearFiles() {
-      this.fileList = [];
     },
   },
 };

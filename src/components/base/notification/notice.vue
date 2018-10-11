@@ -1,17 +1,17 @@
 <template>
-  <transition 
-    :name="transitionName" 
-    @enter="handleEnter" 
+  <transition
+    :name="transitionName"
+    @enter="handleEnter"
     @leave="handleLeave"
   >
-    <div 
-      :class="classes" 
+    <div
+      :class="classes"
       :style="styles"
     >
       <template v-if="type === 'notice'">
-        <div 
-          ref="content" 
-          :class="contentClasses" 
+        <div
+          ref="content"
+          :class="contentClasses"
           v-html="content"
         >
         </div>
@@ -21,9 +21,9 @@
           >
           </render-cell>
         </div>
-        <a 
-          v-if="closable" 
-          :class="[baseClass + '-close']" 
+        <a
+          v-if="closable"
+          :class="[baseClass + '-close']"
           @click="close"
         >
           <i class="ivu-icon ivu-icon-ios-close-empty">
@@ -31,12 +31,12 @@
         </a>
       </template>
       <template v-if="type === 'message'">
-        <div 
-          ref="content" 
+        <div
+          ref="content"
           :class="[baseClass + '-content']"
         >
-          <div 
-            :class="[baseClass + '-content-text']" 
+          <div
+            :class="[baseClass + '-content-text']"
             v-html="content"
           >
           </div>
@@ -46,9 +46,9 @@
             >
             </render-cell>
           </div>
-          <a 
-            v-if="closable" 
-            :class="[baseClass + '-close']" 
+          <a
+            v-if="closable"
+            :class="[baseClass + '-close']"
             @click="close"
           >
             <i class="ivu-icon ivu-icon-ios-close-empty">
@@ -60,6 +60,7 @@
   </transition>
 </template>
 <script>
+import noop from 'lodash/noop';
 import RenderCell from '../render';
 
 export default {
@@ -67,51 +68,51 @@ export default {
     RenderCell,
   },
   props: {
-    prefixCls: {
+    className: {
       type: String,
-      default: '',
     },
-    duration: {
-      type: Number,
-      default: 1.5,
-    },
-    type: {
-      type: String,
+    closable: {
+      default: false,
+      type: Boolean,
     },
     content: {
-      type: String,
       default: '',
+      type: String,
     },
-    withIcon: Boolean,
+    duration: {
+      default: 1.5,
+      type: Number,
+    },
+    hasTitle: Boolean,
+    name: {
+      required: true,
+      type: String,
+    },
+    onClose: {
+      type: Function,
+    },
+    prefixCls: {
+      default: '',
+      type: String,
+    },
     render: {
       type: Function,
     },
-    hasTitle: Boolean,
     styles: {
-      type: Object,
       default() {
         return {
           right: '50%',
         };
       },
-    },
-    closable: {
-      type: Boolean,
-      default: false,
-    },
-    className: {
-      type: String,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    onClose: {
-      type: Function,
+      type: Object,
     },
     transitionName: {
       type: String,
     },
+    type: {
+      type: String,
+    },
+    withIcon: Boolean,
   },
   data() {
     return {
@@ -121,9 +122,6 @@ export default {
   computed: {
     baseClass() {
       return `${this.prefixCls}-notice`;
-    },
-    renderFunc() {
-      return this.render || function() {};
     },
     classes() {
       return [
@@ -146,6 +144,9 @@ export default {
     },
     messageClasses() {
       return [`${this.baseClass}-content`, this.render !== undefined ? `${this.baseClass}-content-with-render` : ''];
+    },
+    renderFunc() {
+      return this.render || noop;
     },
   },
   mounted() {

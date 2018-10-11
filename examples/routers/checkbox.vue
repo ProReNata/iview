@@ -77,8 +77,8 @@
 export default {
   data() {
     return {
-      social: ['facebook', 'github'],
       fruit: ['苹果'],
+      social: ['facebook', 'github'],
       tags: [],
       testValue1: null,
       testValue2: null,

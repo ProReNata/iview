@@ -25,8 +25,8 @@
 <script>
 export default {
   props: {
-    datePanelLabel: Object,
     currentView: String,
+    datePanelLabel: Object,
     datePrefixCls: String,
   },
 };

@@ -80,31 +80,31 @@ const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
 
 export default {
   name: 'RangeTimePickerPanel',
-  components: {TimeSpinner, Confirm},
+  components: {Confirm, TimeSpinner},
   mixins: [Mixin, Locale, Options],
   props: {
-    steps: {
-      type: Array,
-      default: () => [],
-    },
     format: {
-      type: String,
       default: 'HH:mm:ss',
+      type: String,
+    },
+    steps: {
+      default: () => [],
+      type: Array,
     },
     value: {
-      type: Array,
       required: true,
+      type: Array,
     },
   },
   data() {
     const [dateStart, dateEnd] = this.value.slice();
 
     return {
-      prefixCls,
-      timePrefixCls,
-      showDate: false,
-      dateStart: dateStart || initTimeDate(),
       dateEnd: dateEnd || initTimeDate(),
+      dateStart: dateStart || initTimeDate(),
+      prefixCls,
+      showDate: false,
+      timePrefixCls,
     };
   },
   computed: {
@@ -117,14 +117,14 @@ export default {
         },
       ];
     },
-    showSeconds() {
-      return !(this.format || '').match(/mm$/);
-    },
     leftDatePanelLabel() {
       return this.panelLabelConfig(this.date);
     },
     rightDatePanelLabel() {
       return this.panelLabelConfig(this.dateEnd);
+    },
+    showSeconds() {
+      return !(this.format || '').match(/mm$/);
     },
   },
   watch: {
@@ -140,13 +140,6 @@ export default {
     }
   },
   methods: {
-    panelLabelConfig(date) {
-      const locale = this.t('i.locale');
-      const datePanelLabel = this.t('i.datepicker.datePanelLabel');
-      const {labels, separator} = formatDateLabels(locale, datePanelLabel, date || initTimeDate());
-
-      return [labels[0].label, separator, labels[1].label].join('');
-    },
     handleChange(start, end, emit = true) {
       const dateStart = new Date(this.dateStart);
       let dateEnd = new Date(this.dateEnd);
@@ -170,11 +163,18 @@ export default {
         this.$emit('on-pick', [dateStart, dateEnd], 'time');
       }
     },
+    handleEndChange(date) {
+      this.handleChange({}, date);
+    },
     handleStartChange(date) {
       this.handleChange(date, {});
     },
-    handleEndChange(date) {
-      this.handleChange({}, date);
+    panelLabelConfig(date) {
+      const locale = this.t('i.locale');
+      const datePanelLabel = this.t('i.datepicker.datePanelLabel');
+      const {labels, separator} = formatDateLabels(locale, datePanelLabel, date || initTimeDate());
+
+      return [labels[0].label, separator, labels[1].label].join('');
     },
     updateScroll() {
       this.$refs.timeSpinner.updateScroll();

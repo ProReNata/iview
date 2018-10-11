@@ -108,87 +108,89 @@ const selectPrefixCls = 'ivu-select';
 
 export default {
   name: 'Cascader',
-  components: {iInput, Drop, Icon, Caspanel},
+  components: {Caspanel, Drop, Icon, iInput},
   directives: {clickOutside, TransferDom},
   mixins: [Emitter, Locale],
   props: {
-    data: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-    value: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-    disabled: {
-      type: Boolean,
+    changeOnSelect: {
       default: false,
+      type: Boolean,
     },
     clearable: {
-      type: Boolean,
       default: true,
+      type: Boolean,
+    },
+    data: {
+      default() {
+        return [];
+      },
+      type: Array,
+    },
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
+    elementId: {
+      type: String,
+    },
+    filterable: {
+      default: false,
+      type: Boolean,
+    },
+    loadData: {
+      type: Function,
+    },
+    name: {
+      type: String,
+    },
+    notFoundText: {
+      type: String,
     },
     placeholder: {
       type: String,
+    },
+    renderFormat: {
+      default(label) {
+        return label.join(' / ');
+      },
+      type: Function,
     },
     size: {
       validator(value) {
         return oneOf(value, ['small', 'large']);
       },
     },
+    transfer: {
+      default: false,
+      type: Boolean,
+    },
     trigger: {
+      default: 'click',
       validator(value) {
         return oneOf(value, ['click', 'hover']);
       },
-      default: 'click',
     },
-    changeOnSelect: {
-      type: Boolean,
-      default: false,
-    },
-    renderFormat: {
-      type: Function,
-      default(label) {
-        return label.join(' / ');
+    value: {
+      default() {
+        return [];
       },
-    },
-    loadData: {
-      type: Function,
-    },
-    filterable: {
-      type: Boolean,
-      default: false,
-    },
-    notFoundText: {
-      type: String,
-    },
-    transfer: {
-      type: Boolean,
-      default: false,
-    },
-    name: {
-      type: String,
-    },
-    elementId: {
-      type: String,
+      type: Array,
     },
   },
   data() {
     return {
-      prefixCls,
-      selectPrefixCls,
-      visible: false,
-      selected: [],
-      tmpSelected: [],
-      updatingValue: false, // to fix set value in changeOnSelect type
       currentValue: this.value,
+      // #950
+      isLoadedChildren: false,
+      prefixCls,
       query: '',
+      selected: [],
+      selectPrefixCls,
+      tmpSelected: [],
+      // to fix set value in changeOnSelect type
+      updatingValue: false,
       validDataStr: '',
-      isLoadedChildren: false, // #950
+      visible: false,
     };
   },
   computed: {
@@ -204,8 +206,8 @@ export default {
         },
       ];
     },
-    showCloseIcon() {
-      return this.currentValue && this.currentValue.length && this.clearable && !this.disabled;
+    displayInputRender() {
+      return this.filterable ? '' : this.displayRender;
     },
     displayRender() {
       const label = [];
@@ -214,16 +216,6 @@ export default {
       }
 
       return this.renderFormat(label, this.selected);
-    },
-    displayInputRender() {
-      return this.filterable ? '' : this.displayRender;
-    },
-    localePlaceholder() {
-      if (this.placeholder === undefined) {
-        return this.t('i.select.placeholder');
-      }
-
-      return this.placeholder;
     },
     inputPlaceholder() {
       return this.filterable && this.currentValue.length ? null : this.localePlaceholder;
@@ -234,6 +226,13 @@ export default {
       }
 
       return this.notFoundText;
+    },
+    localePlaceholder() {
+      if (this.placeholder === undefined) {
+        return this.t('i.select.placeholder');
+      }
+
+      return this.placeholder;
     },
     querySelections() {
       let selections = [];
@@ -249,11 +248,11 @@ export default {
             delete item.__value;
           } else {
             selections.push({
-              label: item.__label,
-              value: item.__value,
+              disabled: !!item.disabled,
               display: item.__label,
               item,
-              disabled: !!item.disabled,
+              label: item.__label,
+              value: item.__value,
             });
           }
         }
@@ -268,41 +267,11 @@ export default {
 
       return selections;
     },
+    showCloseIcon() {
+      return this.currentValue && this.currentValue.length && this.clearable && !this.disabled;
+    },
   },
   watch: {
-    visible(val) {
-      if (val) {
-        if (this.currentValue.length) {
-          this.updateSelected();
-        }
-
-        if (this.transfer) {
-          this.$refs.drop.update();
-        }
-
-        this.broadcast('Drop', 'on-update-popper');
-      } else {
-        if (this.filterable) {
-          this.query = '';
-          this.$refs.input.currentValue = '';
-        }
-
-        if (this.transfer) {
-          this.$refs.drop.destroy();
-        }
-
-        this.broadcast('Drop', 'on-destroy-popper');
-      }
-
-      this.$emit('on-visible-change', val);
-    },
-    value(val) {
-      this.currentValue = val;
-
-      if (!val.length) {
-        this.selected = [];
-      }
-    },
     currentValue() {
       this.$emit('input', this.currentValue);
 
@@ -329,6 +298,39 @@ export default {
           this.isLoadedChildren = false;
         }
       },
+    },
+    value(val) {
+      this.currentValue = val;
+
+      if (!val.length) {
+        this.selected = [];
+      }
+    },
+    visible(val) {
+      if (val) {
+        if (this.currentValue.length) {
+          this.updateSelected();
+        }
+
+        if (this.transfer) {
+          this.$refs.drop.update();
+        }
+
+        this.broadcast('Drop', 'on-update-popper');
+      } else {
+        if (this.filterable) {
+          this.query = '';
+          this.$refs.input.currentValue = '';
+        }
+
+        if (this.transfer) {
+          this.$refs.drop.destroy();
+        }
+
+        this.broadcast('Drop', 'on-destroy-popper');
+      }
+
+      this.$emit('on-visible-change', val);
     },
   },
   created() {
@@ -377,70 +379,16 @@ export default {
       // this.$broadcast('on-clear');
       this.broadcast('Caspanel', 'on-clear');
     },
-    handleClose() {
-      this.visible = false;
-    },
-    toggleOpen() {
-      if (this.disabled) {
-        return false;
-      }
-
-      if (this.visible) {
-        if (!this.filterable) {
-          this.handleClose();
-        }
-      } else {
-        this.onFocus();
-      }
-    },
-    onFocus() {
-      this.visible = true;
-
-      if (!this.currentValue.length) {
-        this.broadcast('Caspanel', 'on-clear');
-      }
-    },
-    updateResult(result) {
-      this.tmpSelected = result;
-    },
-    updateSelected(init = false, changeOnSelectDataChange = false) {
-      // #2793 changeOnSelectDataChange used for changeOnSelect when data changed and set value
-      if (!this.changeOnSelect || init || changeOnSelectDataChange) {
-        this.broadcast('Caspanel', 'on-find-selected', {
-          value: this.currentValue,
-        });
-      }
-    },
     emitValue(val, oldVal) {
       if (JSON.stringify(val) !== oldVal) {
         this.$emit('on-change', this.currentValue, JSON.parse(JSON.stringify(this.selected)));
         this.$nextTick(() => {
           this.dispatch('FormItem', 'on-form-change', {
-            value: this.currentValue,
             selected: JSON.parse(JSON.stringify(this.selected)),
+            value: this.currentValue,
           });
         });
       }
-    },
-    handleInput(event) {
-      this.query = event.target.value;
-    },
-    handleSelectItem(index) {
-      const item = this.querySelections[index];
-
-      if (item.item.disabled) {
-        return false;
-      }
-
-      this.query = '';
-      this.$refs.input.currentValue = '';
-      const oldVal = JSON.stringify(this.currentValue);
-      this.currentValue = item.value.split(',');
-      this.emitValue(this.currentValue, oldVal);
-      this.handleClose();
-    },
-    handleFocus() {
-      this.$refs.input.focus();
     },
     // 排除 loading 后的 data，避免重复触发 updateSelect
     getValidData(data) {
@@ -467,6 +415,60 @@ export default {
       }
 
       return data.map((item) => deleteData(item));
+    },
+    handleClose() {
+      this.visible = false;
+    },
+    handleFocus() {
+      this.$refs.input.focus();
+    },
+    handleInput(event) {
+      this.query = event.target.value;
+    },
+    handleSelectItem(index) {
+      const item = this.querySelections[index];
+
+      if (item.item.disabled) {
+        return false;
+      }
+
+      this.query = '';
+      this.$refs.input.currentValue = '';
+      const oldVal = JSON.stringify(this.currentValue);
+      this.currentValue = item.value.split(',');
+      this.emitValue(this.currentValue, oldVal);
+      this.handleClose();
+    },
+    onFocus() {
+      this.visible = true;
+
+      if (!this.currentValue.length) {
+        this.broadcast('Caspanel', 'on-clear');
+      }
+    },
+    toggleOpen() {
+      if (this.disabled) {
+        return false;
+      }
+
+      if (this.visible) {
+        if (!this.filterable) {
+          this.handleClose();
+        }
+      } else {
+        this.onFocus();
+      }
+    },
+    updateResult(result) {
+      this.tmpSelected = result;
+    },
+    updateSelected(init = false, changeOnSelectDataChange = false) {
+      // #2793 changeOnSelectDataChange used for changeOnSelect when data changed and set value
+      if (!this.changeOnSelect || init || changeOnSelectDataChange) {
+        this.broadcast('Caspanel', 'on-find-selected', {
+          value: this.currentValue,
+        });
+      }
     },
   },
 };

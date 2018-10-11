@@ -3,8 +3,8 @@
     <Steps :current="index">
       <!--<Step title="开始"></Step>-->
       <Step
-        v-for="(item, index) in activitiList"
-        :key="index"
+        v-for="(item, idx) in activitiList"
+        :key="idx"
         :title="item.approveUserName"
         :content="item.startTime"
       >
@@ -97,9 +97,6 @@ export default {
   props: {},
   data() {
     return {
-      total: 512,
-      current: 0,
-      index: 0,
       activitiList: [
         {
           approveUserName: '123',
@@ -132,22 +129,25 @@ export default {
           startTime: '5',
         },
       ],
+      current: 0,
+      index: 0,
+      total: 512,
     };
   },
   computed: {},
-  mounted() {
-    //            this.change();
-  },
+  // mounted() {
+  //   this.change();
+  // },
   methods: {
+    change() {
+      this.activitiList = this.activitiList.concat(this.changeList);
+    },
     next() {
       if (this.current === 3) {
         this.current = 0;
       } else {
         this.current += 1;
       }
-    },
-    change() {
-      this.activitiList = this.activitiList.concat(this.changeList);
     },
   },
 };

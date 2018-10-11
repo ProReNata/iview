@@ -37,22 +37,22 @@ export default {
   components: {Casitem},
   mixins: [Emitter],
   props: {
+    changeOnSelect: Boolean,
     data: {
-      type: Array,
       default() {
         return [];
       },
+      type: Array,
     },
     disabled: Boolean,
-    changeOnSelect: Boolean,
-    trigger: String,
     prefixCls: String,
+    trigger: String,
   },
   data() {
     return {
-      tmpItem: {},
       result: [],
       sublist: [],
+      tmpItem: {},
     };
   },
   watch: {
@@ -95,6 +95,25 @@ export default {
     });
   },
   methods: {
+    emitUpdate(result) {
+      if (this.$parent.$options.name === 'Caspanel') {
+        this.$parent.updateResult(result);
+      } else {
+        this.$parent.$parent.updateResult(result);
+      }
+    },
+    getBaseItem(item) {
+      const backItem = {...item};
+
+      if (backItem.children) {
+        delete backItem.children;
+      }
+
+      return backItem;
+    },
+    getKey() {
+      return key++;
+    },
     handleClickItem(item) {
       if (this.trigger !== 'click' && item.children && item.children.length) {
         return;
@@ -141,9 +160,9 @@ export default {
       if (item.children && item.children.length) {
         this.sublist = item.children;
         this.dispatch('Cascader', 'on-result-change', {
-          lastValue: false,
           changeOnSelect: this.changeOnSelect,
           fromInit,
+          lastValue: false,
         });
 
         // #1553
@@ -157,34 +176,15 @@ export default {
       } else {
         this.sublist = [];
         this.dispatch('Cascader', 'on-result-change', {
-          lastValue: true,
           changeOnSelect: this.changeOnSelect,
           fromInit,
+          lastValue: true,
         });
       }
     },
     updateResult(item) {
       this.result = [this.tmpItem].concat(item);
       this.emitUpdate(this.result);
-    },
-    getBaseItem(item) {
-      const backItem = {...item};
-
-      if (backItem.children) {
-        delete backItem.children;
-      }
-
-      return backItem;
-    },
-    emitUpdate(result) {
-      if (this.$parent.$options.name === 'Caspanel') {
-        this.$parent.updateResult(result);
-      } else {
-        this.$parent.$parent.updateResult(result);
-      }
-    },
-    getKey() {
-      return key++;
     },
   },
 };

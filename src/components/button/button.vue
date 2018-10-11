@@ -34,10 +34,18 @@ export default {
   name: 'Button',
   components: {Icon},
   props: {
-    type: {
+    disabled: Boolean,
+    htmlType: {
+      default: 'button',
       validator(value) {
-        return oneOf(value, ['primary', 'ghost', 'dashed', 'text', 'info', 'success', 'warning', 'error', 'default']);
+        return oneOf(value, ['button', 'submit', 'reset']);
       },
+    },
+    icon: String,
+    loading: Boolean,
+    long: {
+      default: false,
+      type: Boolean,
     },
     shape: {
       validator(value) {
@@ -49,18 +57,10 @@ export default {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
-    loading: Boolean,
-    disabled: Boolean,
-    htmlType: {
-      default: 'button',
+    type: {
       validator(value) {
-        return oneOf(value, ['button', 'submit', 'reset']);
+        return oneOf(value, ['primary', 'ghost', 'dashed', 'text', 'info', 'success', 'warning', 'error', 'default']);
       },
-    },
-    icon: String,
-    long: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {

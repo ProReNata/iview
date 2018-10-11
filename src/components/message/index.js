@@ -1,3 +1,4 @@
+import noop from 'lodash/noop';
 import Notification from '../base/notification';
 
 const prefixCls = 'ivu-message';
@@ -5,19 +6,19 @@ const iconPrefixCls = 'ivu-icon';
 const prefixKey = 'ivu_message_key_';
 
 const defaults = {
-  top: 24,
   duration: 1.5,
+  top: 24,
 };
 
 let messageInstance;
 let name = 1;
 
 const iconTypes = {
+  error: 'close-circled',
   info: 'information-circled',
+  loading: 'load-c',
   success: 'checkmark-circled',
   warning: 'android-alert',
-  error: 'close-circled',
-  loading: 'load-c',
 };
 
 function getMessageInstance() {
@@ -33,14 +34,7 @@ function getMessageInstance() {
   return messageInstance;
 }
 
-function notice(
-  content = '',
-  duration = defaults.duration,
-  type,
-  onClose = function() {},
-  closable = false,
-  render = function() {},
-) {
+function notice(content = '', duration = defaults.duration, type, onClose = noop, closable = false, render = noop) {
   const iconType = iconTypes[type];
 
   // if loading
@@ -49,19 +43,19 @@ function notice(
   const instance = getMessageInstance();
 
   instance.notice({
-    name: `${prefixKey}${name}`,
-    duration,
-    styles: {},
-    transitionName: 'move-up',
+    closable,
     content: `
             <div class="${prefixCls}-custom-content ${prefixCls}-${type}">
                 <i class="${iconPrefixCls} ${iconPrefixCls}-${iconType}${loadCls}"></i>
                 <span>${content}</span>
             </div>
         `,
-    render,
+    duration,
+    name: `${prefixKey}${name}`,
     onClose,
-    closable,
+    render,
+    styles: {},
+    transitionName: 'move-up',
     type: 'message',
   });
 
@@ -76,19 +70,26 @@ function notice(
 }
 
 export default {
-  name: 'Message',
+  config(options) {
+    if (options.top || options.top === 0) {
+      defaults.top = options.top;
+    }
 
-  info(options) {
-    return this.message('info', options);
+    if (options.duration || options.duration === 0) {
+      defaults.duration = options.duration;
+    }
   },
-  success(options) {
-    return this.message('success', options);
-  },
-  warning(options) {
-    return this.message('warning', options);
+
+  destroy() {
+    const instance = getMessageInstance();
+    messageInstance = null;
+    instance.destroy('ivu-message');
   },
   error(options) {
     return this.message('error', options);
+  },
+  info(options) {
+    return this.message('info', options);
   },
   loading(options) {
     return this.message('loading', options);
@@ -102,18 +103,11 @@ export default {
 
     return notice(options.content, options.duration, type, options.onClose, options.closable, options.render);
   },
-  config(options) {
-    if (options.top || options.top === 0) {
-      defaults.top = options.top;
-    }
-
-    if (options.duration || options.duration === 0) {
-      defaults.duration = options.duration;
-    }
+  name: 'Message',
+  success(options) {
+    return this.message('success', options);
   },
-  destroy() {
-    const instance = getMessageInstance();
-    messageInstance = null;
-    instance.destroy('ivu-message');
+  warning(options) {
+    return this.message('warning', options);
   },
 };

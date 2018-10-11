@@ -15,34 +15,34 @@ const prefixCls = 'ivu-form';
 export default {
   name: 'iForm',
   props: {
+    autocomplete: {
+      default: 'off',
+      validator(value) {
+        return oneOf(value, ['on', 'off']);
+      },
+    },
+    inline: {
+      default: false,
+      type: Boolean,
+    },
+    labelPosition: {
+      default: 'right',
+      validator(value) {
+        return oneOf(value, ['left', 'right', 'top']);
+      },
+    },
+    labelWidth: {
+      type: Number,
+    },
     model: {
       type: Object,
     },
     rules: {
       type: Object,
     },
-    labelWidth: {
-      type: Number,
-    },
-    labelPosition: {
-      validator(value) {
-        return oneOf(value, ['left', 'right', 'top']);
-      },
-      default: 'right',
-    },
-    inline: {
-      type: Boolean,
-      default: false,
-    },
     showMessage: {
-      type: Boolean,
       default: true,
-    },
-    autocomplete: {
-      validator(value) {
-        return oneOf(value, ['on', 'off']);
-      },
-      default: 'off',
+      type: Boolean,
     },
   },
   provide() {

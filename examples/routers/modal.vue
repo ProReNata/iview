@@ -23,30 +23,30 @@ export default {
       switch (type) {
         case 'info':
           this.$Modal.info({
-            title,
-            content,
             closable: true,
+            content,
+            title,
           });
           break;
 
         case 'success':
           this.$Modal.success({
-            title,
             content,
+            title,
           });
           break;
 
         case 'warning':
           this.$Modal.warning({
-            title,
             content,
+            title,
           });
           break;
 
         case 'error':
           this.$Modal.error({
-            title,
             content,
+            title,
           });
           break;
 

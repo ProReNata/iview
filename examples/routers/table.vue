@@ -7,23 +7,6 @@ table {
 
 <template>
   <div>
-    <!-- <br><br><br><br><br> -->
-    <!-- <Table border  :show-header='false' :columns="columns1" height="500" :data="data1"></Table> -->
-    <!-- <Table border :columns="columns1" height='300'></Table> -->
-    <!-- <br><br><br><br><br> -->
-    <!-- <Table width="550" height="200" border :columns="columns2" :data="data4"></Table> -->
-    <!--<br><br><br><br><br>-->
-    <!-- <Table border :columns="columns5" height="240" :data="data5"></Table> -->
-    <!-- <br><br><br><br><br> -->
-    <!-- <Table border :columns="columns6" :data="data5"></Table> -->
-    <!-- <br><br><br><br><br> -->
-    <!-- <Table border  :show-header='false' :columns="columns7"  height="200" :data="data7"></Table> -->
-    <!-- <Table border :columns="columns7"  height="240" :data="data7"></Table> -->
-    <!-- <br><br><br><br><br> -->
-    <!-- <Table border :columns="columns8"  :data="data7" height="200"></Table> -->
-    <!-- <Table border :columns="columns8" height="200"></Table> -->
-    <!-- <br><br><br><br><br> -->
-
     <div class="layout-demo-con">
       <Button @click="change">
         修改Sider绑定的变量来控制收缩
@@ -99,15 +82,19 @@ table {
 export default {
   data() {
     return {
-      isCollapsed: false,
       columns1: [
         {
-          title: 'Name',
-          key: 'name',
           align: 'center',
-          minWidth: 100,
-          maxWidth: 200,
-          fixed: 'left',
+          filterMethod(value, row) {
+            if (value === 1) {
+              return row.name === 'Joe';
+            }
+
+            if (value === 2) {
+              return row.name === 'John Brown';
+            }
+          },
+          filterMultiple: false,
           filters: [
             {
               label: 'Joe',
@@ -118,84 +105,79 @@ export default {
               value: 2,
             },
           ],
-          filterMultiple: false,
-          filterMethod(value, row) {
-            if (value === 1) {
-              return row.name === 'Joe';
-            }
-
-            if (value === 2) {
-              return row.name === 'John Brown';
-            }
-          },
+          fixed: 'left',
+          key: 'name',
+          maxWidth: 200,
+          minWidth: 100,
+          title: 'Name',
         },
         {
-          title: 'Other',
           align: 'center',
           children: [
             {
-              title: 'Age',
-              key: 'age',
               align: 'center',
-              minWidth: 100,
+              key: 'age',
               maxWidth: 200,
+              minWidth: 100,
               sortable: true,
+              title: 'Age',
             },
             {
-              title: 'Address',
               align: 'center',
               children: [
                 {
-                  title: 'Street',
-                  key: 'street',
                   align: 'center',
-                  minWidth: 100,
+                  key: 'street',
                   maxWidth: 200,
+                  minWidth: 100,
+                  title: 'Street',
                 },
                 {
-                  title: 'Block',
                   align: 'center',
                   children: [
                     {
-                      title: 'Building',
-                      key: 'building',
                       align: 'center',
-                      minWidth: 100,
+                      key: 'building',
                       maxWidth: 200,
+                      minWidth: 100,
                       sortable: true,
+                      title: 'Building',
                     },
                     {
-                      title: 'Door No.',
-                      key: 'door',
                       align: 'center',
-                      minWidth: 100,
+                      key: 'door',
                       maxWidth: 200,
+                      minWidth: 100,
+                      title: 'Door No.',
                     },
                   ],
+                  title: 'Block',
                 },
               ],
+              title: 'Address',
             },
           ],
+          title: 'Other',
         },
         {
-          title: 'Company',
           align: 'center',
           children: [
             {
-              title: 'Company Address',
-              key: 'caddress',
               align: 'center',
-              minWidth: 100,
+              key: 'caddress',
               maxWidth: 200,
+              minWidth: 100,
+              title: 'Company Address',
             },
             {
-              title: 'Company Name',
-              key: 'cname',
               align: 'center',
-              minWidth: 100,
+              key: 'cname',
               maxWidth: 200,
+              minWidth: 100,
+              title: 'Company Name',
             },
           ],
+          title: 'Company',
         },
         // {
         //     title: 'Gender',
@@ -205,61 +187,59 @@ export default {
         //     fixed: 'right'
         // },
         {
-          title: 'Gender',
-          key: 'gender',
           align: 'center',
-          minWidth: 100,
-          maxWidth: 200,
           fixed: 'right',
+          key: 'gender',
+          maxWidth: 200,
+          minWidth: 100,
+          title: 'Gender',
         },
       ],
       columns2: [
         {
-          title: 'Name',
-          key: 'name',
-          width: 100,
           fixed: 'left',
+          key: 'name',
+          title: 'Name',
+          width: 100,
         },
         {
-          title: 'Age',
-          key: 'age',
-          width: 100,
           fixed: 'right',
+          key: 'age',
           sortable: true,
+          title: 'Age',
+          width: 100,
         },
         {
-          title: 'Province',
           key: 'province',
+          title: 'Province',
           width: 100,
         },
         {
-          title: 'City',
           key: 'city',
+          title: 'City',
           width: 100,
         },
         {
-          title: 'Address',
           key: 'address',
+          title: 'Address',
           width: 200,
         },
         {
-          title: 'Postcode',
           key: 'zip',
+          title: 'Postcode',
           width: 100,
         },
         {
-          title: 'Action',
-          key: 'action',
           fixed: 'right',
-          width: 120,
+          key: 'action',
           render: (h) =>
             h('div', [
               h(
                 'Button',
                 {
                   props: {
-                    type: 'text',
                     size: 'small',
+                    type: 'text',
                   },
                 },
                 'View',
@@ -268,140 +248,57 @@ export default {
                 'Button',
                 {
                   props: {
-                    type: 'text',
                     size: 'small',
+                    type: 'text',
                   },
                 },
                 'Edit',
               ),
             ]),
-        },
-      ],
-      data1: [],
-      data4: [
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          province: 'America',
-          city: 'New York',
-          zip: 100000,
-        },
-        {
-          name: 'Jim Green',
-          age: 24,
-          address: 'Washington, D.C. No. 1 Lake Park',
-          province: 'America',
-          city: 'Washington, D.C.',
-          zip: 100000,
-        },
-        {
-          name: 'Joe Black',
-          age: 30,
-          address: 'Sydney No. 1 Lake Park',
-          province: 'Australian',
-          city: 'Sydney',
-          zip: 100000,
-        },
-        {
-          name: 'Jon Snow',
-          age: 26,
-          address: 'Ottawa No. 2 Lake Park',
-          province: 'Canada',
-          city: 'Ottawa',
-          zip: 100000,
-        },
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          province: 'America',
-          city: 'New York',
-          zip: 100000,
-        },
-        {
-          name: 'Jim Green',
-          age: 24,
-          address: 'Washington, D.C. No. 1 Lake Park',
-          province: 'America',
-          city: 'Washington, D.C.',
-          zip: 100000,
-        },
-        {
-          name: 'Joe Black',
-          age: 30,
-          address: 'Sydney No. 1 Lake Park',
-          province: 'Australian',
-          city: 'Sydney',
-          zip: 100000,
-        },
-        {
-          name: 'Jon Snow',
-          age: 26,
-          address: 'Ottawa No. 2 Lake Park',
-          province: 'Canada',
-          city: 'Ottawa',
-          zip: 100000,
+          title: 'Action',
+          width: 120,
         },
       ],
       columns5: [
         {
-          title: 'Date',
           key: 'date',
           sortable: true,
+          title: 'Date',
         },
         {
-          title: 'Name',
           key: 'name',
+          title: 'Name',
         },
         {
-          title: 'Age',
           key: 'age',
           sortable: true,
+          title: 'Age',
         },
         {
-          title: 'Address',
           key: 'address',
-        },
-      ],
-      data5: [
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03',
-        },
-        {
-          name: 'Jim Green',
-          age: 24,
-          address: 'London No. 1 Lake Park',
-          date: '2016-10-01',
-        },
-        {
-          name: 'Joe Black',
-          age: 30,
-          address: 'Sydney No. 1 Lake Park',
-          date: '2016-10-02',
-        },
-        {
-          name: 'Jon Snow',
-          age: 26,
-          address: 'Ottawa No. 2 Lake Park',
-          date: '2016-10-04',
+          title: 'Address',
         },
       ],
       columns6: [
         {
-          title: 'Date',
           key: 'date',
+          title: 'Date',
         },
         {
-          title: 'Name',
           key: 'name',
+          title: 'Name',
         },
         {
-          title: 'Age',
-          key: 'age',
+          filterMethod(value, row) {
+            if (value === 1) {
+              return row.age > 25;
+            }
+
+            if (value === 2) {
+              return row.age < 25;
+            }
+          },
+          filterMultiple: false,
           filters: [
             {
               label: 'Greater than 25',
@@ -412,21 +309,13 @@ export default {
               value: 2,
             },
           ],
-          filterMultiple: false,
-          filterMethod(value, row) {
-            if (value === 1) {
-              return row.age > 25;
-            }
-
-            if (value === 2) {
-              return row.age < 25;
-            }
-          },
+          key: 'age',
+          title: 'Age',
         },
         {
-          title: 'Address',
-          key: 'address',
-          fixed: 'right',
+          filterMethod(value, row) {
+            return row.address.indexOf(value) > -1;
+          },
           filters: [
             {
               label: 'New York',
@@ -441,123 +330,217 @@ export default {
               value: 'Sydney',
             },
           ],
-          filterMethod(value, row) {
-            return row.address.indexOf(value) > -1;
-          },
+          fixed: 'right',
+          key: 'address',
+          title: 'Address',
+        },
+      ],
+      columns7: [
+        {
+          key: 'date',
+          sortable: true,
+          title: 'Date',
+          width: 200,
+        },
+        {
+          key: 'name',
+          title: 'Name',
+          width: 200,
+        },
+        {
+          key: 'age',
+          title: 'Age',
+          width: 200,
+        },
+        {
+          key: 'address',
+          title: 'Address',
+          width: 200,
+        },
+      ],
+      columns8: [
+        {
+          key: 'address',
+          // maxWidth:300,
+          minWidth: 200,
+          title: 'Address',
+        },
+        {
+          key: 'date',
+          maxWidth: 150,
+          minWidth: 100,
+          sortable: true,
+          title: 'Date',
+        },
+        {
+          key: 'name',
+          maxWidth: 200,
+          minWidth: 100,
+          title: 'Name',
+        },
+        {
+          key: 'age',
+          maxWidth: 100,
+          minWidth: 60,
+          title: 'Age',
+        },
+      ],
+      data1: [],
+      data4: [
+        {
+          address: 'New York No. 1 Lake Park',
+          age: 18,
+          city: 'New York',
+          name: 'John Brown',
+          province: 'America',
+          zip: 100000,
+        },
+        {
+          address: 'Washington, D.C. No. 1 Lake Park',
+          age: 24,
+          city: 'Washington, D.C.',
+          name: 'Jim Green',
+          province: 'America',
+          zip: 100000,
+        },
+        {
+          address: 'Sydney No. 1 Lake Park',
+          age: 30,
+          city: 'Sydney',
+          name: 'Joe Black',
+          province: 'Australian',
+          zip: 100000,
+        },
+        {
+          address: 'Ottawa No. 2 Lake Park',
+          age: 26,
+          city: 'Ottawa',
+          name: 'Jon Snow',
+          province: 'Canada',
+          zip: 100000,
+        },
+        {
+          address: 'New York No. 1 Lake Park',
+          age: 18,
+          city: 'New York',
+          name: 'John Brown',
+          province: 'America',
+          zip: 100000,
+        },
+        {
+          address: 'Washington, D.C. No. 1 Lake Park',
+          age: 24,
+          city: 'Washington, D.C.',
+          name: 'Jim Green',
+          province: 'America',
+          zip: 100000,
+        },
+        {
+          address: 'Sydney No. 1 Lake Park',
+          age: 30,
+          city: 'Sydney',
+          name: 'Joe Black',
+          province: 'Australian',
+          zip: 100000,
+        },
+        {
+          address: 'Ottawa No. 2 Lake Park',
+          age: 26,
+          city: 'Ottawa',
+          name: 'Jon Snow',
+          province: 'Canada',
+          zip: 100000,
         },
       ],
 
-      columns7: [
+      data5: [
         {
-          title: 'Date',
-          key: 'date',
-          sortable: true,
-          width: 200,
+          address: 'New York No. 1 Lake Park',
+          age: 18,
+          date: '2016-10-03',
+          name: 'John Brown',
         },
         {
-          title: 'Name',
-          key: 'name',
-          width: 200,
+          address: 'London No. 1 Lake Park',
+          age: 24,
+          date: '2016-10-01',
+          name: 'Jim Green',
         },
         {
-          title: 'Age',
-          key: 'age',
-          width: 200,
+          address: 'Sydney No. 1 Lake Park',
+          age: 30,
+          date: '2016-10-02',
+          name: 'Joe Black',
         },
         {
-          title: 'Address',
-          key: 'address',
-          width: 200,
+          address: 'Ottawa No. 2 Lake Park',
+          age: 26,
+          date: '2016-10-04',
+          name: 'Jon Snow',
         },
       ],
       data7: [
         {
-          name: 'John Brown',
-          age: 18,
           address: 'New York No. 1 Lake Park',
+          age: 18,
           date: '2016-10-03',
+          name: 'John Brown',
         },
         {
-          name: 'Jim Green',
-          age: 24,
           address: 'London No. 1 Lake Park',
+          age: 24,
           date: '2016-10-01',
+          name: 'Jim Green',
         },
         {
-          name: 'Joe Black',
-          age: 30,
           address: 'Sydney No. 1 Lake Park Sydney No. 1 Lake Park',
+          age: 30,
           date: '2016-10-02',
+          name: 'Joe Black',
         },
         {
-          name: 'Jon Snow',
-          age: 26,
           address: 'Ottawa No. 2 Lake Park Ottawa No. 2 Lake Park Ottawa No. 2 Lake Park',
+          age: 26,
           date: '2016-10-04',
+          name: 'Jon Snow',
         },
       ],
 
-      columns8: [
-        {
-          title: 'Address',
-          key: 'address',
-          minWidth: 200,
-          // maxWidth:300,
-        },
-        {
-          title: 'Date',
-          key: 'date',
-          sortable: true,
-          minWidth: 100,
-          maxWidth: 150,
-        },
-        {
-          title: 'Name',
-          key: 'name',
-          minWidth: 100,
-          maxWidth: 200,
-        },
-        {
-          title: 'Age',
-          key: 'age',
-          minWidth: 60,
-          maxWidth: 100,
-        },
-      ],
+      isCollapsed: false,
     };
   },
   watch: {
-    isCollapsed(/* val */) {
-      // console.log(val)
-    },
+    // isCollapsed(val) {
+    //   console.log(val)
+    // },
   },
   mounted() {
     const data = [];
     for (let i = 0; i < 20; i++) {
       data.push({
-        key: i,
-        name: 'John Brown',
         age: i + 1,
-        street: 'Lake Park',
         building: 'C',
-        door: 2035,
         caddress: 'Lake Street 42',
         cname: 'SoftLake Co',
+        door: 2035,
         gender: 'M',
+        key: i,
+        name: 'John Brown',
+        street: 'Lake Park',
       });
     }
 
     this.data1 = data;
   },
   methods: {
-    toggleCollapse() {
-      this.$refs.side.toggleCollapse();
-    },
     change() {
       this.isCollapsed = !this.isCollapsed;
     },
     changed(res) {
       console.log(res);
+    },
+    toggleCollapse() {
+      this.$refs.side.toggleCollapse();
     },
   },
 };

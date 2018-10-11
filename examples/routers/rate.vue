@@ -30,12 +30,12 @@ export default {
   data() {
     return {
       value: 0,
-      valueHalf: 2.5,
-      valueText: 3,
-      valueCustomText: 4.0,
-      valueDisabled: 2.4,
       valueClear: 1,
       valueClearHalf: 1.5,
+      valueCustomText: 4.0,
+      valueDisabled: 2.4,
+      valueHalf: 2.5,
+      valueText: 3,
     };
   },
 };

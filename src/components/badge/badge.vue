@@ -32,35 +32,20 @@ const prefixCls = 'ivu-badge';
 export default {
   name: 'Badge',
   props: {
+    className: String,
     count: [Number, String],
     dot: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
     overflowCount: {
-      type: [Number, String],
       default: 99,
+      type: [Number, String],
     },
-    className: String,
   },
   computed: {
-    classes() {
-      return `${prefixCls}`;
-    },
-    dotClasses() {
-      return `${prefixCls}-dot`;
-    },
-    countClasses() {
-      return [
-        `${prefixCls}-count`,
-        {
-          [`${this.className}`]: !!this.className,
-          [`${prefixCls}-count-alone`]: this.alone,
-        },
-      ];
-    },
-    finalCount() {
-      return parseInt(this.count, 10) >= parseInt(this.overflowCount, 10) ? `${this.overflowCount}+` : this.count;
+    alone() {
+      return this.$slots.default === undefined;
     },
     badge() {
       let status = false;
@@ -81,8 +66,23 @@ export default {
 
       return status;
     },
-    alone() {
-      return this.$slots.default === undefined;
+    classes() {
+      return `${prefixCls}`;
+    },
+    countClasses() {
+      return [
+        `${prefixCls}-count`,
+        {
+          [`${this.className}`]: !!this.className,
+          [`${prefixCls}-count-alone`]: this.alone,
+        },
+      ];
+    },
+    dotClasses() {
+      return `${prefixCls}-dot`;
+    },
+    finalCount() {
+      return parseInt(this.count, 10) >= parseInt(this.overflowCount, 10) ? `${this.overflowCount}+` : this.count;
     },
   },
 };

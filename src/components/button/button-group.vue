@@ -11,19 +11,19 @@ const prefixCls = 'ivu-btn-group';
 export default {
   name: 'ButtonGroup',
   props: {
-    size: {
-      validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
-      },
-    },
     shape: {
       validator(value) {
         return oneOf(value, ['circle', 'circle-outline']);
       },
     },
+    size: {
+      validator(value) {
+        return oneOf(value, ['small', 'large', 'default']);
+      },
+    },
     vertical: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
   },
   computed: {

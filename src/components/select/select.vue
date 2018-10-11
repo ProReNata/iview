@@ -162,105 +162,111 @@ const ANIMATION_TIMEOUT = 300;
 
 export default {
   name: 'iSelect',
-  components: {FunctionalOptions, Drop, Icon, SelectHead},
+  components: {Drop, FunctionalOptions, Icon, SelectHead},
   directives: {clickOutside, TransferDom},
   mixins: [Emitter, Locale],
   props: {
-    value: {
-      type: [String, Number, Array],
-      default: '',
-    },
-    // 使用时，也得设置 value 才行
-    label: {
-      type: [String, Number, Array],
-      default: '',
-    },
-    multiple: {
-      type: Boolean,
+    // Use for AutoComplete
+    autoComplete: {
       default: false,
-    },
-    disabled: {
       type: Boolean,
-      default: false,
     },
     clearable: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
-    placeholder: {
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
+    elementId: {
       type: String,
     },
     filterable: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
     filterMethod: {
       type: Function,
     },
-    remoteMethod: {
-      type: Function,
+    // 使用时，也得设置 value 才行
+    label: {
+      default: '',
+      type: [String, Number, Array],
+    },
+    labelInValue: {
+      default: false,
+      type: Boolean,
     },
     loading: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
     loadingText: {
       type: String,
+    },
+    multiple: {
+      default: false,
+      type: Boolean,
+    },
+    name: {
+      type: String,
+    },
+    notFoundText: {
+      type: String,
+    },
+    placeholder: {
+      type: String,
+    },
+    placement: {
+      default: 'bottom',
+      validator(value) {
+        return oneOf(value, ['top', 'bottom']);
+      },
+    },
+    remoteMethod: {
+      type: Function,
     },
     size: {
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
-    labelInValue: {
-      type: Boolean,
-      default: false,
-    },
-    notFoundText: {
-      type: String,
-    },
-    placement: {
-      validator(value) {
-        return oneOf(value, ['top', 'bottom']);
-      },
-      default: 'bottom',
-    },
     transfer: {
-      type: Boolean,
       default: false,
-    },
-    // Use for AutoComplete
-    autoComplete: {
       type: Boolean,
-      default: false,
     },
-    name: {
-      type: String,
-    },
-    elementId: {
-      type: String,
+    value: {
+      default: '',
+      type: [String, Number, Array],
     },
   },
   data() {
     return {
-      prefixCls,
-      values: [],
-      dropDownWidth: 0,
-      visible: false,
-      focusIndex: -1,
-      isFocused: false,
-      query: '',
-      initialLabel: this.label,
-      hasMouseHoverHead: false,
-      slotOptions: this.$slots.default,
       caretPosition: -1,
-      lastRemoteQuery: '',
-      unchangedQuery: true,
+      dropDownWidth: 0,
+      focusIndex: -1,
       hasExpectedValue: false,
+      hasMouseHoverHead: false,
+      initialLabel: this.label,
+      isFocused: false,
+      lastRemoteQuery: '',
+      prefixCls,
       preventRemoteCall: false,
+      query: '',
+      slotOptions: this.$slots.default,
+      unchangedQuery: true,
+      values: [],
+      visible: false,
     };
   },
   computed: {
+    canBeCleared() {
+      const uiStateMatch = this.hasMouseHoverHead || this.active;
+      const qualifiesForClear = !this.multiple && this.clearable;
+
+      return uiStateMatch && qualifiesForClear && this.reset; // we return a function
+    },
     classes() {
       return [
         `${prefixCls}`,
@@ -281,40 +287,6 @@ export default {
         'ivu-auto-complete': this.autoComplete,
       };
     },
-    selectionCls() {
-      return {
-        [`${prefixCls}-selection`]: !this.autoComplete,
-        [`${prefixCls}-selection-focused`]: this.isFocused,
-      };
-    },
-    queryStringMatchesSelectedOption() {
-      const selectedOptions = this.values[0];
-
-      if (!selectedOptions) {
-        return false;
-      }
-
-      const [query, label] = [this.query, selectedOptions.label].map((str) => (str || '').trim());
-
-      return !this.multiple && this.unchangedQuery && query === label;
-    },
-    localeNotFoundText() {
-      if (typeof this.notFoundText === 'undefined') {
-        return this.t('i.select.noMatch');
-      }
-
-      return this.notFoundText;
-    },
-    localeLoadingText() {
-      if (typeof this.loadingText === 'undefined') {
-        return this.t('i.select.loading');
-      }
-
-      return this.loadingText;
-    },
-    transitionName() {
-      return this.placement === 'bottom' ? 'slide-up' : 'slide-down';
-    },
     dropVisible() {
       let status = true;
       const noOptions = !this.selectOptions || this.selectOptions.length === 0;
@@ -329,10 +301,22 @@ export default {
 
       return this.visible && status;
     },
-    showNotFoundLabel() {
-      const {loading, remote, selectOptions} = this;
+    flatOptions() {
+      return extractOptions(this.selectOptions);
+    },
+    localeLoadingText() {
+      if (typeof this.loadingText === 'undefined') {
+        return this.t('i.select.loading');
+      }
 
-      return selectOptions && selectOptions.length === 0 && (!remote || (remote && !loading));
+      return this.loadingText;
+    },
+    localeNotFoundText() {
+      if (typeof this.notFoundText === 'undefined') {
+        return this.t('i.select.noMatch');
+      }
+
+      return this.notFoundText;
     },
     publicValue() {
       if (this.labelInValue) {
@@ -341,11 +325,25 @@ export default {
 
       return this.multiple ? this.values.map((option) => option.value) : (this.values[0] || {}).value;
     },
-    canBeCleared() {
-      const uiStateMatch = this.hasMouseHoverHead || this.active;
-      const qualifiesForClear = !this.multiple && this.clearable;
+    queryStringMatchesSelectedOption() {
+      const selectedOptions = this.values[0];
 
-      return uiStateMatch && qualifiesForClear && this.reset; // we return a function
+      if (!selectedOptions) {
+        return false;
+      }
+
+      const [query, label] = [this.query, selectedOptions.label].map((str) => (str || '').trim());
+
+      return !this.multiple && this.unchangedQuery && query === label;
+    },
+    remote() {
+      return typeof this.remoteMethod === 'function';
+    },
+    selectionCls() {
+      return {
+        [`${prefixCls}-selection`]: !this.autoComplete,
+        [`${prefixCls}-selection-focused`]: this.isFocused,
+      };
     },
     selectOptions() {
       const selectOptions = [];
@@ -421,17 +419,107 @@ export default {
 
       return selectOptions;
     },
-    flatOptions() {
-      return extractOptions(this.selectOptions);
-    },
     selectTabindex() {
       return this.disabled || this.filterable ? -1 : 0;
     },
-    remote() {
-      return typeof this.remoteMethod === 'function';
+    showNotFoundLabel() {
+      const {loading, remote, selectOptions} = this;
+
+      return selectOptions && selectOptions.length === 0 && (!remote || (remote && !loading));
+    },
+    transitionName() {
+      return this.placement === 'bottom' ? 'slide-up' : 'slide-down';
     },
   },
   watch: {
+    dropVisible(open) {
+      this.broadcast('Drop', open ? 'on-update-popper' : 'on-destroy-popper');
+    },
+    focusIndex(index) {
+      if (index < 0 || this.autoComplete) {
+        return;
+      }
+
+      // update scroll
+      const optionValue = this.flatOptions[index].componentOptions.propsData.value;
+      const optionInstance = findChild(
+        this,
+        ({$options}) => $options.componentName === 'select-item' && $options.propsData.value === optionValue,
+      );
+
+      const bottomOverflowDistance =
+        optionInstance.$el.getBoundingClientRect().bottom - this.$refs.dropdown.$el.getBoundingClientRect().bottom;
+      const topOverflowDistance =
+        optionInstance.$el.getBoundingClientRect().top - this.$refs.dropdown.$el.getBoundingClientRect().top;
+
+      if (bottomOverflowDistance > 0) {
+        this.$refs.dropdown.$el.scrollTop += bottomOverflowDistance;
+      }
+
+      if (topOverflowDistance < 0) {
+        this.$refs.dropdown.$el.scrollTop += topOverflowDistance;
+      }
+    },
+    isFocused(focused) {
+      const el = this.filterable ? this.$el.querySelector('input[type="text"]') : this.$el;
+      el[this.isFocused ? 'focus' : 'blur']();
+
+      // restore query value in filterable single selects
+      const [selectedOption] = this.values;
+
+      if (selectedOption && this.filterable && !this.multiple && !focused) {
+        const selectedLabel = String(selectedOption.label || selectedOption.value).trim();
+
+        if (selectedLabel && this.query !== selectedLabel) {
+          this.preventRemoteCall = true;
+          this.query = selectedLabel;
+        }
+      }
+    },
+    loading(state) {
+      if (state === false) {
+        this.updateSlotOptions();
+      }
+    },
+    query(query) {
+      this.$emit('on-query-change', query);
+      const {remoteMethod, lastRemoteQuery} = this;
+      const hasValidQuery = query !== '' && (query !== lastRemoteQuery || !lastRemoteQuery);
+      const shouldCallRemoteMethod = remoteMethod && hasValidQuery && !this.preventRemoteCall;
+      this.preventRemoteCall = false; // remove the flag
+
+      if (shouldCallRemoteMethod) {
+        this.focusIndex = -1;
+        const promise = this.remoteMethod(query);
+        this.initialLabel = '';
+
+        if (promise && promise.then) {
+          promise.then((options) => {
+            if (options) {
+              this.options = options;
+            }
+          });
+        }
+      }
+
+      if (query !== '' && this.remote) {
+        this.lastRemoteQuery = query;
+      }
+    },
+    selectOptions() {
+      if (this.hasExpectedValue && this.selectOptions.length > 0) {
+        if (this.values.length === 0) {
+          this.values = this.getInitialValue();
+        }
+
+        this.values = this.values.map(this.getOptionData).filter(Boolean);
+        this.hasExpectedValue = false;
+      }
+
+      if (this.slotOptions && this.slotOptions.length === 0) {
+        this.query = '';
+      }
+    },
     value(value) {
       const {getInitialValue, getOptionData, publicValue} = this;
 
@@ -465,94 +553,6 @@ export default {
         this.dispatch('FormItem', 'on-form-change', this.publicValue);
       }
     },
-    query(query) {
-      this.$emit('on-query-change', query);
-      const {remoteMethod, lastRemoteQuery} = this;
-      const hasValidQuery = query !== '' && (query !== lastRemoteQuery || !lastRemoteQuery);
-      const shouldCallRemoteMethod = remoteMethod && hasValidQuery && !this.preventRemoteCall;
-      this.preventRemoteCall = false; // remove the flag
-
-      if (shouldCallRemoteMethod) {
-        this.focusIndex = -1;
-        const promise = this.remoteMethod(query);
-        this.initialLabel = '';
-
-        if (promise && promise.then) {
-          promise.then((options) => {
-            if (options) {
-              this.options = options;
-            }
-          });
-        }
-      }
-
-      if (query !== '' && this.remote) {
-        this.lastRemoteQuery = query;
-      }
-    },
-    loading(state) {
-      if (state === false) {
-        this.updateSlotOptions();
-      }
-    },
-    isFocused(focused) {
-      const el = this.filterable ? this.$el.querySelector('input[type="text"]') : this.$el;
-      el[this.isFocused ? 'focus' : 'blur']();
-
-      // restore query value in filterable single selects
-      const [selectedOption] = this.values;
-
-      if (selectedOption && this.filterable && !this.multiple && !focused) {
-        const selectedLabel = String(selectedOption.label || selectedOption.value).trim();
-
-        if (selectedLabel && this.query !== selectedLabel) {
-          this.preventRemoteCall = true;
-          this.query = selectedLabel;
-        }
-      }
-    },
-    focusIndex(index) {
-      if (index < 0 || this.autoComplete) {
-        return;
-      }
-
-      // update scroll
-      const optionValue = this.flatOptions[index].componentOptions.propsData.value;
-      const optionInstance = findChild(
-        this,
-        ({$options}) => $options.componentName === 'select-item' && $options.propsData.value === optionValue,
-      );
-
-      const bottomOverflowDistance =
-        optionInstance.$el.getBoundingClientRect().bottom - this.$refs.dropdown.$el.getBoundingClientRect().bottom;
-      const topOverflowDistance =
-        optionInstance.$el.getBoundingClientRect().top - this.$refs.dropdown.$el.getBoundingClientRect().top;
-
-      if (bottomOverflowDistance > 0) {
-        this.$refs.dropdown.$el.scrollTop += bottomOverflowDistance;
-      }
-
-      if (topOverflowDistance < 0) {
-        this.$refs.dropdown.$el.scrollTop += topOverflowDistance;
-      }
-    },
-    dropVisible(open) {
-      this.broadcast('Drop', open ? 'on-update-popper' : 'on-destroy-popper');
-    },
-    selectOptions() {
-      if (this.hasExpectedValue && this.selectOptions.length > 0) {
-        if (this.values.length === 0) {
-          this.values = this.getInitialValue();
-        }
-
-        this.values = this.values.map(this.getOptionData).filter(Boolean);
-        this.hasExpectedValue = false;
-      }
-
-      if (this.slotOptions && this.slotOptions.length === 0) {
-        this.query = '';
-      }
-    },
     visible(state) {
       this.$emit('on-open-change', state);
     },
@@ -576,17 +576,9 @@ export default {
     this.checkUpdateStatus();
   },
   methods: {
-    setQuery(query) {
-      // PUBLIC API
-      if (query) {
-        this.onQueryChange(query);
-
-        return;
-      }
-
-      if (query === null) {
-        this.onQueryChange('');
-        this.values = [];
+    checkUpdateStatus() {
+      if (this.getInitialValue().length > 0 && this.selectOptions.length === 0) {
+        this.hasExpectedValue = true;
       }
     },
     clearSingleSelect() {
@@ -597,20 +589,6 @@ export default {
       if (this.clearable) {
         this.reset();
       }
-    },
-    getOptionData(value) {
-      const option = this.flatOptions.find(({componentOptions}) => componentOptions.propsData.value === value);
-
-      if (!option) {
-        return null;
-      }
-
-      const label = getOptionLabel(option);
-
-      return {
-        value,
-        label,
-      };
     },
     getInitialValue() {
       const {multiple, remote, value} = this;
@@ -630,112 +608,19 @@ export default {
 
       return initialValue.filter((item) => Boolean(item) || item === 0);
     },
-    processOption(option, values, isFocused) {
-      if (!option.componentOptions) {
-        return option;
+    getOptionData(value) {
+      const option = this.flatOptions.find(({componentOptions}) => componentOptions.propsData.value === value);
+
+      if (!option) {
+        return null;
       }
 
-      const optionValue = option.componentOptions.propsData.value;
-      const {disabled} = option.componentOptions.propsData;
-      const isSelected = values.includes(optionValue);
-
-      const propsData = {
-        ...option.componentOptions.propsData,
-        selected: isSelected,
-        isFocused,
-        disabled: typeof disabled === 'undefined' ? false : disabled !== false,
-      };
+      const label = getOptionLabel(option);
 
       return {
-        ...option,
-        componentOptions: {
-          ...option.componentOptions,
-          propsData,
-        },
+        label,
+        value,
       };
-    },
-
-    validateOption({children, elm, propsData}) {
-      if (this.queryStringMatchesSelectedOption) {
-        return true;
-      }
-
-      const {value} = propsData;
-      const label = propsData.label || '';
-      const textContent =
-        (elm && elm.textContent.trim()) ||
-        (children || []).reduce((str, node) => {
-          const nodeText = node.elm ? node.elm.textContent.trim() : node.text;
-
-          return `${str} ${nodeText}`;
-        }, '') ||
-        '';
-      const stringValues = JSON.stringify([value, label, textContent.trim()]);
-      const query = this.query.toLowerCase().trim();
-
-      return stringValues.toLowerCase().includes(query);
-    },
-
-    toggleMenu(e, force) {
-      if (this.disabled) {
-        return false;
-      }
-
-      this.visible = typeof force !== 'undefined' ? force : !this.visible;
-
-      if (this.visible) {
-        this.dropDownWidth = this.$el.getBoundingClientRect().width;
-        this.broadcast('Drop', 'on-update-popper');
-      }
-    },
-    hideMenu() {
-      this.toggleMenu(null, false);
-      setTimeout(() => {
-        this.unchangedQuery = true;
-      }, ANIMATION_TIMEOUT);
-    },
-    onClickOutside(event) {
-      if (this.visible) {
-        if (event.type === 'mousedown') {
-          event.preventDefault();
-
-          return;
-        }
-
-        if (this.transfer) {
-          const {$el} = this.$refs.dropdown;
-
-          if ($el === event.target || $el.contains(event.target)) {
-            return;
-          }
-        }
-
-        if (this.filterable) {
-          const input = this.$el.querySelector('input[type="text"]');
-          this.caretPosition = input.selectionStart;
-          this.$nextTick(() => {
-            const caretPosition = this.caretPosition === -1 ? input.value.length : this.caretPosition;
-            input.setSelectionRange(caretPosition, caretPosition);
-          });
-        }
-
-        if (!this.autoComplete) {
-          event.stopPropagation();
-        }
-
-        event.preventDefault();
-        this.hideMenu();
-        this.isFocused = true;
-      } else {
-        this.caretPosition = -1;
-        this.isFocused = false;
-      }
-    },
-    reset() {
-      this.query = '';
-      this.focusIndex = -1;
-      this.unchangedQuery = true;
-      this.values = [];
     },
     handleKeydown(e) {
       const {key} = e;
@@ -785,6 +670,14 @@ export default {
         }
       }
     },
+
+    hideMenu() {
+      this.toggleMenu(null, false);
+      setTimeout(() => {
+        this.unchangedQuery = true;
+      }, ANIMATION_TIMEOUT);
+    },
+
     navigateOptions(direction) {
       const optionsLength = this.flatOptions.length - 1;
 
@@ -832,6 +725,62 @@ export default {
       }
 
       this.focusIndex = index;
+    },
+    onClickOutside(event) {
+      if (this.visible) {
+        if (event.type === 'mousedown') {
+          event.preventDefault();
+
+          return;
+        }
+
+        if (this.transfer) {
+          const {$el} = this.$refs.dropdown;
+
+          if ($el === event.target || $el.contains(event.target)) {
+            return;
+          }
+        }
+
+        if (this.filterable) {
+          const input = this.$el.querySelector('input[type="text"]');
+          this.caretPosition = input.selectionStart;
+          this.$nextTick(() => {
+            const caretPosition = this.caretPosition === -1 ? input.value.length : this.caretPosition;
+            input.setSelectionRange(caretPosition, caretPosition);
+          });
+        }
+
+        if (!this.autoComplete) {
+          event.stopPropagation();
+        }
+
+        event.preventDefault();
+        this.hideMenu();
+        this.isFocused = true;
+      } else {
+        this.caretPosition = -1;
+        this.isFocused = false;
+      }
+    },
+    onKeydown(event) {
+      const {key} = event;
+
+      if (oneOf(key, ['Esc', 'Escape'])) {
+        this.handleKeydown(event);
+      } else if (key === 'Enter') {
+        this.handleKeydown(event);
+      } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+        event.preventDefault();
+        this.handleKeydown(event);
+      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+        event.preventDefault();
+        this.handleKeydown(event);
+      } else if (key === 'Tab') {
+        this.handleKeydown(event);
+      } else if (oneOf(key, ['Backspace', 'Delete'])) {
+        this.handleKeydown(event);
+      }
     },
     onOptionClick(option) {
       if (this.multiple) {
@@ -884,6 +833,49 @@ export default {
       this.query = query;
       this.unchangedQuery = this.visible;
     },
+    processOption(option, values, isFocused) {
+      if (!option.componentOptions) {
+        return option;
+      }
+
+      const optionValue = option.componentOptions.propsData.value;
+      const {disabled} = option.componentOptions.propsData;
+      const isSelected = values.includes(optionValue);
+
+      const propsData = {
+        ...option.componentOptions.propsData,
+        disabled: typeof disabled === 'undefined' ? false : disabled !== false,
+        isFocused,
+        selected: isSelected,
+      };
+
+      return {
+        ...option,
+        componentOptions: {
+          ...option.componentOptions,
+          propsData,
+        },
+      };
+    },
+    reset() {
+      this.query = '';
+      this.focusIndex = -1;
+      this.unchangedQuery = true;
+      this.values = [];
+    },
+    setQuery(query) {
+      // PUBLIC API
+      if (query) {
+        this.onQueryChange(query);
+
+        return;
+      }
+
+      if (query === null) {
+        this.onQueryChange('');
+        this.values = [];
+      }
+    },
     toggleHeaderFocus({type}) {
       if (this.disabled) {
         return;
@@ -891,32 +883,40 @@ export default {
 
       this.isFocused = type === 'focus';
     },
+    toggleMenu(e, force) {
+      if (this.disabled) {
+        return false;
+      }
+
+      this.visible = typeof force !== 'undefined' ? force : !this.visible;
+
+      if (this.visible) {
+        this.dropDownWidth = this.$el.getBoundingClientRect().width;
+        this.broadcast('Drop', 'on-update-popper');
+      }
+    },
     updateSlotOptions() {
       this.slotOptions = this.$slots.default;
     },
-    checkUpdateStatus() {
-      if (this.getInitialValue().length > 0 && this.selectOptions.length === 0) {
-        this.hasExpectedValue = true;
+    validateOption({children, elm, propsData}) {
+      if (this.queryStringMatchesSelectedOption) {
+        return true;
       }
-    },
-    onKeydown(event) {
-      const {key} = event;
 
-      if (oneOf(key, ['Esc', 'Escape'])) {
-        this.handleKeydown(event);
-      } else if (key === 'Enter') {
-        this.handleKeydown(event);
-      } else if (oneOf(key, ['Up', 'ArrowUp'])) {
-        event.preventDefault();
-        this.handleKeydown(event);
-      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
-        event.preventDefault();
-        this.handleKeydown(event);
-      } else if (key === 'Tab') {
-        this.handleKeydown(event);
-      } else if (oneOf(key, ['Backspace', 'Delete'])) {
-        this.handleKeydown(event);
-      }
+      const {value} = propsData;
+      const label = propsData.label || '';
+      const textContent =
+        (elm && elm.textContent.trim()) ||
+        (children || []).reduce((str, node) => {
+          const nodeText = node.elm ? node.elm.textContent.trim() : node.text;
+
+          return `${str} ${nodeText}`;
+        }, '') ||
+        '';
+      const stringValues = JSON.stringify([value, label, textContent.trim()]);
+      const query = this.query.toLowerCase().trim();
+
+      return stringValues.toLowerCase().includes(query);
     },
   },
 };

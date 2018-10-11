@@ -40,27 +40,27 @@ const prefixCls = 'ivu-progress';
 export default {
   components: {Icon},
   props: {
+    hideInfo: {
+      default: false,
+      type: Boolean,
+    },
     percent: {
-      type: Number,
       default: 0,
+      type: Number,
     },
     status: {
+      default: 'normal',
       validator(value) {
         return oneOf(value, ['normal', 'active', 'wrong', 'success']);
       },
-      default: 'normal',
-    },
-    hideInfo: {
-      type: Boolean,
-      default: false,
     },
     strokeWidth: {
-      type: Number,
       default: 10,
+      type: Number,
     },
     vertical: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
   },
   data() {
@@ -69,8 +69,28 @@ export default {
     };
   },
   computed: {
+    bgClasses() {
+      return `${prefixCls}-bg`;
+    },
+    bgStyle() {
+      return this.vertical
+        ? {
+            height: `${this.percent}%`,
+            width: `${this.strokeWidth}px`,
+          }
+        : {
+            height: `${this.strokeWidth}px`,
+            width: `${this.percent}%`,
+          };
+    },
+    innerClasses() {
+      return `${prefixCls}-inner`;
+    },
     isStatus() {
       return this.currentStatus === 'wrong' || this.currentStatus === 'success';
+    },
+    outerClasses() {
+      return `${prefixCls}-outer`;
     },
     statusIcon() {
       let type = '';
@@ -88,16 +108,11 @@ export default {
 
       return type;
     },
-    bgStyle() {
-      return this.vertical
-        ? {
-            height: `${this.percent}%`,
-            width: `${this.strokeWidth}px`,
-          }
-        : {
-            width: `${this.percent}%`,
-            height: `${this.strokeWidth}px`,
-          };
+    textClasses() {
+      return `${prefixCls}-text`;
+    },
+    textInnerClasses() {
+      return `${prefixCls}-text-inner`;
     },
     wrapClasses() {
       return [
@@ -108,21 +123,6 @@ export default {
           [`${prefixCls}-vertical`]: this.vertical,
         },
       ];
-    },
-    textClasses() {
-      return `${prefixCls}-text`;
-    },
-    textInnerClasses() {
-      return `${prefixCls}-text-inner`;
-    },
-    outerClasses() {
-      return `${prefixCls}-outer`;
-    },
-    innerClasses() {
-      return `${prefixCls}-inner`;
-    },
-    bgClasses() {
-      return `${prefixCls}-bg`;
     },
   },
   watch: {

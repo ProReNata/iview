@@ -10,8 +10,8 @@ export default {
   name: 'Breadcrumb',
   props: {
     separator: {
-      type: String,
       default: '/',
+      type: String,
     },
   },
   computed: {

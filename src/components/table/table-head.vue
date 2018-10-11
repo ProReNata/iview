@@ -100,8 +100,8 @@
                   <div :class="[prefixCls + '-filter-list-item']">
                     <checkbox-group v-model="getColumn(rowIndex, index)._filterChecked">
                       <checkbox
-                        v-for="(item, index) in column.filters"
-                        :key="index"
+                        v-for="(item, idx) in column.filters"
+                        :key="idx"
                         :label="item.value"
                       >
                         {{ item.label }}
@@ -173,29 +173,32 @@ import Locale from '../../mixins/locale';
 
 export default {
   name: 'TableHead',
-  components: {CheckboxGroup, Checkbox, Poptip, iButton, renderHeader},
+  components: {Checkbox, CheckboxGroup, iButton, Poptip, renderHeader},
   mixins: [Mixin, Locale],
   props: {
+    columnRows: Array,
+    columns: Array,
+    columnsWidth: Object,
+    // rebuildData
+    data: Array,
+    fixed: {
+      default: false,
+      type: [Boolean, String],
+    },
+    fixedColumnRows: Array,
+    objData: Object,
     prefixCls: String,
     styleObject: Object,
-    columns: Array,
-    objData: Object,
-    data: Array, // rebuildData
-    columnsWidth: Object,
-    fixed: {
-      type: [Boolean, String],
-      default: false,
-    },
-    columnRows: Array,
-    fixedColumnRows: Array,
   },
   computed: {
-    styles() {
-      const style = {...this.styleObject};
-      const width = parseInt(this.styleObject.width, 10);
-      style.width = `${width}px`;
+    headRows() {
+      const isGroup = this.columnRows.length > 1;
 
-      return style;
+      if (isGroup) {
+        return this.fixed ? this.fixedColumnRows : this.columnRows;
+      }
+
+      return [this.columns];
     },
     isSelectAll() {
       let isSelectAll = true;
@@ -217,14 +220,12 @@ export default {
 
       return isSelectAll;
     },
-    headRows() {
-      const isGroup = this.columnRows.length > 1;
+    styles() {
+      const style = {...this.styleObject};
+      const width = parseInt(this.styleObject.width, 10);
+      style.width = `${width}px`;
 
-      if (isGroup) {
-        return this.fixed ? this.fixedColumnRows : this.columnRows;
-      }
-
-      return [this.columns];
+      return style;
     },
   },
   methods: {
@@ -236,46 +237,29 @@ export default {
         },
       ];
     },
-    scrollBarCellClass() {
-      let hasRightFixed = false;
-      for (const i in this.headRows) {
-        for (const j in this.headRows[i]) {
-          if (this.headRows[i][j].fixed === 'right') {
-            hasRightFixed = true;
-            break;
-          }
+    // 因为表头嵌套不是深拷贝，所以没有 _ 开头的方法，在 isGroup 下用此列
+    getColumn(rowIndex, index) {
+      const isGroup = this.columnRows.length > 1;
 
-          if (hasRightFixed) {
-            break;
-          }
-        }
+      if (isGroup) {
+        const id = this.headRows[rowIndex][index].__id;
+
+        return this.columns.filter((item) => item.__id === id)[0];
       }
 
-      return [
-        {
-          [`${this.prefixCls}-hidden`]: hasRightFixed,
-        },
-      ];
+      return this.headRows[rowIndex][index];
     },
-    itemClasses(column, item) {
-      return [
-        `${this.prefixCls}-filter-select-item`,
-        {
-          [`${this.prefixCls}-filter-select-item-selected`]: column._filterChecked[0] === item.value,
-        },
-      ];
+    handleFilter(index) {
+      this.$parent.handleFilter(index);
     },
-    itemAllClasses(column) {
-      return [
-        `${this.prefixCls}-filter-select-item`,
-        {
-          [`${this.prefixCls}-filter-select-item-selected`]: !column._filterChecked.length,
-        },
-      ];
+    handleFilterHide(index) {
+      this.$parent.handleFilterHide(index);
     },
-    selectAll() {
-      const status = !this.isSelectAll;
-      this.$parent.selectAll(status);
+    handleReset(index) {
+      this.$parent.handleFilterReset(index);
+    },
+    handleSelect(index, value) {
+      this.$parent.handleFilterSelect(index, value);
     },
     handleSort(index, type) {
       const column = this.columns[index];
@@ -302,29 +286,46 @@ export default {
         }
       }
     },
-    handleFilter(index) {
-      this.$parent.handleFilter(index);
+    itemAllClasses(column) {
+      return [
+        `${this.prefixCls}-filter-select-item`,
+        {
+          [`${this.prefixCls}-filter-select-item-selected`]: !column._filterChecked.length,
+        },
+      ];
     },
-    handleSelect(index, value) {
-      this.$parent.handleFilterSelect(index, value);
+    itemClasses(column, item) {
+      return [
+        `${this.prefixCls}-filter-select-item`,
+        {
+          [`${this.prefixCls}-filter-select-item-selected`]: column._filterChecked[0] === item.value,
+        },
+      ];
     },
-    handleReset(index) {
-      this.$parent.handleFilterReset(index);
-    },
-    handleFilterHide(index) {
-      this.$parent.handleFilterHide(index);
-    },
-    // 因为表头嵌套不是深拷贝，所以没有 _ 开头的方法，在 isGroup 下用此列
-    getColumn(rowIndex, index) {
-      const isGroup = this.columnRows.length > 1;
+    scrollBarCellClass() {
+      let hasRightFixed = false;
+      for (const i in this.headRows) {
+        for (const j in this.headRows[i]) {
+          if (this.headRows[i][j].fixed === 'right') {
+            hasRightFixed = true;
+            break;
+          }
 
-      if (isGroup) {
-        const id = this.headRows[rowIndex][index].__id;
-
-        return this.columns.filter((item) => item.__id === id)[0];
+          if (hasRightFixed) {
+            break;
+          }
+        }
       }
 
-      return this.headRows[rowIndex][index];
+      return [
+        {
+          [`${this.prefixCls}-hidden`]: hasRightFixed,
+        },
+      ];
+    },
+    selectAll() {
+      const status = !this.isSelectAll;
+      this.$parent.selectAll(status);
     },
   },
 };

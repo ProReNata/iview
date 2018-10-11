@@ -18,6 +18,10 @@ LoadingBar.newInstance = (properties) => {
   const loading_bar = Instance.$children[0];
 
   return {
+    component: loading_bar,
+    destroy() {
+      document.body.removeChild(document.getElementsByClassName('ivu-loading-bar')[0]);
+    },
     update(options) {
       if ('percent' in options) {
         loading_bar.percent = options.percent;
@@ -30,10 +34,6 @@ LoadingBar.newInstance = (properties) => {
       if ('show' in options) {
         loading_bar.show = options.show;
       }
-    },
-    component: loading_bar,
-    destroy() {
-      document.body.removeChild(document.getElementsByClassName('ivu-loading-bar')[0]);
     },
   };
 };

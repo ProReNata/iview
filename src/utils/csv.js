@@ -19,8 +19,8 @@ const appendLine = (content, row, {separator, quoted}) => {
 };
 
 const defaults = {
-  separator: ',',
   quoted: false,
+  separator: ',',
 };
 
 export default function csv(columns, datas, options, noHeader = false) {

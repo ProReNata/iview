@@ -202,56 +202,41 @@ let columnKey = 1;
 
 export default {
   name: 'Table',
-  components: {tableHead, tableBody, Spin},
+  components: {Spin, tableBody, tableHead},
   mixins: [Locale],
   props: {
-    data: {
-      type: Array,
-      default() {
-        return [];
-      },
+    border: {
+      default: false,
+      type: Boolean,
     },
     columns: {
-      type: Array,
       default() {
         return [];
       },
+      type: Array,
     },
-    size: {
-      validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+    context: {
+      type: Object,
+    },
+    data: {
+      default() {
+        return [];
       },
+      type: Array,
     },
-    width: {
-      type: [Number, String],
+    disabledHover: {
+      type: Boolean,
     },
     height: {
       type: [Number, String],
     },
-    stripe: {
-      type: Boolean,
-      default: false,
-    },
-    border: {
-      type: Boolean,
-      default: false,
-    },
-    showHeader: {
-      type: Boolean,
-      default: true,
-    },
     highlightRow: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
-    rowClassName: {
-      type: Function,
-      default() {
-        return '';
-      },
-    },
-    context: {
-      type: Object,
+    loading: {
+      default: false,
+      type: Boolean,
     },
     noDataText: {
       type: String,
@@ -259,43 +244,149 @@ export default {
     noFilteredDataText: {
       type: String,
     },
-    disabledHover: {
+    rowClassName: {
+      default() {
+        return '';
+      },
+      type: Function,
+    },
+    showHeader: {
+      default: true,
       type: Boolean,
     },
-    loading: {
-      type: Boolean,
+    size: {
+      validator(value) {
+        return oneOf(value, ['small', 'large', 'default']);
+      },
+    },
+    stripe: {
       default: false,
+      type: Boolean,
+    },
+    width: {
+      type: [Number, String],
     },
   },
   data() {
     const colsWithId = this.makeColumnsId(this.columns);
 
     return {
-      ready: false,
-      tableWidth: 0,
-      columnsWidth: {},
-      prefixCls,
-      compiledUids: [],
-      objData: this.makeObjData(), // checkbox or highlight-row
-      rebuildData: [], // for sort or filter
-      cloneColumns: this.makeColumns(colsWithId),
-      columnRows: this.makeColumnRows(false, colsWithId),
-      leftFixedColumnRows: this.makeColumnRows('left', colsWithId),
-      rightFixedColumnRows: this.makeColumnRows('right', colsWithId),
-      allColumns: getAllColumns(colsWithId), // for multiple table-head, get columns that have no children
-      showSlotHeader: true,
-      showSlotFooter: true,
+      // for multiple table-head, get columns that have no children
+      allColumns: getAllColumns(colsWithId),
       bodyHeight: 0,
-      scrollBarWidth: getScrollBarSize(),
+      cloneColumns: this.makeColumns(colsWithId),
+      // when Cell has a button to delete row data, clickCurrentRow will throw an error, so clone a data
+      cloneData: deepCopy(this.data),
+      columnRows: this.makeColumnRows(false, colsWithId),
+      columnsWidth: {},
+      compiledUids: [],
       currentContext: this.context,
-      cloneData: deepCopy(this.data), // when Cell has a button to delete row data, clickCurrentRow will throw an error, so clone a data
-      showVerticalScrollBar: false,
-      showHorizontalScrollBar: false,
-      headerWidth: 0,
       headerHeight: 0,
+      headerWidth: 0,
+      leftFixedColumnRows: this.makeColumnRows('left', colsWithId),
+      objData: this.makeObjData(), // checkbox or highlight-row
+      prefixCls,
+      ready: false,
+      // for sort or filter
+      rebuildData: [],
+      rightFixedColumnRows: this.makeColumnRows('right', colsWithId),
+      scrollBarWidth: getScrollBarSize(),
+      showHorizontalScrollBar: false,
+      showSlotFooter: true,
+      showSlotHeader: true,
+      showVerticalScrollBar: false,
+      tableWidth: 0,
     };
   },
   computed: {
+    bodyStyle() {
+      const style = {};
+
+      if (this.bodyHeight !== 0) {
+        const height = this.bodyHeight;
+        style.height = `${height}px`;
+      }
+
+      return style;
+    },
+    classes() {
+      return [
+        `${prefixCls}`,
+        {
+          [`${prefixCls}-${this.size}`]: !!this.size,
+          [`${prefixCls}-border`]: this.border,
+          [`${prefixCls}-stripe`]: this.stripe,
+          [`${prefixCls}-with-fixed-top`]: !!this.height,
+        },
+      ];
+    },
+    fixedBodyStyle() {
+      const style = {};
+
+      if (this.bodyHeight !== 0) {
+        const height = this.bodyHeight - (this.showHorizontalScrollBar ? this.scrollBarWidth : 0);
+        style.height = this.showHorizontalScrollBar ? `${height}px` : `${height - 1}px`;
+      }
+
+      return style;
+    },
+    fixedHeaderClasses() {
+      return [
+        `${prefixCls}-fixed-header`,
+        {
+          [`${prefixCls}-fixed-header-with-empty`]: !this.rebuildData.length,
+        },
+      ];
+    },
+    fixedRightHeaderStyle() {
+      const style = {};
+      let width = 0;
+      const height = this.headerHeight + 1;
+
+      if (this.showVerticalScrollBar) {
+        width = this.scrollBarWidth;
+      }
+
+      style.width = `${width}px`;
+      style.height = `${height}px`;
+
+      return style;
+    },
+    fixedRightTableStyle() {
+      const style = {};
+      let width = 0;
+      this.rightFixedColumns.forEach((col) => {
+        if (col.fixed && col.fixed === 'right') {
+          width += col._width;
+        }
+      });
+      // width += this.scrollBarWidth;
+      style.width = `${width}px`;
+      style.right = `${this.showVerticalScrollBar ? this.scrollBarWidth : 0}px`;
+
+      return style;
+    },
+    fixedTableStyle() {
+      const style = {};
+      let width = 0;
+      this.leftFixedColumns.forEach((col) => {
+        if (col.fixed && col.fixed === 'left') {
+          width += col._width;
+        }
+      });
+      style.width = `${width}px`;
+
+      return style;
+    },
+    isLeftFixed() {
+      return this.columns.some((col) => col.fixed && col.fixed === 'left');
+    },
+    isRightFixed() {
+      return this.columns.some((col) => col.fixed && col.fixed === 'right');
+    },
+    leftFixedColumns() {
+      return convertColumnOrder(this.cloneColumns, 'left');
+    },
     localeNoDataText() {
       if (this.noDataText === undefined) {
         return this.t('i.table.noDataText');
@@ -310,34 +401,8 @@ export default {
 
       return this.noFilteredDataText;
     },
-    wrapClasses() {
-      return [
-        `${prefixCls}-wrapper`,
-        {
-          [`${prefixCls}-hide`]: !this.ready,
-          [`${prefixCls}-with-header`]: this.showSlotHeader,
-          [`${prefixCls}-with-footer`]: this.showSlotFooter,
-        },
-      ];
-    },
-    classes() {
-      return [
-        `${prefixCls}`,
-        {
-          [`${prefixCls}-${this.size}`]: !!this.size,
-          [`${prefixCls}-border`]: this.border,
-          [`${prefixCls}-stripe`]: this.stripe,
-          [`${prefixCls}-with-fixed-top`]: !!this.height,
-        },
-      ];
-    },
-    fixedHeaderClasses() {
-      return [
-        `${prefixCls}-fixed-header`,
-        {
-          [`${prefixCls}-fixed-header-with-empty`]: !this.rebuildData.length,
-        },
-      ];
+    rightFixedColumns() {
+      return convertColumnOrder(this.cloneColumns, 'right');
     },
     styles() {
       const style = {};
@@ -349,6 +414,17 @@ export default {
 
       if (this.width) {
         style.width = `${this.width}px`;
+      }
+
+      return style;
+    },
+    tableHeaderStyle() {
+      const style = {};
+
+      if (this.tableWidth !== 0) {
+        let width = '';
+        width = this.tableWidth;
+        style.width = `${width}px`;
       }
 
       return style;
@@ -371,92 +447,35 @@ export default {
 
       return style;
     },
-    tableHeaderStyle() {
-      const style = {};
-
-      if (this.tableWidth !== 0) {
-        let width = '';
-        width = this.tableWidth;
-        style.width = `${width}px`;
-      }
-
-      return style;
-    },
-    fixedTableStyle() {
-      const style = {};
-      let width = 0;
-      this.leftFixedColumns.forEach((col) => {
-        if (col.fixed && col.fixed === 'left') {
-          width += col._width;
-        }
-      });
-      style.width = `${width}px`;
-
-      return style;
-    },
-    fixedRightTableStyle() {
-      const style = {};
-      let width = 0;
-      this.rightFixedColumns.forEach((col) => {
-        if (col.fixed && col.fixed === 'right') {
-          width += col._width;
-        }
-      });
-      // width += this.scrollBarWidth;
-      style.width = `${width}px`;
-      style.right = `${this.showVerticalScrollBar ? this.scrollBarWidth : 0}px`;
-
-      return style;
-    },
-    fixedRightHeaderStyle() {
-      const style = {};
-      let width = 0;
-      const height = this.headerHeight + 1;
-
-      if (this.showVerticalScrollBar) {
-        width = this.scrollBarWidth;
-      }
-
-      style.width = `${width}px`;
-      style.height = `${height}px`;
-
-      return style;
-    },
-    bodyStyle() {
-      const style = {};
-
-      if (this.bodyHeight !== 0) {
-        const height = this.bodyHeight;
-        style.height = `${height}px`;
-      }
-
-      return style;
-    },
-    fixedBodyStyle() {
-      const style = {};
-
-      if (this.bodyHeight !== 0) {
-        const height = this.bodyHeight - (this.showHorizontalScrollBar ? this.scrollBarWidth : 0);
-        style.height = this.showHorizontalScrollBar ? `${height}px` : `${height - 1}px`;
-      }
-
-      return style;
-    },
-    leftFixedColumns() {
-      return convertColumnOrder(this.cloneColumns, 'left');
-    },
-    rightFixedColumns() {
-      return convertColumnOrder(this.cloneColumns, 'right');
-    },
-    isLeftFixed() {
-      return this.columns.some((col) => col.fixed && col.fixed === 'left');
-    },
-    isRightFixed() {
-      return this.columns.some((col) => col.fixed && col.fixed === 'right');
+    wrapClasses() {
+      return [
+        `${prefixCls}-wrapper`,
+        {
+          [`${prefixCls}-hide`]: !this.ready,
+          [`${prefixCls}-with-header`]: this.showSlotHeader,
+          [`${prefixCls}-with-footer`]: this.showSlotFooter,
+        },
+      ];
     },
   },
   watch: {
+    columns: {
+      deep: true,
+      handler() {
+        // todo 这里有性能问题，可能是左右固定计算属性影响的
+        const colsWithId = this.makeColumnsId(this.columns);
+        this.allColumns = getAllColumns(colsWithId);
+        this.cloneColumns = this.makeColumns(colsWithId);
+
+        this.columnRows = this.makeColumnRows(false, colsWithId);
+        this.leftFixedColumnRows = this.makeColumnRows('left', colsWithId);
+        this.rightFixedColumnRows = this.makeColumnRows('right', colsWithId);
+        this.rebuildData = this.makeDataWithSortAndFilter();
+        this.handleResize();
+      },
+    },
     data: {
+      deep: true,
       handler() {
         const oldDataLen = this.rebuildData.length;
         this.objData = this.makeObjData();
@@ -472,22 +491,6 @@ export default {
           this.cloneData = deepCopy(this.data);
         }, 0);
       },
-      deep: true,
-    },
-    columns: {
-      handler() {
-        // todo 这里有性能问题，可能是左右固定计算属性影响的
-        const colsWithId = this.makeColumnsId(this.columns);
-        this.allColumns = getAllColumns(colsWithId);
-        this.cloneColumns = this.makeColumns(colsWithId);
-
-        this.columnRows = this.makeColumnRows(false, colsWithId);
-        this.leftFixedColumnRows = this.makeColumnRows('left', colsWithId);
-        this.rightFixedColumnRows = this.makeColumnRows('right', colsWithId);
-        this.rebuildData = this.makeDataWithSortAndFilter();
-        this.handleResize();
-      },
-      deep: true,
     },
     height() {
       this.handleResize();
@@ -529,8 +532,304 @@ export default {
     this.observer.removeListener(this.$el, this.handleResize);
   },
   methods: {
-    rowClsName(index) {
-      return this.rowClassName(this.data[index], index);
+    clearCurrentRow() {
+      if (!this.highlightRow) {
+        return;
+      }
+
+      this.handleCurrentRow('clear');
+    },
+    clickCurrentRow(_index) {
+      this.highlightCurrentRow(_index);
+      this.$emit('on-row-click', JSON.parse(JSON.stringify(this.cloneData[_index])), _index);
+    },
+    dblclickCurrentRow(_index) {
+      this.highlightCurrentRow(_index);
+      this.$emit('on-row-dblclick', JSON.parse(JSON.stringify(this.cloneData[_index])), _index);
+    },
+    exportCsv(params) {
+      if (params.filename) {
+        if (params.filename.indexOf('.csv') === -1) {
+          params.filename += '.csv';
+        }
+      } else {
+        params.filename = 'table.csv';
+      }
+
+      let columns = [];
+      let datas = [];
+
+      if (params.columns && params.data) {
+        columns = params.columns;
+        datas = params.data;
+      } else {
+        columns = this.allColumns;
+
+        if (!('original' in params)) {
+          params.original = true;
+        }
+
+        datas = params.original ? this.data : this.rebuildData;
+      }
+
+      let noHeader = false;
+
+      if ('noHeader' in params) {
+        noHeader = params.noHeader;
+      }
+
+      const data = Csv(columns, datas, params, noHeader);
+
+      if (params.callback) {
+        params.callback(data);
+      } else {
+        ExportCsv.download(params.filename, data);
+      }
+    },
+    filterData(data, column) {
+      return data.filter((row) => {
+        // 如果定义了远程过滤方法则忽略此方法
+        if (typeof column.filterRemote === 'function') {
+          return true;
+        }
+
+        let status = !column._filterChecked.length;
+        for (let i = 0; i < column._filterChecked.length; i++) {
+          status = column.filterMethod(column._filterChecked[i], row);
+
+          if (status) {
+            break;
+          }
+        }
+
+        return status;
+      });
+    },
+    filterOtherData(data, index) {
+      const column = this.cloneColumns[index];
+
+      if (typeof column.filterRemote === 'function') {
+        column.filterRemote.call(this.$parent, column._filterChecked, column.key, column);
+      }
+
+      this.cloneColumns.forEach((col, colIndex) => {
+        if (colIndex !== index) {
+          data = this.filterData(data, col);
+        }
+      });
+
+      return data;
+    },
+    fixedBody() {
+      if (this.$refs.header) {
+        this.headerWidth = this.$refs.header.children[0].offsetWidth;
+        this.headerHeight = this.$refs.header.children[0].offsetHeight;
+        // this.showHorizontalScrollBar = this.headerWidth>this.$refs.header.offsetWidth;
+      }
+
+      if (!this.$refs.tbody || !this.data || this.data.length === 0) {
+        this.showVerticalScrollBar = false;
+      } else {
+        const bodyContentEl = this.$refs.tbody.$el;
+        const bodyEl = bodyContentEl.parentElement;
+        const bodyContentHeight = bodyContentEl.offsetHeight;
+        const bodyHeight = bodyEl.offsetHeight;
+
+        this.showHorizontalScrollBar =
+          bodyEl.offsetWidth < bodyContentEl.offsetWidth + (this.showVerticalScrollBar ? this.scrollBarWidth : 0);
+        this.showVerticalScrollBar = this.bodyHeight
+          ? bodyHeight - (this.showHorizontalScrollBar ? this.scrollBarWidth : 0) < bodyContentHeight
+          : false;
+
+        if (this.showVerticalScrollBar) {
+          bodyEl.classList.add(`${this.prefixCls}-overflowY`);
+        } else {
+          bodyEl.classList.remove(`${this.prefixCls}-overflowY`);
+        }
+
+        if (this.showHorizontalScrollBar) {
+          bodyEl.classList.add(`${this.prefixCls}-overflowX`);
+        } else {
+          bodyEl.classList.remove(`${this.prefixCls}-overflowX`);
+        }
+      }
+    },
+    fixedHeader() {
+      if (this.height) {
+        this.$nextTick(() => {
+          const titleHeight = parseInt(getStyle(this.$refs.title, 'height'), 10) || 0;
+          const headerHeight = parseInt(getStyle(this.$refs.header, 'height'), 10) || 0;
+          const footerHeight = parseInt(getStyle(this.$refs.footer, 'height'), 10) || 0;
+          this.bodyHeight = this.height - titleHeight - headerHeight - footerHeight;
+          this.$nextTick(() => this.fixedBody());
+        });
+      } else {
+        this.bodyHeight = 0;
+        this.$nextTick(() => this.fixedBody());
+      }
+    },
+    /*
+     * #2832
+     * 应该区分当前表头的 column 是左固定还是右固定
+     * 否则执行到 $parent 时，方法的 index 与 cloneColumns 的 index 是不对应的
+     * 左固定和右固定，要区分对待
+     * 所以，此方法用来获取正确的 index.
+     */
+    GetOriginalIndex(_index) {
+      return this.cloneColumns.findIndex((item) => item._index === _index);
+    },
+    getSelection() {
+      const selectionIndexes = [];
+      for (const i in this.objData) {
+        if (this.objData[i]._isChecked) {
+          selectionIndexes.push(parseInt(i, 10));
+        }
+      }
+
+      return JSON.parse(JSON.stringify(this.data.filter((data, index) => selectionIndexes.indexOf(index) > -1)));
+    },
+    handleBodyScroll(event) {
+      if (this.showHeader) {
+        this.$refs.header.scrollLeft = event.target.scrollLeft;
+      }
+
+      if (this.isLeftFixed) {
+        this.$refs.fixedBody.scrollTop = event.target.scrollTop;
+      }
+
+      if (this.isRightFixed) {
+        this.$refs.fixedRightBody.scrollTop = event.target.scrollTop;
+      }
+
+      this.hideColumnFilter();
+    },
+    // 通用处理 highlightCurrentRow 和 clearCurrentRow
+    handleCurrentRow(type, _index) {
+      let oldIndex = -1;
+      for (const i in this.objData) {
+        if (this.objData[i]._isHighlight) {
+          oldIndex = parseInt(i, 10);
+          this.objData[i]._isHighlight = false;
+        }
+      }
+
+      if (type === 'highlight') {
+        this.objData[_index]._isHighlight = true;
+      }
+
+      const oldData = oldIndex < 0 ? null : JSON.parse(JSON.stringify(this.cloneData[oldIndex]));
+      const newData = type === 'highlight' ? JSON.parse(JSON.stringify(this.cloneData[_index])) : null;
+      this.$emit('on-current-change', newData, oldData);
+    },
+    handleFilter(index) {
+      const column = this.cloneColumns[index];
+      let filterData = this.makeDataWithSort();
+
+      // filter others first, after filter this column
+      filterData = this.filterOtherData(filterData, index);
+      this.rebuildData = this.filterData(filterData, column);
+
+      this.cloneColumns[index]._isFiltered = true;
+      this.cloneColumns[index]._filterVisible = false;
+      this.$emit('on-filter-change', column);
+    },
+
+    handleFilterHide(index) {
+      // clear checked that not filter now
+      if (!this.cloneColumns[index]._isFiltered) {
+        this.cloneColumns[index]._filterChecked = [];
+      }
+    },
+    handleFilterReset(_index) {
+      const index = this.GetOriginalIndex(_index);
+      this.cloneColumns[index]._isFiltered = false;
+      this.cloneColumns[index]._filterVisible = false;
+      this.cloneColumns[index]._filterChecked = [];
+
+      let filterData = this.makeDataWithSort();
+      filterData = this.filterOtherData(filterData, index);
+      this.rebuildData = filterData;
+      this.$emit('on-filter-change', this.cloneColumns[index]);
+    },
+
+    handleFilterSelect(_index, value) {
+      const index = this.GetOriginalIndex(_index);
+      this.cloneColumns[index]._filterChecked = [value];
+      this.handleFilter(index);
+    },
+    handleFixedMousewheel(event) {
+      let {deltaY} = event;
+
+      if (!deltaY && event.detail) {
+        deltaY = event.detail * 40;
+      }
+
+      if (!deltaY && event.wheelDeltaY) {
+        deltaY = -event.wheelDeltaY;
+      }
+
+      if (!deltaY && event.wheelDelta) {
+        deltaY = -event.wheelDelta;
+      }
+
+      if (!deltaY) {
+        return;
+      }
+
+      const {body} = this.$refs;
+      const currentScrollTop = body.scrollTop;
+
+      if (deltaY < 0 && currentScrollTop !== 0) {
+        event.preventDefault();
+      }
+
+      if (deltaY > 0 && body.scrollHeight - body.clientHeight > currentScrollTop) {
+        event.preventDefault();
+      }
+
+      // body.scrollTop += deltaY;
+      let step = 0;
+      const timeId = setInterval(() => {
+        step += 5;
+
+        if (deltaY > 0) {
+          body.scrollTop += 2;
+        } else {
+          body.scrollTop -= 2;
+        }
+
+        if (step >= Math.abs(deltaY)) {
+          clearInterval(timeId);
+        }
+      }, 5);
+    },
+    handleMouseIn(_index) {
+      if (this.disabledHover) {
+        return;
+      }
+
+      if (this.objData[_index]._isHover) {
+        return;
+      }
+
+      this.objData[_index]._isHover = true;
+    },
+    handleMouseOut(_index) {
+      if (this.disabledHover) {
+        return;
+      }
+
+      this.objData[_index]._isHover = false;
+    },
+    handleMouseWheel(event) {
+      const {deltaX} = event;
+      const $body = this.$refs.body;
+
+      if (deltaX > 0) {
+        $body.scrollLeft += 10;
+      } else {
+        $body.scrollLeft -= 10;
+      }
     },
     handleResize() {
       // let tableWidth = parseInt(getStyle(this.$el, 'width')) - 1;
@@ -636,275 +935,6 @@ export default {
       this.columnsWidth = columnsWidth;
       this.fixedHeader();
     },
-    handleMouseIn(_index) {
-      if (this.disabledHover) {
-        return;
-      }
-
-      if (this.objData[_index]._isHover) {
-        return;
-      }
-
-      this.objData[_index]._isHover = true;
-    },
-    handleMouseOut(_index) {
-      if (this.disabledHover) {
-        return;
-      }
-
-      this.objData[_index]._isHover = false;
-    },
-    // 通用处理 highlightCurrentRow 和 clearCurrentRow
-    handleCurrentRow(type, _index) {
-      let oldIndex = -1;
-      for (const i in this.objData) {
-        if (this.objData[i]._isHighlight) {
-          oldIndex = parseInt(i, 10);
-          this.objData[i]._isHighlight = false;
-        }
-      }
-
-      if (type === 'highlight') {
-        this.objData[_index]._isHighlight = true;
-      }
-
-      const oldData = oldIndex < 0 ? null : JSON.parse(JSON.stringify(this.cloneData[oldIndex]));
-      const newData = type === 'highlight' ? JSON.parse(JSON.stringify(this.cloneData[_index])) : null;
-      this.$emit('on-current-change', newData, oldData);
-    },
-    highlightCurrentRow(_index) {
-      if (!this.highlightRow || this.objData[_index]._isHighlight) {
-        return;
-      }
-
-      this.handleCurrentRow('highlight', _index);
-    },
-    clearCurrentRow() {
-      if (!this.highlightRow) {
-        return;
-      }
-
-      this.handleCurrentRow('clear');
-    },
-    clickCurrentRow(_index) {
-      this.highlightCurrentRow(_index);
-      this.$emit('on-row-click', JSON.parse(JSON.stringify(this.cloneData[_index])), _index);
-    },
-    dblclickCurrentRow(_index) {
-      this.highlightCurrentRow(_index);
-      this.$emit('on-row-dblclick', JSON.parse(JSON.stringify(this.cloneData[_index])), _index);
-    },
-    getSelection() {
-      const selectionIndexes = [];
-      for (const i in this.objData) {
-        if (this.objData[i]._isChecked) {
-          selectionIndexes.push(parseInt(i, 10));
-        }
-      }
-
-      return JSON.parse(JSON.stringify(this.data.filter((data, index) => selectionIndexes.indexOf(index) > -1)));
-    },
-    toggleSelect(_index) {
-      let data = {};
-
-      for (const i in this.objData) {
-        if (parseInt(i, 10) === _index) {
-          data = this.objData[i];
-          break;
-        }
-      }
-
-      const status = !data._isChecked;
-
-      this.objData[_index]._isChecked = status;
-
-      const selection = this.getSelection();
-      this.$emit(status ? 'on-select' : 'on-select-cancel', selection, JSON.parse(JSON.stringify(this.data[_index])));
-      this.$emit('on-selection-change', selection);
-    },
-    toggleExpand(_index) {
-      let data = {};
-
-      for (const i in this.objData) {
-        if (parseInt(i, 10) === _index) {
-          data = this.objData[i];
-          break;
-        }
-      }
-
-      const status = !data._isExpanded;
-      this.objData[_index]._isExpanded = status;
-      this.$emit('on-expand', JSON.parse(JSON.stringify(this.cloneData[_index])), status);
-    },
-    selectAll(status) {
-      // this.rebuildData.forEach((data) => {
-      //     if(this.objData[data._index]._isDisabled){
-      //         this.objData[data._index]._isChecked = false;
-      //     }else{
-      //         this.objData[data._index]._isChecked = status;
-      //     }
-
-      // });
-      for (const data of this.rebuildData) {
-        if (this.objData[data._index]._isDisabled) {
-          continue;
-        } else {
-          this.objData[data._index]._isChecked = status;
-        }
-      }
-
-      const selection = this.getSelection();
-
-      if (status) {
-        this.$emit('on-select-all', selection);
-      }
-
-      this.$emit('on-selection-change', selection);
-    },
-
-    fixedHeader() {
-      if (this.height) {
-        this.$nextTick(() => {
-          const titleHeight = parseInt(getStyle(this.$refs.title, 'height'), 10) || 0;
-          const headerHeight = parseInt(getStyle(this.$refs.header, 'height'), 10) || 0;
-          const footerHeight = parseInt(getStyle(this.$refs.footer, 'height'), 10) || 0;
-          this.bodyHeight = this.height - titleHeight - headerHeight - footerHeight;
-          this.$nextTick(() => this.fixedBody());
-        });
-      } else {
-        this.bodyHeight = 0;
-        this.$nextTick(() => this.fixedBody());
-      }
-    },
-    fixedBody() {
-      if (this.$refs.header) {
-        this.headerWidth = this.$refs.header.children[0].offsetWidth;
-        this.headerHeight = this.$refs.header.children[0].offsetHeight;
-        // this.showHorizontalScrollBar = this.headerWidth>this.$refs.header.offsetWidth;
-      }
-
-      if (!this.$refs.tbody || !this.data || this.data.length === 0) {
-        this.showVerticalScrollBar = false;
-      } else {
-        const bodyContentEl = this.$refs.tbody.$el;
-        const bodyEl = bodyContentEl.parentElement;
-        const bodyContentHeight = bodyContentEl.offsetHeight;
-        const bodyHeight = bodyEl.offsetHeight;
-
-        this.showHorizontalScrollBar =
-          bodyEl.offsetWidth < bodyContentEl.offsetWidth + (this.showVerticalScrollBar ? this.scrollBarWidth : 0);
-        this.showVerticalScrollBar = this.bodyHeight
-          ? bodyHeight - (this.showHorizontalScrollBar ? this.scrollBarWidth : 0) < bodyContentHeight
-          : false;
-
-        if (this.showVerticalScrollBar) {
-          bodyEl.classList.add(`${this.prefixCls}-overflowY`);
-        } else {
-          bodyEl.classList.remove(`${this.prefixCls}-overflowY`);
-        }
-
-        if (this.showHorizontalScrollBar) {
-          bodyEl.classList.add(`${this.prefixCls}-overflowX`);
-        } else {
-          bodyEl.classList.remove(`${this.prefixCls}-overflowX`);
-        }
-      }
-    },
-
-    hideColumnFilter() {
-      this.cloneColumns.forEach((col) => {
-        col._filterVisible = false;
-      });
-    },
-    handleBodyScroll(event) {
-      if (this.showHeader) {
-        this.$refs.header.scrollLeft = event.target.scrollLeft;
-      }
-
-      if (this.isLeftFixed) {
-        this.$refs.fixedBody.scrollTop = event.target.scrollTop;
-      }
-
-      if (this.isRightFixed) {
-        this.$refs.fixedRightBody.scrollTop = event.target.scrollTop;
-      }
-
-      this.hideColumnFilter();
-    },
-    handleFixedMousewheel(event) {
-      let {deltaY} = event;
-
-      if (!deltaY && event.detail) {
-        deltaY = event.detail * 40;
-      }
-
-      if (!deltaY && event.wheelDeltaY) {
-        deltaY = -event.wheelDeltaY;
-      }
-
-      if (!deltaY && event.wheelDelta) {
-        deltaY = -event.wheelDelta;
-      }
-
-      if (!deltaY) {
-        return;
-      }
-
-      const {body} = this.$refs;
-      const currentScrollTop = body.scrollTop;
-
-      if (deltaY < 0 && currentScrollTop !== 0) {
-        event.preventDefault();
-      }
-
-      if (deltaY > 0 && body.scrollHeight - body.clientHeight > currentScrollTop) {
-        event.preventDefault();
-      }
-
-      // body.scrollTop += deltaY;
-      let step = 0;
-      const timeId = setInterval(() => {
-        step += 5;
-
-        if (deltaY > 0) {
-          body.scrollTop += 2;
-        } else {
-          body.scrollTop -= 2;
-        }
-
-        if (step >= Math.abs(deltaY)) {
-          clearInterval(timeId);
-        }
-      }, 5);
-    },
-    handleMouseWheel(event) {
-      const {deltaX} = event;
-      const $body = this.$refs.body;
-
-      if (deltaX > 0) {
-        $body.scrollLeft += 10;
-      } else {
-        $body.scrollLeft -= 10;
-      }
-    },
-    sortData(data, type, index) {
-      const {key} = this.cloneColumns[index];
-      data.sort((a, b) => {
-        if (this.cloneColumns[index].sortMethod) {
-          return this.cloneColumns[index].sortMethod(a[key], b[key], type);
-        }
-
-        if (type === 'asc') {
-          return a[key] > b[key] ? 1 : -1;
-        }
-
-        if (type === 'desc') {
-          return a[key] < b[key] ? 1 : -1;
-        }
-      });
-
-      return data;
-    },
     handleSort(_index, type) {
       const index = this.GetOriginalIndex(_index);
       this.cloneColumns.forEach((col) => {
@@ -930,89 +960,89 @@ export default {
         order: type,
       });
     },
-    handleFilterHide(index) {
-      // clear checked that not filter now
-      if (!this.cloneColumns[index]._isFiltered) {
-        this.cloneColumns[index]._filterChecked = [];
-      }
-    },
-    filterData(data, column) {
-      return data.filter((row) => {
-        // 如果定义了远程过滤方法则忽略此方法
-        if (typeof column.filterRemote === 'function') {
-          return true;
-        }
-
-        let status = !column._filterChecked.length;
-        for (let i = 0; i < column._filterChecked.length; i++) {
-          status = column.filterMethod(column._filterChecked[i], row);
-
-          if (status) {
-            break;
-          }
-        }
-
-        return status;
+    hideColumnFilter() {
+      this.cloneColumns.forEach((col) => {
+        col._filterVisible = false;
       });
     },
-    filterOtherData(data, index) {
-      const column = this.cloneColumns[index];
-
-      if (typeof column.filterRemote === 'function') {
-        column.filterRemote.call(this.$parent, column._filterChecked, column.key, column);
+    highlightCurrentRow(_index) {
+      if (!this.highlightRow || this.objData[_index]._isHighlight) {
+        return;
       }
 
-      this.cloneColumns.forEach((col, colIndex) => {
-        if (colIndex !== index) {
-          data = this.filterData(data, col);
+      this.handleCurrentRow('highlight', _index);
+    },
+    // create a multiple table-head
+    makeColumnRows(fixedType, cols) {
+      return convertToRows(cols, fixedType);
+    },
+    makeColumns(cols) {
+      // 在 data 时，this.allColumns 暂时为 undefined
+      const columns = deepCopy(getAllColumns(cols));
+      const left = [];
+      const right = [];
+      const center = [];
+
+      columns.forEach((column, index) => {
+        column._index = index;
+        column._columnKey = columnKey++;
+        column._width = column.width ? column.width : ''; // update in handleResize()
+        column._sortType = 'normal';
+        column._filterVisible = false;
+        column._isFiltered = false;
+        column._filterChecked = [];
+
+        if ('filterMultiple' in column) {
+          column._filterMultiple = column.filterMultiple;
+        } else {
+          column._filterMultiple = true;
+        }
+
+        if ('filteredValue' in column) {
+          column._filterChecked = column.filteredValue;
+          column._isFiltered = true;
+        }
+
+        if ('sortType' in column) {
+          column._sortType = column.sortType;
+        }
+
+        if (column.fixed && column.fixed === 'left') {
+          left.push(column);
+        } else if (column.fixed && column.fixed === 'right') {
+          right.push(column);
+        } else {
+          center.push(column);
         }
       });
 
-      return data;
+      return left.concat(center).concat(right);
     },
-    handleFilter(index) {
-      const column = this.cloneColumns[index];
-      let filterData = this.makeDataWithSort();
+    // 修改列，设置一个隐藏的 id，便于后面的多级表头寻找对应的列，否则找不到
+    makeColumnsId(columns) {
+      return columns.map((item) => {
+        if ('children' in item) {
+          item.children = this.makeColumnsId(item.children);
+        }
 
-      // filter others first, after filter this column
-      filterData = this.filterOtherData(filterData, index);
-      this.rebuildData = this.filterData(filterData, column);
+        item.__id = getRandomStr(6);
 
-      this.cloneColumns[index]._isFiltered = true;
-      this.cloneColumns[index]._filterVisible = false;
-      this.$emit('on-filter-change', column);
-    },
-    /*
-     * #2832
-     * 应该区分当前表头的 column 是左固定还是右固定
-     * 否则执行到 $parent 时，方法的 index 与 cloneColumns 的 index 是不对应的
-     * 左固定和右固定，要区分对待
-     * 所以，此方法用来获取正确的 index.
-     */
-    GetOriginalIndex(_index) {
-      return this.cloneColumns.findIndex((item) => item._index === _index);
-    },
-    handleFilterSelect(_index, value) {
-      const index = this.GetOriginalIndex(_index);
-      this.cloneColumns[index]._filterChecked = [value];
-      this.handleFilter(index);
-    },
-    handleFilterReset(_index) {
-      const index = this.GetOriginalIndex(_index);
-      this.cloneColumns[index]._isFiltered = false;
-      this.cloneColumns[index]._filterVisible = false;
-      this.cloneColumns[index]._filterChecked = [];
-
-      let filterData = this.makeDataWithSort();
-      filterData = this.filterOtherData(filterData, index);
-      this.rebuildData = filterData;
-      this.$emit('on-filter-change', this.cloneColumns[index]);
+        return item;
+      });
     },
     makeData() {
       const data = deepCopy(this.data);
       data.forEach((row, index) => {
         row._index = index;
         row._rowKey = rowKey++;
+      });
+
+      return data;
+    },
+    makeDataWithFilter() {
+      let data = this.makeData();
+      this.cloneColumns.forEach((col) => {
+        data = this.filterData(data, col);
       });
 
       return data;
@@ -1035,14 +1065,6 @@ export default {
       if (sortType !== 'normal' && !isCustom) {
         data = this.sortData(data, sortType, sortIndex);
       }
-
-      return data;
-    },
-    makeDataWithFilter() {
-      let data = this.makeData();
-      this.cloneColumns.forEach((col) => {
-        data = this.filterData(data, col);
-      });
 
       return data;
     },
@@ -1089,102 +1111,83 @@ export default {
 
       return data;
     },
-    // 修改列，设置一个隐藏的 id，便于后面的多级表头寻找对应的列，否则找不到
-    makeColumnsId(columns) {
-      return columns.map((item) => {
-        if ('children' in item) {
-          item.children = this.makeColumnsId(item.children);
-        }
-
-        item.__id = getRandomStr(6);
-
-        return item;
-      });
+    rowClsName(index) {
+      return this.rowClassName(this.data[index], index);
     },
-    makeColumns(cols) {
-      // 在 data 时，this.allColumns 暂时为 undefined
-      const columns = deepCopy(getAllColumns(cols));
-      const left = [];
-      const right = [];
-      const center = [];
+    selectAll(status) {
+      // this.rebuildData.forEach((data) => {
+      //     if(this.objData[data._index]._isDisabled){
+      //         this.objData[data._index]._isChecked = false;
+      //     }else{
+      //         this.objData[data._index]._isChecked = status;
+      //     }
 
-      columns.forEach((column, index) => {
-        column._index = index;
-        column._columnKey = columnKey++;
-        column._width = column.width ? column.width : ''; // update in handleResize()
-        column._sortType = 'normal';
-        column._filterVisible = false;
-        column._isFiltered = false;
-        column._filterChecked = [];
-
-        if ('filterMultiple' in column) {
-          column._filterMultiple = column.filterMultiple;
+      // });
+      for (const data of this.rebuildData) {
+        if (this.objData[data._index]._isDisabled) {
+          continue;
         } else {
-          column._filterMultiple = true;
+          this.objData[data._index]._isChecked = status;
+        }
+      }
+
+      const selection = this.getSelection();
+
+      if (status) {
+        this.$emit('on-select-all', selection);
+      }
+
+      this.$emit('on-selection-change', selection);
+    },
+    sortData(data, type, index) {
+      const {key} = this.cloneColumns[index];
+      data.sort((a, b) => {
+        if (this.cloneColumns[index].sortMethod) {
+          return this.cloneColumns[index].sortMethod(a[key], b[key], type);
         }
 
-        if ('filteredValue' in column) {
-          column._filterChecked = column.filteredValue;
-          column._isFiltered = true;
+        if (type === 'asc') {
+          return a[key] > b[key] ? 1 : -1;
         }
 
-        if ('sortType' in column) {
-          column._sortType = column.sortType;
-        }
-
-        if (column.fixed && column.fixed === 'left') {
-          left.push(column);
-        } else if (column.fixed && column.fixed === 'right') {
-          right.push(column);
-        } else {
-          center.push(column);
+        if (type === 'desc') {
+          return a[key] < b[key] ? 1 : -1;
         }
       });
 
-      return left.concat(center).concat(right);
+      return data;
     },
-    // create a multiple table-head
-    makeColumnRows(fixedType, cols) {
-      return convertToRows(cols, fixedType);
+    toggleExpand(_index) {
+      let data = {};
+
+      for (const i in this.objData) {
+        if (parseInt(i, 10) === _index) {
+          data = this.objData[i];
+          break;
+        }
+      }
+
+      const status = !data._isExpanded;
+      this.objData[_index]._isExpanded = status;
+      this.$emit('on-expand', JSON.parse(JSON.stringify(this.cloneData[_index])), status);
     },
-    exportCsv(params) {
-      if (params.filename) {
-        if (params.filename.indexOf('.csv') === -1) {
-          params.filename += '.csv';
+    toggleSelect(_index) {
+      let data = {};
+
+      for (const i in this.objData) {
+        if (parseInt(i, 10) === _index) {
+          data = this.objData[i];
+          break;
         }
-      } else {
-        params.filename = 'table.csv';
       }
 
-      let columns = [];
-      let datas = [];
+      const status = !data._isChecked;
 
-      if (params.columns && params.data) {
-        columns = params.columns;
-        datas = params.data;
-      } else {
-        columns = this.allColumns;
+      this.objData[_index]._isChecked = status;
 
-        if (!('original' in params)) {
-          params.original = true;
-        }
-
-        datas = params.original ? this.data : this.rebuildData;
-      }
-
-      let noHeader = false;
-
-      if ('noHeader' in params) {
-        noHeader = params.noHeader;
-      }
-
-      const data = Csv(columns, datas, params, noHeader);
-
-      if (params.callback) {
-        params.callback(data);
-      } else {
-        ExportCsv.download(params.filename, data);
-      }
+      const selection = this.getSelection();
+      this.$emit(status ? 'on-select' : 'on-select-cancel', selection, JSON.parse(JSON.stringify(this.data[_index])));
+      this.$emit('on-selection-change', selection);
     },
   },
 };

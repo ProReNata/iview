@@ -19,8 +19,8 @@ export default {
   mixins: [mixin],
   props: {
     title: {
-      type: String,
       default: '',
+      type: String,
     },
   },
   data() {

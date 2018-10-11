@@ -1,26 +1,26 @@
 export default {
   props: {
     disabledHours: {
-      type: Array,
       default() {
         return [];
       },
+      type: Array,
     },
     disabledMinutes: {
-      type: Array,
       default() {
         return [];
       },
+      type: Array,
     },
     disabledSeconds: {
-      type: Array,
       default() {
         return [];
       },
+      type: Array,
     },
     hideDisabledOptions: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
   },
 };

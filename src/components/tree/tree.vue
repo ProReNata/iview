@@ -30,39 +30,39 @@ export default {
   components: {TreeNode},
   mixins: [Emitter, Locale],
   props: {
+    childrenKey: {
+      default: 'children',
+      type: String,
+    },
     data: {
-      type: Array,
       default() {
         return [];
       },
-    },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-    showCheckbox: {
-      type: Boolean,
-      default: false,
+      type: Array,
     },
     emptyText: {
       type: String,
     },
-    childrenKey: {
-      type: String,
-      default: 'children',
-    },
     loadData: {
       type: Function,
+    },
+    multiple: {
+      default: false,
+      type: Boolean,
     },
     render: {
       type: Function,
     },
+    showCheckbox: {
+      default: false,
+      type: Boolean,
+    },
   },
   data() {
     return {
+      flatState: [],
       prefixCls,
       stateTree: this.data,
-      flatState: [],
     };
   },
   computed: {
@@ -120,6 +120,72 @@ export default {
 
       return flatTree;
     },
+    getCheckedNodes() {
+      /* public API */
+      return this.flatState.filter((obj) => obj.node.checked).map((obj) => obj.node);
+    },
+    getSelectedNodes() {
+      /* public API */
+      return this.flatState.filter((obj) => obj.node.selected).map((obj) => obj.node);
+    },
+
+    handleCheck({checked, nodeKey}) {
+      const {node} = this.flatState[nodeKey];
+      this.$set(node, 'checked', checked);
+      this.$set(node, 'indeterminate', false);
+
+      this.updateTreeUp(nodeKey); // propagate up
+      this.updateTreeDown(node, {checked, indeterminate: false}); // reset `indeterminate` when going down
+
+      this.$emit('on-check-change', this.getCheckedNodes());
+    },
+    handleSelect(nodeKey) {
+      const {node} = this.flatState[nodeKey];
+
+      if (!this.multiple) {
+        // reset previously selected node
+        const currentSelectedKey = this.flatState.findIndex((obj) => obj.node.selected);
+
+        if (currentSelectedKey >= 0 && currentSelectedKey !== nodeKey) {
+          this.$set(this.flatState[currentSelectedKey].node, 'selected', false);
+        }
+      }
+
+      this.$set(node, 'selected', !node.selected);
+
+      this.$emit('on-select-change', this.getSelectedNodes());
+    },
+    rebuildTree() {
+      // only called when `data` prop changes
+      const checkedNodes = this.getCheckedNodes();
+      checkedNodes.forEach((node) => {
+        this.updateTreeDown(node, {checked: true});
+        // propagate upwards
+        const parentKey = this.flatState[node.nodeKey].parent;
+
+        if (!parentKey && parentKey !== 0) {
+          return;
+        }
+
+        const parent = this.flatState[parentKey].node;
+        const childHasCheckSetter = typeof node.checked !== 'undefined' && node.checked;
+
+        if (childHasCheckSetter && parent.checked !== node.checked) {
+          this.updateTreeUp(node.nodeKey); // update tree upwards
+        }
+      });
+    },
+    updateTreeDown(node, changes = {}) {
+      for (const key in changes) {
+        this.$set(node, key, changes[key]);
+      }
+
+      if (node[this.childrenKey]) {
+        node[this.childrenKey].forEach((child) => {
+          this.updateTreeDown(child, changes);
+        });
+      }
+    },
     updateTreeUp(nodeKey) {
       const parentKey = this.flatState[nodeKey].parent;
 
@@ -143,72 +209,6 @@ export default {
       }
 
       this.updateTreeUp(parentKey);
-    },
-    rebuildTree() {
-      // only called when `data` prop changes
-      const checkedNodes = this.getCheckedNodes();
-      checkedNodes.forEach((node) => {
-        this.updateTreeDown(node, {checked: true});
-        // propagate upwards
-        const parentKey = this.flatState[node.nodeKey].parent;
-
-        if (!parentKey && parentKey !== 0) {
-          return;
-        }
-
-        const parent = this.flatState[parentKey].node;
-        const childHasCheckSetter = typeof node.checked !== 'undefined' && node.checked;
-
-        if (childHasCheckSetter && parent.checked !== node.checked) {
-          this.updateTreeUp(node.nodeKey); // update tree upwards
-        }
-      });
-    },
-
-    getSelectedNodes() {
-      /* public API */
-      return this.flatState.filter((obj) => obj.node.selected).map((obj) => obj.node);
-    },
-    getCheckedNodes() {
-      /* public API */
-      return this.flatState.filter((obj) => obj.node.checked).map((obj) => obj.node);
-    },
-    updateTreeDown(node, changes = {}) {
-      for (const key in changes) {
-        this.$set(node, key, changes[key]);
-      }
-
-      if (node[this.childrenKey]) {
-        node[this.childrenKey].forEach((child) => {
-          this.updateTreeDown(child, changes);
-        });
-      }
-    },
-    handleSelect(nodeKey) {
-      const {node} = this.flatState[nodeKey];
-
-      if (!this.multiple) {
-        // reset previously selected node
-        const currentSelectedKey = this.flatState.findIndex((obj) => obj.node.selected);
-
-        if (currentSelectedKey >= 0 && currentSelectedKey !== nodeKey) {
-          this.$set(this.flatState[currentSelectedKey].node, 'selected', false);
-        }
-      }
-
-      this.$set(node, 'selected', !node.selected);
-
-      this.$emit('on-select-change', this.getSelectedNodes());
-    },
-    handleCheck({checked, nodeKey}) {
-      const {node} = this.flatState[nodeKey];
-      this.$set(node, 'checked', checked);
-      this.$set(node, 'indeterminate', false);
-
-      this.updateTreeUp(nodeKey); // propagate up
-      this.updateTreeDown(node, {checked, indeterminate: false}); // reset `indeterminate` when going down
-
-      this.$emit('on-check-change', this.getCheckedNodes());
     },
   },
 };

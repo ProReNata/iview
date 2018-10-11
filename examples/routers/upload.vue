@@ -70,8 +70,8 @@ export default {
         },
       ],
       imgName: '',
-      visible: false,
       uploadList: [],
+      visible: false,
     };
   },
   computed: {
@@ -85,32 +85,6 @@ export default {
     //            console.log(this.$refs.upload.fileList)
   },
   methods: {
-    handleView(name) {
-      this.imgName = name;
-      this.visible = true;
-    },
-    handleRemove(file) {
-      // 从 upload 实例删除数据
-      const {fileList} = this.$refs.upload;
-      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-    },
-    handleSuccess(res, file) {
-      // 因为上传过程为实例，这里模拟添加 url
-      file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-      file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-    },
-    handleFormatError(file) {
-      this.$Notice.warning({
-        title: '文件格式不正确',
-        desc: `文件 ${file.name} 格式不正确，请上传 jpg 或 png 格式的图片。`,
-      });
-    },
-    handleMaxSize(file) {
-      this.$Notice.warning({
-        title: '超出文件大小限制',
-        desc: `文件 ${file.name} 太大，不能超过 2M。`,
-      });
-    },
     handleBeforeUpload() {
       const check = this.uploadList.length < 5;
 
@@ -122,8 +96,34 @@ export default {
 
       return check;
     },
+    handleFormatError(file) {
+      this.$Notice.warning({
+        desc: `文件 ${file.name} 格式不正确，请上传 jpg 或 png 格式的图片。`,
+        title: '文件格式不正确',
+      });
+    },
+    handleMaxSize(file) {
+      this.$Notice.warning({
+        desc: `文件 ${file.name} 太大，不能超过 2M。`,
+        title: '超出文件大小限制',
+      });
+    },
     handleProgress(s) {
       console.log(s);
+    },
+    handleRemove(file) {
+      // 从 upload 实例删除数据
+      const {fileList} = this.$refs.upload;
+      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+    },
+    handleSuccess(res, file) {
+      // 因为上传过程为实例，这里模拟添加 url
+      file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+      file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+    },
+    handleView(name) {
+      this.imgName = name;
+      this.visible = true;
     },
   },
 };
@@ -166,31 +166,3 @@ export default {
   margin: 0 2px;
 }
 </style>
-
-
-<!--<template>-->
-    <!--<div>-->
-        <!--<Upload action="//jsonplaceholder.typicode.com/posts/" :before-upload="handleBeforeUpload" ref="file">-->
-            <!--<i-button type="ghost" icon="ios-cloud-upload-outline">选择文件</i-button>-->
-        <!--</Upload>-->
-        <!--<i-button @click.native="handleUpload">上传</i-button>-->
-    <!--</div>-->
-<!--</template>-->
-<!--<script>-->
-    <!--export default {-->
-        <!--data () {-->
-            <!--return {-->
-                <!--file: null-->
-            <!--}-->
-        <!--},-->
-        <!--methods: {-->
-            <!--handleBeforeUpload (file) {-->
-                <!--this.file = file;-->
-                <!--return false;-->
-            <!--},-->
-            <!--handleUpload () {-->
-                <!--this.$refs.file.post(this.file);-->
-            <!--}-->
-        <!--}-->
-    <!--}-->
-<!--</script>-->

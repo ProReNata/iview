@@ -68,33 +68,33 @@ export default {
   name: 'Tag',
   components: {Icon},
   props: {
-    closable: {
-      type: Boolean,
-      default: false,
-    },
     checkable: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
     checked: {
-      type: Boolean,
       default: true,
+      type: Boolean,
+    },
+    closable: {
+      default: false,
+      type: Boolean,
     },
     color: {
-      type: String,
       default: 'default',
+      type: String,
+    },
+    fade: {
+      default: true,
+      type: Boolean,
+    },
+    name: {
+      type: [String, Number],
     },
     type: {
       validator(value) {
         return oneOf(value, ['border', 'dot']);
       },
-    },
-    name: {
-      type: [String, Number],
-    },
-    fade: {
-      type: Boolean,
-      default: true,
     },
   },
   data() {
@@ -103,6 +103,12 @@ export default {
     };
   },
   computed: {
+    bgColorStyle() {
+      return oneOf(this.color, initColorList) ? {} : {background: this.dotColor};
+    },
+    borderColor() {
+      return this.color !== undefined ? (this.color === 'default' ? '' : this.color) : '';
+    },
     classes() {
       return [
         `${prefixCls}`,
@@ -114,30 +120,20 @@ export default {
         },
       ];
     },
-    wraperStyles() {
-      return oneOf(this.color, initColorList)
-        ? {}
-        : {
-            background: this.isChecked ? this.defaultTypeColor : 'transparent',
-            borderWidth: '1px',
-            borderStyle: 'solid',
-            borderColor: this.type !== 'dot' && this.type !== 'border' && this.isChecked ? this.borderColor : this.lineColor,
-            color: this.lineColor,
-          };
-    },
-    textClasses() {
-      return [
-        `${prefixCls}-text`,
-        this.type === 'border' ? (oneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '') : '',
-        this.type !== 'dot' && this.type !== 'border' && this.color !== 'default'
-          ? this.isChecked
-            ? `${prefixCls}-color-white`
-            : ''
-          : '',
-      ];
+    defaultTypeColor() {
+      return this.type !== 'dot' && this.type !== 'border'
+        ? this.color !== undefined
+          ? oneOf(this.color, initColorList)
+            ? ''
+            : this.color
+          : ''
+        : '';
     },
     dotClasses() {
       return `${prefixCls}-dot-inner`;
+    },
+    dotColor() {
+      return this.color !== undefined ? (oneOf(this.color, initColorList) ? '' : this.color) : '';
     },
     iconClass() {
       if (this.type === 'dot') {
@@ -150,9 +146,6 @@ export default {
 
       return this.color !== undefined ? (this.color === 'default' ? '' : 'rgb(255, 255, 255)') : '';
     },
-    showDot() {
-      return !!this.type && this.type === 'dot';
-    },
     lineColor() {
       if (this.type === 'dot') {
         return '';
@@ -164,11 +157,19 @@ export default {
 
       return this.color !== undefined ? (this.color === 'default' ? '' : 'rgb(255, 255, 255)') : '';
     },
-    borderColor() {
-      return this.color !== undefined ? (this.color === 'default' ? '' : this.color) : '';
+    showDot() {
+      return !!this.type && this.type === 'dot';
     },
-    dotColor() {
-      return this.color !== undefined ? (oneOf(this.color, initColorList) ? '' : this.color) : '';
+    textClasses() {
+      return [
+        `${prefixCls}-text`,
+        this.type === 'border' ? (oneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '') : '',
+        this.type !== 'dot' && this.type !== 'border' && this.color !== 'default'
+          ? this.isChecked
+            ? `${prefixCls}-color-white`
+            : ''
+          : '',
+      ];
     },
     textColorStyle() {
       return oneOf(this.color, initColorList)
@@ -179,27 +180,19 @@ export default {
             : {}
           : {color: this.lineColor};
     },
-    bgColorStyle() {
-      return oneOf(this.color, initColorList) ? {} : {background: this.dotColor};
-    },
-    defaultTypeColor() {
-      return this.type !== 'dot' && this.type !== 'border'
-        ? this.color !== undefined
-          ? oneOf(this.color, initColorList)
-            ? ''
-            : this.color
-          : ''
-        : '';
+    wraperStyles() {
+      return oneOf(this.color, initColorList)
+        ? {}
+        : {
+            background: this.isChecked ? this.defaultTypeColor : 'transparent',
+            borderColor: this.type !== 'dot' && this.type !== 'border' && this.isChecked ? this.borderColor : this.lineColor,
+            borderStyle: 'solid',
+            borderWidth: '1px',
+            color: this.lineColor,
+          };
     },
   },
   methods: {
-    close(event) {
-      if (this.name === undefined) {
-        this.$emit('on-close', event);
-      } else {
-        this.$emit('on-close', event, this.name);
-      }
-    },
     check() {
       if (!this.checkable) {
         return;
@@ -212,6 +205,13 @@ export default {
         this.$emit('on-change', checked);
       } else {
         this.$emit('on-change', checked, this.name);
+      }
+    },
+    close(event) {
+      if (this.name === undefined) {
+        this.$emit('on-close', event);
+      } else {
+        this.$emit('on-close', event, this.name);
       }
     },
   },

@@ -1,49 +1,51 @@
 <template>
-  <Form 
-    :model="formItem" 
+  <Form
+    :model="formItem"
     :label-width="80"
   >
     <FormItem label="Input">
-      <Input 
-        v-model="formItem.input" 
+      <Input
+        v-model="formItem.input"
         placeholder="Enter something..."
       ></Input>
     </FormItem>
     <FormItem label="Select">
-      <Select v-model="formItem.select">
-        <Option value="beijing">
-          New York
-        </Option>
-        <Option value="shanghai">
-          London
-        </Option>
-        <Option value="shenzhen">
-          Sydney
-        </Option>
-      </Select>
+      <label>
+        <Select v-model="formItem.select">
+          <Option value="beijing">
+            New York
+          </Option>
+          <Option value="shanghai">
+            London
+          </Option>
+          <Option value="shenzhen">
+            Sydney
+          </Option>
+        </Select>
+      </label>
     </FormItem>
     <FormItem label="DatePicker">
       <Row>
         <Col span="11">
-        <DatePicker 
-          v-model="formItem.date" 
-          type="date" 
+        <DatePicker
+          v-model="formItem.date"
+          type="date"
           placeholder="Select date"
         >
         </DatePicker>
-                </Col>
-        <Col 
-          span="2" 
+        </Col>
+        <Col
+          span="2"
           style="text-align: center"
         >-</Col>
         <Col span="11">
-        <TimePicker 
-          v-model="formItem.time" 
-          type="time" 
+        <TimePicker
+          v-model="formItem.time"
+          type="time"
           placeholder="Select time"
         >
         </TimePicker>
-                </Col>
+        </Col>
       </Row>
     </FormItem>
     <FormItem label="Radio">
@@ -69,8 +71,8 @@
       </CheckboxGroup>
     </FormItem>
     <FormItem label="Switch">
-      <i-switch 
-        v-model="formItem.switch" 
+      <i-switch
+        v-model="formItem.switch"
         size="large"
       >
         <span slot="open">
@@ -82,17 +84,17 @@
       </i-switch>
     </FormItem>
     <FormItem label="Slider">
-      <Slider 
-        v-model="formItem.slider" 
+      <Slider
+        v-model="formItem.slider"
         range
       >
       </Slider>
     </FormItem>
     <FormItem label="Text">
-      <Input 
-        v-model="formItem.textarea" 
-        type="textarea" 
-        :autosize="{minRows: 2,maxRows: 5}" 
+      <Input
+        v-model="formItem.textarea"
+        type="textarea"
+        :autosize="{minRows: 2,maxRows: 5}"
         placeholder="Enter something..."
       ></Input>
     </FormItem>
@@ -100,8 +102,8 @@
       <Button type="primary">
         Submit
       </Button>
-      <Button 
-        type="ghost" 
+      <Button
+        type="ghost"
         style="margin-left: 8px"
       >
         Cancel
@@ -114,46 +116,17 @@ export default {
   data() {
     return {
       formItem: {
-        input: '',
-        select: '',
-        radio: 'male',
         checkbox: [],
-        switch: true,
         date: '',
-        time: '',
+        input: '',
+        radio: 'male',
+        select: '',
         slider: [20, 50],
+        switch: true,
         textarea: '',
+        time: '',
       },
     };
   },
 };
 </script>
-
-
-
-<!--<template>-->
-    <!--<div>-->
-        <!--<Button type="primary" @click="modal1 = true">Display dialog box</Button>-->
-        <!--<Modal v-model="modal1">-->
-            <!--<Slider v-model="value2" range show-tip="always"></Slider>-->
-        <!--</Modal>-->
-    <!--</div>-->
-<!--</template>-->
-<!--<script>-->
-    <!--export default {-->
-        <!--data () {-->
-            <!--return {-->
-                <!--modal1: false,-->
-                <!--value2: [20, 50],-->
-            <!--}-->
-        <!--},-->
-        <!--methods: {-->
-            <!--ok () {-->
-                <!--this.$Message.info('Clicked ok');-->
-            <!--},-->
-            <!--cancel () {-->
-                <!--this.$Message.info('Clicked cancel');-->
-            <!--}-->
-        <!--}-->
-    <!--}-->
-<!--</script>-->

@@ -45,41 +45,41 @@ export default {
   name: 'Rate',
   mixins: [Locale, Emitter],
   props: {
-    count: {
-      type: Number,
-      default: 5,
-    },
-    value: {
-      type: Number,
-      default: 0,
-    },
     allowHalf: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    clearable: {
+      default: false,
+      type: Boolean,
+    },
+    count: {
+      default: 5,
+      type: Number,
     },
     disabled: {
-      type: Boolean,
       default: false,
-    },
-    showText: {
       type: Boolean,
-      default: false,
     },
     name: {
       type: String,
     },
-    clearable: {
-      type: Boolean,
+    showText: {
       default: false,
+      type: Boolean,
+    },
+    value: {
+      default: 0,
+      type: Number,
     },
   },
   data() {
     return {
-      prefixCls,
-      hoverIndex: -1,
-      isHover: false,
-      isHalf: this.allowHalf && this.value.toString().indexOf('.') >= 0,
       currentValue: this.value,
+      hoverIndex: -1,
+      isHalf: this.allowHalf && this.value.toString().indexOf('.') >= 0,
+      isHover: false,
+      prefixCls,
     };
   },
   computed: {
@@ -93,14 +93,61 @@ export default {
     },
   },
   watch: {
-    value(val) {
-      this.currentValue = val;
-    },
     currentValue(val) {
       this.setHalf(val);
     },
+    value(val) {
+      this.currentValue = val;
+    },
   },
   methods: {
+    handleClick(value) {
+      if (this.disabled) {
+        return;
+      }
+
+      // value++;
+      if (this.isHalf) {
+        value -= 0.5;
+      }
+
+      if (this.clearable && Math.abs(value - this.currentValue) < 0.01) {
+        value = 0;
+      }
+
+      this.currentValue = value;
+      this.$emit('input', value);
+      this.$emit('on-change', value);
+      this.dispatch('FormItem', 'on-form-change', value);
+    },
+    handleMouseleave() {
+      if (this.disabled) {
+        return;
+      }
+
+      this.isHover = false;
+      this.setHalf(this.currentValue);
+      this.hoverIndex = -1;
+    },
+    handleMousemove(value, event) {
+      if (this.disabled) {
+        return;
+      }
+
+      this.isHover = true;
+
+      if (this.allowHalf) {
+        const type = event.target.getAttribute('type') || false;
+        this.isHalf = type === 'half';
+      } else {
+        this.isHalf = false;
+      }
+
+      this.hoverIndex = value;
+    },
+    setHalf(val) {
+      this.isHalf = this.allowHalf && val.toString().indexOf('.') >= 0;
+    },
     starCls(value) {
       const {hoverIndex} = this;
       const currentIndex = this.isHover ? hoverIndex : this.currentValue;
@@ -126,53 +173,6 @@ export default {
           [`${prefixCls}-star-zero`]: !full,
         },
       ];
-    },
-    handleMousemove(value, event) {
-      if (this.disabled) {
-        return;
-      }
-
-      this.isHover = true;
-
-      if (this.allowHalf) {
-        const type = event.target.getAttribute('type') || false;
-        this.isHalf = type === 'half';
-      } else {
-        this.isHalf = false;
-      }
-
-      this.hoverIndex = value;
-    },
-    handleMouseleave() {
-      if (this.disabled) {
-        return;
-      }
-
-      this.isHover = false;
-      this.setHalf(this.currentValue);
-      this.hoverIndex = -1;
-    },
-    setHalf(val) {
-      this.isHalf = this.allowHalf && val.toString().indexOf('.') >= 0;
-    },
-    handleClick(value) {
-      if (this.disabled) {
-        return;
-      }
-
-      // value++;
-      if (this.isHalf) {
-        value -= 0.5;
-      }
-
-      if (this.clearable && Math.abs(value - this.currentValue) < 0.01) {
-        value = 0;
-      }
-
-      this.currentValue = value;
-      this.$emit('input', value);
-      this.$emit('on-change', value);
-      this.dispatch('FormItem', 'on-form-change', value);
     },
   },
 };

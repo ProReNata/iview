@@ -24,18 +24,18 @@ export default {
   name: 'Spin',
   mixins: [ScrollbarMixins],
   props: {
+    fix: {
+      default: false,
+      type: Boolean,
+    },
+    fullscreen: {
+      default: false,
+      type: Boolean,
+    },
     size: {
       validator(value) {
         return oneOf(value, ['small', 'large']);
       },
-    },
-    fix: {
-      type: Boolean,
-      default: false,
-    },
-    fullscreen: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {
@@ -57,14 +57,8 @@ export default {
         },
       ];
     },
-    mainClasses() {
-      return `${prefixCls}-main`;
-    },
     dotClasses() {
       return `${prefixCls}-dot`;
-    },
-    textClasses() {
-      return `${prefixCls}-text`;
     },
     fullscreenVisible() {
       if (this.fullscreen) {
@@ -72,6 +66,12 @@ export default {
       }
 
       return true;
+    },
+    mainClasses() {
+      return `${prefixCls}-main`;
+    },
+    textClasses() {
+      return `${prefixCls}-text`;
     },
   },
   watch: {

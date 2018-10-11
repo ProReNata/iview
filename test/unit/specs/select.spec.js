@@ -10,17 +10,17 @@ describe('Select.vue', () => {
     it('should create a Select component with passed placeholder', (done) => {
       const placeholder = 'Hi! Select something!';
       vm = createVue({
+        data() {
+          return {
+            options: [{label: 'Foo', value: 1}, {label: 'Bar', value: 2}],
+            value: '',
+          };
+        },
         template: `
           <Select placeholder="${placeholder}">
             <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         `,
-        data() {
-          return {
-            value: '',
-            options: [{value: 1, label: 'Foo'}, {value: 2, label: 'Bar'}],
-          };
-        },
       });
       vm.$nextTick(() => {
         const placeholderSpan = vm.$el.querySelector('.ivu-select-placeholder');
@@ -32,17 +32,17 @@ describe('Select.vue', () => {
 
     it('should create a Select component and take a pre-selected value', (done) => {
       vm = createVue({
+        data() {
+          return {
+            options: [{label: 'Foo', value: 1}, {label: 'Bar', value: 2}],
+            value: 2,
+          };
+        },
         template: `
               <Select :value="value">
                 <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
            `,
-        data() {
-          return {
-            value: 2,
-            options: [{value: 1, label: 'Foo'}, {value: 2, label: 'Bar'}],
-          };
-        },
       });
       waitForIt(
         () => {
@@ -64,17 +64,17 @@ describe('Select.vue', () => {
 
     it('should accept normal characters', (done) => {
       vm = createVue({
+        data() {
+          return {
+            options: [{label: '> 100$', value: 1}, {label: '< 100$', value: 2}],
+            value: '',
+          };
+        },
         template: `
           <Select :value="2">
             <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         `,
-        data() {
-          return {
-            value: '',
-            options: [{value: 1, label: '> 100$'}, {value: 2, label: '< 100$'}],
-          };
-        },
       });
       vm.$nextTick(() => {
         const selectedValueSpan = vm.$el.querySelector('.ivu-select-selected-value');
@@ -85,17 +85,17 @@ describe('Select.vue', () => {
 
     it('should display normal characters in input when in filterable mode', (done) => {
       vm = createVue({
+        data() {
+          return {
+            options: [{label: '> 100$', value: 1}, {label: '< 100$', value: 2}],
+            value: 2,
+          };
+        },
         template: `
           <Select v-model="value" filterable>
             <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         `,
-        data() {
-          return {
-            value: 2,
-            options: [{value: 1, label: '> 100$'}, {value: 2, label: '< 100$'}],
-          };
-        },
       });
       vm.$nextTick(() => {
         const input = vm.$el.querySelector('.ivu-select-input');
@@ -106,17 +106,17 @@ describe('Select.vue', () => {
 
     it("should use the value's label instead of placeholder when both are set", (done) => {
       vm = createVue({
+        data() {
+          return {
+            options: [{label: 'Foo', value: 1}, {label: 'Bar', value: 2}],
+            value: '',
+          };
+        },
         template: `
           <Select placeholder="Choose anything!" :value="2">
             <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         `,
-        data() {
-          return {
-            value: '',
-            options: [{value: 1, label: 'Foo'}, {value: 2, label: 'Bar'}],
-          };
-        },
       });
       waitForIt(
         () => {
@@ -152,23 +152,23 @@ describe('Select.vue', () => {
     });
 
     it('should set new options', (done) => {
-      const laterOptions = [{value: 1, label: 'Foo'}, {value: 2, label: 'Bar'}];
+      const laterOptions = [{label: 'Foo', value: 1}, {label: 'Bar', value: 2}];
 
       vm = createVue({
-        template: `
-          <Select>
-            <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-        `,
         data() {
           return {
-            value: '',
             options: [],
+            value: '',
           };
         },
         mounted() {
           this.$nextTick(() => (this.options = laterOptions));
         },
+        template: `
+          <Select>
+            <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        `,
       });
       const condition = function() {
         const componentOptions = vm.$children[0].flatOptions;
@@ -190,22 +190,12 @@ describe('Select.vue', () => {
   describe('Behavior tests', () => {
     it('should create different and independent instances', (done) => {
       const options = [
-        {value: 'beijing', label: 'Beijing'},
-        {value: 'stockholm', label: 'Stockholm'},
-        {value: 'lisboa', label: 'Lisboa'},
+        {label: 'Beijing', value: 'beijing'},
+        {label: 'Stockholm', value: 'stockholm'},
+        {label: 'Lisboa', value: 'lisboa'},
       ];
 
       vm = createVue({
-        template: `
-      <div>
-        <i-select v-model="modelA" multiple style="width:260px">
-          <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-        </i-select>
-        <i-select v-model="modelB" multiple style="width:260px">
-          <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-        </i-select>
-      </div>
-    `,
         data() {
           return {
             cityList: [],
@@ -216,6 +206,16 @@ describe('Select.vue', () => {
         mounted() {
           setTimeout(() => (this.cityList = options), 200);
         },
+        template: `
+      <div>
+        <i-select v-model="modelA" multiple style="width:260px">
+          <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+        </i-select>
+        <i-select v-model="modelB" multiple style="width:260px">
+          <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+        </i-select>
+      </div>
+    `,
       });
       const [SelectA, SelectB] = vm.$children;
       SelectA.toggleMenu(null, true);
@@ -273,23 +273,13 @@ describe('Select.vue', () => {
 
     it('should create update model with value, and label when asked', (done) => {
       const options = [
-        {value: 'beijing', label: 'Beijing'},
-        {value: 'stockholm', label: 'Stockholm'},
-        {value: 'lisboa', label: 'Lisboa'},
+        {label: 'Beijing', value: 'beijing'},
+        {label: 'Stockholm', value: 'stockholm'},
+        {label: 'Lisboa', value: 'lisboa'},
       ];
       let onChangeValueA, onChangeValueB;
 
       vm = createVue({
-        template: `
-                  <div>
-                    <i-select v-model="modelA" style="width:260px" @on-change="onChangeA">
-                      <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-                    </i-select>
-                    <i-select v-model="modelB" label-in-value style="width:260px" @on-change="onChangeB">
-                      <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-                    </i-select>
-                  </div>
-                `,
         data() {
           return {
             cityList: options,
@@ -305,6 +295,16 @@ describe('Select.vue', () => {
             onChangeValueB = val;
           },
         },
+        template: `
+                  <div>
+                    <i-select v-model="modelA" style="width:260px" @on-change="onChangeA">
+                      <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                    </i-select>
+                    <i-select v-model="modelB" label-in-value style="width:260px" @on-change="onChangeB">
+                      <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                    </i-select>
+                  </div>
+                `,
       });
       const [SelectA, SelectB] = vm.$children;
       SelectA.toggleMenu(null, true);
@@ -344,23 +344,23 @@ describe('Select.vue', () => {
   describe('Public API', () => {
     it('The "setQuery" method should behave as expected', (done) => {
       const options = [
-        {value: 'beijing', label: 'Beijing'},
-        {value: 'stockholm', label: 'Stockholm'},
-        {value: 'lisboa', label: 'Lisboa'},
+        {label: 'Beijing', value: 'beijing'},
+        {label: 'Stockholm', value: 'stockholm'},
+        {label: 'Lisboa', value: 'lisboa'},
       ];
 
       vm = createVue({
+        data() {
+          return {
+            options: options,
+            value: '',
+          };
+        },
         template: `
                 <Select v-model="value" filterable>
                     <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 `,
-        data() {
-          return {
-            value: '',
-            options: options,
-          };
-        },
       });
       const [Select] = vm.$children;
       Select.setQuery('i');
@@ -390,24 +390,24 @@ describe('Select.vue', () => {
     it('The "clearSingleSelect" method should behave as expected', (done) => {
       // clearSingleSelect
       const options = [
-        {value: 'beijing', label: 'Beijing'},
-        {value: 'stockholm', label: 'Stockholm'},
-        {value: 'lisboa', label: 'Lisboa'},
+        {label: 'Beijing', value: 'beijing'},
+        {label: 'Stockholm', value: 'stockholm'},
+        {label: 'Lisboa', value: 'lisboa'},
       ];
       const preSelected = 'lisboa';
 
       vm = createVue({
+        data() {
+          return {
+            options: options,
+            value: preSelected,
+          };
+        },
         template: `
                 <Select v-model="value" clearable>
                     <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 `,
-        data() {
-          return {
-            value: preSelected,
-            options: options,
-          };
-        },
       });
       const [Select] = vm.$children;
       vm.$nextTick(() => {
@@ -423,29 +423,29 @@ describe('Select.vue', () => {
     it('should handle big numbers of options', (done) => {
       const manyLaterOptions = Array.apply(null, Array(200)).map((_, i) => {
         return {
-          value: i + 1,
           label: Math.random()
             .toString(36)
             .slice(2)
             .toUpperCase(),
+          value: i + 1,
         };
       });
       const start = +new Date();
       vm = createVue({
-        template: `
-          <Select>
-            <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-        `,
         data() {
           return {
-            value: '',
             options: [],
+            value: '',
           };
         },
         mounted() {
           this.$nextTick(() => (this.options = manyLaterOptions));
         },
+        template: `
+          <Select>
+            <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        `,
       });
       const condition = function() {
         const componentOptions = vm.$children[0].flatOptions;

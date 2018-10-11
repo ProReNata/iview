@@ -21,14 +21,14 @@ export default {
     });
   },
   methods: {
-    start() {
-      this.$Loading.start();
+    error() {
+      this.$Loading.error();
     },
     finish() {
       this.$Loading.finish();
     },
-    error() {
-      this.$Loading.error();
+    start() {
+      this.$Loading.start();
     },
   },
 };

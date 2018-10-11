@@ -20,9 +20,9 @@ export default {
   name: 'RadioGroup',
   mixins: [Emitter],
   props: {
-    value: {
-      type: [String, Number],
-      default: '',
+    name: {
+      default: getUuid,
+      type: String,
     },
     size: {
       validator(value) {
@@ -34,19 +34,19 @@ export default {
         return oneOf(value, ['button']);
       },
     },
-    vertical: {
-      type: Boolean,
-      default: false,
+    value: {
+      default: '',
+      type: [String, Number],
     },
-    name: {
-      type: String,
-      default: getUuid,
+    vertical: {
+      default: false,
+      type: Boolean,
     },
   },
   data() {
     return {
-      currentValue: this.value,
       childrens: [],
+      currentValue: this.value,
     };
   },
   computed: {
@@ -74,6 +74,13 @@ export default {
     this.updateValue();
   },
   methods: {
+    change(data) {
+      this.currentValue = data.value;
+      this.updateValue();
+      this.$emit('input', data.value);
+      this.$emit('on-change', data.value);
+      this.dispatch('FormItem', 'on-form-change', data.value);
+    },
     updateValue() {
       this.childrens = findComponentsDownward(this, 'Radio');
 
@@ -83,13 +90,6 @@ export default {
           child.group = true;
         });
       }
-    },
-    change(data) {
-      this.currentValue = data.value;
-      this.updateValue();
-      this.$emit('input', data.value);
-      this.$emit('on-change', data.value);
-      this.dispatch('FormItem', 'on-form-change', data.value);
     },
   },
 };

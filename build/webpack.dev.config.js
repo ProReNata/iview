@@ -13,24 +13,17 @@ process.env.NODE_ENV = 'development';
 
 module.exports = merge(webpackBaseConfig, {
   devtool: 'source-map',
-  mode: process.env.NODE_ENV,
   // 入口
   entry: {
     main: './examples/main',
     vendors: ['vue', 'vue-router'],
   },
+  mode: process.env.NODE_ENV,
   output: {
+    chunkFilename: '[name].chunk.js',
+    filename: '[name].js',
     path: path.join(__dirname, '../examples/dist'),
     publicPath: '',
-    filename: '[name].js',
-    chunkFilename: '[name].chunk.js',
-  },
-  resolve: {
-    alias: {
-      iview: '../../src/index',
-      vue: 'vue/dist/vue.esm.js',
-      // vue: 'vue/dist/vue.runtime.js'
-    },
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -43,4 +36,11 @@ module.exports = merge(webpackBaseConfig, {
       },
     }),
   ],
+  resolve: {
+    alias: {
+      iview: '../../src/index',
+      vue$: 'vue/dist/vue.esm.js',
+      // vue: 'vue/dist/vue.runtime.js'
+    },
+  },
 });

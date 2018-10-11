@@ -208,13 +208,13 @@ const dateSorter = (a, b) => {
 
 export default {
   name: 'RangeDatePickerPanel',
-  components: {Icon, DateTable, YearTable, MonthTable, TimePicker, Confirm, datePanelLabel},
+  components: {Confirm, datePanelLabel, DateTable, Icon, MonthTable, TimePicker, YearTable},
   mixins: [Mixin, Locale, DateMixin],
   props: {
     // more props in the mixin
     splitPanels: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
   },
   data() {
@@ -222,15 +222,15 @@ export default {
     const leftPanelDate = this.startDate ? this.startDate : minDate;
 
     return {
-      prefixCls,
+      currentView: this.selectionMode || 'range',
       datePrefixCls,
       dates: this.value,
-      rangeState: {from: this.value[0], to: this.value[1], selecting: minDate && !maxDate},
-      currentView: this.selectionMode || 'range',
-      leftPickerTable: `${this.selectionMode}-table`,
-      rightPickerTable: `${this.selectionMode}-table`,
       leftPanelDate,
+      leftPickerTable: `${this.selectionMode}-table`,
+      prefixCls,
+      rangeState: {from: this.value[0], selecting: minDate && !maxDate, to: this.value[1]},
       rightPanelDate: new Date(leftPanelDate.getFullYear(), leftPanelDate.getMonth() + 1, 1),
+      rightPickerTable: `${this.selectionMode}-table`,
     };
   },
   computed: {
@@ -244,6 +244,12 @@ export default {
         },
       ];
     },
+    leftDatePanelLabel() {
+      return this.panelLabelConfig('left');
+    },
+    leftDatePanelView() {
+      return this.leftPickerTable.split('-').shift();
+    },
     panelBodyClasses() {
       return [
         `${prefixCls}-body`,
@@ -253,20 +259,11 @@ export default {
         },
       ];
     },
-    leftDatePanelLabel() {
-      return this.panelLabelConfig('left');
-    },
-    rightDatePanelLabel() {
-      return this.panelLabelConfig('right');
-    },
-    leftDatePanelView() {
-      return this.leftPickerTable.split('-').shift();
-    },
-    rightDatePanelView() {
-      return this.rightPickerTable.split('-').shift();
-    },
-    timeDisabled() {
-      return !(this.dates[0] && this.dates[1]);
+    panelPickerHandlers() {
+      return {
+        left: this.preSelecting.left ? this.handlePreSelection.bind(this, 'left') : this.handleRangePick,
+        right: this.preSelecting.right ? this.handlePreSelection.bind(this, 'right') : this.handleRangePick,
+      };
     },
     preSelecting() {
       const tableType = `${this.currentView}-table`;
@@ -276,28 +273,17 @@ export default {
         right: this.rightPickerTable !== tableType,
       };
     },
-    panelPickerHandlers() {
-      return {
-        left: this.preSelecting.left ? this.handlePreSelection.bind(this, 'left') : this.handleRangePick,
-        right: this.preSelecting.right ? this.handlePreSelection.bind(this, 'right') : this.handleRangePick,
-      };
+    rightDatePanelLabel() {
+      return this.panelLabelConfig('right');
+    },
+    rightDatePanelView() {
+      return this.rightPickerTable.split('-').shift();
+    },
+    timeDisabled() {
+      return !(this.dates[0] && this.dates[1]);
     },
   },
   watch: {
-    value(newVal) {
-      const minDate = newVal[0] ? toDate(newVal[0]) : null;
-      const maxDate = newVal[1] ? toDate(newVal[1]) : null;
-      this.dates = [minDate, maxDate].sort(dateSorter);
-
-      this.rangeState = {
-        from: this.dates[0],
-        to: this.dates[1],
-        selecting: false,
-      };
-
-      // set panels positioning
-      this.setPanelDates(this.startDate || this.dates[0] || new Date());
-    },
     currentView(currentView) {
       const leftMonth = this.leftPanelDate.getMonth();
       const rightMonth = this.rightPanelDate.getMonth();
@@ -315,55 +301,28 @@ export default {
         this.changePanelDate('right', 'FullYear', 10);
       }
     },
-    selectionMode(type) {
-      this.currentView = type || 'range';
-    },
     focusedDate(date) {
       this.setPanelDates(date || new Date());
     },
+    selectionMode(type) {
+      this.currentView = type || 'range';
+    },
+    value(newVal) {
+      const minDate = newVal[0] ? toDate(newVal[0]) : null;
+      const maxDate = newVal[1] ? toDate(newVal[1]) : null;
+      this.dates = [minDate, maxDate].sort(dateSorter);
+
+      this.rangeState = {
+        from: this.dates[0],
+        selecting: false,
+        to: this.dates[1],
+      };
+
+      // set panels positioning
+      this.setPanelDates(this.startDate || this.dates[0] || new Date());
+    },
   },
   methods: {
-    reset() {
-      this.currentView = this.selectionMode;
-      this.leftPickerTable = `${this.currentView}-table`;
-      this.rightPickerTable = `${this.currentView}-table`;
-    },
-    setPanelDates(leftPanelDate) {
-      this.leftPanelDate = leftPanelDate;
-      const rightPanelDate = new Date(leftPanelDate.getFullYear(), leftPanelDate.getMonth() + 1, leftPanelDate.getDate());
-      this.rightPanelDate = this.splitPanels ? new Date(Math.max(this.dates[1], rightPanelDate)) : rightPanelDate;
-    },
-    panelLabelConfig(direction) {
-      const locale = this.t('i.locale');
-      const datePanelLabel = this.t('i.datepicker.datePanelLabel');
-      const handler = (type) => {
-        const fn = type === 'month' ? this.showMonthPicker : this.showYearPicker;
-
-        return () => fn(direction);
-      };
-
-      const date = this[`${direction}PanelDate`];
-      const {labels, separator} = formatDateLabels(locale, datePanelLabel, date);
-
-      return {
-        separator,
-        labels: labels.map((obj) => ((obj.handler = handler(obj.type)), obj)),
-      };
-    },
-    prevYear(panel) {
-      const increment = this.currentView === 'year' ? -10 : -1;
-      this.changePanelDate(panel, 'FullYear', increment);
-    },
-    nextYear(panel) {
-      const increment = this.currentView === 'year' ? 10 : 1;
-      this.changePanelDate(panel, 'FullYear', increment);
-    },
-    prevMonth(panel) {
-      this.changePanelDate(panel, 'Month', -1);
-    },
-    nextMonth(panel) {
-      this.changePanelDate(panel, 'Month', 1);
-    },
     changePanelDate(panel, type, increment, updateOtherPanel = true) {
       const current = new Date(this[`${panel}PanelDate`]);
       current[`set${type}`](current[`get${type}`]() + increment);
@@ -392,11 +351,8 @@ export default {
         this[`${otherPanel}PanelDate`] = otherCurrent;
       }
     },
-    showYearPicker(panel) {
-      this[`${panel}PickerTable`] = 'year-table';
-    },
-    showMonthPicker(panel) {
-      this[`${panel}PickerTable`] = 'month-table';
+    handleChangeRange(val) {
+      this.rangeState.to = val;
     },
     handlePreSelection(panel, value) {
       this[`${panel}PanelDate`] = value;
@@ -426,8 +382,8 @@ export default {
           this.dates = [minDate, maxDate];
           this.rangeState = {
             from: minDate,
-            to: maxDate,
             selecting: false,
+            to: maxDate,
           };
         }
 
@@ -435,13 +391,57 @@ export default {
       } else {
         this.rangeState = {
           from: val,
-          to: null,
           selecting: true,
+          to: null,
         };
       }
     },
-    handleChangeRange(val) {
-      this.rangeState.to = val;
+    nextMonth(panel) {
+      this.changePanelDate(panel, 'Month', 1);
+    },
+    nextYear(panel) {
+      const increment = this.currentView === 'year' ? 10 : 1;
+      this.changePanelDate(panel, 'FullYear', increment);
+    },
+    panelLabelConfig(direction) {
+      const locale = this.t('i.locale');
+      const datePanelLabel = this.t('i.datepicker.datePanelLabel');
+      const handler = (type) => {
+        const fn = type === 'month' ? this.showMonthPicker : this.showYearPicker;
+
+        return () => fn(direction);
+      };
+
+      const date = this[`${direction}PanelDate`];
+      const {labels, separator} = formatDateLabels(locale, datePanelLabel, date);
+
+      return {
+        labels: labels.map((obj) => ((obj.handler = handler(obj.type)), obj)),
+        separator,
+      };
+    },
+    prevMonth(panel) {
+      this.changePanelDate(panel, 'Month', -1);
+    },
+    prevYear(panel) {
+      const increment = this.currentView === 'year' ? -10 : -1;
+      this.changePanelDate(panel, 'FullYear', increment);
+    },
+    reset() {
+      this.currentView = this.selectionMode;
+      this.leftPickerTable = `${this.currentView}-table`;
+      this.rightPickerTable = `${this.currentView}-table`;
+    },
+    setPanelDates(leftPanelDate) {
+      this.leftPanelDate = leftPanelDate;
+      const rightPanelDate = new Date(leftPanelDate.getFullYear(), leftPanelDate.getMonth() + 1, leftPanelDate.getDate());
+      this.rightPanelDate = this.splitPanels ? new Date(Math.max(this.dates[1], rightPanelDate)) : rightPanelDate;
+    },
+    showMonthPicker(panel) {
+      this[`${panel}PickerTable`] = 'month-table';
+    },
+    showYearPicker(panel) {
+      this[`${panel}PickerTable`] = 'year-table';
     },
   },
 };

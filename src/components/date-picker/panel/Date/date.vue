@@ -130,13 +130,13 @@ const datePrefixCls = 'ivu-date-picker';
 
 export default {
   name: 'DatePickerPanel',
-  components: {Icon, DateTable, YearTable, MonthTable, TimePicker, Confirm, datePanelLabel},
+  components: {Confirm, datePanelLabel, DateTable, Icon, MonthTable, TimePicker, YearTable},
   mixins: [Mixin, Locale, DateMixin],
   props: {
     // more props in the mixin
     multiple: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
   },
   data() {
@@ -145,12 +145,12 @@ export default {
     const dates = value.slice().sort();
 
     return {
-      prefixCls,
-      datePrefixCls,
       currentView: selectionMode || 'date',
-      pickerTable: this.getTableType(selectionMode),
+      datePrefixCls,
       dates,
       panelDate: this.startDate || dates[0] || new Date(),
+      pickerTable: this.getTableType(selectionMode),
+      prefixCls,
     };
   },
   computed: {
@@ -162,9 +162,6 @@ export default {
         },
       ];
     },
-    panelPickerHandlers() {
-      return this.pickerTable === `${this.currentView}-table` ? this.handlePick : this.handlePreSelection;
-    },
     datePanelLabel() {
       const locale = this.t('i.locale');
       const datePanelLabel = this.t('i.datepicker.datePanelLabel');
@@ -174,20 +171,18 @@ export default {
       const handler = (type) => () => (this.pickerTable = this.getTableType(type));
 
       return {
-        separator,
         labels: labels.map((obj) => ((obj.handler = handler(obj.type)), obj)),
+        separator,
       };
+    },
+    panelPickerHandlers() {
+      return this.pickerTable === `${this.currentView}-table` ? this.handlePick : this.handlePreSelection;
     },
     timeDisabled() {
       return !this.dates[0];
     },
   },
   watch: {
-    value(newVal) {
-      this.dates = newVal;
-      const panelDate = this.multiple ? this.dates[this.dates.length - 1] : this.startDate || this.dates[0];
-      this.panelDate = panelDate || new Date();
-    },
     currentView(currentView) {
       this.$emit('on-selection-mode-change', currentView);
 
@@ -197,10 +192,6 @@ export default {
           spinner.updateScroll();
         });
       }
-    },
-    selectionMode(type) {
-      this.currentView = type;
-      this.pickerTable = this.getTableType(type);
     },
     focusedDate(date) {
       const isDifferentYear = date.getFullYear() !== this.panelDate.getFullYear();
@@ -212,11 +203,19 @@ export default {
         }
       }
     },
+    selectionMode(type) {
+      this.currentView = type;
+      this.pickerTable = this.getTableType(type);
+    },
+    value(newVal) {
+      this.dates = newVal;
+      const panelDate = this.multiple ? this.dates[this.dates.length - 1] : this.startDate || this.dates[0];
+      this.panelDate = panelDate || new Date();
+    },
   },
   methods: {
-    reset() {
-      this.currentView = this.selectionMode;
-      this.pickerTable = this.getTableType(this.currentView);
+    changeMonth(dir) {
+      this.panelDate = siblingMonth(this.panelDate, dir);
     },
     changeYear(dir) {
       if (this.selectionMode === 'year' || this.pickerTable === 'year-table') {
@@ -227,18 +226,6 @@ export default {
     },
     getTableType(currentView) {
       return currentView.match(/^time/) ? 'time-picker' : `${currentView}-table`;
-    },
-    changeMonth(dir) {
-      this.panelDate = siblingMonth(this.panelDate, dir);
-    },
-    handlePreSelection(value) {
-      this.panelDate = value;
-
-      if (this.pickerTable === 'year-table') {
-        this.pickerTable = 'month-table';
-      } else {
-        this.pickerTable = this.getTableType(this.currentView);
-      }
     },
     handlePick(value, type) {
       const {selectionMode, panelDate} = this;
@@ -253,6 +240,19 @@ export default {
 
       this.dates = [value];
       this.$emit('on-pick', value, false, type || selectionMode);
+    },
+    handlePreSelection(value) {
+      this.panelDate = value;
+
+      if (this.pickerTable === 'year-table') {
+        this.pickerTable = 'month-table';
+      } else {
+        this.pickerTable = this.getTableType(this.currentView);
+      }
+    },
+    reset() {
+      this.currentView = this.selectionMode;
+      this.pickerTable = this.getTableType(this.currentView);
     },
   },
 };

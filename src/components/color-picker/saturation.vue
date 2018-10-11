@@ -42,12 +42,12 @@ export default {
     const normalStep = 0.01;
 
     return {
-      left: -normalStep,
-      right: normalStep,
-      up: normalStep,
       down: -normalStep,
+      left: -normalStep,
       multiplier: 10,
       powerKey: 'shiftKey',
+      right: normalStep,
+      up: normalStep,
     };
   },
 
@@ -56,25 +56,13 @@ export default {
       return {background: `hsl(${this.value.hsv.h}, 100%, 50%)`};
     },
     pointerStyle() {
-      return {top: `${-(this.value.hsv.v * 100) + 1 + 100}%`, left: `${this.value.hsv.s * 100}%`};
+      return {left: `${this.value.hsv.s * 100}%`, top: `${-(this.value.hsv.v * 100) + 1 + 100}%`};
     },
   },
 
   methods: {
     change(h, s, v, a) {
-      this.$emit('change', {h, s, v, a, source: 'hsva'});
-    },
-    handleSlide(e, direction, key) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const isPowerKey = e[this.powerKey];
-      const increment = isPowerKey ? direction * this.multiplier : direction;
-      const {h, s, v, a} = this.value.hsv;
-      const saturation = clamp(s + getIncrement(key, ['left', 'right'], increment), 0, 1);
-      const bright = clamp(v + getIncrement(key, ['up', 'down'], increment), 0, 1);
-
-      this.change(h, saturation, bright, a);
+      this.$emit('change', {a, h, s, source: 'hsva', v});
     },
     handleChange(e) {
       e.preventDefault();
@@ -93,10 +81,17 @@ export default {
       //            window.addEventListener('mouseup', this.handleChange, false);
       on(window, 'mouseup', this.handleChange);
     },
-    unbindEventListeners(e) {
-      HSAMixin.methods.unbindEventListeners.call(this, e);
-      //            window.removeEventListener('mouseup', this.handleChange);
-      off(window, 'mouseup', this.handleChange);
+    handleSlide(e, direction, key) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const isPowerKey = e[this.powerKey];
+      const increment = isPowerKey ? direction * this.multiplier : direction;
+      const {h, s, v, a} = this.value.hsv;
+      const saturation = clamp(s + getIncrement(key, ['left', 'right'], increment), 0, 1);
+      const bright = clamp(v + getIncrement(key, ['up', 'down'], increment), 0, 1);
+
+      this.change(h, saturation, bright, a);
     },
     onKeydown(event) {
       const {key} = event;
@@ -112,6 +107,11 @@ export default {
       } else if (oneOf(key, ['Right', 'ArrowRight'])) {
         this.handleRight(event);
       }
+    },
+    unbindEventListeners(e) {
+      HSAMixin.methods.unbindEventListeners.call(this, e);
+      //            window.removeEventListener('mouseup', this.handleChange);
+      off(window, 'mouseup', this.handleChange);
     },
   },
 };

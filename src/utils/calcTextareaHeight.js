@@ -46,7 +46,7 @@ function calculateNodeStyling(node) {
 
   const contextStyle = CONTEXT_STYLE.map((name) => `${name}:${style.getPropertyValue(name)}`).join(';');
 
-  return {contextStyle, paddingSize, borderSize, boxSizing};
+  return {borderSize, boxSizing, contextStyle, paddingSize};
 }
 
 export default function calcTextareaHeight(targetNode, minRows = null, maxRows = null) {
@@ -95,7 +95,7 @@ export default function calcTextareaHeight(targetNode, minRows = null, maxRows =
 
   return {
     height: `${height}px`,
-    minHeight: `${minHeight}px`,
     maxHeight: `${maxHeight}px`,
+    minHeight: `${minHeight}px`,
   };
 }

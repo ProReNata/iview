@@ -10,8 +10,8 @@ export default {
   name: 'Collapse',
   props: {
     accordion: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
     value: {
       type: [Array, String],
@@ -28,27 +28,17 @@ export default {
     },
   },
   watch: {
-    value(val) {
-      this.currentValue = val;
-    },
     currentValue() {
       this.setActive();
+    },
+    value(val) {
+      this.currentValue = val;
     },
   },
   mounted() {
     this.setActive();
   },
   methods: {
-    setActive() {
-      const activeKey = this.getActiveKey();
-
-      this.$children.forEach((child, index) => {
-        const name = child.name || index.toString();
-
-        child.isActive = activeKey.indexOf(name) > -1;
-        child.index = index;
-      });
-    },
     getActiveKey() {
       let activeKey = this.currentValue || [];
       const {accordion} = this;
@@ -66,6 +56,16 @@ export default {
       }
 
       return activeKey;
+    },
+    setActive() {
+      const activeKey = this.getActiveKey();
+
+      this.$children.forEach((child, index) => {
+        const name = child.name || index.toString();
+
+        child.isActive = activeKey.indexOf(name) > -1;
+        child.index = index;
+      });
     },
     toggle(data) {
       const name = data.name.toString();

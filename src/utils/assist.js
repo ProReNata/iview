@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import noop from 'lodash/noop';
 
 const isServer = Vue.prototype.$isServer;
 // 判断参数是否是其中之一
@@ -364,20 +365,20 @@ export function removeClass(el, cls) {
 }
 
 export const dimensionMap = {
-  xs: '480px',
-  sm: '768px',
-  md: '992px',
   lg: '1200px',
+  md: '992px',
+  sm: '768px',
   xl: '1600px',
+  xs: '480px',
 };
 
 export function setMatchMedia() {
   if (typeof window !== 'undefined') {
     const matchMediaPolyfill = (mediaQuery) => ({
-      media: mediaQuery,
       matches: false,
-      on() {},
-      off() {},
+      media: mediaQuery,
+      off: noop,
+      on: noop,
     });
 
     window.matchMedia = window.matchMedia || matchMediaPolyfill;

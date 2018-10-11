@@ -1,6 +1,6 @@
 export default {
-  name: 'RenderCell',
   functional: true,
+  name: 'RenderCell',
   props: {
     render: Function,
   },

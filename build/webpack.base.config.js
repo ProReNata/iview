@@ -209,12 +209,12 @@ module.exports = {
         test: /\.(less)(\?\S*)?$/,
       },
       {
-        test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
         loader: 'url-loader?limit=8192',
+        test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
       },
       {
-        test: /\.(html|tpl)$/,
         loader: 'html-loader',
+        test: /\.(html|tpl)$/,
       },
     ],
   },
@@ -230,17 +230,14 @@ module.exports = {
     // that does not make sense for the client
     tls: 'empty',
   },
-  resolve: {
-    extensions: ['.js', ',jsx', '.vue', '.json'],
-    alias: {
-      /**
-       * ES module builds are intended for use with modern bundlers like webpack 2 or rollup.
-       * @type {string}
-       * @see {@link https://vuejs.org/v2/guide/installation.html#Explanation-of-Different-Builds}
-       */
-      vue$: 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
-    },
+  /**
+   * These options allows you to control how webpack notifies you of assets and
+   * entrypoints that exceed a specific file limit.
+   * @type {!Object}
+   * @see {@link https://webpack.js.org/configuration/performance/}
+   */
+  performance: {
+    hints: false,
   },
   plugins: [
     /**
@@ -272,13 +269,16 @@ module.exports = {
      */
     ...(process.env.REPORT ? [new BundleAnalyzerPlugin()] : []),
   ],
-  /**
-   * These options allows you to control how webpack notifies you of assets and
-   * entrypoints that exceed a specific file limit.
-   * @type {!Object}
-   * @see {@link https://webpack.js.org/configuration/performance/}
-   */
-  performance: {
-    hints: false,
+  resolve: {
+    alias: {
+      /**
+       * ES module builds are intended for use with modern bundlers like webpack 2 or rollup.
+       * @type {string}
+       * @see {@link https://vuejs.org/v2/guide/installation.html#Explanation-of-Different-Builds}
+       */
+      vue$: 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
+    },
+    extensions: ['.js', ',jsx', '.vue', '.json'],
   },
 };

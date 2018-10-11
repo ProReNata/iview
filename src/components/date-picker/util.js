@@ -104,7 +104,6 @@ export const formatDateLabels = (function() {
     */
 
   const formats = {
-    yyyy: (date) => date.getFullYear(),
     m: (date) => date.getMonth() + 1,
     mm: (date) => `0${date.getMonth() + 1}`.slice(-2),
     mmm: (date, locale) => {
@@ -132,6 +131,7 @@ export const formatDateLabels = (function() {
 
       return monthName[0].toUpperCase() + monthName.slice(1).toLowerCase();
     },
+    yyyy: (date) => date.getFullYear(),
   };
   const formatRegex = new RegExp(['yyyy', 'Mmmm', 'mmmm', 'Mmm', 'mmm', 'mm', 'm'].join('|'), 'g');
 
@@ -151,8 +151,8 @@ export const formatDateLabels = (function() {
     });
 
     return {
-      separator,
       labels,
+      separator,
     };
   };
 })();
@@ -160,13 +160,13 @@ export const formatDateLabels = (function() {
 // Parsers and Formaters
 export const DEFAULT_FORMATS = {
   date: 'yyyy-MM-dd',
-  month: 'yyyy-MM',
-  year: 'yyyy',
+  daterange: 'yyyy-MM-dd',
   datetime: 'yyyy-MM-dd HH:mm:ss',
+  datetimerange: 'yyyy-MM-dd HH:mm:ss',
+  month: 'yyyy-MM',
   time: 'HH:mm:ss',
   timerange: 'HH:mm:ss',
-  daterange: 'yyyy-MM-dd',
-  datetimerange: 'yyyy-MM-dd HH:mm:ss',
+  year: 'yyyy',
 };
 
 export const RANGE_SEPARATOR = ' - ';
@@ -211,6 +211,22 @@ const RANGE_PARSER = function(text, format) {
 };
 
 export const TYPE_VALUE_RESOLVER_MAP = {
+  date: {
+    formatter: DATE_FORMATTER,
+    parser: DATE_PARSER,
+  },
+  daterange: {
+    formatter: RANGE_FORMATTER,
+    parser: RANGE_PARSER,
+  },
+  datetime: {
+    formatter: DATE_FORMATTER,
+    parser: DATE_PARSER,
+  },
+  datetimerange: {
+    formatter: RANGE_FORMATTER,
+    parser: RANGE_PARSER,
+  },
   default: {
     formatter(value) {
       if (!value) {
@@ -227,35 +243,7 @@ export const TYPE_VALUE_RESOLVER_MAP = {
       return text;
     },
   },
-  date: {
-    formatter: DATE_FORMATTER,
-    parser: DATE_PARSER,
-  },
-  datetime: {
-    formatter: DATE_FORMATTER,
-    parser: DATE_PARSER,
-  },
-  daterange: {
-    formatter: RANGE_FORMATTER,
-    parser: RANGE_PARSER,
-  },
-  datetimerange: {
-    formatter: RANGE_FORMATTER,
-    parser: RANGE_PARSER,
-  },
-  timerange: {
-    formatter: RANGE_FORMATTER,
-    parser: RANGE_PARSER,
-  },
-  time: {
-    formatter: DATE_FORMATTER,
-    parser: DATE_PARSER,
-  },
   month: {
-    formatter: DATE_FORMATTER,
-    parser: DATE_PARSER,
-  },
-  year: {
     formatter: DATE_FORMATTER,
     parser: DATE_PARSER,
   },
@@ -300,5 +288,17 @@ export const TYPE_VALUE_RESOLVER_MAP = {
 
       return null;
     },
+  },
+  time: {
+    formatter: DATE_FORMATTER,
+    parser: DATE_PARSER,
+  },
+  timerange: {
+    formatter: RANGE_FORMATTER,
+    parser: RANGE_PARSER,
+  },
+  year: {
+    formatter: DATE_FORMATTER,
+    parser: DATE_PARSER,
   },
 };

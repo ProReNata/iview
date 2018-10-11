@@ -38,12 +38,12 @@ export default {
     href: {
       type: [Object, String],
     },
+    replace: {
+      default: false,
+      type: Boolean,
+    },
     to: {
       type: [Object, String],
-    },
-    replace: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {

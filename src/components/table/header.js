@@ -1,10 +1,10 @@
 export default {
-  name: 'TableRenderHeader',
   functional: true,
+  name: 'TableRenderHeader',
   props: {
-    render: Function,
     column: Object,
     index: Number,
+    render: Function,
   },
   render: (h, ctx) => {
     const params = {

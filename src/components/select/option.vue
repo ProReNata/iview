@@ -20,30 +20,31 @@ export default {
   componentName: 'select-item',
   mixins: [Emitter],
   props: {
-    value: {
-      type: [String, Number],
-      required: true,
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
+    isFocused: {
+      default: false,
+      type: Boolean,
     },
     label: {
       type: [String, Number],
     },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
     selected: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
-    isFocused: {
-      type: Boolean,
-      default: false,
+    value: {
+      required: true,
+      type: [String, Number],
     },
   },
   data() {
     return {
-      searchLabel: '', // the slot value (textContent)
       autoComplete: false,
+      // the slot value (textContent)
+      searchLabel: '',
     };
   },
   computed: {
@@ -57,11 +58,11 @@ export default {
         },
       ];
     },
-    showLabel() {
-      return this.label ? this.label : this.value;
-    },
     optionLabel() {
       return this.label || (this.$el && this.$el.textContent.trim());
+    },
+    showLabel() {
+      return this.label ? this.label : this.value;
     },
   },
   mounted() {
@@ -78,12 +79,12 @@ export default {
       }
 
       this.dispatch('iSelect', 'on-select-selected', {
-        value: this.value,
         label: this.optionLabel,
+        value: this.value,
       });
       this.$emit('on-select-selected', {
-        value: this.value,
         label: this.optionLabel,
+        value: this.value,
       });
     },
   },

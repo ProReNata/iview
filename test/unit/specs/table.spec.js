@@ -17,7 +17,6 @@ describe('Table.vue', () => {
   describe('CSV export', () => {
     it('should export simple data to CSV - test A', (done) => {
       vm = createVue({
-        template: '<div><Table :columns="columns" :data="data" ref="tableA" /></div>',
         data() {
           return csvA;
         },
@@ -30,26 +29,27 @@ describe('Table.vue', () => {
             },
           });
         },
+        template: '<div><Table :columns="columns" :data="data" ref="tableA" /></div>',
       });
     });
 
     it('should export data with commas and line breaks to CSV - test B', (done) => {
       vm = createVue({
-        template: '<div><Table :columns="columns" :data="data" ref="tableB" /></div>',
         data() {
           return csvB;
         },
         mounted() {
           this.$refs.tableB.exportCsv({
-            separator: ';',
-            quoted: true,
             callback: (data) => {
               expect(cleanCSV(data)).to.equal(cleanCSV(this.expected));
               expect(cleanCSV(data).length > 0).to.equal(true);
               done();
             },
+            quoted: true,
+            separator: ';',
           });
         },
+        template: '<div><Table :columns="columns" :data="data" ref="tableB" /></div>',
       });
     });
   });

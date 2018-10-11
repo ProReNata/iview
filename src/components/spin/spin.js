@@ -23,9 +23,9 @@ Spin.newInstance = (properties) => {
       } else {
         vnode = h(Spin, {
           props: {
-            size: 'large',
             fix: true,
             fullscreen: true,
+            size: 'large',
           },
         });
       }
@@ -45,9 +45,7 @@ Spin.newInstance = (properties) => {
   const spin = Instance.$children[0];
 
   return {
-    show() {
-      spin.visible = true;
-    },
+    component: spin,
     remove(cb) {
       spin.visible = false;
       setTimeout(() => {
@@ -60,7 +58,9 @@ Spin.newInstance = (properties) => {
         cb();
       }, 500);
     },
-    component: spin,
+    show() {
+      spin.visible = true;
+    },
   };
 };
 

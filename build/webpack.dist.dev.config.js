@@ -7,25 +7,25 @@ process.env.NODE_ENV = 'production';
 
 module.exports = merge(webpackBaseConfig, {
   devtool: 'source-map',
-  mode: process.env.NODE_ENV,
   entry: {
     main: './src/index.js',
   },
+  externals: {
+    vue: {
+      amd: 'vue',
+      commonjs: 'vue',
+      commonjs2: 'vue',
+      root: 'Vue',
+    },
+  },
+  mode: process.env.NODE_ENV,
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: '/dist/',
     filename: 'iview.js',
     library: 'iview',
     libraryTarget: 'umd',
+    path: path.resolve(__dirname, '../dist'),
+    publicPath: '/dist/',
     umdNamedDefine: true,
-  },
-  externals: {
-    vue: {
-      root: 'Vue',
-      commonjs: 'vue',
-      commonjs2: 'vue',
-      amd: 'vue',
-    },
   },
   plugins: [
     // @todo

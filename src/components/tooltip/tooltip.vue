@@ -45,7 +45,29 @@ export default {
   directives: {TransferDom},
   mixins: [Popper],
   props: {
+    always: {
+      default: false,
+      type: Boolean,
+    },
+    content: {
+      default: '',
+      type: [String, Number],
+    },
+    controlled: {
+      default: false,
+      // under this prop,Tooltip will not close when mouseleave
+      type: Boolean,
+    },
+    delay: {
+      default: 100,
+      type: Number,
+    },
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
     placement: {
+      default: 'bottom',
       validator(value) {
         return oneOf(value, [
           'top',
@@ -62,32 +84,10 @@ export default {
           'right-end',
         ]);
       },
-      default: 'bottom',
-    },
-    content: {
-      type: [String, Number],
-      default: '',
-    },
-    delay: {
-      type: Number,
-      default: 100,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    controlled: {
-      // under this prop,Tooltip will not close when mouseleave
-      type: Boolean,
-      default: false,
-    },
-    always: {
-      type: Boolean,
-      default: false,
     },
     transfer: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
   },
   data() {
@@ -106,15 +106,6 @@ export default {
     }
   },
   methods: {
-    handleShowPopper() {
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-      }
-
-      this.timeout = setTimeout(() => {
-        this.visible = true;
-      }, this.delay);
-    },
     handleClosePopper() {
       if (this.timeout) {
         clearTimeout(this.timeout);
@@ -125,6 +116,15 @@ export default {
           }, 100);
         }
       }
+    },
+    handleShowPopper() {
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
+      this.timeout = setTimeout(() => {
+        this.visible = true;
+      }, this.delay);
     },
   },
 };

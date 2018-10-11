@@ -63,101 +63,102 @@ export default {
   components: {Icon},
   props: {
     arrow: {
-      type: String,
       default: 'hover',
+      type: String,
       validator(value) {
         return oneOf(value, ['hover', 'always', 'never']);
       },
     },
     autoplay: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
     autoplaySpeed: {
-      type: Number,
       default: 2000,
-    },
-    loop: {
-      type: Boolean,
-      default: false,
-    },
-    easing: {
-      type: String,
-      default: 'ease',
+      type: Number,
     },
     dots: {
-      type: String,
       default: 'inside',
+      type: String,
       validator(value) {
         return oneOf(value, ['inside', 'outside', 'none']);
       },
     },
-    radiusDot: {
-      type: Boolean,
+    easing: {
+      default: 'ease',
+      type: String,
+    },
+    height: {
+      default: 'auto',
+      type: [String, Number],
+      validator(value) {
+        return value === 'auto' || Object.prototype.toString.call(value) === '[object Number]';
+      },
+    },
+    loop: {
       default: false,
+      type: Boolean,
+    },
+    radiusDot: {
+      default: false,
+      type: Boolean,
     },
     trigger: {
-      type: String,
       default: 'click',
+      type: String,
       validator(value) {
         return oneOf(value, ['click', 'hover']);
       },
     },
     value: {
-      type: Number,
       default: 0,
-    },
-    height: {
-      type: [String, Number],
-      default: 'auto',
-      validator(value) {
-        return value === 'auto' || Object.prototype.toString.call(value) === '[object Number]';
-      },
+      type: Number,
     },
   },
   data() {
     return {
-      prefixCls,
-      listWidth: 0,
-      trackWidth: 0,
-      trackOffset: 0,
-      trackCopyOffset: 0,
-      showCopyTrack: false,
-      slides: [],
-      slideInstances: [],
-      timer: null,
-      ready: false,
-      currentIndex: this.value,
-      trackIndex: this.value,
       copyTrackIndex: this.value,
-      hideTrackPos: -1, // 默认左滑
+      currentIndex: this.value,
+      // 默认左滑
+      hideTrackPos: -1,
+      listWidth: 0,
+      prefixCls,
+      ready: false,
+      showCopyTrack: false,
+      slideInstances: [],
+      slides: [],
+      timer: null,
+      trackCopyOffset: 0,
+      trackIndex: this.value,
+      trackOffset: 0,
+      trackWidth: 0,
     };
   },
   computed: {
-    classes() {
-      return [`${prefixCls}`];
-    },
-    trackStyles() {
-      return {
-        width: `${this.trackWidth}px`,
-        transform: `translate3d(${-this.trackOffset}px, 0px, 0px)`,
-        transition: `transform 500ms ${this.easing}`,
-      };
-    },
-    copyTrackStyles() {
-      return {
-        width: `${this.trackWidth}px`,
-        transform: `translate3d(${-this.trackCopyOffset}px, 0px, 0px)`,
-        transition: `transform 500ms ${this.easing}`,
-        position: 'absolute',
-        top: 0,
-      };
-    },
     arrowClasses() {
       return [`${prefixCls}-arrow`, `${prefixCls}-arrow-${this.arrow}`];
     },
+    classes() {
+      return [`${prefixCls}`];
+    },
+    copyTrackStyles() {
+      return {
+        position: 'absolute',
+        top: 0,
+        transform: `translate3d(${-this.trackCopyOffset}px, 0px, 0px)`,
+        transition: `transform 500ms ${this.easing}`,
+        width: `${this.trackWidth}px`,
+      };
+    },
     dotsClasses() {
       return [`${prefixCls}-dots`, `${prefixCls}-dots-${this.dots}`];
+    },
+    trackStyles() {
+      return {
+        transform: `translate3d(${-this.trackOffset}px, 0px, 0px)`,
+        transition: `transform 500ms ${this.easing}`,
+        width: `${this.trackWidth}px`,
+      };
     },
   },
   watch: {
@@ -167,14 +168,14 @@ export default {
     autoplaySpeed() {
       this.setAutoplay();
     },
-    trackIndex() {
-      this.updateOffset();
-    },
     copyTrackIndex() {
       this.updateOffset();
     },
     height() {
       this.updatePos();
+    },
+    trackIndex() {
+      this.updateOffset();
     },
     value(val) {
       this.currentIndex = val;
@@ -193,92 +194,6 @@ export default {
     off(window, 'resize', this.handleResize);
   },
   methods: {
-    // find option component
-    findChild(cb) {
-      const find = function(child) {
-        const name = child.$options.componentName;
-
-        if (name) {
-          cb(child);
-        } else if (child.$children.length) {
-          child.$children.forEach((innerChild) => {
-            find(innerChild, cb);
-          });
-        }
-      };
-
-      if (this.slideInstances.length || !this.$children) {
-        this.slideInstances.forEach((child) => {
-          find(child);
-        });
-      } else {
-        this.$children.forEach((child) => {
-          find(child);
-        });
-      }
-    },
-    // copy trackDom
-    initCopyTrackDom() {
-      this.$nextTick(() => {
-        this.$refs.copyTrack.innerHTML = this.$refs.originTrack.innerHTML;
-      });
-    },
-    updateSlides(init) {
-      const slides = [];
-      let index = 1;
-
-      this.findChild((child) => {
-        slides.push({
-          $el: child.$el,
-        });
-        child.index = index++;
-
-        if (init) {
-          this.slideInstances.push(child);
-        }
-      });
-
-      this.slides = slides;
-      this.updatePos();
-    },
-    updatePos() {
-      this.findChild((child) => {
-        child.width = this.listWidth;
-        child.height = typeof this.height === 'number' ? `${this.height}px` : this.height;
-      });
-
-      this.trackWidth = (this.slides.length || 0) * this.listWidth;
-    },
-    // use when slot changed
-    slotChange() {
-      this.$nextTick(() => {
-        this.slides = [];
-        this.slideInstances = [];
-
-        this.updateSlides(true, true);
-        this.updatePos();
-        this.updateOffset();
-      });
-    },
-    handleResize() {
-      this.listWidth = parseInt(getStyle(this.$el, 'width'), 10);
-      this.updatePos();
-      this.updateOffset();
-    },
-    updateTrackPos(index) {
-      if (this.showCopyTrack) {
-        this.trackIndex = index;
-      } else {
-        this.copyTrackIndex = index;
-      }
-    },
-    updateTrackIndex(index) {
-      if (this.showCopyTrack) {
-        this.copyTrackIndex = index;
-      } else {
-        this.trackIndex = index;
-      }
-    },
     add(offset) {
       // 获取单个轨道的图片数
       const slidesLen = this.slides.length;
@@ -334,6 +249,41 @@ export default {
         this.setAutoplay();
       }
     },
+    // find option component
+    findChild(cb) {
+      const find = function(child) {
+        const name = child.$options.componentName;
+
+        if (name) {
+          cb(child);
+        } else if (child.$children.length) {
+          child.$children.forEach((innerChild) => {
+            find(innerChild, cb);
+          });
+        }
+      };
+
+      if (this.slideInstances.length || !this.$children) {
+        this.slideInstances.forEach((child) => {
+          find(child);
+        });
+      } else {
+        this.$children.forEach((child) => {
+          find(child);
+        });
+      }
+    },
+    handleResize() {
+      this.listWidth = parseInt(getStyle(this.$el, 'width'), 10);
+      this.updatePos();
+      this.updateOffset();
+    },
+    // copy trackDom
+    initCopyTrackDom() {
+      this.$nextTick(() => {
+        this.$refs.copyTrack.innerHTML = this.$refs.originTrack.innerHTML;
+      });
+    },
     setAutoplay() {
       window.clearInterval(this.timer);
 
@@ -343,6 +293,17 @@ export default {
         }, this.autoplaySpeed);
       }
     },
+    // use when slot changed
+    slotChange() {
+      this.$nextTick(() => {
+        this.slides = [];
+        this.slideInstances = [];
+
+        this.updateSlides(true, true);
+        this.updatePos();
+        this.updateOffset();
+      });
+    },
     updateOffset() {
       this.$nextTick(() => {
         /* hack: revise copyTrack offset (1px) */
@@ -350,6 +311,46 @@ export default {
         this.trackOffset = this.trackIndex * this.listWidth;
         this.trackCopyOffset = this.copyTrackIndex * this.listWidth + ofs;
       });
+    },
+    updatePos() {
+      this.findChild((child) => {
+        child.width = this.listWidth;
+        child.height = typeof this.height === 'number' ? `${this.height}px` : this.height;
+      });
+
+      this.trackWidth = (this.slides.length || 0) * this.listWidth;
+    },
+    updateSlides(init) {
+      const slides = [];
+      let index = 1;
+
+      this.findChild((child) => {
+        slides.push({
+          $el: child.$el,
+        });
+        child.index = index++;
+
+        if (init) {
+          this.slideInstances.push(child);
+        }
+      });
+
+      this.slides = slides;
+      this.updatePos();
+    },
+    updateTrackIndex(index) {
+      if (this.showCopyTrack) {
+        this.copyTrackIndex = index;
+      } else {
+        this.trackIndex = index;
+      }
+    },
+    updateTrackPos(index) {
+      if (this.showCopyTrack) {
+        this.trackIndex = index;
+      } else {
+        this.copyTrackIndex = index;
+      }
     },
   },
 };

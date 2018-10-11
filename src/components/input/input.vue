@@ -106,105 +106,91 @@ export default {
   name: 'Input',
   mixins: [Emitter],
   props: {
-    type: {
+    autocomplete: {
+      default: 'off',
       validator(value) {
-        return oneOf(value, ['text', 'textarea', 'password', 'url', 'email', 'date']);
+        return oneOf(value, ['on', 'off']);
       },
-      default: 'text',
     },
-    value: {
-      type: [String, Number],
+    autofocus: {
+      default: false,
+      type: Boolean,
+    },
+    autosize: {
+      default: false,
+      type: [Boolean, Object],
+    },
+    clearable: {
+      default: false,
+      type: Boolean,
+    },
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
+    elementId: {
+      type: String,
+    },
+    icon: String,
+    maxlength: {
+      type: Number,
+    },
+    name: {
+      type: String,
+    },
+    number: {
+      default: false,
+      type: Boolean,
+    },
+    placeholder: {
       default: '',
+      type: String,
+    },
+    readonly: {
+      default: false,
+      type: Boolean,
+    },
+    rows: {
+      default: 2,
+      type: Number,
     },
     size: {
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
-    placeholder: {
-      type: String,
-      default: '',
-    },
-    maxlength: {
-      type: Number,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    icon: String,
-    autosize: {
-      type: [Boolean, Object],
-      default: false,
-    },
-    rows: {
-      type: Number,
-      default: 2,
-    },
-    readonly: {
-      type: Boolean,
-      default: false,
-    },
-    name: {
-      type: String,
-    },
-    number: {
-      type: Boolean,
-      default: false,
-    },
-    autofocus: {
-      type: Boolean,
-      default: false,
-    },
     spellcheck: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
-    autocomplete: {
+    type: {
+      default: 'text',
       validator(value) {
-        return oneOf(value, ['on', 'off']);
+        return oneOf(value, ['text', 'textarea', 'password', 'url', 'email', 'date']);
       },
-      default: 'off',
     },
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-    elementId: {
-      type: String,
+    value: {
+      default: '',
+      type: [String, Number],
     },
     wrap: {
+      default: 'soft',
       validator(value) {
         return oneOf(value, ['hard', 'soft']);
       },
-      default: 'soft',
     },
   },
   data() {
     return {
+      append: true,
       currentValue: this.value,
       prefixCls,
       prepend: true,
-      append: true,
       slotReady: false,
       textareaStyles: {},
     };
   },
   computed: {
-    wrapClasses() {
-      return [
-        `${prefixCls}-wrapper`,
-        {
-          [`${prefixCls}-wrapper-${this.size}`]: !!this.size,
-          [`${prefixCls}-type`]: this.type,
-          [`${prefixCls}-group`]: this.prepend || this.append,
-          [`${prefixCls}-group-${this.size}`]: (this.prepend || this.append) && !!this.size,
-          [`${prefixCls}-group-with-prepend`]: this.prepend,
-          [`${prefixCls}-group-with-append`]: this.append,
-          [`${prefixCls}-hide-icon`]: this.append, // #554
-        },
-      ];
-    },
     inputClasses() {
       return [
         `${prefixCls}`,
@@ -219,6 +205,20 @@ export default {
         `${prefixCls}`,
         {
           [`${prefixCls}-disabled`]: this.disabled,
+        },
+      ];
+    },
+    wrapClasses() {
+      return [
+        `${prefixCls}-wrapper`,
+        {
+          [`${prefixCls}-wrapper-${this.size}`]: !!this.size,
+          [`${prefixCls}-type`]: this.type,
+          [`${prefixCls}-group`]: this.prepend || this.append,
+          [`${prefixCls}-group-${this.size}`]: (this.prepend || this.append) && !!this.size,
+          [`${prefixCls}-group-with-prepend`]: this.prepend,
+          [`${prefixCls}-group-with-append`]: this.append,
+          [`${prefixCls}-hide-icon`]: this.append, // #554
         },
       ];
     },
@@ -241,23 +241,19 @@ export default {
     this.resizeTextarea();
   },
   methods: {
-    handleEnter(event) {
-      this.$emit('on-enter', event);
+    blur() {
+      if (this.type === 'textarea') {
+        this.$refs.textarea.blur();
+      } else {
+        this.$refs.input.blur();
+      }
     },
-    handleKeydown(event) {
-      this.$emit('on-keydown', event);
-    },
-    handleKeypress(event) {
-      this.$emit('on-keypress', event);
-    },
-    handleKeyup(event) {
-      this.$emit('on-keyup', event);
-    },
-    handleIconClick(event) {
-      this.$emit('on-click', event);
-    },
-    handleFocus(event) {
-      this.$emit('on-focus', event);
+    focus() {
+      if (this.type === 'textarea') {
+        this.$refs.textarea.focus();
+      } else {
+        this.$refs.input.focus();
+      }
     },
     handleBlur(event) {
       this.$emit('on-blur', event);
@@ -265,6 +261,24 @@ export default {
       if (!findComponentUpward(this, ['DatePicker', 'TimePicker', 'Cascader', 'Search'])) {
         this.dispatch('FormItem', 'on-form-blur', this.currentValue);
       }
+    },
+    handleChange(event) {
+      this.$emit('on-input-change', event);
+    },
+    handleClear() {
+      const e = {target: {value: ''}};
+      this.$emit('input', '');
+      this.setCurrentValue('');
+      this.$emit('on-change', e);
+    },
+    handleEnter(event) {
+      this.$emit('on-enter', event);
+    },
+    handleFocus(event) {
+      this.$emit('on-focus', event);
+    },
+    handleIconClick(event) {
+      this.$emit('on-click', event);
     },
     handleInput(event) {
       let {value} = event.target;
@@ -277,21 +291,20 @@ export default {
       this.setCurrentValue(value);
       this.$emit('on-change', event);
     },
-    handleChange(event) {
-      this.$emit('on-input-change', event);
+    handleKeydown(event) {
+      this.$emit('on-keydown', event);
     },
-    setCurrentValue(value) {
-      if (value === this.currentValue) {
-        return;
-      }
-
-      this.$nextTick(() => {
-        this.resizeTextarea();
-      });
-      this.currentValue = value;
-
-      if (!findComponentUpward(this, ['DatePicker', 'TimePicker', 'Cascader', 'Search'])) {
-        this.dispatch('FormItem', 'on-form-change', value);
+    handleKeypress(event) {
+      this.$emit('on-keypress', event);
+    },
+    handleKeyup(event) {
+      this.$emit('on-keyup', event);
+    },
+    onKeyup(event) {
+      if (event.key === 'Enter') {
+        this.handleEnter(event);
+      } else {
+        this.handleKeyup(event);
       }
     },
     resizeTextarea() {
@@ -306,31 +319,18 @@ export default {
 
       this.textareaStyles = calcTextareaHeight(this.$refs.textarea, minRows, maxRows);
     },
-    focus() {
-      if (this.type === 'textarea') {
-        this.$refs.textarea.focus();
-      } else {
-        this.$refs.input.focus();
+    setCurrentValue(value) {
+      if (value === this.currentValue) {
+        return;
       }
-    },
-    blur() {
-      if (this.type === 'textarea') {
-        this.$refs.textarea.blur();
-      } else {
-        this.$refs.input.blur();
-      }
-    },
-    handleClear() {
-      const e = {target: {value: ''}};
-      this.$emit('input', '');
-      this.setCurrentValue('');
-      this.$emit('on-change', e);
-    },
-    onKeyup(event) {
-      if (event.key === 'Enter') {
-        this.handleEnter(event);
-      } else {
-        this.handleKeyup(event);
+
+      this.$nextTick(() => {
+        this.resizeTextarea();
+      });
+      this.currentValue = value;
+
+      if (!findComponentUpward(this, ['DatePicker', 'TimePicker', 'Cascader', 'Search'])) {
+        this.dispatch('FormItem', 'on-form-change', value);
       }
     },
   },

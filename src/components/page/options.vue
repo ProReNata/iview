@@ -55,18 +55,18 @@ function isValueNumber(value) {
 
 export default {
   name: 'PageOption',
-  components: {iSelect, iOption},
+  components: {iOption, iSelect},
   mixins: [Locale],
   props: {
-    pageSizeOpts: Array,
-    showSizer: Boolean,
-    showElevator: Boolean,
-    current: Number,
-    scoreCurrent: Number,
-    pageSize: Number,
     allPages: Number,
+    current: Number,
     isSmall: Boolean,
+    pageSize: Number,
+    pageSizeOpts: Array,
     placement: String,
+    scoreCurrent: Number,
+    showElevator: Boolean,
+    showSizer: Boolean,
     transfer: Boolean,
   },
   data() {
@@ -75,17 +75,17 @@ export default {
     };
   },
   computed: {
-    size() {
-      return this.isSmall ? 'small' : 'default';
+    ElevatorClasses() {
+      return [`${prefixCls}-options-elevator`];
     },
     optsClasses() {
       return [`${prefixCls}-options`];
     },
+    size() {
+      return this.isSmall ? 'small' : 'default';
+    },
     sizerClasses() {
       return [`${prefixCls}-options-sizer`];
-    },
-    ElevatorClasses() {
-      return [`${prefixCls}-options-elevator`];
     },
   },
   watch: {
@@ -94,9 +94,6 @@ export default {
     },
   },
   methods: {
-    changeSize() {
-      this.$emit('on-size', this.currentPageSize);
-    },
     changePage(event) {
       let val = event.target.value.trim();
       let page = 0;
@@ -121,6 +118,9 @@ export default {
         this.$emit('on-page', page);
         event.target.value = page;
       }
+    },
+    changeSize() {
+      this.$emit('on-size', this.currentPageSize);
     },
     onKeyup(event) {
       if (event.key === 'Enter') {

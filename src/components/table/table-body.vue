@@ -74,16 +74,17 @@ export default {
   components: {Cell, Expand, TableTr},
   mixins: [Mixin],
   props: {
+    columns: Array,
+    columnsWidth: Object,
+    // rebuildData
+    data: Array,
+    fixed: {
+      default: false,
+      type: [Boolean, String],
+    },
+    objData: Object,
     prefixCls: String,
     styleObject: Object,
-    columns: Array,
-    data: Array, // rebuildData
-    objData: Object,
-    columnsWidth: Object,
-    fixed: {
-      type: [Boolean, String],
-      default: false,
-    },
   },
   computed: {
     expandRender() {
@@ -105,6 +106,18 @@ export default {
     },
   },
   methods: {
+    clickCurrentRow(_index) {
+      this.$parent.clickCurrentRow(_index);
+    },
+    dblclickCurrentRow(_index) {
+      this.$parent.dblclickCurrentRow(_index);
+    },
+    handleMouseIn(_index) {
+      this.$parent.handleMouseIn(_index);
+    },
+    handleMouseOut(_index) {
+      this.$parent.handleMouseOut(_index);
+    },
     rowChecked(_index) {
       return this.objData[_index] && this.objData[_index]._isChecked;
     },
@@ -113,18 +126,6 @@ export default {
     },
     rowExpanded(_index) {
       return this.objData[_index] && this.objData[_index]._isExpanded;
-    },
-    handleMouseIn(_index) {
-      this.$parent.handleMouseIn(_index);
-    },
-    handleMouseOut(_index) {
-      this.$parent.handleMouseOut(_index);
-    },
-    clickCurrentRow(_index) {
-      this.$parent.clickCurrentRow(_index);
-    },
-    dblclickCurrentRow(_index) {
-      this.$parent.dblclickCurrentRow(_index);
     },
   },
 };

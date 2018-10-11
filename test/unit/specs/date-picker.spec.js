@@ -34,14 +34,6 @@ describe('DatePicker.vue', () => {
     let dateValue, dateRangeValue, timeValue, timeRangeValue;
     vm = createVue(
       {
-        template: `
-        <div>
-          <date-picker type="date" @on-change="onChangeDate"></date-picker>
-          <date-picker type="daterange" @on-change="onChangeDateRange"></date-picker>
-          <time-picker type="time" @on-change="onChangeTime"></time-picker>
-          <time-picker type="timerange" @on-change="onChangeTimeRange"></time-picker>
-        </div>
-      `,
         methods: {
           onChangeDate(val) {
             dateValue = val;
@@ -56,6 +48,14 @@ describe('DatePicker.vue', () => {
             timeRangeValue = val;
           },
         },
+        template: `
+        <div>
+          <date-picker type="date" @on-change="onChangeDate"></date-picker>
+          <date-picker type="daterange" @on-change="onChangeDateRange"></date-picker>
+          <time-picker type="time" @on-change="onChangeTime"></time-picker>
+          <time-picker type="timerange" @on-change="onChangeTimeRange"></time-picker>
+        </div>
+      `,
       },
       true,
     );
@@ -160,12 +160,12 @@ describe('DatePicker.vue', () => {
   it('should change type progamatically', (done) => {
     // https://jsfiddle.net/hq7cLz83/
     vm = createVue({
-      template: '<Date-picker :type="dateType"></Date-picker>',
       data() {
         return {
           dateType: 'month',
         };
       },
+      template: '<Date-picker :type="dateType"></Date-picker>',
     });
 
     const picker = vm.$children[0];
@@ -212,7 +212,6 @@ describe('DatePicker.vue', () => {
     const nowDate = dateToString(now);
     let onChangeCalled = false;
     vm = createVue({
-      template: '<date-picker :value="date" type="date" @on-change="onChange"></date-picker>',
       data() {
         return {date: now};
       },
@@ -221,6 +220,7 @@ describe('DatePicker.vue', () => {
           onChangeCalled = true;
         },
       },
+      template: '<date-picker :value="date" type="date" @on-change="onChange"></date-picker>',
     });
 
     vm.$nextTick(() => {
@@ -299,10 +299,10 @@ describe('DatePicker.vue', () => {
 
   it('should accept a empty string as input v-model value', (done) => {
     vm = createVue({
-      template: '<date-picker v-model="value" type="date"></date-picker>',
       data() {
         return {value: ''};
       },
+      template: '<date-picker v-model="value" type="date"></date-picker>',
     });
 
     vm.$nextTick(() => {
@@ -313,14 +313,6 @@ describe('DatePicker.vue', () => {
 
   it('should convert strings to Date objects', (done) => {
     vm = createVue({
-      template: `
-        <div>
-          <date-picker v-model="value1" type="daterange" style="width: 200px"></date-picker>
-          <date-picker v-model="value2" type="daterange" placement="bottom-end" style="width: 200px"></date-picker>
-          <date-picker v-model="value3" type="datetime" placement="bottom-end" style="width: 200px"></date-picker>
-          <date-picker v-model="value4" type="datetimerange" placement="bottom-end" style="width: 200px"></date-picker>
-        </div>
-      `,
       data() {
         return {
           value1: ['2017-10-10', '2017-10-20'],
@@ -329,6 +321,14 @@ describe('DatePicker.vue', () => {
           value4: ['2027-10-10 10:00:00', '2027-10-20 10:00:00'],
         };
       },
+      template: `
+        <div>
+          <date-picker v-model="value1" type="daterange" style="width: 200px"></date-picker>
+          <date-picker v-model="value2" type="daterange" placement="bottom-end" style="width: 200px"></date-picker>
+          <date-picker v-model="value3" type="datetime" placement="bottom-end" style="width: 200px"></date-picker>
+          <date-picker v-model="value4" type="datetimerange" placement="bottom-end" style="width: 200px"></date-picker>
+        </div>
+      `,
     });
 
     vm.$nextTick(() => {

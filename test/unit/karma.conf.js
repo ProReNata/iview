@@ -12,19 +12,19 @@ module.exports = function(config) {
     //    http://karma-runner.github.io/0.13/config/browsers.html
     // 2. add it to the `browsers` array below.
     browsers: ['ChromeHeadless'],
-    frameworks: ['mocha', 'sinon-chai'],
-    reporters: ['spec', 'coverage'],
+    coverageReporter: {
+      dir: './coverage',
+      reporters: [{subdir: '.', type: 'lcov'}, {type: 'text-summary'}],
+    },
     files: ['./index.js'],
+    frameworks: ['mocha', 'sinon-chai'],
     preprocessors: {
       './index.js': ['webpack', 'sourcemap'],
     },
+    reporters: ['spec', 'coverage'],
     webpack: webpackConfig,
     webpackMiddleware: {
       noInfo: true,
-    },
-    coverageReporter: {
-      dir: './coverage',
-      reporters: [{type: 'lcov', subdir: '.'}, {type: 'text-summary'}],
     },
   });
 };

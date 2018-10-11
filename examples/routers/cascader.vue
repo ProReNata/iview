@@ -31,52 +31,52 @@ export default {
     return {
       data: [
         {
-          value: 1,
-          label: '北京',
           children: [
             {
-              value: 11,
               label: '故宫',
+              value: 11,
             },
             {
-              value: 12,
               label: '天坛',
+              value: 12,
             },
             {
-              value: 13,
               label: '王府井',
+              value: 13,
             },
           ],
+          label: '北京',
+          value: 1,
         },
         {
-          value: 2,
-          label: '江苏',
           children: [
             {
-              value: 21,
-              label: '南京',
               children: [
                 {
-                  value: 211,
                   label: '夫子庙',
+                  value: 211,
                 },
               ],
+              label: '南京',
+              value: 21,
             },
             {
-              value: 22,
-              label: '苏州',
               children: [
                 {
-                  value: 221,
                   label: '拙政园',
+                  value: 221,
                 },
                 {
-                  value: 222,
                   label: '狮子林',
+                  value: 222,
                 },
               ],
+              label: '苏州',
+              value: 22,
             },
           ],
+          label: '江苏',
+          value: 2,
         },
       ],
       value3: [],

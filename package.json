@@ -13,7 +13,9 @@
     "ui",
     "framework"
   ],
+  "browser": "dist/iview.min.js",
   "main": "dist/iview.js",
+  "module": "src/index.js",
   "files": [
     "dist",
     "src"

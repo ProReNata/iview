@@ -105,13 +105,22 @@ export default {
   components: {iButton},
   mixins: [Popper, Locale],
   props: {
-    trigger: {
-      validator(value) {
-        return oneOf(value, ['click', 'focus', 'hover']);
-      },
-      default: 'click',
+    cancelText: {
+      type: String,
+    },
+    confirm: {
+      default: false,
+      type: Boolean,
+    },
+    content: {
+      default: '',
+      type: [String, Number],
+    },
+    okText: {
+      type: String,
     },
     placement: {
+      default: 'top',
       validator(value) {
         return oneOf(value, [
           'top',
@@ -128,42 +137,34 @@ export default {
           'right-end',
         ]);
       },
-      default: 'top',
-    },
-    title: {
-      type: [String, Number],
-    },
-    content: {
-      type: [String, Number],
-      default: '',
-    },
-    width: {
-      type: [String, Number],
-    },
-    confirm: {
-      type: Boolean,
-      default: false,
-    },
-    okText: {
-      type: String,
-    },
-    cancelText: {
-      type: String,
-    },
-    transfer: {
-      type: Boolean,
-      default: false,
     },
     popperClass: {
       type: String,
     },
+    title: {
+      type: [String, Number],
+    },
+    transfer: {
+      default: false,
+      type: Boolean,
+    },
+    trigger: {
+      default: 'click',
+      validator(value) {
+        return oneOf(value, ['click', 'focus', 'hover']);
+      },
+    },
+    width: {
+      type: [String, Number],
+    },
   },
   data() {
     return {
+      // transfer 模式下，点击 slot 也会触发关闭
+      disableCloseUnderTransfer: false,
+      isInput: false,
       prefixCls,
       showTitle: true,
-      isInput: false,
-      disableCloseUnderTransfer: false, // transfer 模式下，点击 slot 也会触发关闭
     };
   },
   computed: {
@@ -174,6 +175,20 @@ export default {
           [`${prefixCls}-confirm`]: this.confirm,
         },
       ];
+    },
+    localeCancelText() {
+      if (this.cancelText === undefined) {
+        return this.t('i.poptip.cancelText');
+      }
+
+      return this.cancelText;
+    },
+    localeOkText() {
+      if (this.okText === undefined) {
+        return this.t('i.poptip.okText');
+      }
+
+      return this.okText;
     },
     popperClasses() {
       return [
@@ -192,20 +207,6 @@ export default {
       }
 
       return style;
-    },
-    localeOkText() {
-      if (this.okText === undefined) {
-        return this.t('i.poptip.okText');
-      }
-
-      return this.okText;
-    },
-    localeCancelText() {
-      if (this.cancelText === undefined) {
-        return this.t('i.poptip.cancelText');
-      }
-
-      return this.cancelText;
     },
   },
   mounted() {
@@ -236,6 +237,30 @@ export default {
     }
   },
   methods: {
+    cancel() {
+      this.visible = false;
+      this.$emit('on-cancel');
+    },
+    getInputChildren() {
+      const $input = this.$refs.reference.querySelectorAll('input');
+      const $textarea = this.$refs.reference.querySelectorAll('textarea');
+      let $children = null;
+
+      if ($input.length) {
+        $children = $input[0];
+      } else if ($textarea.length) {
+        $children = $textarea[0];
+      }
+
+      return $children;
+    },
+    handleBlur(fromInput = true) {
+      if (this.trigger !== 'focus' || this.confirm || (this.isInput && !fromInput)) {
+        return false;
+      }
+
+      this.visible = false;
+    },
     handleClick() {
       if (this.confirm) {
         this.visible = !this.visible;
@@ -248,11 +273,6 @@ export default {
       }
 
       this.visible = !this.visible;
-    },
-    handleTransferClick() {
-      if (this.transfer) {
-        this.disableCloseUnderTransfer = true;
-      }
     },
     handleClose() {
       if (this.disableCloseUnderTransfer) {
@@ -280,13 +300,6 @@ export default {
 
       this.visible = true;
     },
-    handleBlur(fromInput = true) {
-      if (this.trigger !== 'focus' || this.confirm || (this.isInput && !fromInput)) {
-        return false;
-      }
-
-      this.visible = false;
-    },
     handleMouseenter() {
       if (this.trigger !== 'hover' || this.confirm) {
         return false;
@@ -312,26 +325,14 @@ export default {
         }, 100);
       }
     },
-    cancel() {
-      this.visible = false;
-      this.$emit('on-cancel');
+    handleTransferClick() {
+      if (this.transfer) {
+        this.disableCloseUnderTransfer = true;
+      }
     },
     ok() {
       this.visible = false;
       this.$emit('on-ok');
-    },
-    getInputChildren() {
-      const $input = this.$refs.reference.querySelectorAll('input');
-      const $textarea = this.$refs.reference.querySelectorAll('textarea');
-      let $children = null;
-
-      if ($input.length) {
-        $children = $input[0];
-      } else if ($textarea.length) {
-        $children = $textarea[0];
-      }
-
-      return $children;
     },
   },
 };

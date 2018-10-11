@@ -18,13 +18,13 @@ export default {
   name: 'MenuItem',
   mixins: [Emitter, mixin],
   props: {
-    name: {
-      type: [String, Number],
-      required: true,
-    },
     disabled: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    name: {
+      required: true,
+      type: [String, Number],
     },
   },
   data() {

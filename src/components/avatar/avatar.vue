@@ -29,34 +29,50 @@ export default {
   name: 'Avatar',
   components: {Icon},
   props: {
+    icon: {
+      type: String,
+    },
     shape: {
+      default: 'circle',
       validator(value) {
         return oneOf(value, ['circle', 'square']);
       },
-      default: 'circle',
     },
     size: {
+      default: 'default',
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
-      default: 'default',
     },
     src: {
-      type: String,
-    },
-    icon: {
       type: String,
     },
   },
   data() {
     return {
-      prefixCls,
-      scale: 1,
       childrenWidth: 0,
       isSlotShow: false,
+      prefixCls,
+      scale: 1,
     };
   },
   computed: {
+    childrenStyle() {
+      let style = {};
+
+      if (this.isSlotShow) {
+        style = {
+          display: 'inline-block',
+          left: `calc(50% - ${Math.round(this.childrenWidth / 2)}px)`,
+          msTransform: `scale(${this.scale})`,
+          position: 'absolute',
+          transform: `scale(${this.scale})`,
+          WebkitTransform: `scale(${this.scale})`,
+        };
+      }
+
+      return style;
+    },
     classes() {
       return [
         `${prefixCls}`,
@@ -67,22 +83,6 @@ export default {
           [`${prefixCls}-icon`]: !!this.icon,
         },
       ];
-    },
-    childrenStyle() {
-      let style = {};
-
-      if (this.isSlotShow) {
-        style = {
-          msTransform: `scale(${this.scale})`,
-          WebkitTransform: `scale(${this.scale})`,
-          transform: `scale(${this.scale})`,
-          position: 'absolute',
-          display: 'inline-block',
-          left: `calc(50% - ${Math.round(this.childrenWidth / 2)}px)`,
-        };
-      }
-
-      return style;
     },
   },
   mounted() {

@@ -27,26 +27,27 @@ const getGlobal = function() {
 
 module.exports = merge(webpackBaseConfig, {
   devtool: 'source-map',
-  mode: process.env.NODE_ENV,
   entry: {
     main: './src/index.js',
   },
-  output: {
-    globalObject: `(${getGlobal.toString()}())`, // https://github.com/webpack/webpack/issues/6525
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: '/dist/',
-    filename: 'iview.min.js',
-    library: 'iview',
-    libraryTarget: 'umd',
-    umdNamedDefine: true,
-  },
   externals: {
     vue: {
-      root: 'Vue',
+      amd: 'vue',
       commonjs: 'vue',
       commonjs2: 'vue',
-      amd: 'vue',
+      root: 'Vue',
     },
+  },
+  mode: process.env.NODE_ENV,
+  output: {
+    filename: 'iview.min.js',
+    // https://github.com/webpack/webpack/issues/6525
+    globalObject: `(${getGlobal.toString()}())`,
+    library: 'iview',
+    libraryTarget: 'umd',
+    path: path.resolve(__dirname, '../dist'),
+    publicPath: '/dist/',
+    umdNamedDefine: true,
   },
   plugins: [
     // @todo
@@ -61,11 +62,11 @@ module.exports = merge(webpackBaseConfig, {
       },
     }),
     new CompressionPlugin({
-      filename: '[path].gz[query]',
       algorithm: 'gzip',
+      filename: '[path].gz[query]',
+      minRatio: 0.8,
       test: /\.(js|css)$/,
       threshold: 10240,
-      minRatio: 0.8,
     }),
   ],
 });

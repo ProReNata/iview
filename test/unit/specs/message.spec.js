@@ -30,9 +30,9 @@ describe('Message.vue', () => {
     const testMessage = (type) => `Hello world! this is a ${type} message`;
     const tests = ['info', 'success', 'warning', 'error', 'loading'].reduce((tests, type) => {
       return tests.concat({
-        type: type,
-        message: testMessage(type),
         class: 'ivu-message-' + type,
+        message: testMessage(type),
+        type: type,
       });
     }, []);
     let domElements = [];
