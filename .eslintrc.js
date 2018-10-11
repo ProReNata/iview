@@ -27,7 +27,7 @@ module.exports = {
    */
   overrides: [
     {
-      files: ['postcss.config.js', 'build/**/*.js', 'examples/**/*.js', 'examples/**/*.vue'],
+      files: ['build/**/*.js', 'examples/**/*.{js,vue}'],
       rules: {
         'import/no-extraneous-dependencies': [
           'error',
@@ -35,20 +35,6 @@ module.exports = {
             devDependencies: true,
           },
         ],
-      },
-    },
-    {
-      files: ['build/**/*.js'],
-      rules: {
-        'global-require': 'off',
-        'no-new-func': 'off',
-        'no-restricted-globals': 'off',
-        strict: 'off',
-      },
-    },
-    {
-      files: ['build/**/*.js', 'examples/**/*.js', 'examples/**/*.vue'],
-      rules: {
         'no-console': 'off',
       },
     },
@@ -99,6 +85,7 @@ module.exports = {
     'babel/no-invalid-this': 'off',
     'babel/new-cap': 'off',
     'babel/no-unused-expressions': 'off',
+    'compat/compat': process.env.NODE_ENV === 'production' ? 'off' : 'warn',
     'eslint-comments/no-use': 'off',
     'promise/always-return': 'off',
     'promise/avoid-new': 'off',
@@ -129,5 +116,6 @@ module.exports = {
         config: './build/webpack.dev.config.js',
       },
     },
+    polyfills: ['promises'],
   },
 };
