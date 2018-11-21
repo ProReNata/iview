@@ -6,7 +6,17 @@
     @mousedown.prevent
     @touchstart.prevent
   >
+    <i
+      v-if="preIconName"
+      :class="preIconName"
+    >
+    </i>
     <slot>{{ showLabel }}</slot>
+    <i
+      v-if="postIconName"
+      :class="postIconName"
+    >
+    </i>
   </li>
 </template>
 <script>
@@ -30,6 +40,14 @@ export default {
     },
     label: {
       type: [String, Number],
+    },
+    postIconName: {
+      default: '',
+      type: String,
+    },
+    preIconName: {
+      default: '',
+      type: String,
     },
     selected: {
       default: false,
@@ -57,6 +75,9 @@ export default {
           [`${prefixCls}-focus`]: this.isFocused,
         },
       ];
+    },
+    hasDefaultSlot() {
+      return Boolean(this.$slots.default);
     },
     optionLabel() {
       return this.label || (this.$el && this.$el.textContent.trim());

@@ -81,6 +81,7 @@ module.exports = {
     'babel/no-invalid-this': 'off',
     'babel/new-cap': 'off',
     'babel/no-unused-expressions': 'off',
+    'babel/camelcase': 'off',
     'compat/compat': process.env.NODE_ENV === 'production' ? 'off' : 'warn',
     'eslint-comments/no-use': 'off',
     'promise/always-return': 'off',
