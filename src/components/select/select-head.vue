@@ -208,7 +208,7 @@ export default {
 
       // #982
       if (typeof value === 'undefined' || value === '' || value === null) {
-        this.query = '';
+        if (!this.query) this.query = '';
       } else {
         this.query = value.label;
       }
