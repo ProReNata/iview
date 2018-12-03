@@ -8,7 +8,7 @@
       <span class="expand-value">
         {{ row.job }}
       </span>
-            </Col>
+      </Col>
       <Col span="8">
       <span class="expand-key">
         兴趣：
@@ -16,7 +16,7 @@
       <span class="expand-value">
         {{ row.interest }}
       </span>
-            </Col>
+      </Col>
       <Col span="8">
       <span class="expand-key">
         生日：
@@ -24,7 +24,7 @@
       <span class="expand-value">
         {{ row.birthday }}
       </span>
-            </Col>
+      </Col>
     </Row>
     <Row>
       <Col span="8">
@@ -34,7 +34,7 @@
       <span class="expand-value">
         《{{ row.book }}》
       </span>
-            </Col>
+      </Col>
       <Col span="8">
       <span class="expand-key">
         最喜欢的电影：
@@ -42,7 +42,7 @@
       <span class="expand-value">
         {{ row.movie }}
       </span>
-            </Col>
+      </Col>
       <Col span="8">
       <span class="expand-key">
         最喜欢的音乐：
@@ -50,7 +50,7 @@
       <span class="expand-value">
         {{ row.music }}
       </span>
-            </Col>
+      </Col>
     </Row>
   </div>
 </template>

@@ -12,7 +12,7 @@
         ref="navContainer"
         :class="[prefixCls + '-nav-container']"
         tabindex="0"
-        @keydown="onKeydown"
+        @keydown.exact="onKeydown"
         @keydown.space.prevent="handleTabKeyboardSelect(false)"
       >
         <div

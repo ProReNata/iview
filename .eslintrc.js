@@ -96,7 +96,6 @@ module.exports = {
     'vue/no-unused-components': 'off',
     'vue/no-parsing-error': 'off',
     'vue/no-v-html': 'off',
-    'vue/require-prop-type-constructor': 'off', // New rule currently buggy in 5.0.0.beta.3
   },
 
   /**

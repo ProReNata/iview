@@ -108,7 +108,7 @@
                 size="small"
                 type="ghost"
                 @click.native="handleClear"
-                @keydown="onClear"
+                @keydown.exact="onClear"
                 @keydown.native="onClearNative"
               >
                 {{ t('i.datepicker.clear') }}
@@ -119,7 +119,7 @@
                 size="small"
                 type="primary"
                 @click.native="handleSuccess"
-                @keydown="onOk"
+                @keydown.exact="onOk"
                 @keydown.native="onOkNative"
               >
                 {{ t('i.datepicker.ok') }}

@@ -31,7 +31,7 @@
           placeholder="Select date"
         >
         </DatePicker>
-                </Col>
+        </Col>
         <Col
           span="2"
           style="text-align: center"
@@ -43,7 +43,7 @@
           placeholder="Select time"
         >
         </TimePicker>
-                </Col>
+        </Col>
       </Row>
     </FormItem>
     <FormItem label="Radio">

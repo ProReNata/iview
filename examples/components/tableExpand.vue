@@ -13,7 +13,7 @@
       <span class="expand-value">
         {{ row.job }}
       </span>
-            </Col>
+      </Col>
       <Col span="8">
       <span class="expand-key">
         Interest:
@@ -21,7 +21,7 @@
       <span class="expand-value">
         {{ row.interest }}
       </span>
-            </Col>
+      </Col>
       <Col span="8">
       <span class="expand-key">
         Birthday:
@@ -29,7 +29,7 @@
       <span class="expand-value">
         {{ row.birthday }}
       </span>
-            </Col>
+      </Col>
     </Row>
     <Row>
       <Col span="8">
@@ -39,7 +39,7 @@
       <span class="expand-value">
         《{{ row.book }}》
       </span>
-            </Col>
+      </Col>
       <Col span="8">
       <span class="expand-key">
         Favorite movie:
@@ -47,7 +47,7 @@
       <span class="expand-value">
         {{ row.movie }}
       </span>
-            </Col>
+      </Col>
       <Col span="8">
       <span class="expand-key">
         Favorite music:
@@ -55,7 +55,7 @@
       <span class="expand-value">
         {{ row.music }}
       </span>
-            </Col>
+      </Col>
     </Row>
   </div>
 </template>
