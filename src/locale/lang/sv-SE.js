@@ -5,7 +5,7 @@ const lang = {
     datepicker: {
       clear: 'Rensa',
       datePanelLabel: '[mmmm] [yyyy]',
-      endTime: 'Slut tid',
+      endTime: 'Sluttid',
       month: 'Månad',
       month1: 'Januari',
       month10: 'Oktober',
@@ -36,7 +36,7 @@ const lang = {
       ok: 'Ok',
       selectDate: 'Välj datum',
       selectTime: 'Välj tidpunkt',
-      startTime: 'Start tid',
+      startTime: 'Starttid',
       weeks: {
         fri: 'Fre',
         mon: 'Mån',
