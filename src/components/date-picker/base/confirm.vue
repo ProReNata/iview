@@ -1,33 +1,33 @@
 <template>
-  <div 
-    ref="confirm" 
-    :class="[prefixCls + '-confirm']" 
+  <div
+    ref="confirm"
+    :class="[prefixCls + '-confirm']"
     @keydown.capture="onKeydown"
   >
-    <i-button 
-      v-if="showTime" 
-      :class="timeClasses" 
-      size="small" 
-      type="text" 
-      :disabled="timeDisabled" 
+    <i-button
+      v-if="showTime"
+      :class="timeClasses"
+      size="small"
+      type="text"
+      :disabled="timeDisabled"
       @click="handleToggleTime"
     >
       {{ labels.time }}
     </i-button>
-    <i-button 
-      ref="clear" 
-      size="small" 
-      type="ghost" 
-      @click.native="handleClear" 
+    <i-button
+      ref="clear"
+      size="small"
+      type="ghost"
+      @click.native="handleClear"
       @keydown.native="onKeydown"
     >
       {{ labels.clear }}
     </i-button>
-    <i-button 
-      ref="success" 
-      size="small" 
-      type="primary" 
-      @click.native="handleSuccess" 
+    <i-button
+      ref="success"
+      size="small"
+      type="primary"
+      @click.native="handleSuccess"
       @keydown.native="onKeydown"
     >
       {{ labels.ok }}
@@ -45,9 +45,18 @@ export default {
   components: {iButton},
   mixins: [Locale, Emitter],
   props: {
-    isTime: false,
-    showTime: false,
-    timeDisabled: false,
+    isTime: {
+      default: false,
+      type: Boolean,
+    },
+    showTime: {
+      default: false,
+      type: Boolean,
+    },
+    timeDisabled: {
+      default: false,
+      type: Boolean,
+    },
   },
   data() {
     return {
