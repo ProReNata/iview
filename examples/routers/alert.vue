@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Alerts</h1>
-    <h2>Large alerts</h2>
+    <h2>Feedback</h2>
     <Alert
       type="success"
       show-icon="true"
@@ -87,7 +87,7 @@
       </Button>
     </Alert>
 
-    <h2>Small alerts</h2>
+    <h2>Toasts</h2>
     <Alert
       type="success"
       closable
