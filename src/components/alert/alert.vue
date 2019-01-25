@@ -4,29 +4,37 @@
       v-if="!closed"
       :class="wrapClasses"
     >
-      <span
+      <div
         v-if="showIcon"
         :class="iconClasses"
       >
         <slot name="icon">
-          <Icon :type="iconType">
+          <Icon
+            :type="iconType"
+            fw="true"
+            weight="light"
+          >
           </Icon>
         </slot>
-      </span>
-      <span :class="messageClasses">
-        <slot></slot>
-      </span>
-      <span :class="descClasses">
-        <slot name="desc">
+      </div>
+
+      <div :class="messageClasses">
+        <h4 v-if="hasHeader">
+          <slot name="header"></slot>
+        </h4>
+        <slot>
         </slot>
-      </span>
+      </div>
       <a
         v-if="closable"
         :class="closeClasses"
         @click="close"
       >
         <slot name="close">
-          <Icon type="ios-close-empty">
+          <Icon
+            type="times"
+            fw
+          >
           </Icon>
         </slot>
       </a>
@@ -37,16 +45,12 @@
 import Icon from '../icon';
 import {oneOf} from '../../utils/assist';
 
-const prefixCls = 'ivu-alert';
+const prefixCls = 'byx-alert';
 
 export default {
   name: 'Alert',
   components: {Icon},
   props: {
-    banner: {
-      default: false,
-      type: Boolean,
-    },
     closable: {
       default: false,
       type: Boolean,
@@ -55,10 +59,11 @@ export default {
       default: false,
       type: Boolean,
     },
+    size: String,
     type: {
       default: 'info',
       validator(value) {
-        return oneOf(value, ['success', 'info', 'warning', 'error']);
+        return oneOf(value, ['success', 'info', 'warning', 'danger']);
       },
     },
   },
@@ -69,36 +74,51 @@ export default {
     };
   },
   computed: {
+    hasHeader() {
+      return this.$slots.header !== undefined;
+    },
     closeClasses() {
       return `${prefixCls}-close`;
     },
-    descClasses() {
-      return `${prefixCls}-desc`;
-    },
     iconClasses() {
-      return `${prefixCls}-icon`;
+      let iconClasses = `${prefixCls}-icon`;
+
+      if (this.size === 'large') {
+        iconClasses += ` ${prefixCls}-icon-large`;
+      }
+
+      return iconClasses;
     },
     iconType() {
       let type = '';
 
       switch (this.type) {
         case 'success':
-          type = 'checkmark-circled';
+          type = 'thumbs-up';
           break;
 
         case 'info':
-          type = 'information-circled';
+          type = 'info-circle';
           break;
 
         case 'warning':
-          type = 'android-alert';
+          type = 'exclamation-circle';
           break;
 
-        case 'error':
-          type = 'close-circled';
+        case 'danger':
+          type = 'exclamation';
+          break;
+
+        case 'update':
+          type = 'star';
+          break;
+
+        case 'tip':
+          type = 'lightbulb-exclamation';
           break;
 
         default:
+          type = 'info';
       }
 
       return type;
@@ -107,19 +127,11 @@ export default {
       return `${prefixCls}-message`;
     },
     wrapClasses() {
-      return [
-        `${prefixCls}`,
-        `${prefixCls}-${this.type}`,
-        {
-          [`${prefixCls}-with-icon`]: this.showIcon,
-          [`${prefixCls}-with-desc`]: this.desc,
-          [`${prefixCls}-with-banner`]: this.banner,
-        },
-      ];
+      return [`${prefixCls}`, `${prefixCls}-${this.type}`];
     },
   },
   mounted() {
-    this.desc = this.$slots.desc !== undefined;
+    this.header = this.$slots.header !== undefined;
   },
   methods: {
     close(e) {

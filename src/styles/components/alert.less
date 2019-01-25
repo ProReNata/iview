@@ -2,100 +2,79 @@
 @icon-prefix-cls: ~'@{css-prefix}icon';
 
 .@{alert-prefix-cls} {
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 1rem;
+  margin-bottom: .5rem;
   position: relative;
-  padding: 8px 48px 8px 16px;
-  border-radius: @border-radius-base;
-  color: @text-color;
-  font-size: @font-size-small;
-  line-height: 16px;
-  margin-bottom: 10px;
+  border-left: .25rem solid @color-border;
+  border-radius: @radius-normal;
+  box-shadow: @shadow-small;
 
-  &&-with-icon {
-    padding: 8px 48px 8px 38px;
+  .colorToast(@background, @color) {
+    background-color: @background;
+    color: @color;
+    border-left-color: lighten(@color, 5%);
   }
 
-  &-icon {
-    font-size: @font-size-base;
-    top: 8px;
-    left: 16px;
-    position: absolute;
+  &-info { .colorToast(@color-info, @color-info-dark) }
+  &-danger { .colorToast(@color-danger, @color-danger-dark) }
+  &-warning { .colorToast(@color-warning, @color-warning-dark) }
+  &-success { .colorToast(@color-success, @color-success-dark) }
+  &-update { .colorToast(@color-update, @color-update-dark) }
+
+  &-tip {
+    .colorToast(@color-s100, @color-s900);
+    [class^="fa"] { color:@color-p500; }
   }
 
-  &-desc {
-    font-size: @font-size-small;
-    color: @text-color;
-    line-height: 21px;
-    display: none;
-    text-align: justify;
-  }
+  &-icon{
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding-right: $padding;
+    margin: -$padding 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.414rem;
+    width: 3rem;
 
-  &-success {
-    border: 1px solid tint(@success-color, 80%);
-    background-color: tint(@success-color, 90%);
-    .@{alert-prefix-cls}-icon {
-      color: @success-color;
+    &-large {
+      font-size: 2.84rem;
+      width: 5rem;
     }
   }
 
-  &-info {
-    border: 1px solid tint(@primary-color, 80%);
-    background-color: tint(@primary-color, 90%);
-    .@{alert-prefix-cls}-icon {
-      color: @primary-color;
-    }
-  }
-
-  &-warning {
-    border: 1px solid tint(@warning-color, 80%);
-    background-color: tint(@warning-color, 90%);
-    .@{alert-prefix-cls}-icon {
-      color: @warning-color;
-    }
-  }
-
-  &-error {
-    border: 1px solid tint(@error-color, 80%);
-    background-color: tint(@error-color, 90%);
-    .@{alert-prefix-cls}-icon {
-      color: @error-color;
-    }
+  &-message {
+    max-width: 33rem;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 70%;
+    align-self: center;
   }
 
   &-close {
-    .content-close(-3px);
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    text-align: center;
+    width: 2.5rem;
+    line-height: 2.5rem;
   }
 
-  &-with-desc {
-    padding: 16px;
-    position: relative;
-    border-radius: @border-radius-base;
-    margin-bottom: 10px;
-    color: @text-color;
-    line-height: 1.5;
-  }
-
-  &-with-desc&-with-icon {
-    padding: 16px 16px 16px 69px;
-  }
-
-  &-with-desc &-desc {
-    display: block;
-  }
-
-  &-with-desc &-message {
-    font-size: 14px;
-    color: @title-color;
-    display: block;
-  }
-
-  &-with-desc &-icon {
-    top: 50%;
-    left: 24px;
-    margin-top: -21px;
-    font-size: 28px;
-  }
-
-  &-with-banner {
-    border-radius: 0;
+  &-action {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 30%;
+    justify-content: flex-end;
+    align-items: flex-end;
+    > .button {
+      margin: 0;
+    }
   }
 }

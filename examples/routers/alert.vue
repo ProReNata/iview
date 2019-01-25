@@ -1,77 +1,93 @@
 <template>
   <div>
-    <Alert 
-      show-icon 
-      banner 
+    <Alert
+      type="success"
+      show-icon="true"
+      size="large"
+    >
+      <template slot="header">
+        You're all clear, kid.
+      </template>
+      Now let's blow this thing and go home!
+    </Alert>
+
+    <Alert
+      type="warning"
+      show-icon="true"
+      size="large"
+    >
+      <template slot="header">
+        Traveling through hyperspace isn't like dusting crops, boy!
+      </template>
+      Without precise calculations we could fly right through a star or bounce too close to a supernova and that'd end your trip real quick, wouldn't it?
+    </Alert>
+
+    <Alert
+      type="danger"
+      show-icon="true"
+      size="large"
       closable
     >
-      消息提示文案
-    </Alert>
-    <Alert 
-      type="success" 
-      show-icon
-    >
-      成功提示文案
-    </Alert>
-    <Alert 
-      type="warning" 
-      show-icon 
-      banner
-    >
-      警告提示文案
-    </Alert>
-    <Alert 
-      type="error" 
-      show-icon
-    >
-      错误提示文案
-    </Alert>
-    <Alert show-icon>
-      消息提示文案
-      <template slot="desc">
-        消息提示的描述文案消息提示的描述文案消息提示的描述文案消息提示的描述文案消息提示的描述文案
+      <template slot="header">
+        Negative!
       </template>
+      It didn't go in. It just impacted on the surface.
     </Alert>
-    <Alert 
-      type="success" 
-      show-icon
+
+    <Alert
+      type="info"
+      show-icon="true"
+      size="large"
     >
-      成功提示文案
-      <span slot="desc">
-        成功的提示描述文案成功的提示描述文案成功的提示描述文案成功的提示描述文案成功的提示描述文案
-      </span>
-    </Alert>
-    <Alert 
-      type="warning" 
-      show-icon
-    >
-      警告提示文案
-      <template slot="desc">
-        警告的提示描述文案警告的提示描述文案警告的提示描述文案
+      <template slot="header">
+        Rebel base, in range.
       </template>
+      You may fire when ready.
     </Alert>
-    <Alert 
-      type="error" 
-      show-icon
+
+    <Alert
+      type="update"
+      show-icon="true"
+      size="large"
     >
-      错误提示文案
-      <span slot="desc">
-        自定义错误描述文案。
-      </span>
+      <template slot="header">
+        I think my eyes are getting better.
+      </template>
+      Instead of a big dark blur, I see a big light blur.
     </Alert>
-    <Alert 
-      show-icon 
+
+    <Alert
+      type="tip"
+      show-icon
+      size="large"
+    >
+      <template slot="header">
+        I sense something...
+      </template>
+      A presence I haven't felt since...
+    </Alert>
+
+
+    <Alert
+      type="success"
       closable
     >
-      自定义图标
-      <Icon 
-        slot="icon" 
-        type="ios-lightbulb-outline"
-      >
-      </Icon>
-      <template slot="desc">
-        自定义图标文案自定义图标文案自定义图标文案自定义图标文案自定义图标文案
-      </template>
+      Now let's blow this thing and go home!
+    </Alert>
+
+    <Alert
+      type="danger"
+      show-icon
+    >
+      It didn't go in. It just impacted on the surface.
+    </Alert>
+
+    <Alert
+      type="tip"
+      show-icon
+      closable
+    >
+      I sense something...
     </Alert>
   </div>
 </template>
