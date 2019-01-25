@@ -29,7 +29,7 @@ nav {
   <div class="container">
     <nav>
       <ul>
-        <li>
+        <!-- <li>
           <router-link to="/layout">
             Layout
           </router-link>
@@ -43,13 +43,13 @@ nav {
           <router-link to="/grid">
             Grid
           </router-link>
-        </li>
+        </li> -->
         <li>
           <router-link to="/button">
             Button
           </router-link>
         </li>
-        <li>
+        <!-- <li>
           <router-link to="/input">
             Input
           </router-link>
@@ -78,13 +78,13 @@ nav {
           <router-link to="/switch">
             Switch
           </router-link>
-        </li>
+        </li> -->
         <li>
           <router-link to="/alert">
             Alert
           </router-link>
         </li>
-        <li>
+        <!-- <li>
           <router-link to="/badge">
             Badge
           </router-link>
@@ -258,7 +258,7 @@ nav {
           <router-link to="/scroll">
             Scroll
           </router-link>
-        </li>
+        </li>-->
       </ul>
     </nav>
     <router-view></router-view>
