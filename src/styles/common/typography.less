@@ -1,0 +1,142 @@
+// InterUI - Font Source: https://rsms.me/inter/
+
+@import (css) url('https://rsms.me/inter/inter-ui.css');
+@import (css) url('https://fonts.googleapis.com/css?family=Corben:400,700');
+
+html, body {
+  font-family: @font-family;
+  font-feature-settings: 'calt' 1, 'ss01' 1, 'ss02' 1;
+  font-size: 20px;
+  font-weight: @font-weight-normal;
+  letter-spacing: -0.005em;
+  line-height: 1.5rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media all and (max-width: 1691px) {
+    // Large desktops
+    font-size: 18px;
+  }
+  @media all and (max-width: 1199px) {
+    // Desktop and landscape iPad
+    font-size: 16px;
+  }
+  @media all and (max-width: 769px) {
+    // Portrait iPad
+    font-size: 14px;
+  }
+  @media all and (max-width: 479px) {
+    // Mobile
+    font-size: 12px;
+  }
+
+}
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: 'Inter UI var alt', sans-serif;
+  }
+}
+
+h1, .h1 {
+  font-size: 4rem;
+  font-weight: 400;
+  // letter-spacing: -0.017em;
+  margin-bottom: 1.5rem;
+  line-height: 4rem;
+  font-family: @font-family-header;
+}
+
+h2, .h2 {
+  font-size: 2.827rem;
+  font-weight: @font-weight-light;
+  letter-spacing: -0.017em;
+  margin: 2.5rem 0 1rem;
+  line-height: 3rem;
+}
+
+h3, .h3 {
+  font-size: 2rem;
+  font-weight: @font-weight-bold;
+  letter-spacing: -0.016em;
+  margin: 1.5rem 0 1rem;
+  line-height: 2.5rem;
+}
+
+h4, .h4 {
+  font-size: 1.414rem;
+  font-weight: @font-weight-light;
+  letter-spacing: -0.013em;
+  margin: .5rem 0;
+  line-height: 1.5rem;
+}
+
+h5, .h5 {
+  font-size: 1rem;
+  font-weight: @font-weight-bold;
+  letter-spacing: -0.005em;
+  margin: 1rem 0 0;
+  line-height: 1.5rem;
+}
+
+h6, .h6 {
+  font-size: 0.707rem;
+  font-weight: @font-weight-bold;
+  .capitals;
+  line-height: 1.5rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  max-width: 33rem;
+}
+
+code, pre {
+  font-family: monospace;
+  background: @color-s100;
+  padding: 0 .25rem;
+  border-radius: @radius-normal;
+}
+
+.strong() {
+  font-weight: @font-weight-bold;
+}
+strong, b {
+  .strong;
+}
+
+.small() {
+  font-size: 0.707rem;
+  line-height: 1rem;
+}
+.capitals() {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-feature-settings: 'case' 1, 'calt' 1, 'ss01' 1, 'ss02' 1;
+}
+
+.text {
+  &-muted {
+    color: @color-dark75;
+  }
+  &-error {
+    color: @color-danger-dark;
+  }
+  &-small, &-caption {
+    .small;
+  }
+  &-align {
+    &-right {
+      text-align: right;
+    }
+    &-left {
+      text-align: left;
+    }
+    &-center {
+      text-align: center;
+    }
+  }
+}
+
+.no-margin {
+  margin: 0;
+}

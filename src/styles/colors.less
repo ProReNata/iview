@@ -1,0 +1,55 @@
+// Resources: http://mcg.mbitson.com/#!?mcgpalette0=%23fab21c&mcgpalette1=%23859ba0&mcgpalette2=%23550011&themename=PRN
+
+@color-p100: #FEE8BB;
+@color-p300: #FCC960;
+@color-p500: #FAB21C;  // FABRIC
+@color-p700: #F9A214;
+@color-p900: #F68A09;
+
+@color-a100: #CCB3B8;
+@color-a300: #884D58;
+@color-a500: #550011;  // SOL
+@color-a700: #44000C;
+@color-a900: #2A0005;
+
+@color-s0:   #FFFFFF;
+@color-s100: #EFF2F3;
+@color-s200: #E5EBEE;
+@color-s300: #D0D8DA;
+@color-s400: #96A9AD;
+@color-s500: #859BA0;
+@color-s600: #748D93;
+@color-s700: #657D82;
+@color-s800: #586C71;
+@color-s900: #4B5C60;
+
+@color-danger: rgb(251,207,189);
+@color-danger-dark: darken(@color-danger, 60%);
+@color-info: rgb(197,219,242);
+@color-info-dark: darken(@color-info, 60%);
+@color-success: rgb(216,234,204);
+@color-success-dark: darken(@color-success, 60%);
+@color-warning: rgb(251,238,202);
+@color-warning-dark: darken(@color-warning, 60%);
+@color-update: rgb(249,224,250);
+@color-update-dark: darken(@color-update, 70%);
+
+@color-dark100: rgb(36,28,21);
+@color-dark75: rgba(36,28,21,.75);
+@color-dark50: rgba(36,28,21,.5);
+@color-dark30: rgba(36,28,21,.3);
+
+@color-light100: rgb(255,255,255);
+@color-light75: rgba(255,255,255,.75);
+@color-light50: rgba(255,255,255,.5);
+@color-light30: rgba(255,255,255,.3);
+
+.empty-area {
+  @color: fade(@color-s200, 30%);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><path fill="@{color}" d="M104,128L0,24L0,0l128,128H104z M104,0l24,24V0L104,0z"/></svg>');
+  background-size: 1rem;
+  background-color: @color-s300;
+  min-width: 128px;
+  min-height: 128px;
+  border-radius: @radius-big;
+}
