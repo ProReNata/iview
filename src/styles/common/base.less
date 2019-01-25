@@ -75,7 +75,7 @@ input::-ms-reveal {
 }
 
 a {
-  color: @link-color;
+  color: @color-link;
   background: transparent;
   text-decoration: none;
   outline: none;
@@ -83,11 +83,11 @@ a {
   transition: color @transition-time ease;
 
   &:hover {
-    color: @link-hover-color;
+    color: @color-link-hover;
   }
 
   &:active {
-    color: @link-active-color;
+    color: @color-link-active;
   }
 
   &:active,
@@ -98,7 +98,7 @@ a {
 
   &[disabled] {
     color: #ccc;
-    cursor: @cursor-disabled;
+    cursor: not-allowed;
     pointer-events: none;
   }
 }
@@ -107,5 +107,5 @@ code,
 kbd,
 pre,
 samp {
-  font-family: @code-family;
+  font-family: @font-family-code;
 }

@@ -3,26 +3,45 @@
 // Prefix
 @css-prefix : byx-;
 
+/*
+ *  BASES
+ */
+
 // Colors
 @color-text: @color-dark100;
 @color-body-background: @color-s200;
 @color-html-background: @color-p500;
-
-// Shadows
-@shadow-small: 0px 2px 12px fade(@color-dark100, 6%), 0px 1px 2px fade(@color-dark100, 6%);
+@color-link: @color-a500;
+@color-link-hover: @color-a300;
+@color-link-active: @color-a700;
 
 // Typography
 @font-family:         'Inter UI', sans-serif;
 @font-family-header:  'Corben', serif;
+@font-family-code:    monospace;
 @font-weight-lighter: 200;
 @font-weight-light:   300;
 @font-weight-normal:  400;
 @font-weight-bold:    600;
 @font-weight-bolder:  800;
+@line-height-normal:  1.5rem;
 
-// Base
+// Radius
 @radius-normal: .25rem;
 @radius-big:    .5rem;
+
+// Shadows
+@shadow-small: 0px 2px 12px fade(@color-dark100, 6%), 0px 1px 2px fade(@color-dark100, 6%);
+
+// Animation
+@animation-time : .3s;
+@transition-time : .2s;
+@ease-in-out : ease-in-out;
+
+
+/*
+ *  COMPONENTS
+ */
 
 // Button
 @btn-font-weight : @font-weight-bolder;

@@ -78,15 +78,13 @@
   &-large {
     & > .@{btnClassName} {
       .button-size(@btn-padding-large; @btn-font-size-large; @btn-border-radius);
+      line-height: 2rem;
     }
   }
 
   &-small {
     & > .@{btnClassName} {
       .button-size(@btn-padding-small; @btn-font-size; @btn-border-radius);
-      > .@{css-prefix-iconfont} {
-        font-size: @btn-font-size;
-      }
     }
   }
 }
@@ -104,16 +102,12 @@
   background-image: none;
   border: none;
   white-space: nowrap;
-  line-height: @line-height-base;
+  line-height: 1.5rem;
   user-select: none;
   .button-size(@btn-padding-base; @btn-font-size; @btn-border-radius);
   //transform: translate3d(0, 0, 0);
   //transition: all @transition-time linear;
   transition: color @transition-time linear, background-color @transition-time linear, box-shadow @transition-time linear;
-
-  > .@{css-prefix-iconfont} {
-    line-height: 1;
-  }
 
   &,
   &:active,
@@ -132,7 +126,7 @@
 
   &.disabled,
   &[disabled] {
-    cursor: @cursor-disabled;
+    cursor: not-allowed;
     > * {
       pointer-events: none;
     }
@@ -140,6 +134,7 @@
 
   &-large {
     .button-size(@btn-padding-large; @btn-font-size-large; @btn-border-radius);
+    line-height: 2rem;
   }
 
   &-small {
