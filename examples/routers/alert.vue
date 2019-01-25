@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h1>Alerts</h1>
+    <h2>Large alerts</h2>
     <Alert
       type="success"
       show-icon="true"
@@ -43,6 +45,15 @@
         Rebel base, in range.
       </template>
       You may fire when ready.
+      <Button
+        slot="action"
+        icon="rocket"
+        icon-weight="solid"
+        size="small"
+        type="text"
+      >
+        Fire
+      </Button>
     </Alert>
 
     <Alert
@@ -65,9 +76,18 @@
         I sense something...
       </template>
       A presence I haven't felt since...
+      <Button
+        slot="action"
+        size="small"
+        type="text"
+        icon="check"
+        icon-weight="solid"
+      >
+        Got it
+      </Button>
     </Alert>
 
-
+    <h2>Small alerts</h2>
     <Alert
       type="success"
       closable
@@ -88,6 +108,25 @@
       closable
     >
       I sense something...
+    </Alert>
+
+    <Alert
+      show-icon
+    >
+      <Icon
+        slot="icon"
+        type="sword"
+        weight="regular"
+      >
+      </Icon>
+      Do. Or do not. There is no try.
+      <Button
+        slot="action"
+        size="small"
+        type="text"
+      >
+        Try again
+      </Button>
     </Alert>
   </div>
 </template>

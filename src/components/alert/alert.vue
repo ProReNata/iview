@@ -12,7 +12,7 @@
           <Icon
             :type="iconType"
             fw="true"
-            weight="light"
+            :weight="iconWeight"
           >
           </Icon>
         </slot>
@@ -25,6 +25,14 @@
         <slot>
         </slot>
       </div>
+
+      <div
+        v-if="hasAction"
+        :class="actionClasses"
+      >
+        <slot name="action"></slot>
+      </div>
+
       <a
         v-if="closable"
         :class="closeClasses"
@@ -55,15 +63,16 @@ export default {
       default: false,
       type: Boolean,
     },
+    iconWeight: String,
     showIcon: {
       default: false,
       type: Boolean,
     },
     size: String,
     type: {
-      default: 'info',
+      default: 'default',
       validator(value) {
-        return oneOf(value, ['success', 'info', 'warning', 'danger']);
+        return oneOf(value, ['success', 'info', 'warning', 'danger', 'update', 'tip']);
       },
     },
   },
@@ -74,11 +83,17 @@ export default {
     };
   },
   computed: {
-    hasHeader() {
-      return this.$slots.header !== undefined;
+    actionClasses() {
+      return `${prefixCls}-action`;
     },
     closeClasses() {
       return `${prefixCls}-close`;
+    },
+    hasAction() {
+      return this.$slots.action !== undefined;
+    },
+    hasHeader() {
+      return this.$slots.header !== undefined;
     },
     iconClasses() {
       let iconClasses = `${prefixCls}-icon`;
@@ -106,7 +121,7 @@ export default {
           break;
 
         case 'danger':
-          type = 'exclamation';
+          type = 'exclamation-triangle';
           break;
 
         case 'update':
@@ -118,7 +133,6 @@ export default {
           break;
 
         default:
-          type = 'info';
       }
 
       return type;
@@ -132,6 +146,8 @@ export default {
   },
   mounted() {
     this.header = this.$slots.header !== undefined;
+    const standardWeight = this.size === 'large' ? 'light' : 'solid';
+    this.iconWeight = this.iconWeight || standardWeight;
   },
   methods: {
     close(e) {

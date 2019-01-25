@@ -1,5 +1,4 @@
 @alert-prefix-cls: ~'@{css-prefix}alert';
-@icon-prefix-cls: ~'@{css-prefix}icon';
 
 .@{alert-prefix-cls} {
 
@@ -29,7 +28,7 @@
 
   &-tip {
     .colorToast(@color-s100, @color-s900);
-    [class^="fa"] { color:@color-p500; }
+    > [class*="icon"] { color:@color-p500; }
   }
 
   &-icon{
@@ -73,7 +72,7 @@
     flex-basis: 30%;
     justify-content: flex-end;
     align-items: flex-end;
-    > .button {
+    > button[class*="btn"] {
       margin: 0;
     }
   }
