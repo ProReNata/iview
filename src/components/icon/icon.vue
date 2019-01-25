@@ -1,37 +1,46 @@
 <template>
-  <i 
-    :class="classes" 
-    :style="styles" 
+  <i
+    :class="classes"
     @click="handleClick"
   >
   </i>
 </template>
 <script>
-const prefixCls = 'ivu-icon';
-
 export default {
   name: 'Icon',
   props: {
-    color: String,
-    size: [Number, String],
+    fw: Boolean,
+    size: String,
+    spin: Boolean,
     type: String,
+    weight: String,
   },
   computed: {
-    classes() {
-      return `${prefixCls} ${prefixCls}-${this.type}`;
+    weightClass() {
+      const weightMap = {
+        solid: 'fas',
+        regular: 'far',
+        light: 'fal',
+      };
+
+      return weightMap[this.weight || 'regular'];
     },
-    styles() {
-      const style = {};
+    classes() {
+      let styles = '';
 
       if (this.size) {
-        style['font-size'] = `${this.size}px`;
+        styles += ` fa-${this.size}`;
       }
 
-      if (this.color) {
-        style.color = this.color;
+      if (this.fw) {
+        styles += ' fa-fw';
       }
 
-      return style;
+      if (this.spin) {
+        styles += ' fa-spin';
+      }
+
+      return `${this.weightClass} fa-${this.type} ${styles}`;
     },
   },
   methods: {
