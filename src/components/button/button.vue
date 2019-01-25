@@ -15,6 +15,7 @@
     <Icon
       v-if="icon && !loading"
       :type="icon"
+      :weight="iconWeight"
       fw="true"
     >
     </Icon>
@@ -44,6 +45,7 @@ export default {
       },
     },
     icon: String,
+    iconWeight: String,
     loading: Boolean,
     long: {
       default: false,

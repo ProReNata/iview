@@ -1,13 +1,19 @@
 <template>
   <div>
-    <Button>Default</Button>
-    <Button type="primary">
-      Primary
-    </Button>
-    <Button type="text">
-      Text
-    </Button>
-    <br><br>
+    <h1>Buttons</h1>
+
+    <h2>Default</h2>
+    <p>
+      <Button>Default</Button>
+      <Button type="primary">
+        Primary
+      </Button>
+      <Button type="text">
+        Text
+      </Button>
+    </p>
+
+    <h2>Colors</h2>
     <Button type="info">
       Info
     </Button>
@@ -20,14 +26,26 @@
     <Button type="error">
       Error
     </Button>
-    <br><br>
+
+    <h2>Icons</h2>
     <Button
       type="primary"
       icon="search"
     >
       Search
     </Button>
-    <br><br>
+    <Button icon="poop">
+    </Button>
+    <br>
+    <Button
+      icon="mug-marshmallows"
+      icon-weight="solid"
+      size="large"
+    >
+      Hot choclate
+    </Button>
+
+    <h2>States</h2>
     <Button>Default</Button>
     <Button disabled>
       Default(Disabled)
@@ -52,26 +70,24 @@
     >
       Text(Disabled)
     </Button>
-    <br><br>
 
-    <br><br>
-    <h4>基本</h4>
-    <br><br>
+    <h2>Groups</h2>
+    <h4>Basic</h4>
     <Button-group>
-      <Button>取消</Button>
+      <Button>cancel</Button>
       <Button type="primary">
-        确定
+        determine
       </Button>
     </Button-group>
     <Button-group>
       <Button disabled>
-        昨日
+        Yesterday
       </Button>
       <Button disabled>
-        今日
+        Today
       </Button>
       <Button disabled>
-        明日
+        Tomorrow
       </Button>
     </Button-group>
     <Button-group>
@@ -80,17 +96,16 @@
       </Button>
       <Button>M</Button>
     </Button-group>
-    <br><br>
-    <h4>配合图标</h4>
-    <br><br>
+
+    <h4>Icons</h4>
     <Button-group>
       <Button type="primary">
         <Icon type="chevron-left">
         </Icon>
-        前进
+        Back
       </Button>
       <Button type="primary">
-        后退
+        Forward
         <Icon type="chevron-right">
         </Icon>
       </Button>
@@ -107,9 +122,8 @@
       >
       </Button>
     </Button-group>
-    <br><br>
-    <h4>尺寸</h4>
-    <br><br>
+
+    <h4>Sizes</h4>
     <Button-group size="large">
       <Button>
         Large

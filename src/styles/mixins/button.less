@@ -93,7 +93,8 @@
 
 .btn() {
   display: inline-block;
-  margin-bottom: 0;
+  margin-bottom: .5rem;
+  margin-right: .5rem;
   font-weight: @btn-font-weight;
   .capitals;
   text-align: center;
@@ -242,8 +243,8 @@
   .@{btnClassName}:not(:first-child):not(:last-child) {
     border-radius: 0;
   }
-  .@{btnClassName}:not(:first-child) {
-    border-left: 1px solid @btn-group-border;
+  .@{btnClassName}:not(:last-child) {
+    margin-right: 2px;
   }
 
   &:not(&-vertical) > .@{btnClassName}:first-child {
