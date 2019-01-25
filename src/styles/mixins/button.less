@@ -4,10 +4,9 @@
   border-radius: @border-radius;
 }
 
-.button-color(@color; @background; @border) {
+.button-color(@color; @background) {
   color: @color;
   background-color: @background;
-  border-color: @border;
   // a inside Button which only work in Chrome
   // http://stackoverflow.com/a/17253457
   > a:only-child {
@@ -24,17 +23,17 @@
   }
 }
 
-.button-variant(@color; @background; @border) {
-  .button-color(@color; @background; @border);
+.button-variant(@color; @background) {
+  .button-color(@color; @background);
 
   &:hover
     //&:focus
  {
-    .button-color(tint(@color, 20%) ; tint(@background, 20%) ; tint(@border, 20%));
+    .button-color(@color ; tint(@background, 40%) );
   }
   &:active,
   &.active {
-    .button-color(shade(@color, 5%) ; shade(@background, 5%) ; shade(@background, 5%));
+    .button-color(@color ; shade(@background, 5%) );
   }
 
   &.disabled,
@@ -45,7 +44,7 @@
     &:focus,
     &:active,
     &.active {
-      .button-color(@btn-disable-color; @btn-disable-bg; @btn-disable-border);
+      .button-color(@btn-disable-color; @btn-disable-bg );
     }
   }
 }
@@ -65,42 +64,26 @@
     }
   }
 
-  & .@{btnClassName}-icon-only .ivu-icon {
-    font-size: 14px;
-    position: relative;
-    top: 1px;
-  }
-
-  &-large .@{btnClassName}-icon-only .ivu-icon {
-    font-size: 16px;
-    top: 2px;
-  }
-
-  &-small .@{btnClassName}-icon-only .ivu-icon {
-    font-size: 12px;
-    top: 0;
-  }
-
-  &-circle .@{btnClassName} {
-    border-radius: @btn-circle-size;
+  & .@{btnClassName}-icon-only {
+    letter-spacing: normal;
+    padding: 0.5rem 0;
+    text-align: center;
+    width: 2.5rem;
+    & > i[class^="fa"] {
+      margin: 0;
+    }
   }
 
   // size
-  &-large&-circle .@{btnClassName} {
-    border-radius: @btn-circle-size-large;
-  }
   &-large {
     & > .@{btnClassName} {
       .button-size(@btn-padding-large; @btn-font-size-large; @btn-border-radius);
     }
   }
 
-  &-small&-circle .@{btnClassName} {
-    border-radius: @btn-circle-size-small;
-  }
   &-small {
     & > .@{btnClassName} {
-      .button-size(@btn-padding-small; @btn-font-size; @btn-border-radius-small);
+      .button-size(@btn-padding-small; @btn-font-size; @btn-border-radius);
       > .@{css-prefix-iconfont} {
         font-size: @btn-font-size;
       }
@@ -108,35 +91,24 @@
   }
 }
 
-.button-group-vertical-base(@btnClassName) {
-  display: inline-block;
-  vertical-align: middle;
-  > .@{btnClassName} {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    float: none;
-  }
-}
-
 .btn() {
   display: inline-block;
   margin-bottom: 0;
   font-weight: @btn-font-weight;
+  .capitals;
   text-align: center;
   vertical-align: middle;
   touch-action: manipulation;
   cursor: pointer;
   background-image: none;
-  border: 1px solid transparent;
+  border: none;
   white-space: nowrap;
   line-height: @line-height-base;
   user-select: none;
   .button-size(@btn-padding-base; @btn-font-size; @btn-border-radius);
   //transform: translate3d(0, 0, 0);
   //transition: all @transition-time linear;
-  transition: color @transition-time linear, background-color @transition-time linear, border @transition-time linear,
-    box-shadow @transition-time linear;
+  transition: color @transition-time linear, background-color @transition-time linear, box-shadow @transition-time linear;
 
   > .@{css-prefix-iconfont} {
     line-height: 1;
@@ -170,29 +142,39 @@
   }
 
   &-small {
-    .button-size(@btn-padding-small; @btn-font-size; @btn-border-radius-small);
+    .button-size(@btn-padding-small; @btn-font-size; @btn-border-radius);
+  }
+
+  &-icon-only {
+    letter-spacing: normal;
+    padding: 0.5rem 0;
+    text-align: center;
+    width: 2.5rem;
+    > i[class^="fa"]:first-child:last-child {
+      margin: 0;
+    }
   }
 }
 
 // Default
 .btn-default() {
-  .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
+  .button-variant(@btn-default-color; @btn-default-bg);
 
   &:hover
     //&:focus
  {
-    .button-color(tint(@primary-color, 20%) ; white; tint(@primary-color, 20%));
+    .button-color(@color-dark100 ; @color-s300; );
   }
   &:active,
   &.active {
-    .button-color(shade(@primary-color, 5%) ; white; shade(@primary-color, 5%));
+    .button-color(@color-dark100 ; @color-s400; );
   }
-  .active-btn-color(@primary-color);
+  .active-btn-color(@color-p900);
 }
 
 // Primary
 .btn-primary() {
-  .button-variant(@btn-primary-color; @btn-primary-bg; @primary-color);
+  .button-variant(@btn-primary-color; @btn-primary-bg);
 
   &:hover,
     //&:focus,
@@ -200,46 +182,12 @@
     &.active {
     color: @btn-primary-color;
   }
-  .active-btn-color(@primary-color);
-}
-
-// Ghost
-.btn-ghost() {
-  .button-variant(@btn-ghost-color, @btn-ghost-bg, @btn-ghost-border);
-
-  &:hover
-    //&:focus
- {
-    .button-color(tint(@primary-color, 20%) ; @btn-ghost-bg; tint(@primary-color, 20%));
-  }
-  &:active,
-  &.active {
-    .button-color(shade(@primary-color, 5%) ; @btn-ghost-bg; shade(@primary-color, 5%));
-  }
-  .active-btn-color(@primary-color);
-}
-
-// Dashed
-.btn-dashed() {
-  .button-variant(@btn-ghost-color, @btn-ghost-bg, @btn-ghost-border);
-
-  border-style: dashed;
-
-  &:hover
-    //&:focus
- {
-    .button-color(tint(@primary-color, 20%) ; @btn-ghost-bg; tint(@primary-color, 20%));
-  }
-  &:active,
-  &.active {
-    .button-color(shade(@primary-color, 5%) ; @btn-ghost-bg; shade(@primary-color, 5%));
-  }
-  .active-btn-color(@primary-color);
+  .active-btn-color(@color-p900);
 }
 
 // Text
 .btn-text() {
-  .button-variant(@btn-ghost-color, @btn-ghost-bg, transparent);
+  .button-variant(@btn-default-color, transparent);
 
   // for disabled
   &.disabled,
@@ -250,83 +198,52 @@
     &:focus,
     &:active,
     &.active {
-      .button-color(@btn-disable-color; @btn-ghost-bg; transparent);
+      .button-color(@btn-disable-color; transparent);
     }
   }
 
   &:hover
         //&:focus
  {
-    .button-color(tint(@primary-color, 20%) ; @btn-ghost-bg; transparent);
+    .button-color(@color-dark75 ; fade(@color-s0, 15%));
+    box-shadow: @shadow-small;
   }
   &:active,
   &.active {
-    .button-color(shade(@primary-color, 5%) ; @btn-ghost-bg; transparent);
+    .button-color(@color-dark100 ; fade(@color-s0, 25%));
   }
-  .active-btn-color(@primary-color);
+  .active-btn-color(@color-p900);
 }
 
 // Color
 // for tabindex
 .active-btn-color(@color) {
   &:focus {
-    box-shadow: 0 0 0 2px fade(@color, 20%);
+    box-shadow: 0 0 0 2px fade(@color, 75%);
   }
 }
-.btn-color(@color) {
-  .button-variant(@btn-primary-color; @color; @color);
+.btn-color(@color, @background) {
+  .button-variant(@color; @background);
 
   &:hover,
         //&:focus,
     &:active,
     &.active {
-    color: @btn-primary-color;
+    color: @color-light100;
   }
 
-  .active-btn-color(@color);
-}
-
-// Circle for Icon
-.btn-circle(@btnClassName: ivu-btn) {
-  border-radius: @btn-circle-size;
-
-  &.@{btnClassName}-large {
-    border-radius: @btn-circle-size-large;
-  }
-
-  &.@{btnClassName}-size {
-    border-radius: @btn-circle-size-small;
-  }
-
-  &.@{btnClassName}-icon-only {
-    .square(@btn-circle-size);
-    .button-size(0; @font-size-base + 2; 50%);
-
-    &.@{btnClassName}-large {
-      .square(@btn-circle-size-large);
-      .button-size(0; @btn-font-size-large + 2; 50%);
-    }
-
-    &.@{btnClassName}-small {
-      .square(@btn-circle-size-small);
-      .button-size(0; @font-size-base; 50%);
-    }
-  }
+  .active-btn-color(@color-p900);
 }
 
 // Group
-.btn-group(@btnClassName: ivu-btn) {
+.btn-group(@btnClassName: byx-btn) {
   .button-group-base(@btnClassName);
-
-  .@{btnClassName} + .@{btnClassName},
-  .@{btnClassName} + &,
-  & + .@{btnClassName},
-  & + & {
-    margin-left: -1px;
-  }
 
   .@{btnClassName}:not(:first-child):not(:last-child) {
     border-radius: 0;
+  }
+  .@{btnClassName}:not(:first-child) {
+    border-left: 1px solid @btn-group-border;
   }
 
   &:not(&-vertical) > .@{btnClassName}:first-child {
@@ -362,44 +279,5 @@
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     padding-left: 8px;
-  }
-}
-
-.btn-group-vertical(@btnClassName: ivu-btn) {
-  .button-group-vertical-base(@btnClassName);
-
-  .@{btnClassName} + .@{btnClassName},
-  .@{btnClassName} + &,
-  & + .@{btnClassName},
-  & + & {
-    margin-top: -1px;
-    margin-left: 0;
-  }
-
-  > .@{btnClassName}:first-child {
-    margin-top: 0;
-    &:not(:last-child) {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-  }
-
-  > .@{btnClassName}:last-child:not(:first-child) {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-
-  & > &:first-child:not(:last-child) {
-    > .@{btnClassName}:last-child {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      padding-bottom: 8px;
-    }
-  }
-
-  & > &:last-child:not(:first-child) > .@{btnClassName}:first-child {
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    padding-top: 8px;
   }
 }

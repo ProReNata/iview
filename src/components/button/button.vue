@@ -5,19 +5,21 @@
     :disabled="disabled"
     @click="handleClick"
   >
-    <Icon 
-      v-if="loading" 
-      class="ivu-load-loop" 
-      type="load-c"
+    <Icon
+      v-if="loading"
+      type="circle-notch"
+      spin="true"
+      fw="true"
     >
     </Icon>
-    <Icon 
-      v-if="icon && !loading" 
+    <Icon
+      v-if="icon && !loading"
       :type="icon"
+      fw="true"
     >
     </Icon>
-    <span 
-      v-if="showSlot" 
+    <span
+      v-if="showSlot"
       ref="slot"
     >
       <slot></slot>
@@ -28,7 +30,7 @@
 import Icon from '../icon';
 import {oneOf} from '../../utils/assist';
 
-const prefixCls = 'ivu-btn';
+const prefixCls = 'byx-btn';
 
 export default {
   name: 'Button',
@@ -47,11 +49,6 @@ export default {
       default: false,
       type: Boolean,
     },
-    shape: {
-      validator(value) {
-        return oneOf(value, ['circle', 'circle-outline']);
-      },
-    },
     size: {
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
@@ -59,7 +56,7 @@ export default {
     },
     type: {
       validator(value) {
-        return oneOf(value, ['primary', 'ghost', 'dashed', 'text', 'info', 'success', 'warning', 'error', 'default']);
+        return oneOf(value, ['primary', 'text', 'info', 'success', 'warning', 'error', 'default']);
       },
     },
   },
@@ -75,7 +72,6 @@ export default {
         {
           [`${prefixCls}-${this.type}`]: !!this.type,
           [`${prefixCls}-long`]: this.long,
-          [`${prefixCls}-${this.shape}`]: !!this.shape,
           [`${prefixCls}-${this.size}`]: !!this.size,
           [`${prefixCls}-loading`]: this.loading != null && this.loading,
           [`${prefixCls}-icon-only`]: !this.showSlot && (!!this.icon || this.loading),
