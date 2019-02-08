@@ -6,8 +6,8 @@
     text-align: right;
     vertical-align: middle;
     float: left;
-    font-size: @font-size-small;
-    color: @text-color;
+    font-size: 1rem;
+    color: @color-dark100;
     line-height: 1;
     padding: 10px 12px 10px 0;
     box-sizing: border-box;
@@ -36,7 +36,7 @@
   &-content {
     position: relative;
     line-height: 32px;
-    font-size: @font-size-small;
+    font-size: 1rem;
   }
   & & {
     margin-bottom: 0;
@@ -51,7 +51,7 @@
     left: 0;
     line-height: 1;
     padding-top: 6px;
-    color: @error-color;
+    color: @color-error;
   }
 
   &-required {
@@ -60,9 +60,8 @@
       display: inline-block;
       margin-right: 4px;
       line-height: 1;
-      font-family: SimSun;
-      font-size: @font-size-small;
-      color: @error-color;
+      font-size: 1rem;
+      color: @color-error;
     }
   }
   &-error {
