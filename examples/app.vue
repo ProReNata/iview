@@ -49,11 +49,12 @@ nav {
             Button
           </router-link>
         </li>
-        <!-- <li>
+        <li>
           <router-link to="/input">
             Input
           </router-link>
         </li>
+        <!--
         <li>
           <router-link to="/radio">
             Radio
