@@ -10,27 +10,42 @@
     </i-input>
   </div>
 </template>
+
 <script>
 import iInput from '../input/input.vue';
 
 export default {
   name: 'Search',
+
   components: {iInput},
+
   props: {
-    placeholder: String,
-    prefixCls: String,
-    query: String,
+    placeholder: {
+      default: undefined,
+      type: String,
+    },
+    prefixCls: {
+      default: undefined,
+      type: String,
+    },
+    query: {
+      default: undefined,
+      type: String,
+    },
   },
+
   data() {
     return {
       currentQuery: this.query,
     };
   },
+
   computed: {
     icon() {
       return this.query === '' ? 'ios-search' : 'ios-close';
     },
   },
+
   watch: {
     currentQuery(val) {
       this.$emit('on-query-change', val);
@@ -39,6 +54,7 @@ export default {
       this.currentQuery = val;
     },
   },
+
   methods: {
     handleClick() {
       if (this.currentQuery === '') {

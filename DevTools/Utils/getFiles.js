@@ -1,11 +1,11 @@
 const fs = require('fs');
-const path = require('path');
+const nodePath = require('path');
 
 function getFiles(dir, fileType, files_) {
   const regex = fileType ? new RegExp(`\\${fileType}$`) : '';
 
   return fs.readdirSync(dir).reduce((allFiles, file) => {
-    const name = path.join(dir, file);
+    const name = nodePath.join(dir, file);
 
     if (fs.statSync(name).isDirectory()) {
       getFiles(name, fileType, allFiles);

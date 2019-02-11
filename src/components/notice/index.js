@@ -1,4 +1,5 @@
 import noop from 'lodash/noop';
+import get from 'lodash/get';
 import Notification from '../base/notification';
 
 const prefixCls = 'ivu-notice';
@@ -37,40 +38,43 @@ function notice(type, options) {
   const noticeKey = options.name || `${prefixKey}${name}`;
   const onClose = options.onClose || noop;
 
-  const render = options.render;
+  const {render} = options;
   // todo const btn = options.btn || null;
   const duration = options.duration === 0 ? 0 : options.duration || defaultDuration;
 
-  name++;
+  name += 1;
 
   const instance = getNoticeInstance();
-
   let content;
-
   let withIcon;
+  let withDesc;
 
-  const with_desc = options.render && !title ? '' : desc || options.render ? ` ${prefixCls}-with-desc` : '';
+  if (options.render && !title) {
+    withDesc = '';
+  } else {
+    withDesc = desc || options.render ? ` ${prefixCls}-with-desc` : '';
+  }
 
   if (type === 'normal') {
     withIcon = false;
     content = `
-            <div class="${prefixCls}-custom-content ${prefixCls}-with-normal ${with_desc}">
-                <div class="${prefixCls}-title">${title}</div>
-                <div class="${prefixCls}-desc">${desc}</div>
-            </div>
-        `;
+      <div class="${prefixCls}-custom-content ${prefixCls}-with-normal ${withDesc}">
+        <div class="${prefixCls}-title">${title}</div>
+        <div class="${prefixCls}-desc">${desc}</div>
+      </div>
+    `;
   } else {
     const iconType = iconTypes[type];
     withIcon = true;
     content = `
-            <div class="${prefixCls}-custom-content ${prefixCls}-with-icon ${prefixCls}-with-${type} ${with_desc}">
-                <span class="${prefixCls}-icon ${prefixCls}-icon-${type}">
-                    <i class="${iconPrefixCls} ${iconPrefixCls}-${iconType}"></i>
-                </span>
-                <div class="${prefixCls}-title">${title}</div>
-                <div class="${prefixCls}-desc">${desc}</div>
-            </div>
-        `;
+      <div class="${prefixCls}-custom-content ${prefixCls}-with-icon ${prefixCls}-with-${type} ${withDesc}">
+        <span class="${prefixCls}-icon ${prefixCls}-icon-${type}">
+          <i class="${iconPrefixCls} ${iconPrefixCls}-${iconType}"></i>
+        </span>
+        <div class="${prefixCls}-title">${title}</div>
+        <div class="${prefixCls}-desc">${desc}</div>
+      </div>
+    `;
   }
 
   instance.notice({
@@ -89,20 +93,16 @@ function notice(type, options) {
 }
 
 export default {
-  close(name) {
-    if (name) {
-      name = name.toString();
-
+  close(noticeName) {
+    if (noticeName) {
       if (noticeInstance) {
-        noticeInstance.remove(name);
+        noticeInstance.remove(noticeName.toString());
       }
-    } else {
-      return false;
     }
   },
   config(options) {
     if (options.top) {
-      top = options.top;
+      top = get(options, 'top');
     }
 
     if (options.duration || options.duration === 0) {

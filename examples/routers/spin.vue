@@ -31,24 +31,24 @@
         <p>三山半落青天外，二水中分白鹭洲。</p>
         <p>总为浮云能蔽日，长安不见使人愁。</p>
       </article>
-      <Spin
+      <spin
         v-if="spinShow"
         size="large"
         fix
       >
         <!--<Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>-->
         <!--<div>Loading</div>-->
-      </Spin>
+      </spin>
     </div>
     <br>
     切换显示状态：<i-switch @on-change="spinShow = !spinShow">
     </i-switch>
-    <Button @click="show">
+    <i-button @click="show">
       show
-    </Button>
-    <Button @click="hide">
+    </i-button>
+    <i-button @click="hide">
       hide
-    </Button>
+    </i-button>
   </div>
 </template>
 <script>

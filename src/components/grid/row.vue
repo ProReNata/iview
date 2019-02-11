@@ -1,11 +1,12 @@
 <template>
-  <div 
-    :class="classes" 
+  <div
+    :class="classes"
     :style="styles"
   >
     <slot></slot>
   </div>
 </template>
+
 <script>
 import {oneOf, findComponentDownward, findBrothersComponents} from '../../utils/assist';
 
@@ -13,28 +14,39 @@ const prefixCls = 'ivu-row';
 
 export default {
   name: 'Row',
+
   props: {
     align: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['top', 'middle', 'bottom']);
       },
     },
-    className: String,
+    className: {
+      default: undefined,
+      type: String,
+    },
     gutter: {
       default: 0,
       type: Number,
     },
     justify: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['start', 'end', 'center', 'space-around', 'space-between']);
       },
     },
     type: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['flex']);
       },
     },
   },
+
   computed: {
     classes() {
       return [

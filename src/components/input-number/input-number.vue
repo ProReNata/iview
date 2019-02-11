@@ -48,6 +48,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import {oneOf} from '../../utils/assist';
 import Emitter from '../../mixins/emitter';
@@ -76,14 +77,16 @@ function addNum(num1, num2) {
   //            m = Math.pow(10, Math.max(sq1, sq2));
   //            return (num1 * m + num2 * m) / m;
   //        }
-  const m = Math.pow(10, Math.max(sq1, sq2));
+  const m = 10 ** Math.max(sq1, sq2);
 
   return (Math.round(num1 * m) + Math.round(num2 * m)) / m;
 }
 
 export default {
   name: 'InputNumber',
+
   mixins: [Emitter],
+
   props: {
     autofocus: {
       default: false,
@@ -98,9 +101,11 @@ export default {
       type: Boolean,
     },
     elementId: {
+      default: undefined,
       type: String,
     },
     formatter: {
+      default: undefined,
       type: Function,
     },
     max: {
@@ -112,9 +117,11 @@ export default {
       type: Number,
     },
     name: {
+      default: undefined,
       type: String,
     },
     parser: {
+      default: undefined,
       type: Function,
     },
     placeholder: {
@@ -122,6 +129,7 @@ export default {
       type: String,
     },
     precision: {
+      default: undefined,
       type: Number,
     },
     readonly: {
@@ -129,6 +137,8 @@ export default {
       type: Boolean,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
@@ -142,6 +152,7 @@ export default {
       type: Number,
     },
   },
+
   data() {
     return {
       currentValue: this.value,
@@ -150,6 +161,7 @@ export default {
       upDisabled: false,
     };
   },
+
   computed: {
     downClasses() {
       return [
@@ -210,6 +222,7 @@ export default {
       ];
     },
   },
+
   watch: {
     currentValue(val) {
       this.changeVal(val);
@@ -224,9 +237,11 @@ export default {
       this.currentValue = val;
     },
   },
+
   mounted() {
     this.changeVal(this.currentValue);
   },
+
   methods: {
     blur() {
       this.focused = false;
@@ -285,7 +300,7 @@ export default {
     },
     changeStep(type, e) {
       if (this.disabled || this.readonly) {
-        return false;
+        return;
       }
 
       const targetVal = Number(e.target.value);
@@ -293,7 +308,7 @@ export default {
       const step = Number(this.step);
 
       if (Number.isNaN(val)) {
-        return false;
+        return;
       }
 
       // input a number, and key up or down
@@ -302,13 +317,13 @@ export default {
           if (addNum(targetVal, step) <= this.max) {
             val = targetVal;
           } else {
-            return false;
+            return;
           }
         } else if (type === 'down') {
           if (addNum(targetVal, -step) >= this.min) {
             val = targetVal;
           } else {
-            return false;
+            return;
           }
         }
       }
@@ -321,8 +336,8 @@ export default {
 
       this.setValue(val);
     },
-    changeVal(val) {
-      val = Number(val);
+    changeVal(value) {
+      const val = Number(value);
 
       if (!Number.isNaN(val)) {
         const {step} = this;
@@ -338,7 +353,7 @@ export default {
       const targetVal = Number(e.target.value);
 
       if (this.downDisabled && Number.isNaN(targetVal)) {
-        return false;
+        return;
       }
 
       this.changeStep('down', e);
@@ -359,7 +374,9 @@ export default {
     preventDefault(e) {
       e.preventDefault();
     },
-    setValue(val) {
+    setValue(value) {
+      let val = value;
+
       // 如果 step 是小数，且没有设置 precision，是有问题的
       if (val && !Number.isNaN(this.precision)) {
         val = Number(Number(val).toFixed(this.precision));
@@ -376,7 +393,7 @@ export default {
       const targetVal = Number(e.target.value);
 
       if (this.upDisabled && Number.isNaN(targetVal)) {
-        return false;
+        return;
       }
 
       this.changeStep('up', e);

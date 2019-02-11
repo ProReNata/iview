@@ -7,7 +7,8 @@
   >
     <colgroup>
       <col
-        v-for="column in columns"
+        v-for="(column, i) in columns"
+        :key="i"
         :width="setCellWidth(column)"
       >
       <col
@@ -16,9 +17,13 @@
       >
     </colgroup>
     <thead>
-      <tr v-for="(cols, rowIndex) in headRows">
+      <tr
+        v-for="(cols, rowIndex) in headRows"
+        :key="rowIndex"
+      >
         <th
           v-for="(column, index) in cols"
+          :key="index"
           :colspan="column.colSpan"
           :rowspan="column.rowSpan"
           :class="alignCls(column)"
@@ -37,12 +42,12 @@
               </render-header>
             </template>
             <template v-else-if="column.type === 'selection'">
-              <Checkbox
+              <checkbox
                 :value="isSelectAll"
                 :disabled="!data.length"
                 @on-change="selectAll"
               >
-              </Checkbox>
+              </checkbox>
             </template>
             <template v-else>
               <span
@@ -76,7 +81,7 @@
                 >
                 </i>
               </span>
-              <Poptip
+              <poptip
                 v-if="isPopperShow(column)"
                 v-model="getColumn(rowIndex, index)._filterVisible"
                 placement="bottom"
@@ -139,7 +144,8 @@
                       {{ t('i.table.clearFilter') }}
                     </li>
                     <li
-                      v-for="item in column.filters"
+                      v-for="(item, j) in column.filters"
+                      :key="j"
                       :class="itemClasses(getColumn(rowIndex, index), item)"
                       @click="handleSelect(getColumn(rowIndex, index)._index, item.value)"
                     >
@@ -147,7 +153,7 @@
                     </li>
                   </ul>
                 </div>
-              </Poptip>
+              </poptip>
             </template>
           </div>
         </th>
@@ -162,6 +168,7 @@
     </thead>
   </table>
 </template>
+
 <script>
 import CheckboxGroup from '../checkbox/checkbox-group.vue';
 import Checkbox from '../checkbox/checkbox.vue';
@@ -173,23 +180,51 @@ import Locale from '../../mixins/locale';
 
 export default {
   name: 'TableHead',
+
   components: {Checkbox, CheckboxGroup, iButton, Poptip, renderHeader},
+
   mixins: [Mixin, Locale],
+
   props: {
-    columnRows: Array,
-    columns: Array,
-    columnsWidth: Object,
+    columnRows: {
+      default: undefined,
+      type: Array,
+    },
+    columns: {
+      default: undefined,
+      type: Array,
+    },
+    columnsWidth: {
+      default: undefined,
+      type: Object,
+    },
     // rebuildData
-    data: Array,
+    data: {
+      default: undefined,
+      type: Array,
+    },
     fixed: {
       default: false,
       type: [Boolean, String],
     },
-    fixedColumnRows: Array,
-    objData: Object,
-    prefixCls: String,
-    styleObject: Object,
+    fixedColumnRows: {
+      default: undefined,
+      type: Array,
+    },
+    objData: {
+      default: undefined,
+      type: Object,
+    },
+    prefixCls: {
+      default: undefined,
+      type: String,
+    },
+    styleObject: {
+      default: undefined,
+      type: Object,
+    },
   },
+
   computed: {
     headRows() {
       const isGroup = this.columnRows.length > 1;
@@ -207,11 +242,13 @@ export default {
         isSelectAll = false;
       }
 
+      /* eslint-disable-next-line no-underscore-dangle */
       if (!this.data.find((item) => !item._disabled)) {
         isSelectAll = false;
       } // #1751
 
-      for (let i = 0; i < this.data.length; i++) {
+      for (let i = 0; i < this.data.length; i += 1) {
+        /* eslint-disable-next-line no-underscore-dangle */
         if (!this.objData[this.data[i]._index]._isChecked && !this.objData[this.data[i]._index]._isDisabled) {
           isSelectAll = false;
           break;
@@ -228,6 +265,7 @@ export default {
       return style;
     },
   },
+
   methods: {
     cellClasses(column) {
       return [
@@ -242,8 +280,10 @@ export default {
       const isGroup = this.columnRows.length > 1;
 
       if (isGroup) {
+        /* eslint-disable-next-line no-underscore-dangle */
         const id = this.headRows[rowIndex][index].__id;
 
+        /* eslint-disable-next-line no-underscore-dangle */
         return this.columns.filter((item) => item.__id === id)[0];
       }
 
@@ -261,10 +301,12 @@ export default {
     handleSelect(index, value) {
       this.$parent.handleFilterSelect(index, value);
     },
-    handleSort(index, type) {
+    handleSort(index, sortType) {
+      let type = sortType;
       const column = this.columns[index];
       const {_index} = column;
 
+      /* eslint-disable-next-line no-underscore-dangle */
       if (column._sortType === type) {
         type = 'normal';
       }
@@ -275,6 +317,7 @@ export default {
       const column = this.columns[index];
 
       if (column.sortable) {
+        /* eslint-disable-next-line no-underscore-dangle */
         const type = column._sortType;
 
         if (type === 'normal') {
@@ -290,6 +333,7 @@ export default {
       return [
         `${this.prefixCls}-filter-select-item`,
         {
+          /* eslint-disable-next-line no-underscore-dangle */
           [`${this.prefixCls}-filter-select-item-selected`]: !column._filterChecked.length,
         },
       ];
@@ -298,13 +342,16 @@ export default {
       return [
         `${this.prefixCls}-filter-select-item`,
         {
+          /* eslint-disable-next-line no-underscore-dangle */
           [`${this.prefixCls}-filter-select-item-selected`]: column._filterChecked[0] === item.value,
         },
       ];
     },
     scrollBarCellClass() {
       let hasRightFixed = false;
+      /* eslint-disable-next-line guard-for-in, no-restricted-syntax */
       for (const i in this.headRows) {
+        /* eslint-disable-next-line guard-for-in, no-restricted-syntax */
         for (const j in this.headRows[i]) {
           if (this.headRows[i][j].fixed === 'right') {
             hasRightFixed = true;

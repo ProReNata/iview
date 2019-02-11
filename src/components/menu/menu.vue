@@ -6,7 +6,9 @@
     <slot></slot>
   </ul>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
 import {oneOf, findComponentsDownward, findComponentsUpward} from '../../utils/assist';
 import Emitter from '../../mixins/emitter';
 
@@ -14,29 +16,32 @@ const prefixCls = 'ivu-menu';
 
 export default {
   name: 'Menu',
+
   mixins: [Emitter],
+
   props: {
     accordion: {
       default: false,
       type: Boolean,
     },
     activeName: {
+      default: undefined,
       type: [String, Number],
     },
     mode: {
       default: 'vertical',
+      type: String,
       validator(value) {
         return oneOf(value, ['horizontal', 'vertical']);
       },
     },
     openNames: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     theme: {
       default: 'light',
+      type: String,
       validator(value) {
         return oneOf(value, ['light', 'dark', 'primary']);
       },
@@ -112,11 +117,7 @@ export default {
 
       if (items.length) {
         items.forEach((item) => {
-          if (this.openedNames.indexOf(item.name) > -1) {
-            item.opened = true;
-          } else {
-            item.opened = false;
-          }
+          item.opened = this.openedNames.indexOf(item.name) > -1;
         });
       }
     },

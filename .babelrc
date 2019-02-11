@@ -26,6 +26,7 @@
         "useESModules": false
       }
     ],
+    "js-logger",
     "lodash",
     "transform-vue-jsx"
   ]

@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const eslintFriendlyFormatter = require('eslint-friendly-formatter');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const pkg = require('../package.json');
 
 function resolve(dir) {
@@ -28,7 +29,7 @@ const PRODUCTION = 'production';
  * The default exclude regex.
  * @type {regexp}
  */
-const DEFAULT_EXCLUDE_RX = /node_modules/;
+const DEFAULT_EXCLUDE_RX = /node_modules|redactor-3_1_6/;
 
 /**
  * Indicates if linting errors should fail the build.
@@ -110,22 +111,6 @@ const lessLoader = {
   },
 };
 
-/**
- * Generate style loaders for 'vue-loader'.
- *
- * @param {(Object|string)} [loader] - The loader prefix.
- * @returns {Array} A new array with the required loaders.
- */
-const generateLoaders = (loader) => {
-  const loaders = [cssLoader];
-
-  if (loader) {
-    loaders.push(loader);
-  }
-
-  return ['vue-style-loader', ...loaders];
-};
-
 module.exports = {
   // 加载器
   module: {
@@ -165,9 +150,9 @@ module.exports = {
               cssSourceMap: true,
               // https://github.com/vuejs/vue-loader/blob/master/docs/en/options.md#loaders
               loaders: {
-                css: generateLoaders(),
+                css: ['vue-style-loader', cssLoader],
                 js: [babelLoader],
-                less: generateLoaders(lessLoader),
+                less: ['vue-style-loader', cssLoader, lessLoader],
               },
               // https://github.com/vuejs/vue-loader/blob/master/docs/en/options.md#transformtorequire
               transformToRequire: {
@@ -195,26 +180,19 @@ module.exports = {
 
       /* Style loading. */
       {
-        loaders: [
-          styleLoader,
-          cssLoader,
-          {
-            loader: 'autoprefixer-loader',
-          },
-        ],
-        test: /\.(css)(\?\S*)?$/,
+        loaders: [styleLoader, cssLoader],
+        test: /\.css$/,
       },
       {
         loaders: [styleLoader, cssLoader, lessLoader],
-        test: /\.(less)(\?\S*)?$/,
+        test: /\.less$/,
       },
       {
-        loader: 'url-loader?limit=8192',
+        loader: 'url-loader',
+        options: {
+          limit: 8192,
+        },
         test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
-      },
-      {
-        loader: 'html-loader',
-        test: /\.(html|tpl)$/,
       },
     ],
   },
@@ -254,6 +232,15 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.VERSION': `'${pkg.version}'`,
     }),
+
+    /**
+     * Add the vue-loader plugin object to the list of plugins.
+     * Required by v15+ of vue-loader.
+     * @type {!Object}
+     * @see {@link https://vue-loader.vuejs.org/guide/}
+     */
+    new VueLoaderPlugin(),
+
     /**
      * Smaller lodash builds. We are not opting in to path feature.
      * @type {!Object}

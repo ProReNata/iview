@@ -34,6 +34,7 @@
     </slot>
   </label>
 </template>
+
 <script>
 import {findComponentUpward, oneOf} from '../../utils/assist';
 import Emitter from '../../mixins/emitter';
@@ -42,7 +43,9 @@ const prefixCls = 'ivu-checkbox';
 
 export default {
   name: 'Checkbox',
+
   mixins: [Emitter],
+
   props: {
     disabled: {
       default: false,
@@ -57,12 +60,16 @@ export default {
       type: Boolean,
     },
     label: {
+      default: undefined,
       type: [String, Number, Boolean],
     },
     name: {
+      default: undefined,
       type: String,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
@@ -76,6 +83,7 @@ export default {
       type: [String, Number, Boolean],
     },
   },
+
   data() {
     return {
       currentValue: this.value,
@@ -86,6 +94,7 @@ export default {
       showSlot: true,
     };
   },
+
   computed: {
     checkboxClasses() {
       return [
@@ -120,6 +129,7 @@ export default {
       ];
     },
   },
+
   watch: {
     value(val) {
       if (val === this.trueValue || val === this.falseValue) {
@@ -129,6 +139,7 @@ export default {
       }
     },
   },
+
   mounted() {
     this.parent = findComponentUpward(this, 'CheckboxGroup');
 
@@ -143,10 +154,11 @@ export default {
       this.showSlot = this.$slots.default !== undefined;
     }
   },
+
   methods: {
     change(event) {
       if (this.disabled) {
-        return false;
+        return;
       }
 
       const {checked} = event.target;

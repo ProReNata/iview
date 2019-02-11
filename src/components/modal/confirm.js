@@ -7,12 +7,12 @@ import Locale from '../../mixins/locale';
 const prefixCls = 'ivu-modal-confirm';
 
 Modal.newInstance = (properties) => {
-  const _props = properties || {};
+  const props = properties || {};
 
   const Instance = new Vue({
     mixins: [Locale],
     data: {
-      ..._props,
+      ...props,
       ...{
         body: '',
         buttonLoading: false,
@@ -121,10 +121,10 @@ Modal.newInstance = (properties) => {
       );
 
       // render content
-      let body_render;
+      let bodyRender;
 
       if (this.render) {
-        body_render = h(
+        bodyRender = h(
           'div',
           {
             attrs: {
@@ -134,7 +134,7 @@ Modal.newInstance = (properties) => {
           [this.render(h)],
         );
       } else {
-        body_render = h(
+        bodyRender = h(
           'div',
           {
             attrs: {
@@ -174,7 +174,7 @@ Modal.newInstance = (properties) => {
             },
           },
           props: {
-            ..._props,
+            ...props,
             ...{
               closable: this.closable,
               scrollable: this.scrollable,
@@ -209,7 +209,7 @@ Modal.newInstance = (properties) => {
                   }),
                 ],
               ),
-              body_render,
+              bodyRender,
               h(
                 'div',
                 {
@@ -237,11 +237,11 @@ Modal.newInstance = (properties) => {
       modal.$parent.buttonLoading = false;
       modal.$parent.remove();
     },
-    show(props) {
-      modal.$parent.showCancel = props.showCancel;
-      modal.$parent.iconType = props.icon;
+    show(showProps) {
+      modal.$parent.showCancel = showProps.showCancel;
+      modal.$parent.iconType = showProps.icon;
 
-      switch (props.icon) {
+      switch (showProps.icon) {
         case 'info':
           modal.$parent.iconName = 'information-circled';
           break;
@@ -265,49 +265,49 @@ Modal.newInstance = (properties) => {
         default:
       }
 
-      if ('width' in props) {
-        modal.$parent.width = props.width;
+      if ('width' in showProps) {
+        modal.$parent.width = showProps.width;
       }
 
-      if ('closable' in props) {
-        modal.$parent.closable = props.closable;
+      if ('closable' in showProps) {
+        modal.$parent.closable = showProps.closable;
       }
 
-      if ('title' in props) {
-        modal.$parent.title = props.title;
+      if ('title' in showProps) {
+        modal.$parent.title = showProps.title;
       }
 
-      if ('content' in props) {
-        modal.$parent.body = props.content;
+      if ('content' in showProps) {
+        modal.$parent.body = showProps.content;
       }
 
-      if ('okText' in props) {
-        modal.$parent.okText = props.okText;
+      if ('okText' in showProps) {
+        modal.$parent.okText = showProps.okText;
       }
 
-      if ('cancelText' in props) {
-        modal.$parent.cancelText = props.cancelText;
+      if ('cancelText' in showProps) {
+        modal.$parent.cancelText = showProps.cancelText;
       }
 
-      if ('onCancel' in props) {
-        modal.$parent.onCancel = props.onCancel;
+      if ('onCancel' in showProps) {
+        modal.$parent.onCancel = showProps.onCancel;
       }
 
-      if ('onOk' in props) {
-        modal.$parent.onOk = props.onOk;
+      if ('onOk' in showProps) {
+        modal.$parent.onOk = showProps.onOk;
       }
 
       // async for ok
-      if ('loading' in props) {
-        modal.$parent.loading = props.loading;
+      if ('loading' in showProps) {
+        modal.$parent.loading = showProps.loading;
       }
 
-      if ('scrollable' in props) {
-        modal.$parent.scrollable = props.scrollable;
+      if ('scrollable' in showProps) {
+        modal.$parent.scrollable = showProps.scrollable;
       }
 
       // notice when component destroy
-      modal.$parent.onRemove = props.onRemove;
+      modal.$parent.onRemove = showProps.onRemove;
 
       modal.visible = true;
     },

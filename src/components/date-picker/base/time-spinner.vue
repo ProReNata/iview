@@ -6,8 +6,9 @@
     >
       <ul :class="[prefixCls + '-ul']">
         <li
-          v-for="item in hoursList"
+          v-for="(item, i) in hoursList"
           v-show="!item.hide"
+          :key="i"
           :class="getCellCls(item)"
           @click="handleClick('hours', item)"
         >
@@ -21,8 +22,9 @@
     >
       <ul :class="[prefixCls + '-ul']">
         <li
-          v-for="item in minutesList"
+          v-for="(item, i) in minutesList"
           v-show="!item.hide"
+          :key="i"
           :class="getCellCls(item)"
           @click="handleClick('minutes', item)"
         >
@@ -37,8 +39,9 @@
     >
       <ul :class="[prefixCls + '-ul']">
         <li
-          v-for="item in secondsList"
+          v-for="(item, i) in secondsList"
           v-show="!item.hide"
+          :key="i"
           :class="getCellCls(item)"
           @click="handleClick('seconds', item)"
         >
@@ -48,7 +51,9 @@
     </div>
   </div>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
 import Options from '../time-mixins';
 import {deepCopy, scrollTop, firstUpperCase} from '../../../utils/assist';
 
@@ -57,7 +62,9 @@ const timeParts = ['hours', 'minutes', 'seconds'];
 
 export default {
   name: 'TimeSpinner',
+
   mixins: [Options],
+
   props: {
     hours: {
       default: NaN,
@@ -76,10 +83,11 @@ export default {
       type: Boolean,
     },
     steps: {
-      default: () => [],
+      default: stubArray,
       type: Array,
     },
   },
+
   data() {
     return {
       compiled: false,
@@ -91,6 +99,7 @@ export default {
       spinerSteps: [1, 1, 1].map((one, i) => Math.abs(this.steps[i]) || one),
     };
   },
+
   computed: {
     classes() {
       return [
@@ -104,7 +113,7 @@ export default {
       const hours = [];
       const step = this.spinerSteps[0];
       const focusedHour = this.focusedColumn === 0 && this.focusedTime[0];
-      const hour_tmpl = {
+      const hourTmpl = {
         disabled: false,
         hide: false,
         selected: false,
@@ -112,7 +121,7 @@ export default {
       };
 
       for (let i = 0; i < 24; i += step) {
-        const hour = deepCopy(hour_tmpl);
+        const hour = deepCopy(hourTmpl);
         hour.text = i;
         hour.focused = i === focusedHour;
 
@@ -137,7 +146,7 @@ export default {
       const minutes = [];
       const step = this.spinerSteps[1];
       const focusedMinute = this.focusedColumn === 1 && this.focusedTime[1];
-      const minute_tmpl = {
+      const minuteTmpl = {
         disabled: false,
         hide: false,
         selected: false,
@@ -145,7 +154,7 @@ export default {
       };
 
       for (let i = 0; i < 60; i += step) {
-        const minute = deepCopy(minute_tmpl);
+        const minute = deepCopy(minuteTmpl);
         minute.text = i;
         minute.focused = i === focusedMinute;
 
@@ -170,7 +179,7 @@ export default {
       const seconds = [];
       const step = this.spinerSteps[2];
       const focusedMinute = this.focusedColumn === 2 && this.focusedTime[2];
-      const second_tmpl = {
+      const secondTmpl = {
         disabled: false,
         hide: false,
         selected: false,
@@ -178,7 +187,7 @@ export default {
       };
 
       for (let i = 0; i < 60; i += step) {
-        const second = deepCopy(second_tmpl);
+        const second = deepCopy(secondTmpl);
         second.text = i;
         second.focused = i === focusedMinute;
 
@@ -200,6 +209,7 @@ export default {
       return seconds;
     },
   },
+
   watch: {
     focusedTime(updated, old) {
       timeParts.forEach((part, i) => {
@@ -233,11 +243,13 @@ export default {
       this.scroll('seconds', this.secondsList.findIndex((obj) => obj.text === val));
     },
   },
+
   mounted() {
     this.$nextTick(() => {
       this.compiled = true;
     });
   },
+
   methods: {
     chooseValue(values) {
       const changes = timeParts.reduce((obj, part, i) => {
@@ -274,14 +286,20 @@ export default {
         },
       ];
     },
-    getScrollIndex(type, index) {
+    getScrollIndex(type, idx) {
+      let index = idx;
       const Type = firstUpperCase(type);
       const disabled = this[`disabled${Type}`];
 
       if (disabled.length && this.hideDisabledOptions) {
-        let _count = 0;
-        disabled.forEach((item) => (item <= index ? _count++ : ''));
-        index -= _count;
+        let count = 0;
+        disabled.forEach((item) => {
+          if (item <= index) {
+            count += 1;
+          }
+        });
+
+        index -= count;
       }
 
       return index;

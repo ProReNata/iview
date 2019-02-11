@@ -9,12 +9,12 @@
         :class="iconClasses"
       >
         <slot name="icon">
-          <Icon
+          <icon
             :type="iconType"
-            fw="true"
-            :weight="iconWeight"
+            :fw="true"
+            :weight="iconWeightData"
           >
-          </Icon>
+          </icon>
         </slot>
       </div>
 
@@ -39,16 +39,17 @@
         @click="close"
       >
         <slot name="close">
-          <Icon
+          <icon
             type="times"
             fw
           >
-          </Icon>
+          </icon>
         </slot>
       </a>
     </div>
   </transition>
 </template>
+
 <script>
 import Icon from '../icon';
 import {oneOf} from '../../utils/assist';
@@ -57,31 +58,42 @@ const prefixCls = 'byx-alert';
 
 export default {
   name: 'Alert',
+
   components: {Icon},
+
   props: {
     closable: {
       default: false,
       type: Boolean,
     },
-    iconWeight: String,
+    iconWeight: {
+      default: undefined,
+      type: String,
+    },
     showIcon: {
       default: false,
       type: Boolean,
     },
-    size: String,
+    size: {
+      default: undefined,
+      type: String,
+    },
     type: {
       default: 'default',
       validator(value) {
-        return oneOf(value, ['success', 'info', 'warning', 'danger', 'update', 'tip']);
+        return Boolean(oneOf(value, ['default', 'success', 'info', 'warning', 'danger', 'update', 'tip']));
       },
     },
   },
+
   data() {
     return {
       closed: false,
       desc: false,
+      iconWeightData: this.iconWeight,
     };
   },
+
   computed: {
     actionClasses() {
       return `${prefixCls}-action`;
@@ -144,11 +156,13 @@ export default {
       return [`${prefixCls}`, `${prefixCls}-${this.type}`];
     },
   },
+
   mounted() {
     this.header = this.$slots.header !== undefined;
     const standardWeight = this.size === 'large' ? 'light' : 'solid';
-    this.iconWeight = this.iconWeight || standardWeight;
+    this.iconWeightData = this.iconWeight || standardWeight;
   },
+
   methods: {
     close(e) {
       this.closed = true;

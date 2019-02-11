@@ -1,30 +1,31 @@
 <template>
   <div>
-    <Tooltip 
-      always 
-      placement="top" 
-      transfer 
-      :content="text" 
+    <tooltip
+      always
+      placement="top"
+      transfer
+      :content="text"
       :delay="1000"
     >
-      <Button @click="disabled = true">
+      <button @click="disabled = true">
         延时1秒显示
-      </Button>
-    </Tooltip>
-    <Tooltip 
-      placement="top" 
-      transfer 
+      </button>
+    </tooltip>
+    <tooltip
+      placement="top"
+      transfer
       :content="text"
     >
-      <Button @click="handleChange">
+      <button @click="handleChange">
         change
-      </Button>
-    </Tooltip>
-    <Button @click="handleChange">
+      </button>
+    </tooltip>
+    <button @click="handleChange">
       change
-    </Button>
+    </button>
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -32,6 +33,7 @@ export default {
       text: 'Tooltip 文字提示',
     };
   },
+
   methods: {
     handleChange() {
       this.text = '提示';

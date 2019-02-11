@@ -44,5 +44,7 @@ getFiles(APP_ROOT, '.vue')
     const sourceFiles = files.filter((filePath) => !filePath.includes('node_modules') && !filePath.includes('sandbox'));
     console.log('Found', sourceFiles.length);
     sourceFiles.forEach(processFile);
+
+    return sourceFiles;
   })
   .catch((err) => console.log(err));

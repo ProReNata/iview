@@ -34,9 +34,9 @@
       </i-input>
     </slot>
     <slot>
-      <i-option 
-        v-for="item in filteredData" 
-        :key="item" 
+      <i-option
+        v-for="item in filteredData"
+        :key="item"
         :value="item"
       >
         {{ item }}
@@ -44,6 +44,7 @@
     </slot>
   </i-select>
 </template>
+
 <script>
 import iSelect from '../select/select.vue';
 import iOption from '../select/option.vue';
@@ -53,8 +54,11 @@ import Emitter from '../../mixins/emitter';
 
 export default {
   name: 'AutoComplete',
+
   components: {iInput, iOption, iSelect},
+
   mixins: [Emitter],
+
   props: {
     clearable: {
       default: false,
@@ -69,6 +73,7 @@ export default {
       type: Boolean,
     },
     elementId: {
+      default: undefined,
       type: String,
     },
     filterMethod: {
@@ -76,6 +81,7 @@ export default {
       type: [Function, Boolean],
     },
     icon: {
+      default: undefined,
       type: String,
     },
     label: {
@@ -83,18 +89,23 @@ export default {
       type: [String, Number],
     },
     name: {
+      default: undefined,
       type: String,
     },
     placeholder: {
+      default: undefined,
       type: String,
     },
     placement: {
       default: 'bottom',
+      type: String,
       validator(value) {
         return oneOf(value, ['top', 'bottom']);
       },
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
@@ -108,12 +119,14 @@ export default {
       type: [String, Number],
     },
   },
+
   data() {
     return {
       currentValue: this.value,
       disableEmitChange: false, // for Form reset
     };
   },
+
   computed: {
     filteredData() {
       if (this.filterMethod) {
@@ -123,17 +136,18 @@ export default {
       return this.data;
     },
     inputIcon() {
-      let icon = '';
+      let iconName = '';
 
       if (this.clearable && this.currentValue) {
-        icon = 'ios-close';
+        iconName = 'ios-close';
       } else if (this.icon) {
-        icon = this.icon;
+        iconName = this.icon;
       }
 
-      return icon;
+      return iconName;
     },
   },
+
   watch: {
     currentValue(val) {
       this.$refs.select.query = val;
@@ -156,6 +170,7 @@ export default {
       this.currentValue = val;
     },
   },
+
   methods: {
     handleBlur(event) {
       this.$emit('on-blur', event);

@@ -1,6 +1,6 @@
 <template>
   <div style="margin: 100px;width: 200px;">
-    <AutoComplete
+    <auto-complete
       v-model="value"
       placement="top"
       transfer
@@ -13,7 +13,7 @@
       <!--<Option v-for="item in data" :value="item" :label="item" :key="item">-->
       <!--<span style="color: red">{{ item }}</span>-->
       <!--</Option>-->
-    </AutoComplete>
+    </auto-complete>
   </div>
 </template>
 <script>

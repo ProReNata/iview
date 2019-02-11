@@ -1,3 +1,4 @@
+import get from 'lodash/get';
 import LoadingBar from './loading-bar';
 
 let loadingBarInstance;
@@ -47,15 +48,15 @@ function clearTimer() {
 export default {
   config(options) {
     if (options.color) {
-      color = options.color;
+      color = get(options, 'color');
     }
 
     if (options.failedColor) {
-      failedColor = options.failedColor;
+      failedColor = get(options, 'failedColor');
     }
 
     if (options.height) {
-      height = options.height;
+      height = get(options, 'height');
     }
   },
   destroy() {

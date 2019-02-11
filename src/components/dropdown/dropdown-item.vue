@@ -1,11 +1,12 @@
 <template>
-  <li 
-    :class="classes" 
+  <li
+    :class="classes"
     @click="handleClick"
   >
     <slot></slot>
   </li>
 </template>
+
 <script>
 import {findComponentUpward} from '../../utils/assist';
 
@@ -13,6 +14,7 @@ const prefixCls = 'ivu-dropdown-item';
 
 export default {
   name: 'DropdownItem',
+
   props: {
     disabled: {
       default: false,
@@ -23,6 +25,7 @@ export default {
       type: Boolean,
     },
     name: {
+      default: undefined,
       type: [String, Number],
     },
     selected: {
@@ -30,6 +33,7 @@ export default {
       type: Boolean,
     },
   },
+
   computed: {
     classes() {
       return [
@@ -42,6 +46,7 @@ export default {
       ];
     },
   },
+
   methods: {
     handleClick() {
       const $parent = findComponentUpward(this, 'Dropdown');

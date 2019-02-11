@@ -1,24 +1,24 @@
 import dateUtil from '../../utils/date';
 
-export const toDate = function(date) {
-  let _date = new Date(date);
+export const toDate = function _toDate(date) {
+  let dateClone = new Date(date);
 
   // IE patch start (#1422)
-  if (Number.isNaN(_date.getTime()) && typeof date === 'string') {
-    _date = date.split('-').map(Number);
-    _date[1] += 1;
-    _date = new Date(..._date);
+  if (Number.isNaN(dateClone.getTime()) && typeof date === 'string') {
+    dateClone = date.split('-').map(Number);
+    dateClone[1] += 1;
+    dateClone = new Date(...dateClone);
   }
   // IE patch end
 
-  if (Number.isNaN(_date.getTime())) {
+  if (Number.isNaN(dateClone.getTime())) {
     return null;
   }
 
-  return _date;
+  return dateClone;
 };
 
-export const clearHours = function(time) {
+export const clearHours = function _clearHours(time) {
   const cloneDate = new Date(time);
   cloneDate.setHours(0, 0, 0, 0);
 
@@ -35,32 +35,32 @@ export const isInRange = (time, a, b) => {
   return time >= start && time <= end;
 };
 
-export const formatDate = function(date, format) {
-  date = toDate(date);
+export const formatDate = function _formatDate(date, format) {
+  const realDate = toDate(date);
 
-  if (!date) {
+  if (!realDate) {
     return '';
   }
 
-  return dateUtil.format(date, format || 'yyyy-MM-dd');
+  return dateUtil.format(realDate, format || 'yyyy-MM-dd');
 };
 
-export const parseDate = function(string, format) {
+export const parseDate = function _parseDate(string, format) {
   return dateUtil.parse(string, format || 'yyyy-MM-dd');
 };
 
-export const getDayCountOfMonth = function(year, month) {
+export const getDayCountOfMonth = function _getDayCountOfMonth(year, month) {
   return new Date(year, month + 1, 0).getDate();
 };
 
-export const getFirstDayOfMonth = function(date) {
+export const getFirstDayOfMonth = function _getFirstDayOfMonth(date) {
   const temp = new Date(date.getTime());
   temp.setDate(1);
 
   return temp.getDay();
 };
 
-export const siblingMonth = function(src, diff) {
+export const siblingMonth = function _siblingMonth(src, diff) {
   const temp = new Date(src); // lets copy it so we don't change the original
   const newMonth = temp.getMonth() + diff;
   const newMonthDayCount = getDayCountOfMonth(temp.getFullYear(), newMonth);
@@ -74,15 +74,15 @@ export const siblingMonth = function(src, diff) {
   return temp;
 };
 
-export const prevMonth = function(src) {
+export const prevMonth = function _prevMonth(src) {
   return siblingMonth(src, -1);
 };
 
-export const nextMonth = function(src) {
+export const nextMonth = function _nextMonth(src) {
   return siblingMonth(src, 1);
 };
 
-export const initTimeDate = function() {
+export const initTimeDate = function _initTimeDate() {
   const date = new Date();
   date.setHours(0);
   date.setMinutes(0);
@@ -91,7 +91,7 @@ export const initTimeDate = function() {
   return date;
 };
 
-export const formatDateLabels = (function() {
+export const formatDateLabels = (function iife() {
   /*
       Formats:
       yyyy - 4 digit year
@@ -135,7 +135,7 @@ export const formatDateLabels = (function() {
   };
   const formatRegex = new RegExp(['yyyy', 'Mmmm', 'mmmm', 'Mmm', 'mmm', 'mm', 'm'].join('|'), 'g');
 
-  return function(locale, format, date) {
+  return function _formatDateLabels(locale, format, date) {
     const componetsRegex = /(\[[^\]]+])([^[\]]+)(\[[^\]]+])/;
     const components = format.match(componetsRegex).slice(1);
     const separator = components[1];
@@ -171,15 +171,15 @@ export const DEFAULT_FORMATS = {
 
 export const RANGE_SEPARATOR = ' - ';
 
-const DATE_FORMATTER = function(value, format) {
+const DATE_FORMATTER = function _DATE_FORMATTER(value, format) {
   return formatDate(value, format);
 };
 
-const DATE_PARSER = function(text, format) {
+const DATE_PARSER = function _DATE_PARSER(text, format) {
   return parseDate(text, format);
 };
 
-const RANGE_FORMATTER = function(value, format) {
+const RANGE_FORMATTER = function _RANGE_FORMATTER(value, format) {
   if (Array.isArray(value) && value.length === 2) {
     const start = value[0];
     const end = value[1];
@@ -194,7 +194,7 @@ const RANGE_FORMATTER = function(value, format) {
   return '';
 };
 
-const RANGE_PARSER = function(text, format) {
+const RANGE_PARSER = function _RANGE_PARSER(text, format) {
   const array = Array.isArray(text) ? text : text.split(RANGE_SEPARATOR);
 
   if (array.length === 2) {
@@ -256,18 +256,20 @@ export const TYPE_VALUE_RESOLVER_MAP = {
     parser: (value, format) => {
       const values = typeof value === 'string' ? value.split(',') : value;
 
-      return values.map((value) => {
-        if (value instanceof Date) {
-          return value;
+      return values.map((val) => {
+        let valueItem = val;
+
+        if (valueItem instanceof Date) {
+          return valueItem;
         }
 
-        if (typeof value === 'string') {
-          value = value.trim();
-        } else if (typeof value !== 'number' && !value) {
-          value = '';
+        if (typeof valueItem === 'string') {
+          valueItem = valueItem.trim();
+        } else if (typeof valueItem !== 'number' && !valueItem) {
+          valueItem = '';
         }
 
-        return parseDate(value, format);
+        return parseDate(valueItem, format);
       });
     },
   },

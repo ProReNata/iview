@@ -9,12 +9,14 @@
       :style="styles"
     >
       <template v-if="type === 'notice'">
+        <!-- eslint-disable vue/no-v-html -->
         <div
           ref="content"
           :class="contentClasses"
           v-html="content"
         >
         </div>
+        <!-- eslint-enable vue/no-v-html -->
         <div :class="contentWithIcon">
           <render-cell
             :render="renderFunc"
@@ -35,11 +37,13 @@
           ref="content"
           :class="[baseClass + '-content']"
         >
+          <!-- eslint-disable vue/no-v-html -->
           <div
             :class="[baseClass + '-content-text']"
             v-html="content"
           >
           </div>
+          <!-- eslint-enable vue/no-v-html -->
           <div :class="[baseClass + '-content-text']">
             <render-cell
               :render="renderFunc"
@@ -59,16 +63,17 @@
     </div>
   </transition>
 </template>
+
 <script>
 import noop from 'lodash/noop';
 import RenderCell from '../render';
 
 export default {
-  components: {
-    RenderCell,
-  },
+  components: {RenderCell},
+
   props: {
     className: {
+      default: undefined,
       type: String,
     },
     closable: {
@@ -83,12 +88,16 @@ export default {
       default: 1.5,
       type: Number,
     },
-    hasTitle: Boolean,
+    hasTitle: {
+      default: false,
+      type: Boolean,
+    },
     name: {
       required: true,
       type: String,
     },
     onClose: {
+      default: undefined,
       type: Function,
     },
     prefixCls: {
@@ -96,6 +105,7 @@ export default {
       type: String,
     },
     render: {
+      default: undefined,
       type: Function,
     },
     styles: {
@@ -107,18 +117,25 @@ export default {
       type: Object,
     },
     transitionName: {
+      default: undefined,
       type: String,
     },
     type: {
+      default: undefined,
       type: String,
     },
-    withIcon: Boolean,
+    withIcon: {
+      default: false,
+      type: Boolean,
+    },
   },
+
   data() {
     return {
       withDesc: false,
     };
   },
+
   computed: {
     baseClass() {
       return `${this.prefixCls}-notice`;
@@ -149,6 +166,7 @@ export default {
       return this.render || noop;
     },
   },
+
   mounted() {
     this.clearCloseTimer();
 
@@ -161,12 +179,19 @@ export default {
     // check if with desc in Notice component
     if (this.prefixCls === 'ivu-notice') {
       const desc = this.$refs.content.querySelectorAll(`.${this.prefixCls}-desc`)[0];
-      this.withDesc = this.render ? true : desc ? desc.innerHTML !== '' : false;
+
+      if (this.render) {
+        this.withDesc = true;
+      } else {
+        this.withDesc = desc ? desc.innerHTML !== '' : false;
+      }
     }
   },
+
   beforeDestroy() {
     this.clearCloseTimer();
   },
+
   methods: {
     clearCloseTimer() {
       if (this.closeTimer) {

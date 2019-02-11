@@ -1,23 +1,23 @@
 <template>
   <div>
-    <Rate v-model="value">
-    </Rate>
-    <Rate 
-      v-model="valueHalf" 
+    <rate v-model="value">
+    </rate>
+    <rate
+      v-model="valueHalf"
       allow-half
     >
-    </Rate>
-    <Rate 
-      v-model="valueClear" 
+    </rate>
+    <rate
+      v-model="valueClear"
       clearable
     >
-    </Rate>
-    <Rate 
-      v-model="valueClearHalf" 
-      clearable  
+    </rate>
+    <rate
+      v-model="valueClearHalf"
+      clearable
       allow-half
     >
-    </Rate>
+    </rate>
     <!--<Rate show-text v-model="valueText"></Rate>-->
     <!--<Rate show-text allow-half v-model="valueCustomText">-->
     <!--<span style="color: #f5a623">{{ valueCustomText }}</span>-->

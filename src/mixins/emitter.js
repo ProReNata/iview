@@ -1,4 +1,5 @@
 function broadcast(componentName, eventName, params) {
+  /* eslint-disable-next-line babel/no-invalid-this */
   this.$children.forEach((child) => {
     const {name} = child.$options;
 
@@ -18,13 +19,13 @@ export default {
     },
     dispatch(componentName, eventName, params) {
       let parent = this.$parent || this.$root;
-      let name = parent.$options.name;
+      let optName = parent.$options.name;
 
-      while (parent && (!name || name !== componentName)) {
+      while (parent && (!optName || optName !== componentName)) {
         parent = parent.$parent;
 
         if (parent) {
-          name = parent.$options.name;
+          optName = parent.$options.name;
         }
       }
 

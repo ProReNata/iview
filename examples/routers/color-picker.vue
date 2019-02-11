@@ -11,18 +11,18 @@
     >
     </color-picker>
     <label>
-      <Input
+      <i-input
         value="hello"
         style="display: inline-block"
-      ></Input>
+      ></i-input>
     </label>
-    <Date-picker
+    <date-picker
       transfer
       type="date"
       placeholder="选择日期"
       style="width: 200px"
     >
-    </Date-picker>
+    </date-picker>
     <color-picker
       ref="xxx"
       v-model="color"
@@ -48,13 +48,13 @@
       size="small"
     >
     </color-picker>
-    <Date-picker
+    <date-picker
       type="date"
       placeholder="选择日期"
       size="small"
       style="width: 200px"
     >
-    </Date-picker>
+    </date-picker>
     <color-picker
       ref="yyy"
       v-model="color"
@@ -64,33 +64,33 @@
       alpha
     >
     </color-picker>
-    <Button @click="setColor">
+    <i-button @click="setColor">
       set color
-    </Button>
+    </i-button>
 
     <br><br><br><br>
     {{ openState }}
-    <ColorPicker
+    <color-picker
       v-model="color7"
       :hue="false"
       @on-open-change="onOpenChange"
     >
-    </ColorPicker>
-    <ColorPicker
+    </color-picker>
+    <color-picker
       v-model="color7"
       :hue="false"
       :hide-drop-down="hideDropDown"
       transfer
       @on-open-change="onOpenChange"
     >
-    </ColorPicker>
+    </color-picker>
 
     <br><br><br><br>
-    <ColorPicker
+    <color-picker
       v-model="color7"
       disabled
     >
-    </ColorPicker>
+    </color-picker>
   </div>
 </template>
 

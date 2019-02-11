@@ -1,10 +1,11 @@
 <template>
   <div>
     {{ data1 }}
-    <Tree :data="data1">
-    </Tree>
+    <tree :data="data1">
+    </tree>
   </div>
 </template>
+
 <script>
 export default {
   data() {

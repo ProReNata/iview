@@ -18,8 +18,8 @@
           v-if="isStatus"
           :class="textInnerClasses"
         >
-          <Icon :type="statusIcon">
-          </Icon>
+          <icon :type="statusIcon">
+          </icon>
         </span>
         <span
           v-else
@@ -31,6 +31,7 @@
     </span>
   </div>
 </template>
+
 <script>
 import Icon from '../icon';
 import {oneOf} from '../../utils/assist';
@@ -39,6 +40,7 @@ const prefixCls = 'ivu-progress';
 
 export default {
   components: {Icon},
+
   props: {
     hideInfo: {
       default: false,
@@ -63,11 +65,13 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     return {
       currentStatus: this.status,
     };
   },
+
   computed: {
     bgClasses() {
       return `${prefixCls}-bg`;
@@ -125,6 +129,7 @@ export default {
       ];
     },
   },
+
   watch: {
     percent(val, oldVal) {
       if (val < oldVal) {

@@ -1,17 +1,18 @@
 <template>
   <div @click="onHeaderClick">
     <div
-      v-for="item in selectedMultiple"
+      v-for="(item, i) in selectedMultiple"
+      :key="i"
       class="ivu-tag ivu-tag-checked"
     >
       <span class="ivu-tag-text">
         {{ item.label }}
       </span>
-      <Icon
+      <icon
         type="ios-close-empty"
         @click.native.stop="removeTag(item)"
       >
-      </Icon>
+      </icon>
     </div>
     <span
       v-show="singleDisplayValue"
@@ -37,22 +38,24 @@
         @blur="onInputFocus"
       >
     </label>
-    <Icon
+    <icon
       v-if="resetSelect"
       type="ios-close"
       :class="[prefixCls + '-arrow']"
       @click.native.stop="onClear"
     >
-    </Icon>
-    <Icon
+    </icon>
+    <icon
       v-if="!resetSelect && !remote && !disabled"
       type="arrow-down-b"
       :class="[prefixCls + '-arrow']"
     >
-    </Icon>
+    </icon>
   </div>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
 import Icon from '../icon';
 import Emitter from '../../mixins/emitter';
 import Locale from '../../mixins/locale';
@@ -61,9 +64,12 @@ import {oneOf} from '../../utils/assist';
 const prefixCls = 'ivu-select';
 
 export default {
-  name: 'iSelectHead',
+  name: 'ISelectHead',
+
   components: {Icon},
+
   mixins: [Emitter, Locale],
+
   props: {
     clearable: {
       default: false,
@@ -78,9 +84,11 @@ export default {
       type: Boolean,
     },
     initialLabel: {
+      default: undefined,
       type: [String, Number, Array],
     },
     inputElementId: {
+      default: undefined,
       type: String,
     },
     multiple: {
@@ -88,6 +96,7 @@ export default {
       type: Boolean,
     },
     placeholder: {
+      default: undefined,
       type: String,
     },
     queryProp: {
@@ -99,10 +108,11 @@ export default {
       type: Boolean,
     },
     values: {
-      default: () => [],
+      default: stubArray,
       type: Array,
     },
   },
+
   data() {
     return {
       inputLength: 20,
@@ -246,7 +256,7 @@ export default {
     },
     removeTag(value) {
       if (this.disabled) {
-        return false;
+        return;
       }
 
       this.dispatch('iSelect', 'on-select-selected', value);

@@ -27,16 +27,20 @@
     </slot>
   </div>
 </template>
+
 <script>
 import {on, off} from '../../utils/dom';
 import {oneOf, dimensionMap, setMatchMedia} from '../../utils/assist';
 
 const prefixCls = 'ivu-layout-sider';
 setMatchMedia();
+
 export default {
   name: 'Sider',
+
   props: {
     breakpoint: {
+      default: undefined,
       type: String,
       validator(val) {
         return oneOf(val, ['xs', 'sm', 'md', 'lg', 'xl']);
@@ -72,12 +76,14 @@ export default {
       type: [Number, String],
     },
   },
+
   data() {
     return {
       mediaMatched: false,
       prefixCls,
     };
   },
+
   computed: {
     childClasses() {
       return `${this.prefixCls}-children`;
@@ -91,13 +97,15 @@ export default {
         : false;
     },
     siderWidth() {
-      return this.collapsible
-        ? this.value
-          ? this.mediaMatched
-            ? 0
-            : parseInt(this.collapsedWidth, 10)
-          : parseInt(this.width, 10)
-        : this.width;
+      if (this.collapsible) {
+        if (this.value) {
+          return this.mediaMatched ? 0 : parseInt(this.collapsedWidth, 10);
+        }
+
+        return parseInt(this.width, 10);
+      }
+
+      return this.width;
     },
     triggerClasses() {
       return [`${prefixCls}-trigger`, this.value ? `${prefixCls}-trigger-collapsed` : ''];
@@ -120,11 +128,13 @@ export default {
       return [`${prefixCls}-zero-width-trigger`, this.reverseArrow ? `${prefixCls}-zero-width-trigger-left` : ''];
     },
   },
+
   watch: {
     value(stat) {
       this.$emit('on-collapse', stat);
     },
   },
+
   mounted() {
     if (this.defaultCollapsed) {
       this.$emit('input', this.defaultCollapsed);
@@ -142,12 +152,7 @@ export default {
   },
   methods: {
     matchMedia() {
-      let matchMedia;
-
-      if (window.matchMedia) {
-        matchMedia = window.matchMedia;
-      }
-
+      const {matchMedia} = window;
       const {mediaMatched} = this;
       this.mediaMatched = matchMedia(`(max-width: ${dimensionMap[this.breakpoint]})`).matches;
 

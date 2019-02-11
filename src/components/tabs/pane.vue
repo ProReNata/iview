@@ -1,11 +1,12 @@
 <template>
-  <div 
-    v-show="show" 
+  <div
+    v-show="show"
     :class="prefixCls"
   >
     <slot></slot>
   </div>
 </template>
+
 <script>
 const prefixCls = 'ivu-tabs-tabpane';
 
@@ -21,6 +22,7 @@ export default {
       type: Boolean,
     },
     icon: {
+      default: undefined,
       type: String,
     },
     label: {
@@ -28,9 +30,11 @@ export default {
       type: [String, Function],
     },
     name: {
+      default: undefined,
       type: String,
     },
   },
+
   data() {
     return {
       currentName: this.name,
@@ -38,6 +42,7 @@ export default {
       show: true,
     };
   },
+
   watch: {
     disabled() {
       this.updateNav();
@@ -53,12 +58,15 @@ export default {
       this.updateNav();
     },
   },
+
   mounted() {
     this.updateNav();
   },
+
   destroyed() {
     this.updateNav();
   },
+
   methods: {
     updateNav() {
       this.$parent.updateNav();

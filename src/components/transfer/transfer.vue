@@ -1,4 +1,6 @@
 <script>
+import stubObject from 'lodash/stubObject';
+import stubArray from 'lodash/stubArray';
 import List from './list.vue';
 import Operation from './operation.vue';
 import Locale from '../../mixins/locale';
@@ -8,12 +10,12 @@ const prefixCls = 'ivu-transfer';
 
 export default {
   name: 'Transfer',
+
   mixins: [Emitter, Locale],
+
   props: {
     data: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     filterable: {
@@ -29,21 +31,19 @@ export default {
       type: Function,
     },
     filterPlaceholder: {
+      default: undefined,
       type: String,
     },
     listStyle: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Object,
     },
     notFoundText: {
+      default: undefined,
       type: String,
     },
     operations: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     renderFormat: {
@@ -53,21 +53,19 @@ export default {
       type: Function,
     },
     selectedKeys: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     targetKeys: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     titles: {
+      default: undefined,
       type: Array,
     },
   },
+
   data() {
     return {
       leftCheckedKeys: [],
@@ -77,6 +75,7 @@ export default {
       rightData: [],
     };
   },
+
   computed: {
     classes() {
       return [`${prefixCls}`];
@@ -99,16 +98,17 @@ export default {
       return this.notFoundText;
     },
     localeTitles() {
-      if (this.titles === undefined) {
-        return [this.t('i.transfer.titles.source'), this.t('i.transfer.titles.target')];
+      if (Array.isArray(this.titles)) {
+        return this.titles;
       }
 
-      return this.titles;
+      return [this.t('i.transfer.titles.source'), this.t('i.transfer.titles.target')];
     },
     rightValidKeysCount() {
       return this.getValidKeys('right').length;
     },
   },
+
   watch: {
     data() {
       this.splitData(false);
@@ -117,9 +117,11 @@ export default {
       this.splitData(false);
     },
   },
+
   mounted() {
     this.splitData(true);
   },
+
   methods: {
     getValidKeys(direction) {
       return this[`${direction}Data`]
@@ -191,7 +193,7 @@ export default {
   },
   render(h) {
     function cloneVNode(vnode) {
-      const clonedChildren = vnode.children && vnode.children.map((vnode) => cloneVNode(vnode));
+      const clonedChildren = vnode.children && vnode.children.map((vNode) => cloneVNode(vNode));
       const cloned = h(vnode.tag, vnode.data, clonedChildren);
       cloned.text = vnode.text;
       cloned.isComment = vnode.isComment;

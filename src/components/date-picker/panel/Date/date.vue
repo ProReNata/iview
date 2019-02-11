@@ -1,14 +1,15 @@
 <template>
-  <div 
-    :class="classes" 
+  <div
+    :class="classes"
     @mousedown.prevent
   >
-    <div 
-      v-if="shortcuts.length" 
+    <div
+      v-if="shortcuts.length"
       :class="[prefixCls + '-sidebar']"
     >
       <div
-        v-for="shortcut in shortcuts"
+        v-for="(shortcut, i) in shortcuts"
+        :key="i"
         :class="[prefixCls + '-shortcut']"
         @click="handleShortcutClick(shortcut)"
       >
@@ -16,16 +17,16 @@
       </div>
     </div>
     <div :class="[prefixCls + '-body']">
-      <div 
-        v-show="currentView !== 'time'" 
+      <div
+        v-show="currentView !== 'time'"
         :class="[datePrefixCls + '-header']"
       >
         <span
           :class="iconBtnCls('prev', '-double')"
           @click="changeYear(-1)"
         >
-          <Icon type="ios-arrow-left">
-          </Icon>
+          <icon type="ios-arrow-left">
+          </icon>
         </span>
         <span
           v-if="pickerTable === 'date-table'"
@@ -33,8 +34,8 @@
           :class="iconBtnCls('prev')"
           @click="changeMonth(-1)"
         >
-          <Icon type="ios-arrow-left">
-          </Icon>
+          <icon type="ios-arrow-left">
+          </icon>
         </span>
         <date-panel-label
           :date-panel-label="datePanelLabel"
@@ -46,8 +47,8 @@
           :class="iconBtnCls('next', '-double')"
           @click="changeYear(+1)"
         >
-          <Icon type="ios-arrow-right">
-          </Icon>
+          <icon type="ios-arrow-right">
+          </icon>
         </span>
         <span
           v-if="pickerTable === 'date-table'"
@@ -55,8 +56,8 @@
           :class="iconBtnCls('next')"
           @click="changeMonth(+1)"
         >
-          <Icon type="ios-arrow-right">
-          </Icon>
+          <icon type="ios-arrow-right">
+          </icon>
         </span>
       </div>
       <div :class="[prefixCls + '-content']">
@@ -76,8 +77,8 @@
         >
         </component>
       </div>
-      <div 
-        v-show="isTime" 
+      <div
+        v-show="isTime"
         :class="[prefixCls + '-content']"
       >
         <time-picker
@@ -98,7 +99,7 @@
         >
         </time-picker>
       </div>
-      <Confirm
+      <confirm
         v-if="confirm"
         :show-time="showTime"
         :is-time="isTime"
@@ -106,10 +107,11 @@
         @on-pick-clear="handlePickClear"
         @on-pick-success="handlePickSuccess"
       >
-      </Confirm>
+      </confirm>
     </div>
   </div>
 </template>
+
 <script>
 import Icon from '../../../icon/icon.vue';
 import DateTable from '../../base/date-table.vue';
@@ -117,12 +119,10 @@ import YearTable from '../../base/year-table.vue';
 import MonthTable from '../../base/month-table.vue';
 import TimePicker from '../Time/time.vue';
 import Confirm from '../../base/confirm.vue';
-import datePanelLabel from './date-panel-label.vue';
-
+import DatePanelLabel from './date-panel-label.vue';
 import Mixin from '../panel-mixin';
 import DateMixin from './date-panel-mixin';
 import Locale from '../../../../mixins/locale';
-
 import {siblingMonth, formatDateLabels} from '../../util';
 
 const prefixCls = 'ivu-picker-panel';
@@ -130,8 +130,11 @@ const datePrefixCls = 'ivu-date-picker';
 
 export default {
   name: 'DatePickerPanel',
-  components: {Confirm, datePanelLabel, DateTable, Icon, MonthTable, TimePicker, YearTable},
+
+  components: {Confirm, DatePanelLabel, DateTable, Icon, MonthTable, TimePicker, YearTable},
+
   mixins: [Mixin, Locale, DateMixin],
+
   props: {
     // more props in the mixin
     multiple: {
@@ -139,6 +142,7 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     const {selectionMode, value} = this;
 
@@ -153,6 +157,7 @@ export default {
       prefixCls,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -167,11 +172,19 @@ export default {
       const datePanelLabel = this.t('i.datepicker.datePanelLabel');
       const date = this.panelDate;
       const {labels, separator} = formatDateLabels(locale, datePanelLabel, date);
+      const handler = (type) => () => {
+        /* eslint-disable-next-line vue/no-side-effects-in-computed-properties */
+        this.pickerTable = this.getTableType(type);
 
-      const handler = (type) => () => (this.pickerTable = this.getTableType(type));
+        return this.pickerTable;
+      };
 
       return {
-        labels: labels.map((obj) => ((obj.handler = handler(obj.type)), obj)),
+        labels: labels.map((obj) => {
+          obj.handler = handler(obj.type);
+
+          return obj;
+        }),
         separator,
       };
     },
@@ -182,6 +195,7 @@ export default {
       return !this.dates[0];
     },
   },
+
   watch: {
     currentView(currentView) {
       this.$emit('on-selection-mode-change', currentView);
@@ -213,6 +227,7 @@ export default {
       this.panelDate = panelDate || new Date();
     },
   },
+
   methods: {
     changeMonth(dir) {
       this.panelDate = siblingMonth(this.panelDate, dir);
@@ -227,7 +242,8 @@ export default {
     getTableType(currentView) {
       return currentView.match(/^time/) ? 'time-picker' : `${currentView}-table`;
     },
-    handlePick(value, type) {
+    handlePick(val, type) {
+      let value = val;
       const {selectionMode, panelDate} = this;
 
       if (selectionMode === 'year') {

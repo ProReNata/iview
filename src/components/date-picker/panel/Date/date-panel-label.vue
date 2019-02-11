@@ -25,9 +25,18 @@
 <script>
 export default {
   props: {
-    currentView: String,
-    datePanelLabel: Object,
-    datePrefixCls: String,
+    currentView: {
+      default: undefined,
+      type: String,
+    },
+    datePanelLabel: {
+      default: undefined,
+      type: Object,
+    },
+    datePrefixCls: {
+      default: undefined,
+      type: String,
+    },
   },
 };
 </script>

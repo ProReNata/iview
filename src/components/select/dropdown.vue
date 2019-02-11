@@ -7,6 +7,7 @@
     <slot></slot>
   </div>
 </template>
+
 <script>
 import Vue from 'vue';
 import noop from 'lodash/noop';
@@ -18,8 +19,10 @@ const Popper = isServer ? noop : require('popper.js/dist/umd/popper.js');
 
 export default {
   name: 'Drop',
+
   props: {
     className: {
+      default: undefined,
       type: String,
     },
     placement: {
@@ -27,6 +30,7 @@ export default {
       type: String,
     },
   },
+
   data() {
     return {
       popper: null,
@@ -34,6 +38,7 @@ export default {
       width: '',
     };
   },
+
   computed: {
     styles() {
       const style = {};
@@ -45,15 +50,18 @@ export default {
       return style;
     },
   },
+
   created() {
     this.$on('on-update-popper', this.update);
     this.$on('on-destroy-popper', this.destroy);
   },
+
   beforeDestroy() {
     if (this.popper) {
       this.popper.destroy();
     }
   },
+
   methods: {
     destroy() {
       if (this.popper) {
@@ -73,10 +81,10 @@ export default {
         return;
       }
 
-      const x_placement = this.popper.popper.getAttribute('x-placement');
-      const placementStart = x_placement.split('-')[0];
-      const placementEnd = x_placement.split('-')[1];
-      const leftOrRight = x_placement === 'left' || x_placement === 'right';
+      const xPlacement = this.popper.popper.getAttribute('x-placement');
+      const placementStart = xPlacement.split('-')[0];
+      const placementEnd = xPlacement.split('-')[1];
+      const leftOrRight = xPlacement === 'left' || xPlacement === 'right';
 
       if (!leftOrRight) {
         this.popper.popper.style.transformOrigin =

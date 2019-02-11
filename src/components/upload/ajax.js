@@ -46,7 +46,7 @@ export default function upload(option) {
   const formData = new FormData();
 
   if (option.data) {
-    Object.keys(option.data).map((key) => {
+    Object.keys(option.data).forEach((key) => {
       formData.append(key, option.data[key]);
     });
   }
@@ -63,6 +63,8 @@ export default function upload(option) {
     }
 
     option.onSuccess(getBody(xhr));
+
+    return undefined;
   };
 
   xhr.open('post', action, true);
@@ -76,7 +78,7 @@ export default function upload(option) {
   // if (headers['X-Requested-With'] !== null) {
   //   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   // }
-
+  /* eslint-disable-next-line no-restricted-syntax */
   for (const item in headers) {
     if (has(headers, item) && headers[item] !== null) {
       xhr.setRequestHeader(item, headers[item]);

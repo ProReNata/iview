@@ -19,6 +19,7 @@
     </i>
   </li>
 </template>
+
 <script>
 import Emitter from '../../mixins/emitter';
 import {findComponentUpward} from '../../utils/assist';
@@ -26,9 +27,12 @@ import {findComponentUpward} from '../../utils/assist';
 const prefixCls = 'ivu-select-item';
 
 export default {
-  name: 'iOption',
+  name: 'IOption',
+
   componentName: 'select-item',
+
   mixins: [Emitter],
+
   props: {
     disabled: {
       default: false,
@@ -39,6 +43,7 @@ export default {
       type: Boolean,
     },
     label: {
+      default: undefined,
       type: [String, Number],
     },
     postIconName: {
@@ -58,6 +63,7 @@ export default {
       type: [String, Number],
     },
   },
+
   data() {
     return {
       autoComplete: false,
@@ -65,6 +71,7 @@ export default {
       searchLabel: '',
     };
   },
+
   computed: {
     classes() {
       return [
@@ -86,6 +93,7 @@ export default {
       return this.label ? this.label : this.value;
     },
   },
+
   mounted() {
     const Select = findComponentUpward(this, 'iSelect');
 
@@ -93,10 +101,11 @@ export default {
       this.autoComplete = Select.autoComplete;
     }
   },
+
   methods: {
     select() {
       if (this.disabled) {
-        return false;
+        return;
       }
 
       this.dispatch('iSelect', 'on-select-selected', {

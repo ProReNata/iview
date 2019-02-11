@@ -1,17 +1,17 @@
 <template>
   <div>
-    <Button @click="instance('info')">
+    <i-button @click="instance('info')">
       Info
-    </Button>
-    <Button @click="instance('success')">
+    </i-button>
+    <i-button @click="instance('success')">
       Success
-    </Button>
-    <Button @click="instance('warning')">
+    </i-button>
+    <i-button @click="instance('warning')">
       Warning
-    </Button>
-    <Button @click="instance('error')">
+    </i-button>
+    <i-button @click="instance('error')">
       Error
-    </Button>
+    </i-button>
   </div>
 </template>
 <script>

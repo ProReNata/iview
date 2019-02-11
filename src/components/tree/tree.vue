@@ -1,6 +1,6 @@
 <template>
   <div :class="prefixCls">
-    <Tree-node
+    <tree-node
       v-for="(item, i) in stateTree"
       :key="i"
       :data="item"
@@ -9,7 +9,7 @@
       :show-checkbox="showCheckbox"
       :children-key="childrenKey"
     >
-    </Tree-node>
+    </tree-node>
     <div
       v-if="!stateTree.length"
       :class="[prefixCls + '-empty']"
@@ -18,7 +18,9 @@
     </div>
   </div>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
 import TreeNode from './node.vue';
 import Emitter from '../../mixins/emitter';
 import Locale from '../../mixins/locale';
@@ -27,23 +29,26 @@ const prefixCls = 'ivu-tree';
 
 export default {
   name: 'Tree',
+
   components: {TreeNode},
+
   mixins: [Emitter, Locale],
+
   props: {
     childrenKey: {
       default: 'children',
       type: String,
     },
     data: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     emptyText: {
+      default: undefined,
       type: String,
     },
     loadData: {
+      default: undefined,
       type: Function,
     },
     multiple: {
@@ -51,6 +56,7 @@ export default {
       type: Boolean,
     },
     render: {
+      default: undefined,
       type: Function,
     },
     showCheckbox: {
@@ -58,6 +64,7 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     return {
       flatState: [],
@@ -65,6 +72,7 @@ export default {
       stateTree: this.data,
     };
   },
+
   computed: {
     localeEmptyText() {
       if (typeof this.emptyText === 'undefined') {
@@ -74,6 +82,7 @@ export default {
       return this.emptyText;
     },
   },
+
   watch: {
     data: {
       deep: true,
@@ -84,15 +93,18 @@ export default {
       },
     },
   },
+
   created() {
     this.flatState = this.compileFlatState();
     this.rebuildTree();
   },
+
   mounted() {
     this.$on('on-check', this.handleCheck);
     this.$on('on-selected', this.handleSelect);
     this.$on('toggle-expand', (node) => this.$emit('on-toggle-expand', node));
   },
+
   methods: {
     compileFlatState() {
       // so we have always a relation parent/children of each node
@@ -100,7 +112,8 @@ export default {
       const {childrenKey} = this;
       const flatTree = [];
       function flattenChildren(node, parent) {
-        node.nodeKey = keyCounter++;
+        node.nodeKey = keyCounter;
+        keyCounter += 1;
         flatTree[node.nodeKey] = {node, nodeKey: node.nodeKey};
 
         if (typeof parent !== 'undefined') {
@@ -176,9 +189,9 @@ export default {
       });
     },
     updateTreeDown(node, changes = {}) {
-      for (const key in changes) {
+      Object.keys(changes).forEach((key) => {
         this.$set(node, key, changes[key]);
-      }
+      });
 
       if (node[this.childrenKey]) {
         node[this.childrenKey].forEach((child) => {
@@ -201,11 +214,15 @@ export default {
       } // no need to update upwards
 
       if (node.checked === true) {
-        this.$set(parent, 'checked', parent[this.childrenKey].every((node) => node.checked));
+        this.$set(parent, 'checked', parent[this.childrenKey].every((childNode) => childNode.checked));
         this.$set(parent, 'indeterminate', !parent.checked);
       } else {
         this.$set(parent, 'checked', false);
-        this.$set(parent, 'indeterminate', parent[this.childrenKey].some((node) => node.checked || node.indeterminate));
+        this.$set(
+          parent,
+          'indeterminate',
+          parent[this.childrenKey].some((childNode) => childNode.checked || childNode.indeterminate),
+        );
       }
 
       this.updateTreeUp(parentKey);

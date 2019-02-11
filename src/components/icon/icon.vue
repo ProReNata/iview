@@ -5,16 +5,34 @@
   >
   </i>
 </template>
+
 <script>
 export default {
   name: 'Icon',
+
   props: {
-    fw: Boolean,
-    size: String,
-    spin: Boolean,
-    type: String,
-    weight: String,
+    fw: {
+      default: false,
+      type: Boolean,
+    },
+    size: {
+      default: undefined,
+      type: String,
+    },
+    spin: {
+      default: false,
+      type: Boolean,
+    },
+    type: {
+      default: undefined,
+      type: String,
+    },
+    weight: {
+      default: undefined,
+      type: String,
+    },
   },
+
   computed: {
     weightClass() {
       const weightMap = {
@@ -43,6 +61,7 @@ export default {
       return `${this.weightClass} fa-${this.type} ${styles}`;
     },
   },
+
   methods: {
     handleClick(event) {
       this.$emit('click', event);

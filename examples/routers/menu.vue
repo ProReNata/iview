@@ -1,198 +1,198 @@
 <template>
   <div>
-    <Menu 
-      ref="menu" 
-      active-name="1-2" 
-      :open-names="openNames" 
-      theme="dark" 
-      accordion 
+    <menu
+      ref="menu"
+      active-name="1-2"
+      :open-names="openNames"
+      theme="dark"
+      accordion
       @on-open-change="handleOpenChange"
     >
-      <Submenu name="1">
+      <submenu name="1">
         <template slot="title">
-          <Icon type="ios-analytics">
-          </Icon>
+          <icon type="ios-analytics">
+          </icon>
           Navigation One
         </template>
-        <MenuGroup title="Item 1">
-          <MenuItem name="1-1">
+        <menu-group title="Item 1">
+          <menu-item name="1-1">
             Option 1
-          </MenuItem>
-          <MenuItem name="1-2">
+          </menu-item>
+          <menu-item name="1-2">
             Option 2
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup title="Item 2">
-          <MenuItem name="1-3">
+          </menu-item>
+        </menu-group>
+        <menu-group title="Item 2">
+          <menu-item name="1-3">
             Option 3
-          </MenuItem>
-          <MenuItem name="1-4">
+          </menu-item>
+          <menu-item name="1-4">
             Option 4
-          </MenuItem>
-        </MenuGroup>
-      </Submenu>
-      <Submenu name="2">
+          </menu-item>
+        </menu-group>
+      </submenu>
+      <submenu name="2">
         <template slot="title">
-          <Icon type="ios-filing">
-          </Icon>
+          <icon type="ios-filing">
+          </icon>
           Navigation Two
         </template>
-        <MenuItem name="2-1">
+        <menu-item name="2-1">
           Option 5
-        </MenuItem>
-        <MenuItem name="2-2">
+        </menu-item>
+        <menu-item name="2-2">
           Option 6
-        </MenuItem>
-        <Submenu name="3">
+        </menu-item>
+        <submenu name="3">
           <template slot="title">
             Submenu
           </template>
-          <MenuItem name="3-1">
+          <menu-item name="3-1">
             Option 7
-          </MenuItem>
-          <MenuItem name="3-2">
+          </menu-item>
+          <menu-item name="3-2">
             Option 8
-          </MenuItem>
-        </Submenu>
-        <Submenu name="4">
+          </menu-item>
+        </submenu>
+        <submenu name="4">
           <template slot="title">
             Submenu
           </template>
-          <MenuItem name="4-1">
+          <menu-item name="4-1">
             Option 7
-          </MenuItem>
-          <MenuItem name="4-2">
+          </menu-item>
+          <menu-item name="4-2">
             Option 8
-          </MenuItem>
-        </Submenu>
-      </Submenu>
-      <Submenu name="5">
+          </menu-item>
+        </submenu>
+      </submenu>
+      <submenu name="5">
         <template slot="title">
-          <Icon type="ios-gear">
-          </Icon>
+          <icon type="ios-gear">
+          </icon>
           Navigation Three
         </template>
-        <MenuItem name="5-1">
+        <menu-item name="5-1">
           Option 9
-        </MenuItem>
-        <MenuItem name="5-2">
+        </menu-item>
+        <menu-item name="5-2">
           Option 10
-        </MenuItem>
-        <MenuItem name="5-3">
+        </menu-item>
+        <menu-item name="5-3">
           Option 11
-        </MenuItem>
-        <MenuItem name="5-4">
+        </menu-item>
+        <menu-item name="5-4">
           Option 12
-        </MenuItem>
-      </Submenu>
-    </Menu>
+        </menu-item>
+      </submenu>
+    </menu>
     <br>
-    <Menu 
-      ref="menu2" 
-      theme="dark" 
-      accordion 
-      :open-names="openNames2" 
+    <menu
+      ref="menu2"
+      theme="dark"
+      accordion
+      :open-names="openNames2"
       @on-open-change="handleOpenChange"
     >
       <template v-for="item in menuList">
-        <custem-menu-item 
-          v-if="item.children" 
-          :key="`menu-${item.name}`" 
+        <custem-menu-item
+          v-if="item.children"
+          :key="`menu-${item.name}`"
           :parent-item="item"
         >
         </custem-menu-item>
-        <menu-item 
-          v-else 
-          :key="`menu-${item.name}`" 
+        <menu-item
+          v-else
+          :key="`menu-${item.name}`"
           :name="`${item.name}`"
         >
           {{ item.name }}
         </menu-item>
       </template>
-    </Menu>
-    <Button @click="addNewItem">
+    </menu>
+    <i-button @click="addNewItem">
       添加菜单项
-    </Button>
-    <Button @click="changeActive">
+    </i-button>
+    <i-button @click="changeActive">
       修改激活项
-    </Button>
-    <Button @click="setOpenNames">
+    </i-button>
+    <i-button @click="setOpenNames">
       修改展开数组
-    </Button>
-    <Menu 
-      mode="horizontal" 
-      theme="light" 
-      :active-name="activeName" 
+    </i-button>
+    <menu
+      mode="horizontal"
+      theme="light"
+      :active-name="activeName"
       @on-open-change="hc"
     >
-      <MenuItem name="1">
-        <Icon type="ios-paper">
-        </Icon>
+      <menu-item name="1">
+        <icon type="ios-paper">
+        </icon>
         内容管理
-      </MenuItem>
-      <MenuItem name="2">
-        <Icon type="ios-people">
-        </Icon>
+      </menu-item>
+      <menu-item name="2">
+        <icon type="ios-people">
+        </icon>
         用户管理
-      </MenuItem>
-      <Submenu name="3">
+      </menu-item>
+      <submenu name="3">
         <template slot="title">
-          <Icon type="stats-bars">
-          </Icon>
+          <icon type="stats-bars">
+          </icon>
           统计分析
         </template>
-        <MenuGroup title="使用">
-          <MenuItem name="3-1">
+        <menu-group title="使用">
+          <menu-item name="3-1">
             新增和启动
-          </MenuItem>
-          <MenuItem name="3-2">
+          </menu-item>
+          <menu-item name="3-2">
             活跃分析
-          </MenuItem>
-          <MenuItem name="3-3">
+          </menu-item>
+          <menu-item name="3-3">
             时段分析
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup title="留存">
-          <MenuItem name="3-4">
+          </menu-item>
+        </menu-group>
+        <menu-group title="留存">
+          <menu-item name="3-4">
             用户留存
-          </MenuItem>
-          <MenuItem name="3-5">
+          </menu-item>
+          <menu-item name="3-5">
             流失用户
-          </MenuItem>
-        </MenuGroup>
-      </Submenu>
-      <Submenu name="4">
+          </menu-item>
+        </menu-group>
+      </submenu>
+      <submenu name="4">
         <template slot="title">
-          <Icon type="stats-bars">
-          </Icon>
+          <icon type="stats-bars">
+          </icon>
           统计分析2
         </template>
-        <MenuGroup title="使用2">
-          <MenuItem name="4-1">
+        <menu-group title="使用2">
+          <menu-item name="4-1">
             新增和启动2
-          </MenuItem>
-          <MenuItem name="4-2">
+          </menu-item>
+          <menu-item name="4-2">
             活跃分析2
-          </MenuItem>
-          <MenuItem name="4-3">
+          </menu-item>
+          <menu-item name="4-3">
             时段分析2
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup title="留存2">
-          <MenuItem name="4-4">
+          </menu-item>
+        </menu-group>
+        <menu-group title="留存2">
+          <menu-item name="4-4">
             用户留存2
-          </MenuItem>
-          <MenuItem name="4-5">
+          </menu-item>
+          <menu-item name="4-5">
             流失用户2
-          </MenuItem>
-        </MenuGroup>
-      </Submenu>
-      <MenuItem name="5">
-        <Icon type="settings">
-        </Icon>
+          </menu-item>
+        </menu-group>
+      </submenu>
+      <menu-item name="5">
+        <icon type="settings">
+        </icon>
         综合设置
-      </MenuItem>
-    </Menu>
+      </menu-item>
+    </menu>
   </div>
 </template>
 <script>

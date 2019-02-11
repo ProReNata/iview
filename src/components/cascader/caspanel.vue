@@ -4,7 +4,7 @@
       v-if="data && data.length"
       :class="[prefixCls + '-menu']"
     >
-      <Casitem
+      <casitem
         v-for="item in data"
         :key="getKey(item)"
         :prefix-cls="prefixCls"
@@ -13,8 +13,9 @@
         @click.native.stop="handleClickItem(item)"
         @mouseenter.native.stop="handleHoverItem(item)"
       >
-      </Casitem>
-    </ul><Caspanel
+      </casitem>
+    </ul>
+    <caspanel
       v-if="sublist && sublist.length"
       :prefix-cls="prefixCls"
       :data="sublist"
@@ -22,10 +23,12 @@
       :trigger="trigger"
       :change-on-select="changeOnSelect"
     >
-    </Caspanel>
+    </caspanel>
   </span>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
 import Casitem from './casitem.vue';
 import Emitter from '../../mixins/emitter';
 import {findComponentUpward, findComponentDownward} from '../../utils/assist';
@@ -34,20 +37,31 @@ let key = 1;
 
 export default {
   name: 'Caspanel',
+
   components: {Casitem},
+
   mixins: [Emitter],
+
   props: {
     changeOnSelect: Boolean,
     data: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
-    disabled: Boolean,
-    prefixCls: String,
-    trigger: String,
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
+    prefixCls: {
+      default: undefined,
+      type: String,
+    },
+    trigger: {
+      default: undefined,
+      type: String,
+    },
   },
+
   data() {
     return {
       result: [],
@@ -55,17 +69,19 @@ export default {
       tmpItem: {},
     };
   },
+
   watch: {
     data() {
       this.sublist = [];
     },
   },
+
   mounted() {
     this.$on('on-find-selected', (params) => {
       const val = params.value;
       const value = [...val];
-      for (let i = 0; i < value.length; i++) {
-        for (let j = 0; j < this.data.length; j++) {
+      for (let i = 0; i < value.length; i += 1) {
+        for (let j = 0; j < this.data.length; j += 1) {
           if (value[i] === this.data[j].value) {
             this.handleTriggerItem(this.data[j], true);
             value.splice(0, 1);
@@ -75,7 +91,7 @@ export default {
               });
             });
 
-            return false;
+            return;
           }
         }
       }
@@ -94,6 +110,7 @@ export default {
       }
     });
   },
+
   methods: {
     emitUpdate(result) {
       if (this.$parent.$options.name === 'Caspanel') {
@@ -112,7 +129,11 @@ export default {
       return backItem;
     },
     getKey() {
-      return key++;
+      const value = key;
+
+      key += 1;
+
+      return value;
     },
     handleClickItem(item) {
       if (this.trigger !== 'click' && item.children && item.children.length) {

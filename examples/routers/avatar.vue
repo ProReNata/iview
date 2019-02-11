@@ -1,14 +1,14 @@
 <template>
   <div class="demo-avatar">
-    <Avatar :style="{background: color}">
+    <avatar :style="{background: color}">
       {{ user }}
-    </Avatar>
-    <Button 
-      size="small" 
+    </avatar>
+    <i-button
+      size="small"
       @click="handleChange"
     >
       Change
-    </Button>
+    </i-button>
   </div>
 </template>
 <script>

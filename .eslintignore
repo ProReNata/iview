@@ -6,3 +6,5 @@ node_modules/
 test/
 package-lock.json
 src/directives/
+redactor-3_1_6/
+DevTools/

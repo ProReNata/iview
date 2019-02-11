@@ -1,14 +1,14 @@
 <template>
-  <li 
-    v-show="!hidden" 
+  <li
+    v-show="!hidden"
     :class="[prefixCls + '-wrap']"
   >
     <div :class="[prefixCls + '-title']">
       {{ label }}
     </div>
     <ul>
-      <li 
-        ref="options" 
+      <li
+        ref="options"
         :class="[prefixCls]"
       >
         <slot></slot>
@@ -46,7 +46,7 @@ export default {
       this.$nextTick(() => {
         const options = this.$refs.options.querySelectorAll('.ivu-select-item');
         let hasVisibleOption = false;
-        for (let i = 0; i < options.length; i++) {
+        for (let i = 0; i < options.length; i += 1) {
           if (options[i].style.display !== 'none') {
             hasVisibleOption = true;
             break;

@@ -6,40 +6,40 @@
           :class="arrowClasses"
           @click="handleExpand"
         >
-          <Icon
+          <icon
             v-if="showArrow"
             type="arrow-right-b"
           >
-          </Icon>
-          <Icon
+          </icon>
+          <icon
             v-if="showLoading"
             type="load-c"
             class="ivu-load-loop"
           >
-          </Icon>
+          </icon>
         </span>
-        <Checkbox
+        <checkbox
           v-if="showCheckbox"
           :value="data.checked"
           :indeterminate="data.indeterminate"
           :disabled="data.disabled || data.disableCheckbox"
           @click.native.prevent="handleCheck"
         >
-        </Checkbox>
-        <Render
+        </checkbox>
+        <render
           v-if="data.render"
           :render="data.render"
           :data="data"
           :node="node"
         >
-        </Render>
-        <Render
+        </render>
+        <render
           v-else-if="isParentRender"
           :render="parentRender"
           :data="data"
           :node="node"
         >
-        </Render>
+        </render>
         <span
           v-else
           :class="titleClasses"
@@ -48,7 +48,7 @@
           {{ data.title }}
         </span>
         <template v-if="data.expand">
-          <Tree-node
+          <tree-node
             v-for="(item, i) in children"
             :key="i"
             :data="item"
@@ -56,13 +56,15 @@
             :show-checkbox="showCheckbox"
             :children-key="childrenKey"
           >
-          </Tree-node>
+          </tree-node>
         </template>
       </li>
     </ul>
   </collapse-transition>
 </template>
+
 <script>
+import stubObject from 'lodash/stubObject';
 import Checkbox from '../checkbox/checkbox.vue';
 import Icon from '../icon/icon.vue';
 import Render from './render';
@@ -74,17 +76,18 @@ const prefixCls = 'ivu-tree';
 
 export default {
   name: 'TreeNode',
+
   components: {Checkbox, CollapseTransition, Icon, Render},
+
   mixins: [Emitter],
+
   props: {
     childrenKey: {
       default: 'children',
       type: String,
     },
     data: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Object,
     },
     multiple: {
@@ -96,11 +99,13 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     return {
       prefixCls,
     };
   },
+
   computed: {
     arrowClasses() {
       return [
@@ -165,6 +170,7 @@ export default {
       ];
     },
   },
+
   methods: {
     handleCheck() {
       if (this.data.disabled) {

@@ -15,7 +15,7 @@ const word = /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|
 
 function shorten(arr, sLen) {
   const newArr = [];
-  for (let i = 0, len = arr.length; i < len; i++) {
+  for (let i = 0, len = arr.length; i < len; i += 1) {
     newArr.push(arr[i].substr(0, sLen));
   }
 
@@ -23,7 +23,7 @@ function shorten(arr, sLen) {
 }
 
 function monthUpdate(arrName) {
-  return function(d, v, i18n) {
+  return function _monthUpdate(d, v, i18n) {
     const index = i18n[arrName].indexOf(v.charAt(0).toUpperCase() + v.substr(1).toLowerCase());
 
     if (index !== -1) {
@@ -32,9 +32,9 @@ function monthUpdate(arrName) {
   };
 }
 
-function pad(val, len) {
-  val = String(val);
-  len = len || 2;
+function pad(value, length) {
+  let val = String(value);
+  const len = length || 2;
   while (val.length < len) {
     val = `0${val}`;
   }
@@ -96,6 +96,7 @@ const formatFlags = {
     return i18n.dayNames[dateObj.getDay()];
   },
   Do(dateObj, i18n) {
+    /* eslint-disable-next-line babel/new-cap */
     return i18n.DoFn(dateObj.getDate());
   },
   h(dateObj) {
@@ -160,7 +161,7 @@ const formatFlags = {
 const parseFlags = {
   a: [
     word,
-    function(d, v, i18n) {
+    function _a(d, v, i18n) {
       const val = v.toLowerCase();
 
       if (val === i18n.amPm[0]) {
@@ -172,7 +173,7 @@ const parseFlags = {
   ],
   d: [
     twoDigits,
-    function(d, v) {
+    function _d(d, v) {
       d.day = v;
     },
   ],
@@ -180,19 +181,19 @@ const parseFlags = {
   ddd: [word, noop],
   h: [
     twoDigits,
-    function(d, v) {
+    function _h(d, v) {
       d.hour = v;
     },
   ],
   m: [
     twoDigits,
-    function(d, v) {
+    function _m(d, v) {
       d.minute = v;
     },
   ],
   M: [
     twoDigits,
-    function(d, v) {
+    function _M(d, v) {
       d.month = v - 1;
     },
   ],
@@ -200,31 +201,31 @@ const parseFlags = {
   MMMM: [word, monthUpdate('monthNames')],
   s: [
     twoDigits,
-    function(d, v) {
+    function _s(d, v) {
       d.second = v;
     },
   ],
   S: [
     /\d/,
-    function(d, v) {
+    function _S(d, v) {
       d.millisecond = v * 100;
     },
   ],
   SS: [
     /\d{2}/,
-    function(d, v) {
+    function _SS(d, v) {
       d.millisecond = v * 10;
     },
   ],
   SSS: [
     threeDigits,
-    function(d, v) {
+    function _SSS(d, v) {
       d.millisecond = v;
     },
   ],
   yy: [
     twoDigits,
-    function(d, v) {
+    function _yy(d, v) {
       const da = new Date();
 
       const cent = +`${da.getFullYear()}`.substr(0, 2);
@@ -233,13 +234,13 @@ const parseFlags = {
   ],
   yyyy: [
     fourDigits,
-    function(d, v) {
+    function _yyyy(d, v) {
       d.year = v;
     },
   ],
   ZZ: [
     /[+-]\d\d:?\d\d/,
-    function(d, v) {
+    function _ZZ(d, v) {
       const parts = `${v}`.match(/([+-]|\d\d)/gi);
 
       let minutes;
@@ -279,11 +280,12 @@ fecha.masks = {
  * Format a date.
  *
  * @function format
- * @param {Date|number} dateObj - A date object or number to be parsed.
- * @param {string} mask - Format of the date, i.e. 'mm-dd-yy' or 'shortDate'.
+ * @param {Date|number} dateObject - A date object or number to be parsed.
+ * @param {string} maskString - Format of the date, i.e. 'mm-dd-yy' or 'shortDate'.
  * @param {Object} i18nSettings - Locale settings.
  */
-fecha.format = function(dateObj, mask, i18nSettings) {
+fecha.format = function _format(dateObject, maskString, i18nSettings) {
+  let dateObj = dateObject;
   const i18n = i18nSettings || fecha.i18n;
 
   if (typeof dateObj === 'number') {
@@ -294,7 +296,7 @@ fecha.format = function(dateObj, mask, i18nSettings) {
     throw new Error('Invalid Date in fecha.format');
   }
 
-  mask = fecha.masks[mask] || mask || fecha.masks.default;
+  const mask = fecha.masks[maskString] || maskString || fecha.masks.default;
 
   return mask.replace(token, ($0) => ($0 in formatFlags ? formatFlags[$0](dateObj, i18n) : $0.slice(1, $0.length - 1)));
 };
@@ -303,12 +305,14 @@ fecha.format = function(dateObj, mask, i18nSettings) {
  * Parse a date string into an object, changes - into /.
  *
  * @function parse
- * @param {string} dateStr - Date string.
- * @param {string} format - Date parse format.
+ * @param {string} dateString - Date string.
+ * @param {string} formatString - Date parse format.
  * @param {Object} i18nSettings - Locale settings.
  * @returns {Date|boolean} Date or a boolean.
  */
-fecha.parse = function(dateStr, format, i18nSettings) {
+fecha.parse = function _parse(dateString, formatString, i18nSettings) {
+  let dateStr = dateString;
+  let format = formatString;
   const i18n = i18nSettings || fecha.i18n;
 
   if (typeof format !== 'string') {

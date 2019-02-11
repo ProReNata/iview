@@ -1,5 +1,9 @@
 /**
  * @file Manages the root configuration settings for project wide stylelint.
+ * @copyright Copyright (c) 2017-present, ProReNata AB
+ * @module stylelint/root/configuration
+ * @version 1.0.0
+ * @since 0.0.2
  * @see {@link https://stylelint.io/} for further information.
  */
 
@@ -25,12 +29,12 @@ module.exports = {
   ],
 
   /**
-   * @type {array}
+   * @type {Array}
    */
   // plugins: [], // do not include empty
 
   /**
-   * @type {array}
+   * @type {Array}
    */
   // processors: [], // do not include empty
 

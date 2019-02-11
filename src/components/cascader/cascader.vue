@@ -32,22 +32,22 @@
         >
           {{ displayRender }}
         </div>
-        <Icon
+        <icon
           v-show="showCloseIcon"
           type="ios-close"
           :class="[prefixCls + '-arrow']"
           @click.native.stop="clearSelect"
         >
-        </Icon>
-        <Icon
+        </icon>
+        <icon
           type="arrow-down-b"
           :class="[prefixCls + '-arrow']"
         >
-        </Icon>
+        </icon>
       </slot>
     </div>
     <transition name="transition-drop">
-      <Drop
+      <drop
         v-show="visible"
         ref="drop"
         v-transfer-dom
@@ -55,7 +55,7 @@
         :data-transfer="transfer"
       >
         <div>
-          <Caspanel
+          <caspanel
             v-show="!filterable || (filterable && query === '')"
             ref="caspanel"
             :prefix-cls="prefixCls"
@@ -64,14 +64,16 @@
             :change-on-select="changeOnSelect"
             :trigger="trigger"
           >
-          </Caspanel>
+          </caspanel>
           <div
             v-show="filterable && query !== '' && querySelections.length"
             :class="[prefixCls + '-dropdown']"
           >
             <ul :class="[selectPrefixCls + '-dropdown-list']">
+              <!-- eslint-disable vue/no-v-html -->
               <li
                 v-for="(item, index) in querySelections"
+                :key="index"
                 :class="[selectPrefixCls + '-item', {
                   [selectPrefixCls + '-item-disabled']: item.disabled
                 }]"
@@ -79,6 +81,7 @@
                 v-html="item.display"
               >
               </li>
+              <!-- eslint-enable vue/no-v-html -->
             </ul>
           </div>
           <ul
@@ -88,11 +91,13 @@
             <li>{{ localeNotFoundText }}</li>
           </ul>
         </div>
-      </Drop>
+      </drop>
     </transition>
   </div>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
 import {directive as clickOutside} from 'v-click-outside-x';
 import iInput from '../input/input.vue';
 import Drop from '../select/dropdown.vue';
@@ -108,9 +113,13 @@ const selectPrefixCls = 'ivu-select';
 
 export default {
   name: 'Cascader',
+
   components: {Caspanel, Drop, Icon, iInput},
+
   directives: {clickOutside, TransferDom},
+
   mixins: [Emitter, Locale],
+
   props: {
     changeOnSelect: {
       default: false,
@@ -121,9 +130,7 @@ export default {
       type: Boolean,
     },
     data: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     disabled: {
@@ -131,6 +138,7 @@ export default {
       type: Boolean,
     },
     elementId: {
+      default: undefined,
       type: String,
     },
     filterable: {
@@ -138,15 +146,19 @@ export default {
       type: Boolean,
     },
     loadData: {
+      default: undefined,
       type: Function,
     },
     name: {
+      default: undefined,
       type: String,
     },
     notFoundText: {
+      default: undefined,
       type: String,
     },
     placeholder: {
+      default: undefined,
       type: String,
     },
     renderFormat: {
@@ -156,6 +168,8 @@ export default {
       type: Function,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large']);
       },
@@ -166,17 +180,17 @@ export default {
     },
     trigger: {
       default: 'click',
+      type: String,
       validator(value) {
         return oneOf(value, ['click', 'hover']);
       },
     },
     value: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
   },
+
   data() {
     return {
       currentValue: this.value,
@@ -193,6 +207,7 @@ export default {
       visible: false,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -211,7 +226,7 @@ export default {
     },
     displayRender() {
       const label = [];
-      for (let i = 0; i < this.selected.length; i++) {
+      for (let i = 0; i < this.selected.length; i += 1) {
         label.push(this.selected[i].label);
       }
 
@@ -237,21 +252,29 @@ export default {
     querySelections() {
       let selections = [];
       function getSelections(arr, label, value) {
-        for (let i = 0; i < arr.length; i++) {
+        for (let i = 0; i < arr.length; i += 1) {
           const item = arr[i];
+          /* eslint-disable-next-line no-underscore-dangle */
           item.__label = label ? `${label} / ${item.label}` : item.label;
+          /* eslint-disable-next-line no-underscore-dangle */
           item.__value = value ? `${value},${item.value}` : item.value;
 
           if (item.children && item.children.length) {
+            /* eslint-disable-next-line no-underscore-dangle */
             getSelections(item.children, item.__label, item.__value);
+            /* eslint-disable-next-line no-underscore-dangle */
             delete item.__label;
+            /* eslint-disable-next-line no-underscore-dangle */
             delete item.__value;
           } else {
             selections.push({
               disabled: !!item.disabled,
+              /* eslint-disable-next-line no-underscore-dangle */
               display: item.__label,
               item,
+              /* eslint-disable-next-line no-underscore-dangle */
               label: item.__label,
+              /* eslint-disable-next-line no-underscore-dangle */
               value: item.__value,
             });
           }
@@ -271,6 +294,7 @@ export default {
       return this.currentValue && this.currentValue.length && this.clearable && !this.disabled;
     },
   },
+
   watch: {
     currentValue() {
       this.$emit('input', this.currentValue);
@@ -333,6 +357,7 @@ export default {
       this.$emit('on-visible-change', val);
     },
   },
+
   created() {
     this.validDataStr = JSON.stringify(this.getValidData(this.data));
     this.$on('on-result-change', (params) => {
@@ -361,13 +386,15 @@ export default {
       }
     });
   },
+
   mounted() {
     this.updateSelected(true);
   },
+
   methods: {
     clearSelect() {
       if (this.disabled) {
-        return false;
+        return;
       }
 
       const oldVal = JSON.stringify(this.currentValue);
@@ -393,25 +420,27 @@ export default {
     // 排除 loading 后的 data，避免重复触发 updateSelect
     getValidData(data) {
       function deleteData(item) {
-        const new_item = {...item};
+        const newItem = {...item};
 
-        if ('loading' in new_item) {
-          delete new_item.loading;
+        if ('loading' in newItem) {
+          delete newItem.loading;
         }
 
-        if ('__value' in new_item) {
-          delete new_item.__value;
+        if ('__value' in newItem) {
+          /* eslint-disable-next-line no-underscore-dangle */
+          delete newItem.__value;
         }
 
-        if ('__label' in new_item) {
-          delete new_item.__label;
+        if ('__label' in newItem) {
+          /* eslint-disable-next-line no-underscore-dangle */
+          delete newItem.__label;
         }
 
-        if ('children' in new_item && new_item.children.length) {
-          new_item.children = new_item.children.map((i) => deleteData(i));
+        if ('children' in newItem && newItem.children.length) {
+          newItem.children = newItem.children.map((i) => deleteData(i));
         }
 
-        return new_item;
+        return newItem;
       }
 
       return data.map((item) => deleteData(item));
@@ -429,7 +458,7 @@ export default {
       const item = this.querySelections[index];
 
       if (item.item.disabled) {
-        return false;
+        return;
       }
 
       this.query = '';
@@ -448,7 +477,7 @@ export default {
     },
     toggleOpen() {
       if (this.disabled) {
-        return false;
+        return;
       }
 
       if (this.visible) {

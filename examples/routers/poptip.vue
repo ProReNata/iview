@@ -1,48 +1,48 @@
 <template>
   <div style="margin: 200px">
-    <Tabs value="name1">
-      <TabPane
+    <tabs value="name1">
+      <tab-pane
         label="标签一"
         name="name1"
       >
         <div>
-          <Poptip
+          <poptip
             title="提示标题"
             content="标签一的内容"
             transfer
           >
-            <Button id="aaa">
+            <i-button id="aaa">
               点击显示
-            </Button>
+            </i-button>
             <div slot="content">
-              <Button @click="loadData(15)">
+              <i-button @click="loadData(15)">
                 15条数据
-              </Button>
-              <Button @click="loadData(10)">
+              </i-button>
+              <i-button @click="loadData(10)">
                 10条数据
-              </Button>
-              <Button @click="loadData(5)">
+              </i-button>
+              <i-button @click="loadData(5)">
                 5条数据
-              </Button>
-              <Button @click="loadData(3)">
+              </i-button>
+              <i-button @click="loadData(3)">
                 3条数据
-              </Button>
-              <Table
+              </i-button>
+              <table
                 :columns="columns1"
                 :data="data1"
               >
-              </Table>
+              </table>
             </div>
-          </Poptip>
+          </poptip>
         </div>
-      </TabPane>
-      <TabPane
+      </tab-pane>
+      <tab-pane
         label="标签二"
         name="name2"
       >
         标签二的内容
-      </TabPane>
-    </Tabs>
+      </tab-pane>
+    </tabs>
   </div>
 </template>
 <script>
@@ -81,7 +81,7 @@ export default {
   methods: {
     loadData(num) {
       const data = [];
-      for (let i = 0; i < num; i++) {
+      for (let i = 0; i < num; i += 1) {
         data.push({
           data1: Math.random() * 1000000,
           data2: Math.random() * 100000000,

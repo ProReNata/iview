@@ -1,22 +1,22 @@
 <template>
-  <div 
-    :style="circleSize" 
+  <div
+    :style="circleSize"
     :class="wrapClasses"
   >
     <svg viewBox="0 0 100 100">
-      <path 
-        :d="pathString" 
-        :stroke="trailColor" 
-        :stroke-width="trailWidth" 
+      <path
+        :d="pathString"
+        :stroke="trailColor"
+        :stroke-width="trailWidth"
         :fill-opacity="0"
       >
       </path>
-      <path 
-        :d="pathString" 
-        :stroke-linecap="strokeLinecap" 
-        :stroke="strokeColor" 
-        :stroke-width="strokeWidth" 
-        fill-opacity="0" 
+      <path
+        :d="pathString"
+        :stroke-linecap="strokeLinecap"
+        :stroke="strokeColor"
+        :stroke-width="strokeWidth"
+        fill-opacity="0"
         :style="pathStyle"
       >
       </path>
@@ -26,13 +26,15 @@
     </div>
   </div>
 </template>
+
 <script>
 import {oneOf} from '../../utils/assist';
 
 const prefixCls = 'ivu-chart-circle';
 
 export default {
-  name: 'iCircle',
+  name: 'ICircle',
+
   props: {
     percent: {
       default: 0,
@@ -48,6 +50,7 @@ export default {
     },
     strokeLinecap: {
       default: 'round',
+      type: String,
       validator(value) {
         return oneOf(value, ['square', 'round']);
       },
@@ -65,6 +68,7 @@ export default {
       type: Number,
     },
   },
+
   computed: {
     circleSize() {
       return {

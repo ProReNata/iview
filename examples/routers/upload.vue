@@ -1,22 +1,26 @@
 <template>
   <div>
     <div
-      v-for="item in uploadList"
+      v-for="(item, i) in uploadList"
+      :key="i"
       class="demo-upload-list"
     >
       <template v-if="item.status === 'finished'">
-        <img :src="item.url">
+        <img
+          :src="item.url"
+          alt=""
+        >
         <div class="demo-upload-list-cover">
-          <Icon
+          <icon
             type="ios-eye-outline"
             @click.native="handleView(item.name)"
           >
-          </Icon>
-          <Icon
+          </icon>
+          <icon
             type="ios-trash-outline"
             @click.native="handleRemove(item)"
           >
-          </Icon>
+          </icon>
         </div>
       </template>
       <template v-else>
@@ -28,7 +32,7 @@
         </i-progress>
       </template>
     </div>
-    <Upload
+    <upload
       ref="upload"
       :show-upload-list="false"
       :default-file-list="defaultList"
@@ -45,16 +49,17 @@
       @on-progress="handleProgress"
     >
       <div style="width: 58px;height:58px;line-height: 58px;">
-        <Icon
+        <icon
           type="camera"
           size="20"
         >
-        </Icon>
+        </icon>
       </div>
-    </Upload>
+    </upload>
     {{ visible }}
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -74,16 +79,20 @@ export default {
       visible: false,
     };
   },
+
   computed: {
     //            uploadList () {
     //                return this.$refs.upload ? this.$refs.upload.fileList : [];
     //            }
   },
+
   watch: {},
+
   mounted() {
     this.uploadList = this.$refs.upload.fileList;
     //            console.log(this.$refs.upload.fileList)
   },
+
   methods: {
     handleBeforeUpload() {
       const check = this.uploadList.length < 5;
@@ -128,6 +137,7 @@ export default {
   },
 };
 </script>
+
 <style>
 .demo-upload-list {
   display: inline-block;

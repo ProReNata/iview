@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-click-outside="http://www.w3.org/1999/xhtml">
   <div
     v-click-outside.capture="onClickOutside"
     v-click-outside:mousedown.capture="onClickOutside"
@@ -46,7 +46,7 @@
       </slot>
     </div>
     <transition name="transition-drop">
-      <Drop
+      <drop
         v-show="dropVisible"
         ref="dropdown"
         v-transfer-dom
@@ -75,13 +75,13 @@
         >
           {{ localeLoadingText }}
         </ul>
-      </Drop>
+      </drop>
     </transition>
   </div>
 </template>
+
 <script>
 import {directive as clickOutside} from 'v-click-outside-x';
-import Icon from '../icon';
 import Drop from './dropdown.vue';
 import TransferDom from '../../directives/transfer-dom';
 import {oneOf} from '../../utils/assist';
@@ -101,7 +101,7 @@ const findChild = (instance, checkFn) => {
     return instance;
   }
 
-  for (let i = 0, l = instance.$children.length; i < l; i++) {
+  for (let i = 0, l = instance.$children.length; i < l; i += 1) {
     const child = instance.$children[i];
     match = findChild(child, checkFn);
 
@@ -109,6 +109,8 @@ const findChild = (instance, checkFn) => {
       return match;
     }
   }
+
+  return undefined;
 };
 
 const findOptionsInVNode = (node) => {
@@ -128,7 +130,7 @@ const findOptionsInVNode = (node) => {
   return options.length > 0 ? options : [];
 };
 
-const extractOptions = (options) => options.reduce((options, slotEntry) => options.concat(findOptionsInVNode(slotEntry)), []);
+const extractOptions = (options) => options.reduce((opts, slotEntry) => opts.concat(findOptionsInVNode(slotEntry)), []);
 
 const applyProp = (node, propName, value) => ({
   ...node,
@@ -161,10 +163,14 @@ const getOptionLabel = (option) => {
 const ANIMATION_TIMEOUT = 300;
 
 export default {
-  name: 'iSelect',
-  components: {Drop, FunctionalOptions, Icon, SelectHead},
+  name: 'ISelect',
+
+  components: {Drop, FunctionalOptions, SelectHead},
+
   directives: {clickOutside, TransferDom},
+
   mixins: [Emitter, Locale],
+
   props: {
     // Use for AutoComplete
     autoComplete: {
@@ -180,6 +186,7 @@ export default {
       type: Boolean,
     },
     elementId: {
+      default: undefined,
       type: String,
     },
     filterable: {
@@ -187,6 +194,7 @@ export default {
       type: Boolean,
     },
     filterMethod: {
+      default: undefined,
       type: Function,
     },
     // 使用时，也得设置 value 才行
@@ -203,6 +211,7 @@ export default {
       type: Boolean,
     },
     loadingText: {
+      default: undefined,
       type: String,
     },
     multiple: {
@@ -210,24 +219,31 @@ export default {
       type: Boolean,
     },
     name: {
+      default: undefined,
       type: String,
     },
     notFoundText: {
+      default: undefined,
       type: String,
     },
     placeholder: {
+      default: undefined,
       type: String,
     },
     placement: {
       default: 'bottom',
+      type: String,
       validator(value) {
         return oneOf(value, ['top', 'bottom']);
       },
     },
     remoteMethod: {
+      default: undefined,
       type: Function,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
@@ -241,6 +257,7 @@ export default {
       type: [String, Number, Array],
     },
   },
+
   data() {
     return {
       caretPosition: -1,
@@ -260,6 +277,7 @@ export default {
       visible: false,
     };
   },
+
   computed: {
     canBeCleared() {
       const uiStateMatch = this.hasMouseHoverHead || this.active;
@@ -377,10 +395,12 @@ export default {
       }
 
       const hasDefaultSelected = slotOptions.some((option) => this.query === option.key);
+      /* eslint-disable-next-line no-restricted-syntax */
       for (const option of slotOptions) {
         const cOptions = option.componentOptions;
 
         if (!cOptions) {
+          /* eslint-disable-next-line no-continue */
           continue;
         }
 
@@ -392,6 +412,7 @@ export default {
             children = children.filter(({componentOptions}) => this.validateOption(componentOptions));
           }
 
+          /* eslint-disable-next-line no-loop-func */
           cOptions.children = children.map((opt) => {
             optionCounter += 1;
 
@@ -408,6 +429,7 @@ export default {
             const optionPassesFilter = this.filterable ? this.validateOption(cOptions) : option;
 
             if (!optionPassesFilter) {
+              /* eslint-disable-next-line no-continue */
               continue;
             }
           }
@@ -431,6 +453,7 @@ export default {
       return this.placement === 'bottom' ? 'slide-up' : 'slide-down';
     },
   },
+
   watch: {
     dropVisible(open) {
       this.broadcast('Drop', open ? 'on-update-popper' : 'on-destroy-popper');
@@ -494,11 +517,17 @@ export default {
         this.initialLabel = '';
 
         if (promise && promise.then) {
-          promise.then((options) => {
-            if (options) {
-              this.options = options;
-            }
-          });
+          promise
+            .then((options) => {
+              if (options) {
+                this.options = options;
+              }
+
+              return null;
+            })
+            .catch((error) => {
+              throw error;
+            });
         }
       }
 
@@ -538,13 +567,15 @@ export default {
     values(now, before) {
       const newValue = JSON.stringify(now);
       const oldValue = JSON.stringify(before);
+      let vModelValue;
+
       // v-model is always just the value, event with labelInValue === true
-      const vModelValue =
-        this.publicValue && this.labelInValue
-          ? this.multiple
-            ? this.publicValue.map(({value}) => value)
-            : this.publicValue.value
-          : this.publicValue;
+      if (this.publicValue && this.labelInValue) {
+        vModelValue = this.multiple ? this.publicValue.map(({value}) => value) : this.publicValue.value;
+      } else {
+        vModelValue = this.publicValue;
+      }
+
       const shouldEmitInput = newValue !== oldValue && vModelValue !== this.value;
 
       if (shouldEmitInput) {
@@ -557,6 +588,7 @@ export default {
       this.$emit('on-open-change', state);
     },
   },
+
   mounted() {
     this.$on('on-select-selected', this.onOptionClick);
 
@@ -575,6 +607,7 @@ export default {
 
     this.checkUpdateStatus();
   },
+
   methods: {
     checkUpdateStatus() {
       if (this.getInitialValue().length > 0 && this.selectOptions.length === 0) {
@@ -655,7 +688,9 @@ export default {
         // enter
         if (key === 'Enter') {
           if (this.focusIndex === -1) {
-            return this.hideMenu();
+            this.hideMenu();
+
+            return;
           }
 
           const optionComponent = this.flatOptions[this.focusIndex];
@@ -670,14 +705,12 @@ export default {
         }
       }
     },
-
     hideMenu() {
       this.toggleMenu(null, false);
       setTimeout(() => {
         this.unchangedQuery = true;
       }, ANIMATION_TIMEOUT);
     },
-
     navigateOptions(direction) {
       const optionsLength = this.flatOptions.length - 1;
 
@@ -694,7 +727,7 @@ export default {
       // find nearest option in case of disabled options in between
       if (direction > 0) {
         let nearestActiveOption = -1;
-        for (let i = 0; i < this.flatOptions.length; i++) {
+        for (let i = 0; i < this.flatOptions.length; i += 1) {
           const optionIsActive = !this.flatOptions[i].componentOptions.propsData.disabled;
 
           if (optionIsActive) {
@@ -709,7 +742,7 @@ export default {
         index = nearestActiveOption;
       } else {
         let nearestActiveOption = this.flatOptions.length;
-        for (let i = optionsLength; i >= 0; i--) {
+        for (let i = optionsLength; i >= 0; i -= 1) {
           const optionIsActive = !this.flatOptions[i].componentOptions.propsData.disabled;
 
           if (optionIsActive) {
@@ -885,7 +918,7 @@ export default {
     },
     toggleMenu(e, force) {
       if (this.disabled) {
-        return false;
+        return;
       }
 
       this.visible = typeof force !== 'undefined' ? force : !this.visible;

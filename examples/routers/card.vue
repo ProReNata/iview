@@ -1,8 +1,8 @@
 <template>
-  <Card style="width:350px">
+  <card style="width:350px">
     <p slot="title">
-      <Icon type="ios-film-outline">
-      </Icon>
+      <icon type="ios-film-outline">
+      </icon>
       经典电影
     </p>
     <a
@@ -10,12 +10,15 @@
       href="#"
       @click.prevent="changeLimit"
     >
-      <Icon type="ios-loop-strong">
-      </Icon>
+      <icon type="ios-loop-strong">
+      </icon>
       换一换
     </a>
     <ul>
-      <li v-for="item in movieList">
+      <li
+        v-for="(item, i) in movieList"
+        :key="i"
+      >
         <a
           :href="item.url"
           target="_blank"
@@ -27,7 +30,7 @@
         </span>
       </li>
     </ul>
-  </Card>
+  </card>
 </template>
 <script>
 export default {

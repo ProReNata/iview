@@ -2,31 +2,31 @@
   <div>
     <h1>Alerts</h1>
     <h2>Feedback</h2>
-    <Alert
+    <alert
       type="success"
-      show-icon="true"
+      :show-icon="true"
       size="large"
     >
       <template slot="header">
         You're all clear, kid.
       </template>
       Now let's blow this thing and go home!
-    </Alert>
+    </alert>
 
-    <Alert
+    <alert
       type="warning"
-      show-icon="true"
+      :show-icon="true"
       size="large"
     >
       <template slot="header">
         Traveling through hyperspace isn't like dusting crops, boy!
       </template>
       Without precise calculations we could fly right through a star or bounce too close to a supernova and that'd end your trip real quick, wouldn't it?
-    </Alert>
+    </alert>
 
-    <Alert
+    <alert
       type="danger"
-      show-icon="true"
+      :show-icon="true"
       size="large"
       closable
     >
@@ -34,18 +34,18 @@
         Negative!
       </template>
       It didn't go in. It just impacted on the surface.
-    </Alert>
+    </alert>
 
-    <Alert
+    <alert
       type="info"
-      show-icon="true"
+      :show-icon="true"
       size="large"
     >
       <template slot="header">
         Rebel base, in range.
       </template>
       You may fire when ready.
-      <Button
+      <button
         slot="action"
         icon="rocket"
         icon-weight="solid"
@@ -53,21 +53,21 @@
         type="text"
       >
         Fire
-      </Button>
-    </Alert>
+      </button>
+    </alert>
 
-    <Alert
+    <alert
       type="update"
-      show-icon="true"
+      :show-icon="true"
       size="large"
     >
       <template slot="header">
         I think my eyes are getting better.
       </template>
       Instead of a big dark blur, I see a big light blur.
-    </Alert>
+    </alert>
 
-    <Alert
+    <alert
       type="tip"
       show-icon
       size="large"
@@ -76,60 +76,60 @@
         I sense something...
       </template>
       A presence I haven't felt since...
-      <Button
+      <button
         slot="action"
         size="small"
-        type="text"
         icon="check"
         icon-weight="solid"
       >
         Got it
-      </Button>
-    </Alert>
+      </button>
+    </alert>
 
     <h2>Toasts</h2>
-    <Alert
+    <alert
       type="success"
       closable
     >
       Now let's blow this thing and go home!
-    </Alert>
+    </alert>
 
-    <Alert
+    <alert
       type="danger"
       show-icon
     >
       It didn't go in. It just impacted on the surface.
-    </Alert>
+    </alert>
 
-    <Alert
+    <alert
       type="tip"
       show-icon
       closable
     >
       I sense something...
-    </Alert>
+    </alert>
 
-    <Alert
+    <alert
       show-icon
     >
-      <Icon
+      <icon
         slot="icon"
         type="sword"
         weight="regular"
       >
-      </Icon>
+      </icon>
       Do. Or do not. There is no try.
-      <Button
+      <button
         slot="action"
         size="small"
         type="text"
       >
         Try again
-      </Button>
-    </Alert>
+      </button>
+    </alert>
   </div>
 </template>
+
 <script>
 // import { Alert, Icon } from 'iview';
 export default {

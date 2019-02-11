@@ -1,21 +1,22 @@
 <template>
   <ul :class="[prefixCls + '-list']">
     <li
-      v-for="file in files"
+      v-for="(file, i) in files"
+      :key="i"
       :class="fileCls(file)"
       @click="handleClick(file)"
     >
       <span @click="handlePreview(file)">
-        <Icon :type="format(file)">
-        </Icon> {{ file.name }}
+        <icon :type="format(file)">
+        </icon> {{ file.name }}
       </span>
-      <Icon
+      <icon
         v-show="file.status === 'finished'"
         type="ios-close-empty"
         :class="[prefixCls + '-list-remove']"
         @click.native="handleRemove(file)"
       >
-      </Icon>
+      </icon>
       <transition name="fade">
         <i-progress
           v-if="file.showProgress"
@@ -28,7 +29,9 @@
     </li>
   </ul>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
 import Icon from '../icon/icon.vue';
 import iProgress from '../progress/progress.vue';
 
@@ -36,15 +39,16 @@ const prefixCls = 'ivu-upload';
 
 export default {
   name: 'UploadList',
+
   components: {Icon, iProgress},
+
   props: {
     files: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
   },
+
   data() {
     return {
       prefixCls,

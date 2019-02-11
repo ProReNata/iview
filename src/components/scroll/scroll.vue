@@ -42,6 +42,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import noop from 'lodash/noop';
 import throttle from 'lodash/throttle';
@@ -57,27 +58,38 @@ const dragConfig = {
 
 export default {
   name: 'Scroll',
+
   components: {loader},
+
   mixins: [Locale],
+
   props: {
-    distanceToEdge: [Number, Array],
+    distanceToEdge: {
+      default: undefined,
+      type: [Number, Array],
+    },
     height: {
       default: 300,
       type: [Number, String],
     },
     loadingText: {
+      default: undefined,
       type: String,
     },
     onReachBottom: {
+      default: undefined,
       type: Function,
     },
     onReachEdge: {
+      default: undefined,
       type: Function,
     },
     onReachTop: {
+      default: undefined,
       type: Function,
     },
   },
+
   data() {
     const distanceToEdge = this.calculateProximityThreshold();
 
@@ -103,6 +115,7 @@ export default {
       touchScroll: false,
     };
   },
+
   computed: {
     loaderClasses() {
       return `${prefixCls}-loader`;
@@ -135,11 +148,13 @@ export default {
       };
     },
   },
+
   created() {
     this.handleScroll = throttle(this.onScroll, 150, {leading: false});
     this.pointerUpHandler = this.onPointerUp.bind(this); // because we need the same function to add and remove event handlers
     this.pointerMoveHandler = throttle(this.onPointerMove, 50, {leading: false});
   },
+
   methods: {
     calculateProximityThreshold() {
       const dte = this.distanceToEdge;
@@ -173,33 +188,41 @@ export default {
         let bottomLoaderHeight = 0;
         const container = this.$refs.scrollContainer;
         const initialScrollTop = container.scrollTop;
-        for (let i = 0; i < 20; i++) {
-          setTimeout(() => {
-            bottomLoaderHeight = Math.max(bottomLoaderHeight, this.$refs.bottomLoader.getBoundingClientRect().height);
-            container.scrollTop = initialScrollTop + bottomLoaderHeight;
-          }, i * 50);
+        const executor = () => {
+          bottomLoaderHeight = Math.max(bottomLoaderHeight, this.$refs.bottomLoader.getBoundingClientRect().height);
+          container.scrollTop = initialScrollTop + bottomLoaderHeight;
+        };
+
+        for (let i = 0; i < 20; i += 1) {
+          setTimeout(executor, i * 50);
         }
       }
 
       const callbacks = [this.waitOneSecond(), this.onReachEdge ? this.onReachEdge(dir) : Promise.resolve()];
-      callbacks.push(
-        dir > 0
-          ? this.onReachTop
-            ? this.onReachTop()
-            : Promise.resolve()
-          : this.onReachBottom
-            ? this.onReachBottom()
-            : Promise.resolve(),
-      );
+      let cb;
+
+      if (dir > 0) {
+        cb = this.onReachTop ? this.onReachTop() : Promise.resolve();
+      } else {
+        cb = this.onReachBottom ? this.onReachBottom() : Promise.resolve();
+      }
+
+      callbacks.push(cb);
 
       const tooSlow = setTimeout(() => {
         this.reset();
       }, 5000);
 
-      Promise.all(callbacks).then(() => {
-        clearTimeout(tooSlow);
-        this.reset();
-      });
+      Promise.all(callbacks)
+        .then(() => {
+          clearTimeout(tooSlow);
+          this.reset();
+
+          return null;
+        })
+        .catch((error) => {
+          throw error;
+        });
     },
 
     onPointerDown(e) {
@@ -229,9 +252,9 @@ export default {
       on(window, 'touchend', this.pointerUpHandler);
       this.$refs.scrollContainer.parentElement.addEventListener(
         'touchmove',
-        (e) => {
-          e.stopPropagation();
-          this.pointerMoveHandler(e);
+        (evt) => {
+          evt.stopPropagation();
+          this.pointerMoveHandler(evt);
         },
         {passive: false, useCapture: true},
       );

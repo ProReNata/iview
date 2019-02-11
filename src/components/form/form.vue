@@ -1,11 +1,12 @@
 <template>
-  <form 
-    :class="classes" 
+  <form
+    :class="classes"
     :autocomplete="autocomplete"
   >
     <slot></slot>
   </form>
 </template>
+
 <script>
 // https://github.com/ElemeFE/element/blob/dev/packages/form/src/form.vue
 import {oneOf} from '../../utils/assist';
@@ -13,10 +14,12 @@ import {oneOf} from '../../utils/assist';
 const prefixCls = 'ivu-form';
 
 export default {
-  name: 'iForm',
+  name: 'IForm',
+
   props: {
     autocomplete: {
       default: 'off',
+      type: String,
       validator(value) {
         return oneOf(value, ['on', 'off']);
       },
@@ -32,12 +35,15 @@ export default {
       },
     },
     labelWidth: {
+      default: undefined,
       type: Number,
     },
     model: {
+      default: undefined,
       type: Object,
     },
     rules: {
+      default: undefined,
       type: Object,
     },
     showMessage: {
@@ -45,14 +51,17 @@ export default {
       type: Boolean,
     },
   },
+
   provide() {
     return {form: this};
   },
+
   data() {
     return {
       fields: [],
     };
   },
+
   computed: {
     classes() {
       return [
@@ -64,11 +73,13 @@ export default {
       ];
     },
   },
+
   watch: {
     rules() {
       this.validate();
     },
   },
+
   created() {
     this.$on('on-form-item-add', (field) => {
       if (field) {
@@ -85,6 +96,7 @@ export default {
       return false;
     });
   },
+
   methods: {
     resetFields() {
       this.fields.forEach((field) => {
@@ -101,7 +113,9 @@ export default {
               valid = false;
             }
 
-            if (++count === this.fields.length) {
+            count += 1;
+
+            if (count === this.fields.length) {
               // all finish
               resolve(valid);
 
@@ -114,7 +128,7 @@ export default {
       });
     },
     validateField(prop, cb) {
-      const field = this.fields.filter((field) => field.prop === prop)[0];
+      const field = this.fields.filter((fieldItem) => fieldItem.prop === prop)[0];
 
       if (!field) {
         throw new Error('[iView warn]: must call validateField with valid prop string!');

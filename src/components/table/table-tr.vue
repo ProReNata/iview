@@ -3,30 +3,41 @@
     <slot></slot>
   </tr>
 </template>
+
 <script>
+import get from 'lodash/get';
+
 export default {
   props: {
-    prefixCls: String,
-    row: Object,
+    prefixCls: {
+      default: undefined,
+      type: String,
+    },
+    row: {
+      default: undefined,
+      type: Object,
+    },
   },
+
   computed: {
     objData() {
       return this.$parent.objData;
     },
   },
+
   methods: {
-    rowClasses(_index) {
+    rowClasses(index) {
       return [
         `${this.prefixCls}-row`,
-        this.rowClsName(_index),
+        this.rowClsName(index),
         {
-          [`${this.prefixCls}-row-highlight`]: this.objData[_index] && this.objData[_index]._isHighlight,
-          [`${this.prefixCls}-row-hover`]: this.objData[_index] && this.objData[_index]._isHover,
+          [`${this.prefixCls}-row-highlight`]: get(this.objData, `[${index}]._isHighlight`, false),
+          [`${this.prefixCls}-row-hover`]: get(this.objData, `[${index}]._isHover`, false),
         },
       ];
     },
-    rowClsName(_index) {
-      return this.$parent.$parent.rowClassName(this.objData[_index], _index);
+    rowClsName(index) {
+      return this.$parent.$parent.rowClassName(this.objData[index], index);
     },
   },
 };

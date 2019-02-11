@@ -5,7 +5,9 @@
 
 const newLine = '\r\n';
 const appendLine = (content, row, {separator, quoted}) => {
-  const line = row.map((data) => {
+  const line = row.map((dataRow) => {
+    let data = dataRow;
+
     if (!quoted) {
       return data;
     }
@@ -23,8 +25,8 @@ const defaults = {
   separator: ',',
 };
 
-export default function csv(columns, datas, options, noHeader = false) {
-  options = {...defaults, ...options};
+export default function csv(columns, datas, opts, noHeader = false) {
+  const options = {...defaults, ...opts};
   let columnOrder;
   const content = [];
   const column = [];
@@ -63,7 +65,9 @@ export default function csv(columns, datas, options, noHeader = false) {
   }
 
   if (Array.isArray(datas)) {
-    datas.forEach((row) => {
+    datas.forEach((dataRow) => {
+      let row = dataRow;
+
       if (!Array.isArray(row)) {
         row = columnOrder.map((k) => (typeof row[k] !== 'undefined' ? row[k] : ''));
       }

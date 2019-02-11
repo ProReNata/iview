@@ -1,40 +1,40 @@
 <template>
   <div>
     <p>带描述信息</p>
-    <Button @click="normal(false)">
+    <i-button @click="normal(false)">
       普通
-    </Button>
-    <Button @click="info(false)">
+    </i-button>
+    <i-button @click="info(false)">
       消息
-    </Button>
-    <Button @click="success(false)">
+    </i-button>
+    <i-button @click="success(false)">
       成功
-    </Button>
-    <Button @click="warning(false)">
+    </i-button>
+    <i-button @click="warning(false)">
       警告
-    </Button>
-    <Button @click="error(false)">
+    </i-button>
+    <i-button @click="error(false)">
       错误
-    </Button>
-    <Button @click="testRender()">
+    </i-button>
+    <i-button @click="testRender()">
       render
-    </Button>
+    </i-button>
     <p>仅标题</p>
-    <Button @click="info(true)">
+    <i-button @click="info(true)">
       消息
-    </Button>
-    <Button @click="success(true)">
+    </i-button>
+    <i-button @click="success(true)">
       成功
-    </Button>
-    <Button @click="warning(true)">
+    </i-button>
+    <i-button @click="warning(true)">
       警告
-    </Button>
-    <Button @click="error(true)">
+    </i-button>
+    <i-button @click="error(true)">
       错误
-    </Button>
-    <Button @click="destroy()">
+    </i-button>
+    <i-button @click="destroy()">
       销毁
-    </Button>
+    </i-button>
   </div>
 </template>
 <script>
@@ -79,7 +79,7 @@ export default {
       this.$Notice.success({
         desc: '当你定义了render之后，这个描述会被覆盖',
         duration: 0,
-        render: (h) => h('span', {}, ['这是', h('Button', {props: {type: 'text'}}, 'render'), '函数渲染的']),
+        render: (h) => h('span', {}, ['这是', h('i-button', {props: {type: 'text'}}, 'render'), '函数渲染的']),
         title: '这是通知标题',
       });
     },
@@ -87,7 +87,7 @@ export default {
       this.$Notice.info({
         duration: 0,
         // desc: '当你定义了render之后，这个描述会被覆盖',
-        render: (h) => h('span', {}, ['这是', h('Button', {props: {type: 'text'}}, 'render'), '函数渲染的']),
+        render: (h) => h('span', {}, ['这是', h('i-button', {props: {type: 'text'}}, 'render'), '函数渲染的']),
         title: '这是通知标题',
       });
     },

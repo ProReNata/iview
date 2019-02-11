@@ -1,76 +1,79 @@
 <template>
-  <Form
+  <form
     :model="formItem"
     :label-width="80"
   >
-    <FormItem label="Input">
-      <Input
+    <form-item label="Input">
+      <i-input
         v-model="formItem.input"
         placeholder="Enter something..."
-      ></Input>
-    </FormItem>
-    <FormItem label="Select">
+      >
+      </i-input>
+    </form-item>
+    <form-item label="Select">
       <label>
-        <Select v-model="formItem.select">
-          <Option value="beijing">
+        <select v-model="formItem.select">
+          <option value="beijing">
             New York
-          </Option>
-          <Option value="shanghai">
+          </option>
+          <option value="shanghai">
             London
-          </Option>
-          <Option value="shenzhen">
+          </option>
+          <option value="shenzhen">
             Sydney
-          </Option>
-        </Select>
+          </option>
+        </select>
       </label>
-    </FormItem>
-    <FormItem label="DatePicker">
-      <Row>
-        <Col span="11">
-        <DatePicker
-          v-model="formItem.date"
-          type="date"
-          placeholder="Select date"
-        >
-        </DatePicker>
-        </Col>
-        <Col
+    </form-item>
+    <form-item label="DatePicker">
+      <row>
+        <i-col span="11">
+          <date-picker
+            v-model="formItem.date"
+            type="date"
+            placeholder="Select date"
+          >
+          </date-picker>
+        </i-col>
+        <i-col
           span="2"
           style="text-align: center"
-        >-</Col>
-        <Col span="11">
-        <TimePicker
-          v-model="formItem.time"
-          type="time"
-          placeholder="Select time"
         >
-        </TimePicker>
-        </Col>
-      </Row>
-    </FormItem>
-    <FormItem label="Radio">
-      <RadioGroup v-model="formItem.radio">
-        <Radio label="male">
+          -
+        </i-col>
+        <i-col span="11">
+          <time-picker
+            v-model="formItem.time"
+            type="time"
+            placeholder="Select time"
+          >
+          </time-picker>
+        </i-col>
+      </row>
+    </form-item>
+    <form-item label="Radio">
+      <radio-group v-model="formItem.radio">
+        <radio label="male">
           Male
-        </Radio>
-        <Radio label="female">
+        </radio>
+        <radio label="female">
           Female
-        </Radio>
-      </RadioGroup>
-    </FormItem>
-    <FormItem label="Checkbox">
-      <CheckboxGroup v-model="formItem.checkbox">
-        <Checkbox label="Eat">
-        </Checkbox>
-        <Checkbox label="Sleep">
-        </Checkbox>
-        <Checkbox label="Run">
-        </Checkbox>
-        <Checkbox label="Movie">
-        </Checkbox>
-      </CheckboxGroup>
-    </FormItem>
-    <FormItem label="Switch">
+        </radio>
+      </radio-group>
+    </form-item>
+    <form-item label="Checkbox">
+      <checkbox-group v-model="formItem.checkbox">
+        <checkbox label="Eat">
+        </checkbox>
+        <checkbox label="Sleep">
+        </checkbox>
+        <checkbox label="Run">
+        </checkbox>
+        <checkbox label="Movie">
+        </checkbox>
+      </checkbox-group>
+    </form-item>
+    <form-item label="Switch">
       <i-switch
         v-model="formItem.switch"
         size="large"
@@ -82,34 +85,34 @@
           Off
         </span>
       </i-switch>
-    </FormItem>
-    <FormItem label="Slider">
-      <Slider
+    </form-item>
+    <form-item label="Slider">
+      <slider
         v-model="formItem.slider"
         range
       >
-      </Slider>
-    </FormItem>
-    <FormItem label="Text">
-      <Input
+      </slider>
+    </form-item>
+    <form-item label="Text">
+      <i-input
         v-model="formItem.textarea"
         type="textarea"
         :autosize="{minRows: 2,maxRows: 5}"
         placeholder="Enter something..."
-      ></Input>
-    </FormItem>
-    <FormItem>
-      <Button type="primary">
+      ></i-input>
+    </form-item>
+    <form-item>
+      <i-button type="primary">
         Submit
-      </Button>
-      <Button
+      </i-button>
+      <i-button
         type="ghost"
         style="margin-left: 8px"
       >
         Cancel
-      </Button>
-    </FormItem>
-  </Form>
+      </i-button>
+    </form-item>
+  </form>
 </template>
 <script>
 export default {

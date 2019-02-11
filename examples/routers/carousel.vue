@@ -1,30 +1,30 @@
 <template>
   <div>
-    <Carousel 
-      v-model="v1" 
-      dots="outside" 
-      :autoplay="false" 
+    <carousel
+      v-model="v1"
+      dots="outside"
+      :autoplay="false"
       @on-change="hc"
     >
-      <Carousel-item>
+      <carousel-item>
         <div class="demo-case-img">
           <img src="https://file.iviewui.com/dist/84b3cded4163febf9dae090e76129322.png">
         </div>
-      </Carousel-item>
-      <Carousel-item>
+      </carousel-item>
+      <carousel-item>
         <div class="demo-case-img">
           <img src="https://file.iviewui.com/dist/84b3cded4163febf9dae090e76129322.png">
         </div>
-      </Carousel-item>
-      <Carousel-item>
+      </carousel-item>
+      <carousel-item>
         <div class="demo-case-img">
           <img src="https://file.iviewui.com/dist/84b3cded4163febf9dae090e76129322.png">
         </div>
-      </Carousel-item>
-    </Carousel>
-    <Button @click="v1 = 2">
+      </carousel-item>
+    </carousel>
+    <i-button @click="v1 = 2">
       change
-    </Button>
+    </i-button>
   </div>
 </template>
 <script>

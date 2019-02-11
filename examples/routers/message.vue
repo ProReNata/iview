@@ -43,7 +43,7 @@ export default {
         // },
         render(h) {
           return h(
-            'Button',
+            'i-button',
             {
               props: {
                 type: 'primary',

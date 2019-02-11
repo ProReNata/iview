@@ -3,7 +3,9 @@
     <slot></slot>
   </div>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
 import {findComponentsDownward, oneOf} from '../../utils/assist';
 import Emitter from '../../mixins/emitter';
 
@@ -14,14 +16,14 @@ export default {
   mixins: [Emitter],
   props: {
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
     value: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
   },

@@ -61,16 +61,20 @@
           <tbody>
             <tr>
               <td :style="{'height':bodyStyle.height,'width':`${headerWidth}px`}">
+                <!-- eslint-disable vue/no-v-html -->
                 <span
                   v-if="!data || data.length === 0"
                   v-html="localeNoDataText"
                 >
                 </span>
+                <!-- eslint-enable vue/no-v-html -->
+                <!-- eslint-disable vue/no-v-html -->
                 <span
                   v-else
                   v-html="localeNoFilteredDataText"
                 >
                 </span>
+                <!-- eslint-enable vue/no-v-html -->
               </td>
             </tr>
           </tbody>
@@ -173,24 +177,27 @@
         </slot>
       </div>
     </div>
-    <Spin
+    <spin
       v-if="loading"
       fix
       size="large"
     >
       <slot name="loading">
       </slot>
-    </Spin>
+    </spin>
   </div>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
+import get from 'lodash/get';
 import elementResizeDetectorMaker from 'element-resize-detector';
 import tableHead from './table-head.vue';
 import tableBody from './table-body.vue';
 import Spin from '../spin/spin.vue';
 import {oneOf, getStyle, deepCopy, getScrollBarSize} from '../../utils/assist';
 import {on, off} from '../../utils/dom';
-import Csv from '../../utils/csv';
+import csv from '../../utils/csv';
 import ExportCsv from './export-csv';
 import Locale from '../../mixins/locale';
 import {getAllColumns, convertToRows, convertColumnOrder, getRandomStr} from './util';
@@ -202,32 +209,33 @@ let columnKey = 1;
 
 export default {
   name: 'Table',
+
   components: {Spin, tableBody, tableHead},
+
   mixins: [Locale],
+
   props: {
     border: {
       default: false,
       type: Boolean,
     },
     columns: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     context: {
+      default: undefined,
       type: Object,
     },
     data: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     disabledHover: {
       type: Boolean,
     },
     height: {
+      default: undefined,
       type: [Number, String],
     },
     highlightRow: {
@@ -239,9 +247,11 @@ export default {
       type: Boolean,
     },
     noDataText: {
+      default: undefined,
       type: String,
     },
     noFilteredDataText: {
+      default: undefined,
       type: String,
     },
     rowClassName: {
@@ -255,6 +265,8 @@ export default {
       type: Boolean,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
@@ -264,9 +276,11 @@ export default {
       type: Boolean,
     },
     width: {
+      default: undefined,
       type: [Number, String],
     },
   },
+
   data() {
     const colsWithId = this.makeColumnsId(this.columns);
 
@@ -357,6 +371,7 @@ export default {
       let width = 0;
       this.rightFixedColumns.forEach((col) => {
         if (col.fixed && col.fixed === 'right') {
+          /* eslint-disable-next-line no-underscore-dangle */
           width += col._width;
         }
       });
@@ -371,6 +386,7 @@ export default {
       let width = 0;
       this.leftFixedColumns.forEach((col) => {
         if (col.fixed && col.fixed === 'left') {
+          /* eslint-disable-next-line no-underscore-dangle */
           width += col._width;
         }
       });
@@ -541,10 +557,12 @@ export default {
     },
     clickCurrentRow(_index) {
       this.highlightCurrentRow(_index);
+      /* eslint-disable-next-line no-underscore-dangle */
       this.$emit('on-row-click', JSON.parse(JSON.stringify(this.cloneData[_index])), _index);
     },
     dblclickCurrentRow(_index) {
       this.highlightCurrentRow(_index);
+      /* eslint-disable-next-line no-underscore-dangle */
       this.$emit('on-row-dblclick', JSON.parse(JSON.stringify(this.cloneData[_index])), _index);
     },
     exportCsv(params) {
@@ -560,7 +578,7 @@ export default {
       let datas = [];
 
       if (params.columns && params.data) {
-        columns = params.columns;
+        columns = get(params, 'columns');
         datas = params.data;
       } else {
         columns = this.allColumns;
@@ -572,13 +590,8 @@ export default {
         datas = params.original ? this.data : this.rebuildData;
       }
 
-      let noHeader = false;
-
-      if ('noHeader' in params) {
-        noHeader = params.noHeader;
-      }
-
-      const data = Csv(columns, datas, params, noHeader);
+      const noHeader = 'noHeader' in params && params.noHeader;
+      const data = csv(columns, datas, params, noHeader);
 
       if (params.callback) {
         params.callback(data);
@@ -593,8 +606,11 @@ export default {
           return true;
         }
 
+        /* eslint-disable-next-line no-underscore-dangle */
         let status = !column._filterChecked.length;
-        for (let i = 0; i < column._filterChecked.length; i++) {
+        /* eslint-disable-next-line no-underscore-dangle */
+        for (let i = 0; i < column._filterChecked.length; i += 1) {
+          /* eslint-disable-next-line no-underscore-dangle */
           status = column.filterMethod(column._filterChecked[i], row);
 
           if (status) {
@@ -605,10 +621,12 @@ export default {
         return status;
       });
     },
-    filterOtherData(data, index) {
+    filterOtherData(otherData, index) {
+      let data = otherData;
       const column = this.cloneColumns[index];
 
       if (typeof column.filterRemote === 'function') {
+        /* eslint-disable-next-line no-underscore-dangle */
         column.filterRemote.call(this.$parent, column._filterChecked, column.key, column);
       }
 
@@ -675,12 +693,15 @@ export default {
      * 左固定和右固定，要区分对待
      * 所以，此方法用来获取正确的 index.
      */
-    GetOriginalIndex(_index) {
+    getOriginalIndex(_index) {
+      /* eslint-disable-next-line no-underscore-dangle */
       return this.cloneColumns.findIndex((item) => item._index === _index);
     },
     getSelection() {
       const selectionIndexes = [];
+      /* eslint-disable-next-line no-restricted-syntax */
       for (const i in this.objData) {
+        /* eslint-disable-next-line no-underscore-dangle */
         if (this.objData[i]._isChecked) {
           selectionIndexes.push(parseInt(i, 10));
         }
@@ -706,18 +727,23 @@ export default {
     // 通用处理 highlightCurrentRow 和 clearCurrentRow
     handleCurrentRow(type, _index) {
       let oldIndex = -1;
+      /* eslint-disable-next-line no-restricted-syntax */
       for (const i in this.objData) {
+        /* eslint-disable-next-line no-underscore-dangle */
         if (this.objData[i]._isHighlight) {
           oldIndex = parseInt(i, 10);
+          /* eslint-disable-next-line no-underscore-dangle */
           this.objData[i]._isHighlight = false;
         }
       }
 
       if (type === 'highlight') {
+        /* eslint-disable-next-line no-underscore-dangle */
         this.objData[_index]._isHighlight = true;
       }
 
       const oldData = oldIndex < 0 ? null : JSON.parse(JSON.stringify(this.cloneData[oldIndex]));
+      /* eslint-disable-next-line no-underscore-dangle */
       const newData = type === 'highlight' ? JSON.parse(JSON.stringify(this.cloneData[_index])) : null;
       this.$emit('on-current-change', newData, oldData);
     },
@@ -728,22 +754,28 @@ export default {
       // filter others first, after filter this column
       filterData = this.filterOtherData(filterData, index);
       this.rebuildData = this.filterData(filterData, column);
-
+      /* eslint-disable-next-line no-underscore-dangle */
       this.cloneColumns[index]._isFiltered = true;
+      /* eslint-disable-next-line no-underscore-dangle */
       this.cloneColumns[index]._filterVisible = false;
       this.$emit('on-filter-change', column);
     },
 
     handleFilterHide(index) {
       // clear checked that not filter now
+      /* eslint-disable-next-line no-underscore-dangle */
       if (!this.cloneColumns[index]._isFiltered) {
+        /* eslint-disable-next-line no-underscore-dangle */
         this.cloneColumns[index]._filterChecked = [];
       }
     },
     handleFilterReset(_index) {
-      const index = this.GetOriginalIndex(_index);
+      const index = this.getOriginalIndex(_index);
+      /* eslint-disable-next-line no-underscore-dangle */
       this.cloneColumns[index]._isFiltered = false;
+      /* eslint-disable-next-line no-underscore-dangle */
       this.cloneColumns[index]._filterVisible = false;
+      /* eslint-disable-next-line no-underscore-dangle */
       this.cloneColumns[index]._filterChecked = [];
 
       let filterData = this.makeDataWithSort();
@@ -753,7 +785,8 @@ export default {
     },
 
     handleFilterSelect(_index, value) {
-      const index = this.GetOriginalIndex(_index);
+      const index = this.getOriginalIndex(_index);
+      /* eslint-disable-next-line no-underscore-dangle */
       this.cloneColumns[index]._filterChecked = [value];
       this.handleFilter(index);
     },
@@ -808,10 +841,12 @@ export default {
         return;
       }
 
+      /* eslint-disable-next-line no-underscore-dangle */
       if (this.objData[_index]._isHover) {
         return;
       }
 
+      /* eslint-disable-next-line no-underscore-dangle */
       this.objData[_index]._isHover = true;
     },
     handleMouseOut(_index) {
@@ -819,6 +854,7 @@ export default {
         return;
       }
 
+      /* eslint-disable-next-line no-underscore-dangle */
       this.objData[_index]._isHover = false;
     },
     handleMouseWheel(event) {
@@ -857,6 +893,7 @@ export default {
           }
         }
 
+        /* eslint-disable-next-line no-underscore-dangle */
         col._width = null;
       });
 
@@ -869,13 +906,15 @@ export default {
         columnWidth = parseInt(usableWidth / usableLength, 10);
       }
 
-      for (let i = 0; i < this.cloneColumns.length; i++) {
+      for (let i = 0; i < this.cloneColumns.length; i += 1) {
         const column = this.cloneColumns[i];
         let width = columnWidth + (column.minWidth ? column.minWidth : 0);
 
         if (column.width) {
-          width = column.width;
+          width = get(column, 'width');
+          /* eslint-disable-next-line no-underscore-dangle */
         } else if (column._width) {
+          /* eslint-disable-next-line no-underscore-dangle */
           width = column._width;
         } else {
           if (column.minWidth > width) {
@@ -886,7 +925,7 @@ export default {
 
           if (usableWidth > 0) {
             usableWidth -= width - (column.minWidth ? column.minWidth : 0);
-            usableLength--;
+            usableLength -= 1;
 
             if (usableLength > 0) {
               columnWidth = parseInt(usableWidth / usableLength, 10);
@@ -898,8 +937,9 @@ export default {
           }
         }
 
+        /* eslint-disable-next-line no-underscore-dangle */
         column._width = width;
-
+        /* eslint-disable-next-line no-underscore-dangle */
         columnsWidth[column._index] = {
           width,
         };
@@ -908,20 +948,22 @@ export default {
       if (usableWidth > 0) {
         usableLength = noMaxWidthColumns.length;
         columnWidth = parseInt(usableWidth / usableLength, 10);
-        for (let i = 0; i < noMaxWidthColumns.length; i++) {
+        for (let i = 0; i < noMaxWidthColumns.length; i += 1) {
           const column = noMaxWidthColumns[i];
+          /* eslint-disable-next-line no-underscore-dangle */
           const width = column._width + columnWidth;
 
           if (usableLength > 1) {
-            usableLength--;
+            usableLength -= 1;
             usableWidth -= columnWidth;
             columnWidth = parseInt(usableWidth / usableLength, 10);
           } else {
             columnWidth = 0;
           }
 
+          /* eslint-disable-next-line no-underscore-dangle */
           column._width = width;
-
+          /* eslint-disable-next-line no-underscore-dangle */
           columnsWidth[column._index] = {
             width,
           };
@@ -929,6 +971,7 @@ export default {
       }
 
       this.tableWidth =
+        /* eslint-disable-next-line no-underscore-dangle */
         this.cloneColumns.map((cell) => cell._width).reduce((a, b) => a + b, 0) +
         (this.showVerticalScrollBar ? this.scrollBarWidth : 0) +
         1;
@@ -936,8 +979,9 @@ export default {
       this.fixedHeader();
     },
     handleSort(_index, type) {
-      const index = this.GetOriginalIndex(_index);
+      const index = this.getOriginalIndex(_index);
       this.cloneColumns.forEach((col) => {
+        /* eslint-disable-next-line no-underscore-dangle */
         col._sortType = 'normal';
       });
 
@@ -952,9 +996,11 @@ export default {
         }
       }
 
+      /* eslint-disable-next-line no-underscore-dangle */
       this.cloneColumns[index]._sortType = type;
 
       this.$emit('on-sort-change', {
+        /* eslint-disable-next-line no-underscore-dangle */
         column: JSON.parse(JSON.stringify(this.allColumns[this.cloneColumns[index]._index])),
         key,
         order: type,
@@ -962,10 +1008,12 @@ export default {
     },
     hideColumnFilter() {
       this.cloneColumns.forEach((col) => {
+        /* eslint-disable-next-line no-underscore-dangle */
         col._filterVisible = false;
       });
     },
     highlightCurrentRow(_index) {
+      /* eslint-disable-next-line no-underscore-dangle */
       if (!this.highlightRow || this.objData[_index]._isHighlight) {
         return;
       }
@@ -984,26 +1032,39 @@ export default {
       const center = [];
 
       columns.forEach((column, index) => {
+        /* eslint-disable-next-line no-underscore-dangle */
         column._index = index;
-        column._columnKey = columnKey++;
+        /* eslint-disable-next-line no-underscore-dangle */
+        column._columnKey = columnKey;
+        columnKey += 1;
+        /* eslint-disable-next-line no-underscore-dangle */
         column._width = column.width ? column.width : ''; // update in handleResize()
+        /* eslint-disable-next-line no-underscore-dangle */
         column._sortType = 'normal';
+        /* eslint-disable-next-line no-underscore-dangle */
         column._filterVisible = false;
+        /* eslint-disable-next-line no-underscore-dangle */
         column._isFiltered = false;
+        /* eslint-disable-next-line no-underscore-dangle */
         column._filterChecked = [];
 
         if ('filterMultiple' in column) {
+          /* eslint-disable-next-line no-underscore-dangle */
           column._filterMultiple = column.filterMultiple;
         } else {
+          /* eslint-disable-next-line no-underscore-dangle */
           column._filterMultiple = true;
         }
 
         if ('filteredValue' in column) {
+          /* eslint-disable-next-line no-underscore-dangle */
           column._filterChecked = column.filteredValue;
+          /* eslint-disable-next-line no-underscore-dangle */
           column._isFiltered = true;
         }
 
         if ('sortType' in column) {
+          /* eslint-disable-next-line no-underscore-dangle */
           column._sortType = column.sortType;
         }
 
@@ -1025,6 +1086,7 @@ export default {
           item.children = this.makeColumnsId(item.children);
         }
 
+        /* eslint-disable-next-line no-underscore-dangle */
         item.__id = getRandomStr(6);
 
         return item;
@@ -1033,8 +1095,11 @@ export default {
     makeData() {
       const data = deepCopy(this.data);
       data.forEach((row, index) => {
+        /* eslint-disable-next-line no-underscore-dangle */
         row._index = index;
-        row._rowKey = rowKey++;
+        /* eslint-disable-next-line no-underscore-dangle */
+        row._rowKey = rowKey;
+        rowKey += 1;
       });
 
       return data;
@@ -1053,8 +1118,10 @@ export default {
       let sortIndex = -1;
       let isCustom = false;
 
-      for (let i = 0; i < this.cloneColumns.length; i++) {
+      for (let i = 0; i < this.cloneColumns.length; i += 1) {
+        /* eslint-disable-next-line no-underscore-dangle */
         if (this.cloneColumns[i]._sortType !== 'normal') {
+          /* eslint-disable-next-line no-underscore-dangle */
           sortType = this.cloneColumns[i]._sortType;
           sortIndex = i;
           isCustom = this.cloneColumns[i].sortable === 'custom';
@@ -1080,29 +1147,42 @@ export default {
       const data = {};
       this.data.forEach((row, index) => {
         const newRow = deepCopy(row); // todo 直接替换
+        /* eslint-disable-next-line no-underscore-dangle */
         newRow._isHover = false;
 
+        /* eslint-disable-next-line no-underscore-dangle */
         if (newRow._disabled) {
+          /* eslint-disable-next-line no-underscore-dangle */
           newRow._isDisabled = newRow._disabled;
         } else {
+          /* eslint-disable-next-line no-underscore-dangle */
           newRow._isDisabled = false;
         }
 
+        /* eslint-disable-next-line no-underscore-dangle */
         if (newRow._checked) {
+          /* eslint-disable-next-line no-underscore-dangle */
           newRow._isChecked = newRow._checked;
         } else {
+          /* eslint-disable-next-line no-underscore-dangle */
           newRow._isChecked = false;
         }
 
+        /* eslint-disable-next-line no-underscore-dangle */
         if (newRow._expanded) {
+          /* eslint-disable-next-line no-underscore-dangle */
           newRow._isExpanded = newRow._expanded;
         } else {
+          /* eslint-disable-next-line no-underscore-dangle */
           newRow._isExpanded = false;
         }
 
+        /* eslint-disable-next-line no-underscore-dangle */
         if (newRow._highlight) {
+          /* eslint-disable-next-line no-underscore-dangle */
           newRow._isHighlight = newRow._highlight;
         } else {
+          /* eslint-disable-next-line no-underscore-dangle */
           newRow._isHighlight = false;
         }
 
@@ -1123,12 +1203,16 @@ export default {
       //     }
 
       // });
+      /* eslint-disable-next-line no-restricted-syntax */
       for (const data of this.rebuildData) {
+        /* eslint-disable-next-line no-underscore-dangle */
         if (this.objData[data._index]._isDisabled) {
+          /* eslint-disable-next-line no-continue */
           continue;
-        } else {
-          this.objData[data._index]._isChecked = status;
         }
+
+        /* eslint-disable-next-line no-underscore-dangle */
+        this.objData[data._index]._isChecked = status;
       }
 
       const selection = this.getSelection();
@@ -1153,6 +1237,8 @@ export default {
         if (type === 'desc') {
           return a[key] < b[key] ? 1 : -1;
         }
+
+        return undefined;
       });
 
       return data;
@@ -1160,6 +1246,7 @@ export default {
     toggleExpand(_index) {
       let data = {};
 
+      /* eslint-disable-next-line no-restricted-syntax */
       for (const i in this.objData) {
         if (parseInt(i, 10) === _index) {
           data = this.objData[i];
@@ -1167,13 +1254,17 @@ export default {
         }
       }
 
+      /* eslint-disable-next-line no-underscore-dangle */
       const status = !data._isExpanded;
+      /* eslint-disable-next-line no-underscore-dangle */
       this.objData[_index]._isExpanded = status;
+      /* eslint-disable-next-line no-underscore-dangle */
       this.$emit('on-expand', JSON.parse(JSON.stringify(this.cloneData[_index])), status);
     },
     toggleSelect(_index) {
       let data = {};
 
+      /* eslint-disable-next-line no-restricted-syntax */
       for (const i in this.objData) {
         if (parseInt(i, 10) === _index) {
           data = this.objData[i];
@@ -1181,11 +1272,14 @@ export default {
         }
       }
 
+      /* eslint-disable-next-line no-underscore-dangle */
       const status = !data._isChecked;
 
+      /* eslint-disable-next-line no-underscore-dangle */
       this.objData[_index]._isChecked = status;
 
       const selection = this.getSelection();
+      /* eslint-disable-next-line no-underscore-dangle */
       this.$emit(status ? 'on-select' : 'on-select-cancel', selection, JSON.parse(JSON.stringify(this.data[_index])));
       this.$emit('on-selection-change', selection);
     },

@@ -26,14 +26,22 @@
     </sup>
   </span>
 </template>
+
 <script>
 const prefixCls = 'ivu-badge';
 
 export default {
   name: 'Badge',
+
   props: {
-    className: String,
-    count: [Number, String],
+    className: {
+      default: undefined,
+      type: String,
+    },
+    count: {
+      default: undefined,
+      type: [Number, String],
+    },
     dot: {
       default: false,
       type: Boolean,
@@ -43,6 +51,7 @@ export default {
       type: [Number, String],
     },
   },
+
   computed: {
     alone() {
       return this.$slots.default === undefined;

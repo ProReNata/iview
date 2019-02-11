@@ -50,8 +50,10 @@ function getOffset(element) {
 
 export default {
   name: 'Affix',
+
   props: {
     offsetBottom: {
+      default: undefined,
       type: Number,
     },
     offsetTop: {
@@ -59,6 +61,7 @@ export default {
       type: Number,
     },
   },
+
   data() {
     return {
       affix: false,
@@ -67,6 +70,7 @@ export default {
       styles: {},
     };
   },
+
   computed: {
     classes() {
       return [
@@ -85,18 +89,21 @@ export default {
       return type;
     },
   },
+
   mounted() {
     //            window.addEventListener('scroll', this.handleScroll, false);
     //            window.addEventListener('resize', this.handleScroll, false);
     on(window, 'scroll', this.handleScroll);
     on(window, 'resize', this.handleScroll);
   },
+
   beforeDestroy() {
     //            window.removeEventListener('scroll', this.handleScroll, false);
     //            window.removeEventListener('resize', this.handleScroll, false);
     off(window, 'scroll', this.handleScroll);
     off(window, 'resize', this.handleScroll);
   },
+
   methods: {
     handleScroll() {
       const {affix} = this;

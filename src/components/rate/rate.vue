@@ -10,6 +10,7 @@
     >
     <div
       v-for="item in count"
+      :key="item"
       :class="starCls(item)"
       @mousemove="handleMousemove(item, $event)"
       @click="handleClick(item)"
@@ -35,6 +36,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Locale from '../../mixins/locale';
 import Emitter from '../../mixins/emitter';
@@ -62,6 +64,7 @@ export default {
       type: Boolean,
     },
     name: {
+      default: undefined,
       type: String,
     },
     showText: {
@@ -73,6 +76,7 @@ export default {
       type: Number,
     },
   },
+
   data() {
     return {
       currentValue: this.value,
@@ -82,6 +86,7 @@ export default {
       prefixCls,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -92,6 +97,7 @@ export default {
       ];
     },
   },
+
   watch: {
     currentValue(val) {
       this.setHalf(val);
@@ -100,11 +106,14 @@ export default {
       this.currentValue = val;
     },
   },
+
   methods: {
-    handleClick(value) {
+    handleClick(item) {
       if (this.disabled) {
         return;
       }
+
+      let value = item;
 
       // value++;
       if (this.isHalf) {

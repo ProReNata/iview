@@ -3,7 +3,7 @@
     :class="classes"
     :style="styles"
   >
-    <Notice
+    <notice
       v-for="notice in notices"
       :key="notice.name"
       :prefix-cls="prefixCls"
@@ -19,7 +19,7 @@
       :transition-name="notice.transitionName"
       :on-close="notice.onClose"
     >
-    </Notice>
+    </notice>
   </div>
 </template>
 <script>
@@ -30,16 +30,22 @@ let seed = 0;
 const now = Date.now();
 
 function getUuid() {
-  return `ivuNotification_${now}_${seed++}`;
+  const value = `ivuNotification_${now}_${seed}`;
+
+  seed += 1;
+
+  return value;
 }
 
 export default {
   components: {Notice},
   props: {
     className: {
+      default: undefined,
       type: String,
     },
     content: {
+      default: undefined,
       type: String,
     },
     prefixCls: {
@@ -56,11 +62,13 @@ export default {
       type: Object,
     },
   },
+
   data() {
     return {
       notices: [],
     };
   },
+
   computed: {
     classes() {
       return [
@@ -71,11 +79,12 @@ export default {
       ];
     },
   },
+
   methods: {
     add(notice) {
       const name = notice.name || getUuid();
 
-      const _notice = {
+      const noticeObj = {
         ...{
           closable: false,
           content: '',
@@ -88,11 +97,11 @@ export default {
         ...notice,
       };
 
-      this.notices.push(_notice);
+      this.notices.push(noticeObj);
     },
     close(name) {
       const {notices} = this;
-      for (let i = 0; i < notices.length; i++) {
+      for (let i = 0; i < notices.length; i += 1) {
         if (notices[i].name === name) {
           this.notices.splice(i, 1);
           break;

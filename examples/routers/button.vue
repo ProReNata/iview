@@ -4,152 +4,153 @@
 
     <h2>Default</h2>
     <p>
-      <Button>Default</Button>
-      <Button type="primary">
+      <i-button>Default</i-button>
+      <i-button type="primary">
         Primary
-      </Button>
-      <Button type="text">
+      </i-button>
+      <i-button type="text">
         Text
-      </Button>
+      </i-button>
     </p>
 
     <h2>Colors</h2>
-    <Button type="info">
+    <i-button type="info">
       Info
-    </Button>
-    <Button type="success">
+    </i-button>
+    <i-button type="success">
       Success
-    </Button>
-    <Button type="warning">
+    </i-button>
+    <i-button type="warning">
       Warning
-    </Button>
-    <Button type="error">
+    </i-button>
+    <i-button type="error">
       Error
-    </Button>
+    </i-button>
 
     <h2>Icons</h2>
-    <Button
+    <i-button
       type="primary"
       icon="search"
     >
       Search
-    </Button>
-    <Button icon="poop">
-    </Button>
+    </i-button>
+    <i-button icon="poop">
+    </i-button>
     <br>
-    <Button
+    <i-button
       icon="mug-marshmallows"
       icon-weight="solid"
       size="large"
     >
       Hot choclate
-    </Button>
+    </i-button>
 
     <h2>States</h2>
-    <Button>Default</Button>
-    <Button disabled>
+    <i-button>Default</i-button>
+    <i-button disabled>
       Default(Disabled)
-    </Button>
+    </i-button>
     <br>
-    <Button type="primary">
+    <i-button type="primary">
       Primary
-    </Button>
-    <Button
+    </i-button>
+    <i-button
       type="primary"
       disabled
     >
       Primary(Disabled)
-    </Button>
+    </i-button>
     <br>
-    <Button type="text">
+    <i-button type="text">
       Text
-    </Button>
-    <Button
+    </i-button>
+    <i-button
       type="text"
       disabled
     >
       Text(Disabled)
-    </Button>
+    </i-button>
 
     <h2>Groups</h2>
     <h4>Basic</h4>
-    <Button-group>
-      <Button>cancel</Button>
-      <Button type="primary">
+    <button-group>
+      <i-button>cancel</i-button>
+      <i-button type="primary">
         determine
-      </Button>
-    </Button-group>
-    <Button-group>
-      <Button disabled>
+      </i-button>
+    </button-group>
+    <button-group>
+      <i-button disabled>
         Yesterday
-      </Button>
-      <Button disabled>
+      </i-button>
+      <i-button disabled>
         Today
-      </Button>
-      <Button disabled>
+      </i-button>
+      <i-button disabled>
         Tomorrow
-      </Button>
-    </Button-group>
-    <Button-group>
-      <Button type="primary">
+      </i-button>
+    </button-group>
+    <button-group>
+      <i-button type="primary">
         L
-      </Button>
-      <Button>M</Button>
-    </Button-group>
+      </i-button>
+      <i-button>M</i-button>
+    </button-group>
 
     <h4>Icons</h4>
-    <Button-group>
-      <Button type="primary">
-        <Icon type="chevron-left">
-        </Icon>
+    <button-group>
+      <i-button type="primary">
+        <icon type="chevron-left">
+        </icon>
         Back
-      </Button>
-      <Button type="primary">
+      </i-button>
+      <i-button type="primary">
         Forward
-        <Icon type="chevron-right">
-        </Icon>
-      </Button>
-    </Button-group>
-    <Button-group>
-      <Button
+        <icon type="chevron-right">
+        </icon>
+      </i-button>
+    </button-group>
+    <button-group>
+      <i-button
         type="primary"
         icon="arrow-left"
       >
-      </Button>
-      <Button
+      </i-button>
+      <i-button
         type="primary"
         icon="arrow-right"
       >
-      </Button>
-    </Button-group>
+      </i-button>
+    </button-group>
 
     <h4>Sizes</h4>
-    <Button-group size="large">
-      <Button>
+    <button-group size="large">
+      <i-button>
         Large
-      </Button>
-      <Button>
+      </i-button>
+      <i-button>
         Large
-      </Button>
-    </Button-group>
-    <Button-group>
-      <Button>
+      </i-button>
+    </button-group>
+    <button-group>
+      <i-button>
         Default
-      </Button>
-      <Button>
+      </i-button>
+      <i-button>
         Default
-      </Button>
-    </Button-group>
-    <Button-group size="small">
-      <Button>
+      </i-button>
+    </button-group>
+    <button-group size="small">
+      <i-button>
         Small
-      </Button>
-      <Button>
+      </i-button>
+      <i-button>
         Small
-      </Button>
-    </Button-group>
+      </i-button>
+    </button-group>
   </div>
 </template>
+
 <script>
 export default {};
 </script>

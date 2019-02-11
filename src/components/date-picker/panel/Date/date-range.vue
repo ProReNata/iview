@@ -8,7 +8,8 @@
       :class="[prefixCls + '-sidebar']"
     >
       <div
-        v-for="shortcut in shortcuts"
+        v-for="(shortcut, i) in shortcuts"
+        :key="i"
         :class="[prefixCls + '-shortcut']"
         @click="handleShortcutClick(shortcut)"
       >
@@ -28,8 +29,8 @@
             :class="iconBtnCls('prev', '-double')"
             @click="prevYear('left')"
           >
-            <Icon type="ios-arrow-left">
-            </Icon>
+            <icon type="ios-arrow-left">
+            </icon>
           </span>
           <span
             v-if="leftPickerTable === 'date-table'"
@@ -37,8 +38,8 @@
             :class="iconBtnCls('prev')"
             @click="prevMonth('left')"
           >
-            <Icon type="ios-arrow-left">
-            </Icon>
+            <icon type="ios-arrow-left">
+            </icon>
           </span>
           <date-panel-label
             :date-panel-label="leftDatePanelLabel"
@@ -51,8 +52,8 @@
             :class="iconBtnCls('next', '-double')"
             @click="nextYear('left')"
           >
-            <Icon type="ios-arrow-right">
-            </Icon>
+            <icon type="ios-arrow-right">
+            </icon>
           </span>
           <span
             v-if="splitPanels && leftPickerTable === 'date-table'"
@@ -60,8 +61,8 @@
             :class="iconBtnCls('next')"
             @click="nextMonth('left')"
           >
-            <Icon type="ios-arrow-right">
-            </Icon>
+            <icon type="ios-arrow-right">
+            </icon>
           </span>
         </div>
         <component
@@ -95,8 +96,8 @@
             :class="iconBtnCls('prev', '-double')"
             @click="prevYear('right')"
           >
-            <Icon type="ios-arrow-left">
-            </Icon>
+            <icon type="ios-arrow-left">
+            </icon>
           </span>
           <span
             v-if="splitPanels && rightPickerTable === 'date-table'"
@@ -104,8 +105,8 @@
             :class="iconBtnCls('prev')"
             @click="prevMonth('right')"
           >
-            <Icon type="ios-arrow-left">
-            </Icon>
+            <icon type="ios-arrow-left">
+            </icon>
           </span>
           <date-panel-label
             :date-panel-label="rightDatePanelLabel"
@@ -117,8 +118,8 @@
             :class="iconBtnCls('next', '-double')"
             @click="nextYear('right')"
           >
-            <Icon type="ios-arrow-right">
-            </Icon>
+            <icon type="ios-arrow-right">
+            </icon>
           </span>
           <span
             v-if="rightPickerTable === 'date-table'"
@@ -126,8 +127,8 @@
             :class="iconBtnCls('next')"
             @click="nextMonth('right')"
           >
-            <Icon type="ios-arrow-right">
-            </Icon>
+            <icon type="ios-arrow-right">
+            </icon>
           </span>
         </div>
         <component
@@ -167,7 +168,7 @@
         >
         </time-picker>
       </div>
-      <Confirm
+      <confirm
         v-if="confirm"
         :show-time="showTime"
         :is-time="isTime"
@@ -176,10 +177,11 @@
         @on-pick-clear="handlePickClear"
         @on-pick-success="handlePickSuccess"
       >
-      </Confirm>
+      </confirm>
     </div>
   </div>
 </template>
+
 <script>
 import Icon from '../../../icon/icon.vue';
 import DateTable from '../../base/date-table.vue';
@@ -189,7 +191,7 @@ import TimePicker from '../Time/time-range.vue';
 import Confirm from '../../base/confirm.vue';
 
 import {toDate, initTimeDate, formatDateLabels} from '../../util';
-import datePanelLabel from './date-panel-label.vue';
+import DatePanelLabel from './date-panel-label.vue';
 
 import Mixin from '../panel-mixin';
 import DateMixin from './date-panel-mixin';
@@ -208,8 +210,11 @@ const dateSorter = (a, b) => {
 
 export default {
   name: 'RangeDatePickerPanel',
-  components: {Confirm, datePanelLabel, DateTable, Icon, MonthTable, TimePicker, YearTable},
+
+  components: {Confirm, DatePanelLabel, DateTable, Icon, MonthTable, TimePicker, YearTable},
+
   mixins: [Mixin, Locale, DateMixin],
+
   props: {
     // more props in the mixin
     splitPanels: {
@@ -217,6 +222,7 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     const [minDate, maxDate] = this.value.map((date) => date || initTimeDate());
     const leftPanelDate = this.startDate ? this.startDate : minDate;
@@ -233,6 +239,7 @@ export default {
       rightPickerTable: `${this.selectionMode}-table`,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -283,6 +290,7 @@ export default {
       return !(this.dates[0] && this.dates[1]);
     },
   },
+
   watch: {
     currentView(currentView) {
       const leftMonth = this.leftPanelDate.getMonth();
@@ -322,6 +330,7 @@ export default {
       this.setPanelDates(this.startDate || this.dates[0] || new Date());
     },
   },
+
   methods: {
     changePanelDate(panel, type, increment, updateOtherPanel = true) {
       const current = new Date(this[`${panel}PanelDate`]);
@@ -416,7 +425,11 @@ export default {
       const {labels, separator} = formatDateLabels(locale, datePanelLabel, date);
 
       return {
-        labels: labels.map((obj) => ((obj.handler = handler(obj.type)), obj)),
+        labels: labels.map((obj) => {
+          obj.handler = handler(obj.type);
+
+          return obj;
+        }),
         separator,
       };
     },

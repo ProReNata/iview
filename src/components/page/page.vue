@@ -156,7 +156,7 @@
         </i>
       </a>
     </li>
-    <Options
+    <options
       :show-sizer="showSizer"
       :page-size="currentPageSize"
       :page-size-opts="pageSizeOpts"
@@ -170,9 +170,10 @@
       @on-size="onSize"
       @on-page="onPage"
     >
-    </Options>
+    </options>
   </ul>
 </template>
+
 <script>
 import {oneOf} from '../../utils/assist';
 import Options from './options.vue';
@@ -182,10 +183,14 @@ const prefixCls = 'ivu-page';
 
 export default {
   name: 'Page',
+
   components: {Options},
+
   mixins: [Locale],
+
   props: {
     className: {
+      default: undefined,
       type: String,
     },
     current: {
@@ -204,6 +209,7 @@ export default {
     },
     placement: {
       default: 'bottom',
+      type: String,
       validator(value) {
         return oneOf(value, ['top', 'bottom']);
       },
@@ -225,11 +231,14 @@ export default {
       type: Boolean,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small']);
       },
     },
     styles: {
+      default: undefined,
       type: Object,
     },
     total: {
@@ -241,6 +250,7 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     return {
       currentPage: this.current,
@@ -248,6 +258,7 @@ export default {
       prefixCls,
     };
   },
+
   computed: {
     allPages() {
       const allPage = Math.ceil(this.total / this.currentPageSize);
@@ -311,6 +322,7 @@ export default {
       ];
     },
   },
+
   watch: {
     current(val) {
       this.currentPage = val;
@@ -326,6 +338,7 @@ export default {
       }
     },
   },
+
   methods: {
     changePage(page) {
       if (this.currentPage !== page) {
@@ -387,7 +400,7 @@ export default {
       const current = this.currentPage;
 
       if (current >= this.allPages) {
-        return false;
+        return;
       }
 
       this.changePage(current + 1);
@@ -404,7 +417,7 @@ export default {
       const current = this.currentPage;
 
       if (current <= 1) {
-        return false;
+        return;
       }
 
       this.changePage(current - 1);

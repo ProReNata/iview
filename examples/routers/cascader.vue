@@ -1,28 +1,28 @@
 <template>
   <div>
-    <Cascader 
-      v-model="value3" 
-      :data="data" 
-      filterable 
+    <cascader
+      v-model="value3"
+      :data="data"
+      filterable
       style="width: 400px"
     >
-    </Cascader>
+    </cascader>
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <Cascader 
-      v-model="value3" 
-      :data="data" 
-      filterable 
+    <cascader
+      v-model="value3"
+      :data="data"
+      filterable
       style="width: 400px"
     >
-    </Cascader>
+    </cascader>
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <Cascader 
-      v-model="value3" 
-      :data="data" 
-      filterable 
+    <cascader
+      v-model="value3"
+      :data="data"
+      filterable
       style="width: 400px"
     >
-    </Cascader>
+    </cascader>
   </div>
 </template>
 <script>

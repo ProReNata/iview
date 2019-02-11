@@ -19,52 +19,52 @@ function confirm(options) {
   const render = 'render' in options ? options.render : undefined;
   const instance = getModalInstance(render);
 
-  options.onRemove = function() {
+  options.onRemove = function _onRemove() {
     modalInstance = null;
   };
 
   instance.show(options);
 }
 
-Modal.info = function(props = {}) {
+Modal.info = function _info(props = {}) {
   props.icon = 'info';
   props.showCancel = false;
 
   return confirm(props);
 };
 
-Modal.success = function(props = {}) {
+Modal.success = function _success(props = {}) {
   props.icon = 'success';
   props.showCancel = false;
 
   return confirm(props);
 };
 
-Modal.warning = function(props = {}) {
+Modal.warning = function _warning(props = {}) {
   props.icon = 'warning';
   props.showCancel = false;
 
   return confirm(props);
 };
 
-Modal.error = function(props = {}) {
+Modal.error = function _error(props = {}) {
   props.icon = 'error';
   props.showCancel = false;
 
   return confirm(props);
 };
 
-Modal.confirm = function(props = {}) {
+Modal.confirm = function _confirm(props = {}) {
   props.icon = 'confirm';
   props.showCancel = true;
 
   return confirm(props);
 };
 
-Modal.remove = function() {
+Modal.remove = function _remove() {
   if (!modalInstance) {
     // at loading status, remove after Cancel
-    return false;
+    return;
   }
 
   const instance = getModalInstance();

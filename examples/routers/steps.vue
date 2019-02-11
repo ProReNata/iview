@@ -1,19 +1,19 @@
 <template>
   <div>
-    <Steps :current="index">
+    <steps :current="index">
       <!--<Step title="开始"></Step>-->
-      <Step
+      <step
         v-for="(item, idx) in activitiList"
         :key="idx"
         :title="item.approveUserName"
         :content="item.startTime"
       >
-      </Step>
+      </step>
       <!--<Step title="结束"></Step>-->
-    </Steps>
-    <Button @click="change">
+    </steps>
+    <i-button @click="change">
       change
-    </Button>
+    </i-button>
     <br><br><br><br>
     <hr>
     <!--<Steps :current="1" size="small">-->

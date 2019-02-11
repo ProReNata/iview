@@ -7,12 +7,12 @@ USAGE:
 */
 
 const fs = require('fs');
-const path = require('path');
+const nodePath = require('path');
 
 const jscodeshift = require('jscodeshift');
 const getFiles = require('../../Utils/getFiles');
 
-const APP_ROOT = path.join(__dirname, '../../../');
+const APP_ROOT = nodePath.join(__dirname, '../../../');
 const scriptContent = /<script>[\s\S]+<\/script>/;
 
 const vueDefaultOrder = require('./vueDefaultOrder');
@@ -172,6 +172,8 @@ function processFile(file) {
       const sourceFiles = files.filter((filePath) => !filePath.includes('node_modules') && !filePath.includes('sandbox'));
       console.log('Found', sourceFiles.length, 'files of type:', type);
       sourceFiles.forEach(processFile);
+
+      return sourceFiles;
     })
     .catch((err) => console.log(err));
 });

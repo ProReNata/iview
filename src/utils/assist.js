@@ -4,7 +4,7 @@ import noop from 'lodash/noop';
 const isServer = Vue.prototype.$isServer;
 // 判断参数是否是其中之一
 export function oneOf(value, validList) {
-  for (let i = 0; i < validList.length; i++) {
+  for (let i = 0; i < validList.length; i += 1) {
     if (value === validList[i]) {
       return true;
     }
@@ -33,8 +33,8 @@ export function getScrollBarSize(fresh) {
     const outerStyle = outer.style;
 
     outerStyle.position = 'absolute';
-    outerStyle.top = 0;
-    outerStyle.left = 0;
+    outerStyle.top = '0';
+    outerStyle.left = '0';
     outerStyle.pointerEvents = 'none';
     outerStyle.visibility = 'hidden';
     outerStyle.width = '200px';
@@ -76,7 +76,9 @@ function camelCase(name) {
 }
 
 // getStyle
-export function getStyle(element, styleName) {
+export function getStyle(element, style) {
+  let styleName = style;
+
   if (!element || !styleName) {
     return null;
   }
@@ -104,10 +106,10 @@ function firstUpperCase(str) {
 export {firstUpperCase};
 
 // Warn
-export function warnProp(component, prop, correctType, wrongType) {
-  correctType = firstUpperCase(correctType);
-  wrongType = firstUpperCase(wrongType);
-  // eslint-disable-next-line no-console
+export function warnProp(component, prop, cType, wType) {
+  const correctType = firstUpperCase(cType);
+  const wrongType = firstUpperCase(wType);
+  /* eslint-disable-next-line no-console */
   console.error(
     `[iView warn]: Invalid prop: type check failed for prop ${prop}. Expected ${correctType}, got ${wrongType}. (found in component: ${component})`,
   );
@@ -145,10 +147,11 @@ function deepCopy(data) {
   }
 
   if (t === 'array') {
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i += 1) {
       o.push(deepCopy(data[i]));
     }
   } else if (t === 'object') {
+    /* eslint-disable-next-line guard-for-in,no-restricted-syntax */
     for (const i in data) {
       o[i] = deepCopy(data[i]);
     }
@@ -166,7 +169,7 @@ export function scrollTop(el, from = 0, to, duration = 500) {
       window.webkitRequestAnimationFrame ||
       window.mozRequestAnimationFrame ||
       window.msRequestAnimationFrame ||
-      function(callback) {
+      function requestAnimationFrame(callback) {
         return window.setTimeout(callback, 1000 / 60);
       };
   }
@@ -174,15 +177,15 @@ export function scrollTop(el, from = 0, to, duration = 500) {
   const difference = Math.abs(from - to);
   const step = Math.ceil((difference / duration) * 50);
 
-  function scroll(start, end, step) {
+  function scroll(start, end, scrollStep) {
     if (start === end) {
       return;
     }
 
-    let d = start + step > end ? end : start + step;
+    let d = start + scrollStep > end ? end : start + scrollStep;
 
     if (start > end) {
-      d = start - step < end ? end : start - step;
+      d = start - scrollStep < end ? end : start - scrollStep;
     }
 
     if (el === window) {
@@ -191,14 +194,16 @@ export function scrollTop(el, from = 0, to, duration = 500) {
       el.scrollTop = d;
     }
 
-    window.requestAnimationFrame(() => scroll(d, end, step));
+    window.requestAnimationFrame(() => scroll(d, end, scrollStep));
   }
 
   scroll(from, to, step);
 }
 
 // Find components upward
-function findComponentUpward(context, componentName, componentNames) {
+function findComponentUpward(context, componentName, names) {
+  let componentNames = names;
+
   if (typeof componentName === 'string') {
     componentNames = [componentName];
   } else {
@@ -206,12 +211,12 @@ function findComponentUpward(context, componentName, componentNames) {
   }
 
   let parent = context.$parent;
-  let name = parent.$options.name;
-  while (parent && (!name || componentNames.indexOf(name) < 0)) {
+  let optionName = parent.$options.name;
+  while (parent && (!optionName || componentNames.indexOf(optionName) < 0)) {
     parent = parent.$parent;
 
     if (parent) {
-      name = parent.$options.name;
+      optionName = parent.$options.name;
     }
   }
 
@@ -226,6 +231,7 @@ export function findComponentDownward(context, componentName) {
   let children = null;
 
   if (childrens.length) {
+    /* eslint-disable-next-line no-restricted-syntax */
     for (const child of childrens) {
       const {name} = child.$options;
 
@@ -277,6 +283,7 @@ export function findComponentsUpward(context, componentName) {
 // Find brothers components
 export function findBrothersComponents(context, componentName, exceptMe = true) {
   const res = context.$parent.$children.filter((item) => item.$options.name === componentName);
+  /* eslint-disable-next-line no-underscore-dangle */
   const index = res.findIndex((item) => item._uid === context._uid);
 
   if (exceptMe) {
@@ -287,7 +294,7 @@ export function findBrothersComponents(context, componentName, exceptMe = true) 
 }
 
 /* istanbul ignore next */
-const trim = function(string) {
+const trim = function trim(string) {
   return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
 };
 
@@ -317,10 +324,11 @@ export function addClass(el, cls) {
   let curClass = el.className;
   const classes = (cls || '').split(' ');
 
-  for (let i = 0, j = classes.length; i < j; i++) {
+  for (let i = 0, j = classes.length; i < j; i += 1) {
     const clsName = classes[i];
 
     if (!clsName) {
+      /* eslint-disable-next-line no-continue */
       continue;
     }
 
@@ -345,10 +353,11 @@ export function removeClass(el, cls) {
   const classes = cls.split(' ');
   let curClass = ` ${el.className} `;
 
-  for (let i = 0, j = classes.length; i < j; i++) {
+  for (let i = 0, j = classes.length; i < j; i += 1) {
     const clsName = classes[i];
 
     if (!clsName) {
+      /* eslint-disable-next-line no-continue */
       continue;
     }
 

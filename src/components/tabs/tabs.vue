@@ -23,15 +23,15 @@
             :class="[prefixCls + '-nav-prev', scrollable ? '' : prefixCls + '-nav-scroll-disabled']"
             @click="scrollPrev"
           >
-            <Icon type="chevron-left">
-            </Icon>
+            <icon type="chevron-left">
+            </icon>
           </span>
           <span
             :class="[prefixCls + '-nav-next', scrollable ? '' : prefixCls + '-nav-scroll-disabled']"
             @click="scrollNext"
           >
-            <Icon type="chevron-right">
-            </Icon>
+            <icon type="chevron-right">
+            </icon>
           </span>
           <div
             ref="navScroll"
@@ -50,28 +50,29 @@
               </div>
               <div
                 v-for="(item, index) in navList"
+                :key="index"
                 :class="tabCls(item)"
                 @click="handleChange(index)"
               >
-                <Icon
+                <icon
                   v-if="item.icon !== ''"
                   :type="item.icon"
                 >
-                </Icon>
-                <Render
+                </icon>
+                <render
                   v-if="item.labelType === 'function'"
                   :render="item.label"
                 >
-                </Render>
+                </render>
                 <template v-else>
                   {{ item.label }}
                 </template>
-                <Icon
+                <icon
                   v-if="showClose(item)"
                   type="ios-close-empty"
                   @click.native.stop="handleRemove(index)"
                 >
-                </Icon>
+                </icon>
               </div>
             </div>
           </div>
@@ -87,6 +88,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import elementResizeDetectorMaker from 'element-resize-detector';
 import Icon from '../icon/icon.vue';
@@ -112,13 +114,16 @@ const getNextTab = (list, activeKey, direction, countDisabledAlso) => {
 const focusFirst = (element, root) => {
   try {
     element.focus();
-  } catch (err) {} // eslint-disable-line no-empty
+  } catch (err) {
+    /* empty */
+  }
 
   if (document.activeElement === element && element !== root) {
     return true;
   }
 
   const candidates = element.children;
+  /* eslint-disable-next-line no-restricted-syntax */
   for (const candidate of candidates) {
     if (focusFirst(candidate, root)) {
       return true;
@@ -130,8 +135,11 @@ const focusFirst = (element, root) => {
 
 export default {
   name: 'Tabs',
+
   components: {Icon, Render},
+
   mixins: [Emitter],
+
   props: {
     animated: {
       default: true,
@@ -147,20 +155,24 @@ export default {
     },
     size: {
       default: 'default',
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'default']);
       },
     },
     type: {
       default: 'line',
+      type: String,
       validator(value) {
         return oneOf(value, ['line', 'card']);
       },
     },
     value: {
+      default: undefined,
       type: [String, Number],
     },
   },
+
   data() {
     return {
       activeKey: this.value,
@@ -177,6 +189,7 @@ export default {
       transitioning: false,
     };
   },
+
   computed: {
     barClasses() {
       return [
@@ -237,6 +250,7 @@ export default {
       return style;
     },
   },
+
   watch: {
     activeKey(val) {
       this.focusedKey = val;
@@ -256,6 +270,7 @@ export default {
       this.focusedKey = val;
     },
   },
+
   mounted() {
     this.showSlot = this.$slots.extra !== undefined;
     this.observer = elementResizeDetectorMaker();
@@ -282,6 +297,7 @@ export default {
     this.handleTabKeyboardSelect(true);
     this.updateVisibility(this.getTabIndex(this.activeKey));
   },
+
   beforeDestroy() {
     this.observer.removeListener(this.$refs.navWrap, this.handleResize);
 
@@ -289,6 +305,7 @@ export default {
       this.mutationObserver.disconnect();
     }
   },
+
   methods: {
     getCurrentScrollOffset() {
       const {navStyle} = this;
@@ -372,13 +389,13 @@ export default {
       this.focusedKey = nextTab.name;
     },
     isInsideHiddenElement() {
-      let {parentNode} = this.$el;
-      while (parentNode && parentNode !== document.body) {
-        if (parentNode.style && parentNode.style.display === 'none') {
-          return parentNode;
+      let currentNode = this.$el.parentNode;
+      while (currentNode && currentNode !== document.body) {
+        if (currentNode.style && currentNode.style.display === 'none') {
+          return currentNode;
         }
 
-        parentNode = parentNode.parentNode;
+        currentNode = currentNode.parentNode;
       }
 
       return false;
@@ -491,7 +508,7 @@ export default {
         if (index > 0) {
           let offset = 0;
           const gutter = this.size === 'small' ? 0 : 16;
-          for (let i = 0; i < index; i++) {
+          for (let i = 0; i < index; i += 1) {
             offset += parseFloat(prevTabs[i].offsetWidth) + gutter;
           }
 

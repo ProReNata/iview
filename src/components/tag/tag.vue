@@ -1,63 +1,64 @@
 <template>
-  <transition 
-    v-if="fade" 
+  <transition
+    v-if="fade"
     name="fade"
   >
-    <div 
-      :class="classes" 
-      :style="wraperStyles" 
+    <div
+      :class="classes"
+      :style="wraperStyles"
       @click.stop="check"
     >
-      <span 
-        v-if="showDot" 
-        :class="dotClasses" 
+      <span
+        v-if="showDot"
+        :class="dotClasses"
         :style="bgColorStyle"
       >
       </span>
-      <span 
-        :class="textClasses" 
+      <span
+        :class="textClasses"
         :style="textColorStyle"
       >
         <slot></slot>
       </span>
-      <Icon 
-        v-if="closable" 
-        :class="iconClass" 
-        :color="lineColor" 
-        type="ios-close-empty" 
+      <icon
+        v-if="closable"
+        :class="iconClass"
+        :color="lineColor"
+        type="ios-close-empty"
         @click.native.stop="close"
       >
-      </Icon>
+      </icon>
     </div>
   </transition>
-  <div 
-    v-else 
-    :class="classes" 
-    :style="wraperStyles" 
+  <div
+    v-else
+    :class="classes"
+    :style="wraperStyles"
     @click.stop="check"
   >
-    <span 
-      v-if="showDot" 
-      :class="dotClasses" 
+    <span
+      v-if="showDot"
+      :class="dotClasses"
       :style="bgColorStyle"
     >
     </span>
-    <span 
-      :class="textClasses" 
+    <span
+      :class="textClasses"
       :style="textColorStyle"
     >
       <slot></slot>
     </span>
-    <Icon 
-      v-if="closable" 
-      :class="iconClass" 
-      :color="lineColor" 
-      type="ios-close-empty" 
+    <icon
+      v-if="closable"
+      :class="iconClass"
+      :color="lineColor"
+      type="ios-close-empty"
       @click.native.stop="close"
     >
-    </Icon>
+    </icon>
   </div>
 </template>
+
 <script>
 import Icon from '../icon';
 import {oneOf} from '../../utils/assist';
@@ -66,7 +67,9 @@ const prefixCls = 'ivu-tag';
 const initColorList = ['blue', 'green', 'red', 'yellow', 'default'];
 export default {
   name: 'Tag',
+
   components: {Icon},
+
   props: {
     checkable: {
       default: false,
@@ -89,25 +92,34 @@ export default {
       type: Boolean,
     },
     name: {
+      default: undefined,
       type: [String, Number],
     },
     type: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['border', 'dot']);
       },
     },
   },
+
   data() {
     return {
       isChecked: this.checked,
     };
   },
+
   computed: {
     bgColorStyle() {
       return oneOf(this.color, initColorList) ? {} : {background: this.dotColor};
     },
     borderColor() {
-      return this.color !== undefined ? (this.color === 'default' ? '' : this.color) : '';
+      if (typeof this.color === 'undefined') {
+        return '';
+      }
+
+      return this.color === 'default' ? '' : this.color;
     },
     classes() {
       return [
@@ -121,19 +133,23 @@ export default {
       ];
     },
     defaultTypeColor() {
-      return this.type !== 'dot' && this.type !== 'border'
-        ? this.color !== undefined
-          ? oneOf(this.color, initColorList)
-            ? ''
-            : this.color
-          : ''
-        : '';
+      if (this.type !== 'dot' && this.type !== 'border') {
+        if (typeof this.color !== 'undefined') {
+          return oneOf(this.color, initColorList) ? '' : this.color;
+        }
+      }
+
+      return '';
     },
     dotClasses() {
       return `${prefixCls}-dot-inner`;
     },
     dotColor() {
-      return this.color !== undefined ? (oneOf(this.color, initColorList) ? '' : this.color) : '';
+      if (typeof this.color === 'undefined') {
+        return '';
+      }
+
+      return oneOf(this.color, initColorList) ? '' : this.color;
     },
     iconClass() {
       if (this.type === 'dot') {
@@ -144,7 +160,11 @@ export default {
         return oneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '';
       }
 
-      return this.color !== undefined ? (this.color === 'default' ? '' : 'rgb(255, 255, 255)') : '';
+      if (typeof this.color === 'undefined') {
+        return '';
+      }
+
+      return this.color === 'default' ? '' : 'rgb(255, 255, 255)';
     },
     lineColor() {
       if (this.type === 'dot') {
@@ -152,33 +172,46 @@ export default {
       }
 
       if (this.type === 'border') {
-        return this.color !== undefined ? (oneOf(this.color, initColorList) ? '' : this.color) : '';
+        if (typeof this.color === 'undefined') {
+          return '';
+        }
+
+        return oneOf(this.color, initColorList) ? '' : this.color;
       }
 
-      return this.color !== undefined ? (this.color === 'default' ? '' : 'rgb(255, 255, 255)') : '';
+      if (typeof this.color === 'undefined') {
+        return '';
+      }
+
+      return this.color === 'default' ? '' : 'rgb(255, 255, 255)';
     },
     showDot() {
       return !!this.type && this.type === 'dot';
     },
     textClasses() {
-      return [
-        `${prefixCls}-text`,
-        this.type === 'border' ? (oneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '') : '',
-        this.type !== 'dot' && this.type !== 'border' && this.color !== 'default'
-          ? this.isChecked
-            ? `${prefixCls}-color-white`
-            : ''
-          : '',
-      ];
+      let type1 = '';
+      let type2 = '';
+
+      if (this.type === 'border') {
+        type1 = oneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '';
+      }
+
+      if (this.type !== 'dot' && this.type !== 'border' && this.color !== 'default') {
+        type2 = this.isChecked ? `${prefixCls}-color-white` : '';
+      }
+
+      return [`${prefixCls}-text`, type1, type2];
     },
     textColorStyle() {
-      return oneOf(this.color, initColorList)
-        ? {}
-        : this.type !== 'dot' && this.type !== 'border'
-          ? this.isChecked
-            ? {color: this.lineColor}
-            : {}
-          : {color: this.lineColor};
+      if (oneOf(this.color, initColorList)) {
+        return {};
+      }
+
+      if (this.type !== 'dot' && this.type !== 'border') {
+        return this.isChecked ? {color: this.lineColor} : {};
+      }
+
+      return {color: this.lineColor};
     },
     wraperStyles() {
       return oneOf(this.color, initColorList)
@@ -192,6 +225,7 @@ export default {
           };
     },
   },
+
   methods: {
     check() {
       if (!this.checkable) {

@@ -60,10 +60,12 @@ function notice(content = '', duration = defaults.duration, type, onClose = noop
   });
 
   // 用于手动消除
-  return (function() {
-    const target = name++;
+  return (function iife() {
+    const target = name;
 
-    return function() {
+    name += 1;
+
+    return function _notice() {
       instance.remove(`${prefixKey}${target}`);
     };
   })();
@@ -94,7 +96,9 @@ export default {
   loading(options) {
     return this.message('loading', options);
   },
-  message(type, options) {
+  message(type, opts) {
+    let options = opts;
+
     if (typeof options === 'string') {
       options = {
         content: options,

@@ -1,16 +1,16 @@
 <template>
   <div :class="itemClasses">
-    <div 
-      :class="headerClasses" 
+    <div
+      :class="headerClasses"
       @click="toggle"
     >
-      <Icon type="arrow-right-b">
-      </Icon>
+      <icon type="arrow-right-b">
+      </icon>
       <slot></slot>
     </div>
     <collapse-transition>
-      <div 
-        v-show="isActive" 
+      <div
+        v-show="isActive"
         :class="contentClasses"
       >
         <div :class="boxClasses">
@@ -21,6 +21,7 @@
     </collapse-transition>
   </div>
 </template>
+
 <script>
 import Icon from '../icon/icon.vue';
 import CollapseTransition from '../base/collapse-transition';
@@ -29,18 +30,23 @@ const prefixCls = 'ivu-collapse';
 
 export default {
   name: 'Panel',
+
   components: {CollapseTransition, Icon},
+
   props: {
     name: {
+      default: undefined,
       type: String,
     },
   },
+
   data() {
     return {
       index: 0, // use index for default when name is null
       isActive: false,
     };
   },
+
   computed: {
     boxClasses() {
       return `${prefixCls}-content-box`;
@@ -60,6 +66,7 @@ export default {
       ];
     },
   },
+
   methods: {
     toggle() {
       this.$parent.toggle({

@@ -33,6 +33,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Emitter from '../../mixins/emitter';
 import {oneOf} from '../../utils/assist';
@@ -42,15 +43,21 @@ const iconPrefixCls = 'ivu-icon';
 
 export default {
   name: 'Step',
+
   mixins: [Emitter],
+
   props: {
     content: {
+      default: undefined,
       type: String,
     },
     icon: {
+      default: undefined,
       type: String,
     },
     status: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['wait', 'process', 'finish', 'error']);
       },
@@ -60,6 +67,7 @@ export default {
       type: String,
     },
   },
+
   data() {
     return {
       currentStatus: '',
@@ -69,23 +77,24 @@ export default {
       total: 1,
     };
   },
+
   computed: {
     iconClasses() {
-      let icon = '';
+      let iconName = '';
 
       if (this.icon) {
-        icon = this.icon;
+        iconName = this.icon;
       } else if (this.currentStatus === 'finish') {
-        icon = 'ios-checkmark-empty';
+        iconName = 'ios-checkmark-empty';
       } else if (this.currentStatus === 'error') {
-        icon = 'ios-close-empty';
+        iconName = 'ios-close-empty';
       }
 
       return [
         `${prefixCls}-icon`,
         `${iconPrefixCls}`,
         {
-          [`${iconPrefixCls}-${icon}`]: icon !== '',
+          [`${iconPrefixCls}-${iconName}`]: iconName !== '',
         },
       ];
     },
@@ -105,6 +114,7 @@ export default {
       ];
     },
   },
+
   watch: {
     status(val) {
       this.currentStatus = val;
@@ -114,12 +124,15 @@ export default {
       }
     },
   },
+
   created() {
     this.currentStatus = this.status;
   },
+
   mounted() {
     this.dispatch('Steps', 'append');
   },
+
   beforeDestroy() {
     this.dispatch('Steps', 'remove');
   },

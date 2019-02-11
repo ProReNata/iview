@@ -11,12 +11,15 @@ body {
 </style>
 <template>
   <div>
-    <Affix>
+    <affix>
       <div class="demo-affix">
         固定在最顶部
       </div>
-    </Affix>
-    <div v-for="item in arr">
+    </affix>
+    <div
+      v-for="(item, i) in arr"
+      :key="i"
+    >
       {{ item }}
     </div>
   </div>
@@ -29,7 +32,7 @@ export default {
     };
   },
   created() {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i += 1) {
       this.arr.push(i);
     }
   },

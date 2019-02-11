@@ -5,25 +5,26 @@
     @click="toggle"
     @keydown="onKeydown"
   >
-    <input 
-      type="hidden" 
-      :name="name" 
+    <input
+      type="hidden"
+      :name="name"
       :value="currentValue"
     >
     <span :class="innerClasses">
-      <slot 
-        v-if="currentValue === trueValue" 
+      <slot
+        v-if="currentValue === trueValue"
         name="open"
       >
       </slot>
-      <slot 
-        v-if="currentValue === falseValue" 
+      <slot
+        v-if="currentValue === falseValue"
         name="close"
       >
       </slot>
     </span>
   </span>
 </template>
+
 <script>
 import {oneOf} from '../../utils/assist';
 import Emitter from '../../mixins/emitter';
@@ -31,8 +32,10 @@ import Emitter from '../../mixins/emitter';
 const prefixCls = 'ivu-switch';
 
 export default {
-  name: 'iSwitch',
+  name: 'ISwitch',
+
   mixins: [Emitter],
+
   props: {
     disabled: {
       default: false,
@@ -43,9 +46,12 @@ export default {
       type: [String, Number, Boolean],
     },
     name: {
+      default: undefined,
       type: String,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['large', 'small', 'default']);
       },
@@ -59,11 +65,13 @@ export default {
       type: [String, Number, Boolean],
     },
   },
+
   data() {
     return {
       currentValue: this.value,
     };
   },
+
   computed: {
     innerClasses() {
       return `${prefixCls}-inner`;
@@ -79,6 +87,7 @@ export default {
       ];
     },
   },
+
   watch: {
     value(val) {
       if (val !== this.trueValue && val !== this.falseValue) {
@@ -88,6 +97,7 @@ export default {
       this.currentValue = val;
     },
   },
+
   methods: {
     onKeydown(event) {
       if (oneOf(event.key, [' ', 'Space', 'Spacebar'])) {
@@ -98,7 +108,7 @@ export default {
       event.preventDefault();
 
       if (this.disabled) {
-        return false;
+        return;
       }
 
       const checked = this.currentValue === this.trueValue ? this.falseValue : this.trueValue;

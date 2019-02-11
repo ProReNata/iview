@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-click-outside="http://www.w3.org/1999/xhtml">
   <div
     v-click-outside.capture="handleClose"
     v-click-outside:mousedown.capture="handleClose"
@@ -39,7 +39,7 @@
       </div>
     </div>
     <transition name="transition-drop">
-      <Drop
+      <drop
         v-show="visible"
         ref="drop"
         v-transfer-dom
@@ -54,34 +54,34 @@
           >
             <div :class="[prefixCls + '-picker-wrapper']">
               <div :class="[prefixCls + '-picker-panel']">
-                <Saturation
+                <saturation
                   ref="saturation"
                   v-model="saturationColors"
                   :focused="visible"
                   @change="childChange"
                   @keydown.native="handleFirstTab"
                 >
-                </Saturation>
+                </saturation>
               </div>
               <div
                 v-if="hue"
                 :class="[prefixCls + '-picker-hue-slider']"
               >
-                <Hue
+                <hue
                   v-model="saturationColors"
                   @change="childChange"
                 >
-                </Hue>
+                </hue>
               </div>
               <div
                 v-if="alpha"
                 :class="[prefixCls + '-picker-alpha-slider']"
               >
-                <Alpha
+                <alpha
                   v-model="saturationColors"
                   @change="childChange"
                 >
-                </Alpha>
+                </alpha>
               </div>
               <recommend-colors
                 v-if="colors.length"
@@ -127,7 +127,7 @@
             </div>
           </div>
         </transition>
-      </Drop>
+      </drop>
     </transition>
   </div>
 </template>

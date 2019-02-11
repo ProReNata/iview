@@ -1,3 +1,5 @@
+import get from 'lodash/get';
+
 export default {
   methods: {
     alignCls(column, row = {}) {
@@ -31,9 +33,11 @@ export default {
       let width = '';
 
       if (column.width) {
-        width = column.width;
+        width = get(column, 'width');
+        /* eslint-disable-next-line no-underscore-dangle */
       } else if (this.columnsWidth[column._index]) {
-        width = this.columnsWidth[column._index].width;
+        /* eslint-disable-next-line no-underscore-dangle */
+        width = get(this.columnsWidth[column._index], 'width');
       }
 
       if (width === '0') {

@@ -6,59 +6,59 @@
       </label>
     </p>
 
-    <DatePicker
+    <date-picker
       type="month"
       show-week-numbers
       placeholder="Select date"
       style="width: 200px"
     >
-    </DatePicker>
-    <DatePicker
+    </date-picker>
+    <date-picker
       type="year"
       show-week-numbers
       placeholder="Select date"
       style="width: 200px"
     >
-    </DatePicker>
+    </date-picker>
 
-    <DatePicker
+    <date-picker
       type="date"
       transfer
       show-week-numbers
       placeholder="Select date"
       style="width: 400px"
     >
-    </DatePicker>
-    <DatePicker
+    </date-picker>
+    <date-picker
       type="datetime"
       show-week-numbers
       confirm
       placeholder="Select date"
       style="width: 400px"
     >
-    </DatePicker>
+    </date-picker>
 
-    <DatePicker
+    <date-picker
       type="daterange"
       transfer
       show-week-numbers
       placeholder="Select date"
       style="width: 400px"
     >
-    </DatePicker>
-    <DatePicker
+    </date-picker>
+    <date-picker
       type="datetimerange"
       transfer
       show-week-numbers
       placeholder="Select date"
       style="width: 400px"
     >
-    </DatePicker>
-    <Time-Picker
+    </date-picker>
+    <time-picker
       :steps="[1, 1, 15]"
       :value="new Date()"
     >
-    </Time-Picker>
+    </time-picker>
   </div>
 </template>
 <script>

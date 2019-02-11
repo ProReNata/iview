@@ -1,15 +1,15 @@
 <template>
-  <Table
+  <i-table
     width="550"
     border
     :columns="columns2"
     :data="data3"
   >
-  </Table>
+  </i-table>
 </template>
 <script>
 export default {
-  name: 'etable',
+  name: 'Etable',
   data() {
     return {
       columns2: [

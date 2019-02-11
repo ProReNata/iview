@@ -25,7 +25,10 @@
           </div>
         </div>
       </div>
-      <br v-if="lineBreak(list, index)">
+      <br
+        v-if="lineBreak(list, index)"
+        :key="item + ':br:' + index"
+      >
     </template>
   </div>
 </template>

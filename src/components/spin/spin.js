@@ -2,10 +2,10 @@ import Vue from 'vue';
 import Spin from './spin.vue';
 
 Spin.newInstance = (properties) => {
-  const _props = properties || {};
+  const props = properties || {};
 
   const Instance = new Vue({
-    data: {..._props},
+    data: {...props},
     render(h) {
       let vnode = '';
 
@@ -14,8 +14,14 @@ Spin.newInstance = (properties) => {
           Spin,
           {
             props: {
-              fix: true,
-              fullscreen: true,
+              fix: {
+                default: true,
+                type: Boolean,
+              },
+              fullscreen: {
+                default: true,
+                type: Boolean,
+              },
             },
           },
           [this.render(h)],
@@ -23,9 +29,18 @@ Spin.newInstance = (properties) => {
       } else {
         vnode = h(Spin, {
           props: {
-            fix: true,
-            fullscreen: true,
-            size: 'large',
+            fix: {
+              default: true,
+              type: Boolean,
+            },
+            fullscreen: {
+              default: true,
+              type: Boolean,
+            },
+            size: {
+              default: 'large',
+              type: String,
+            },
           },
         });
       }

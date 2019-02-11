@@ -1,24 +1,26 @@
 <template>
   <span :class="classes">
-    <img 
-      v-if="src" 
+    <img
+      v-if="src"
       :src="src"
+      alt=""
     >
-    <Icon 
-      v-else-if="icon" 
+    <icon
+      v-else-if="icon"
       :type="icon"
     >
-    </Icon>
-    <span 
-      v-else 
-      ref="children" 
-      :class="[prefixCls + '-string']" 
+    </icon>
+    <span
+      v-else
+      ref="children"
+      :class="[prefixCls + '-string']"
       :style="childrenStyle"
     >
       <slot></slot>
     </span>
   </span>
 </template>
+
 <script>
 import Icon from '../icon';
 import {oneOf} from '../../utils/assist';
@@ -27,9 +29,12 @@ const prefixCls = 'ivu-avatar';
 
 export default {
   name: 'Avatar',
+
   components: {Icon},
+
   props: {
     icon: {
+      default: undefined,
       type: String,
     },
     shape: {
@@ -45,9 +50,11 @@ export default {
       },
     },
     src: {
+      default: undefined,
       type: String,
     },
   },
+
   data() {
     return {
       childrenWidth: 0,
@@ -56,6 +63,7 @@ export default {
       scale: 1,
     };
   },
+
   computed: {
     childrenStyle() {
       let style = {};
@@ -85,12 +93,15 @@ export default {
       ];
     },
   },
+
   mounted() {
     this.setScale();
   },
+
   updated() {
     this.setScale();
   },
+
   methods: {
     setScale() {
       this.isSlotShow = !this.src && !this.icon;

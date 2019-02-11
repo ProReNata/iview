@@ -38,11 +38,15 @@ const getAllColumns = (cols, forTableHead = false) => {
 export {getAllColumns};
 
 const convertToRows = (columns, fixedType = false) => {
-  const originColumns = fixedType
-    ? fixedType === 'left'
-      ? deepCopy(convertColumnOrder(columns, 'left'))
-      : deepCopy(convertColumnOrder(columns, 'right'))
-    : deepCopy(columns);
+  let originColumns;
+
+  if (fixedType) {
+    originColumns =
+      fixedType === 'left' ? deepCopy(convertColumnOrder(columns, 'left')) : deepCopy(convertColumnOrder(columns, 'right'));
+  } else {
+    originColumns = deepCopy(columns);
+  }
+
   let maxLevel = 1;
   const traverse = (column, parent) => {
     if (parent) {
@@ -71,7 +75,7 @@ const convertToRows = (columns, fixedType = false) => {
   });
 
   const rows = [];
-  for (let i = 0; i < maxLevel; i++) {
+  for (let i = 0; i < maxLevel; i += 1) {
     rows.push([]);
   }
 
@@ -92,11 +96,11 @@ const convertToRows = (columns, fixedType = false) => {
 
 export {convertToRows};
 
-const getRandomStr = function(len = 32) {
+const getRandomStr = function _getRandomStr(len = 32) {
   const $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
   const maxPos = $chars.length;
   let str = '';
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i += 1) {
     str += $chars.charAt(Math.floor(Math.random() * maxPos));
   }
 

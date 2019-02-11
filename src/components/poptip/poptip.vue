@@ -29,8 +29,8 @@
         <div :class="[prefixCls + '-content']">
           <div :class="[prefixCls + '-arrow']">
           </div>
-          <div 
-            v-if="confirm" 
+          <div
+            v-if="confirm"
             :class="[prefixCls + '-inner']"
           >
             <div :class="[prefixCls + '-body']">
@@ -43,29 +43,29 @@
               </div>
             </div>
             <div :class="[prefixCls + '-footer']">
-              <i-button 
-                type="text" 
-                size="small" 
+              <i-button
+                type="text"
+                size="small"
                 @click.native="cancel"
               >
                 {{ localeCancelText }}
               </i-button>
-              <i-button 
-                type="primary" 
-                size="small" 
+              <i-button
+                type="primary"
+                size="small"
                 @click.native="ok"
               >
                 {{ localeOkText }}
               </i-button>
             </div>
           </div>
-          <div 
-            v-if="!confirm" 
+          <div
+            v-if="!confirm"
             :class="[prefixCls + '-inner']"
           >
-            <div 
-              v-if="showTitle" 
-              ref="title" 
+            <div
+              v-if="showTitle"
+              ref="title"
               :class="[prefixCls + '-title']"
             >
               <slot name="title">
@@ -90,6 +90,7 @@
   </div>
 </template>
 <script>
+import head from 'lodash/head';
 import {directive as clickOutside} from 'v-click-outside-x';
 import Popper from '../base/popper';
 import iButton from '../button/button.vue';
@@ -101,11 +102,16 @@ const prefixCls = 'ivu-poptip';
 
 export default {
   name: 'Poptip',
+
   directives: {clickOutside, TransferDom},
+
   components: {iButton},
+
   mixins: [Popper, Locale],
+
   props: {
     cancelText: {
+      default: undefined,
       type: String,
     },
     confirm: {
@@ -117,6 +123,7 @@ export default {
       type: [String, Number],
     },
     okText: {
+      default: undefined,
       type: String,
     },
     placement: {
@@ -139,9 +146,11 @@ export default {
       },
     },
     popperClass: {
+      default: undefined,
       type: String,
     },
     title: {
+      default: undefined,
       type: [String, Number],
     },
     transfer: {
@@ -155,9 +164,11 @@ export default {
       },
     },
     width: {
+      default: undefined,
       type: [String, Number],
     },
   },
+
   data() {
     return {
       // transfer 模式下，点击 slot 也会触发关闭
@@ -167,6 +178,7 @@ export default {
       showTitle: true,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -209,6 +221,7 @@ export default {
       return style;
     },
   },
+
   mounted() {
     if (!this.confirm) {
       //                this.showTitle = this.$refs.title.innerHTML != `<div class="${prefixCls}-title-inner"></div>`;
@@ -236,6 +249,7 @@ export default {
       $children.removeEventListener('blur', this.handleBlur, false);
     }
   },
+
   methods: {
     cancel() {
       this.visible = false;
@@ -247,16 +261,16 @@ export default {
       let $children = null;
 
       if ($input.length) {
-        $children = $input[0];
+        $children = head($input);
       } else if ($textarea.length) {
-        $children = $textarea[0];
+        $children = head($textarea);
       }
 
       return $children;
     },
     handleBlur(fromInput = true) {
       if (this.trigger !== 'focus' || this.confirm || (this.isInput && !fromInput)) {
-        return false;
+        return;
       }
 
       this.visible = false;
@@ -273,6 +287,8 @@ export default {
       }
 
       this.visible = !this.visible;
+
+      return false;
     },
     handleClose() {
       if (this.disableCloseUnderTransfer) {
@@ -292,17 +308,19 @@ export default {
       }
 
       this.visible = false;
+
+      return false;
     },
     handleFocus(fromInput = true) {
       if (this.trigger !== 'focus' || this.confirm || (this.isInput && !fromInput)) {
-        return false;
+        return;
       }
 
       this.visible = true;
     },
     handleMouseenter() {
       if (this.trigger !== 'hover' || this.confirm) {
-        return false;
+        return;
       }
 
       if (this.enterTimer) {
@@ -315,7 +333,7 @@ export default {
     },
     handleMouseleave() {
       if (this.trigger !== 'hover' || this.confirm) {
-        return false;
+        return;
       }
 
       if (this.enterTimer) {

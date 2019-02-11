@@ -7,7 +7,8 @@
   >
     <colgroup>
       <col
-        v-for="column in columns"
+        v-for="(column, i) in columns"
+        :key="i"
         :width="setCellWidth(column)"
       >
     </colgroup>
@@ -23,10 +24,11 @@
           @dblclick.native.stop="dblclickCurrentRow(row._index)"
         >
           <td
-            v-for="column in columns"
+            v-for="(column, i) in columns"
+            :key="i"
             :class="alignCls(column, row)"
           >
-            <Cell
+            <cell
               :key="column._columnKey"
               :fixed="fixed"
               :prefix-cls="prefixCls"
@@ -38,31 +40,34 @@
               :disabled="rowDisabled(row._index)"
               :expanded="rowExpanded(row._index)"
             >
-            </Cell>
+            </cell>
           </td>
         </table-tr>
         <tr
           v-if="rowExpanded(row._index)"
+          :key="row._index"
           :class="{[prefixCls + '-expanded-hidden']: fixed}"
         >
           <td
             :colspan="columns.length"
             :class="prefixCls + '-expanded-cell'"
           >
-            <Expand
+            <expand
               :key="row._rowKey"
               :row="row"
               :render="expandRender"
               :index="row._index"
             >
-            </Expand>
+            </expand>
           </td>
         </tr>
       </template>
     </tbody>
   </table>
 </template>
+
 <script>
+import get from 'lodash/get';
 // todo :key="row"
 import TableTr from './table-tr.vue';
 import Cell from './cell.vue';
@@ -71,38 +76,60 @@ import Mixin from './mixin';
 
 export default {
   name: 'TableBody',
+
   components: {Cell, Expand, TableTr},
+
   mixins: [Mixin],
+
   props: {
-    columns: Array,
-    columnsWidth: Object,
+    columns: {
+      default: undefined,
+      type: Array,
+    },
+    columnsWidth: {
+      default: undefined,
+      type: Object,
+    },
     // rebuildData
-    data: Array,
+    data: {
+      default: undefined,
+      type: Array,
+    },
     fixed: {
       default: false,
       type: [Boolean, String],
     },
-    objData: Object,
-    prefixCls: String,
-    styleObject: Object,
+    objData: {
+      default: undefined,
+      type: Object,
+    },
+    prefixCls: {
+      default: undefined,
+      type: String,
+    },
+    styleObject: {
+      default: undefined,
+      type: Object,
+    },
   },
+
   computed: {
     expandRender() {
-      let render = function() {
+      let renderFn = function render() {
         return '';
       };
 
-      for (let i = 0; i < this.columns.length; i++) {
+      for (let i = 0; i < this.columns.length; i += 1) {
         const column = this.columns[i];
 
         if (column.type && column.type === 'expand') {
           if (column.render) {
-            render = column.render;
+            renderFn = column.render;
           }
         }
       }
 
-      return render;
+      return renderFn;
     },
   },
   methods: {
@@ -119,13 +146,13 @@ export default {
       this.$parent.handleMouseOut(_index);
     },
     rowChecked(_index) {
-      return this.objData[_index] && this.objData[_index]._isChecked;
+      return get(this.objData, `[${_index}]._isChecked`);
     },
     rowDisabled(_index) {
-      return this.objData[_index] && this.objData[_index]._isDisabled;
+      return get(this.objData, `[${_index}]._isDisabled`);
     },
     rowExpanded(_index) {
-      return this.objData[_index] && this.objData[_index]._isExpanded;
+      return get(this.objData, `[${_index}]._isExpanded`);
     },
   },
 };

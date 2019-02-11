@@ -14,19 +14,19 @@
 </style>
 <template>
   <div>
-    <Badge 
-      dot 
+    <badge
+      dot
       :count="count"
     >
-      <a 
-        href="#" 
+      <a
+        href="#"
         class="demo-badge"
       >
       </a>
-    </Badge>
-    <Button @click="setCount">
+    </badge>
+    <i-button @click="setCount">
       set count
-    </Button>
+    </i-button>
   </div>
 </template>
 <script>

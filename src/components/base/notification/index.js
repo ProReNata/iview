@@ -2,12 +2,12 @@ import Vue from 'vue';
 import Notification from './notification.vue';
 
 Notification.newInstance = (properties) => {
-  const _props = properties || {};
+  const props = properties || {};
 
   const Instance = new Vue({
     render(h) {
       return h(Notification, {
-        props: _props,
+        props,
       });
     },
   });

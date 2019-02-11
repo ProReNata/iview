@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-click-outside="http://www.w3.org/1999/xhtml">
   <div
     v-click-outside:mousedown.capture="handleClose"
     v-click-outside.capture="handleClose"
@@ -36,7 +36,7 @@
       </slot>
     </div>
     <transition name="transition-drop">
-      <Drop
+      <drop
         v-show="opened"
         ref="drop"
         v-transfer-dom
@@ -75,11 +75,15 @@
           >
           </component>
         </div>
-      </Drop>
+      </drop>
     </transition>
   </div>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
+import stubObject from 'lodash/stubObject';
+import castArray from 'lodash/castArray';
 import {directive as clickOutside} from 'v-click-outside-x';
 import iInput from '../input/input.vue';
 import Drop from '../select/dropdown.vue';
@@ -116,6 +120,8 @@ const mapPossibleValues = (key, horizontal, vertical) => {
   if (key === 'down') {
     return vertical * -1;
   }
+
+  return undefined;
 };
 
 const pulseElement = (el) => {
@@ -134,8 +140,11 @@ const extractTime = (date) => {
 
 export default {
   components: {Drop, iInput},
+
   directives: {clickOutside, TransferDom},
+
   mixins: [Emitter],
+
   props: {
     clearable: {
       default: true,
@@ -154,9 +163,11 @@ export default {
       type: Boolean,
     },
     elementId: {
+      default: undefined,
       type: String,
     },
     format: {
+      default: undefined,
       type: String,
     },
     multiple: {
@@ -164,6 +175,7 @@ export default {
       type: Boolean,
     },
     name: {
+      default: undefined,
       type: String,
     },
     open: {
@@ -171,7 +183,7 @@ export default {
       type: Boolean,
     },
     options: {
-      default: () => ({}),
+      default: stubObject,
       type: Object,
     },
     placeholder: {
@@ -206,6 +218,8 @@ export default {
       type: Boolean,
     },
     size: {
+      default: 'default',
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
@@ -215,14 +229,15 @@ export default {
       type: Boolean,
     },
     startDate: {
+      default: undefined,
       type: Date,
     },
     steps: {
-      default: () => [],
+      default: stubArray,
       type: Array,
     },
     timePickerOptions: {
-      default: () => ({}),
+      default: stubObject,
       type: Object,
     },
     transfer: {
@@ -230,9 +245,11 @@ export default {
       type: Boolean,
     },
     value: {
+      default: undefined,
       type: [Date, String, Array],
     },
   },
+
   data() {
     const isRange = this.type.includes('range');
     const emptyArray = isRange ? [null, null] : [null];
@@ -262,6 +279,7 @@ export default {
       visible: false,
     };
   },
+
   computed: {
     iconType() {
       let icon = 'ios-calendar-outline';
@@ -326,6 +344,7 @@ export default {
       ];
     },
   },
+
   watch: {
     open(val) {
       this.visible = val === true;
@@ -354,6 +373,7 @@ export default {
       this.$emit('on-open-change', state);
     },
   },
+
   mounted() {
     const initialValue = this.value;
     const parsedValue = this.publicVModelValue;
@@ -369,6 +389,7 @@ export default {
     // to handle focus from confirm buttons
     this.$on('focus-input', () => this.focus());
   },
+
   methods: {
     emitChange(type) {
       this.$nextTick(() => {
@@ -377,7 +398,9 @@ export default {
       });
     },
     focus() {
-      this.$refs.input && this.$refs.input.focus();
+      if (this.$refs.input) {
+        this.$refs.input.focus();
+      }
     },
     formatDate(value) {
       const format = DEFAULT_FORMATS[this.type];
@@ -428,7 +451,7 @@ export default {
       if (this.disableCloseUnderTransfer) {
         this.disableCloseUnderTransfer = false;
 
-        return false;
+        return;
       }
 
       if (e && e.type === 'mousedown' && this.visible) {
@@ -446,8 +469,11 @@ export default {
         } // its a click inside own component, lets ignore it.
 
         this.visible = false;
-        e && e.preventDefault();
-        e && e.stopPropagation();
+
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
 
         return;
       }
@@ -491,7 +517,7 @@ export default {
         this.emitChange(this.type);
         this.internalValue = newDate;
       } else {
-        this.forceInputRerender++;
+        this.forceInputRerender += 1;
       }
     },
     handleInputMouseenter() {
@@ -682,7 +708,13 @@ export default {
 
       const maxNrOfColumns = (timePickers[0].showSeconds ? 3 : 2) * timePickers.length;
       const column = ((currentColumn) => {
-        const incremented = currentColumn + (horizontal ? (direction === 'left' ? -1 : 1) : 0);
+        let dir = 0;
+
+        if (horizontal) {
+          dir = direction === 'left' ? -1 : 1;
+        }
+
+        const incremented = currentColumn + dir;
 
         return (incremented + maxNrOfColumns) % maxNrOfColumns;
       })(this.focusedTime.column);
@@ -749,12 +781,13 @@ export default {
           .filter((ts, i, arr) => arr.indexOf(ts) === i && i !== indexOfPickedDate); // filter away duplicates
         this.internalValue = timeStamps.map((ts) => new Date(ts));
       } else {
-        dates = this.parseDate(dates);
-        this.internalValue = Array.isArray(dates) ? dates : [dates];
+        this.internalValue = castArray(this.parseDate(dates));
       }
 
-      if (this.internalValue[0]) {
-        this.focusedDate = this.internalValue[0];
+      const [internalValue] = this.internalValue;
+
+      if (internalValue) {
+        this.focusedDate = internalValue;
       }
 
       this.focusedTime = {
@@ -778,7 +811,9 @@ export default {
       this.focus();
       this.reset();
     },
-    onSelectionModeChange(type) {
+    onSelectionModeChange(rangeType) {
+      let type = rangeType;
+
       if (type.match(/^date/)) {
         type = 'date';
       }
@@ -787,7 +822,8 @@ export default {
 
       return this.selectionMode;
     },
-    parseDate(val) {
+    parseDate(value) {
+      let val = value;
       const {type} = this;
       const isRange = type.includes('range');
       const {parser} = TYPE_VALUE_RESOLVER_MAP[type] || TYPE_VALUE_RESOLVER_MAP.default;
@@ -823,7 +859,9 @@ export default {
       return isRange || this.multiple ? val || [] : [val];
     },
     reset() {
-      this.$refs.pickerPanel.reset && this.$refs.pickerPanel.reset();
+      if (this.$refs.pickerPanel.reset) {
+        this.$refs.pickerPanel.reset();
+      }
     },
   },
 };

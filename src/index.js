@@ -34,6 +34,7 @@ import Poptip from './components/poptip';
 import Progress from './components/progress';
 import Radio from './components/radio';
 import Rate from './components/rate';
+import Richtext from './components/richtext';
 import Sider from './components/sider';
 import Slider from './components/slider';
 import Spin from './components/spin';
@@ -101,6 +102,7 @@ const components = {
   Radio,
   RadioGroup: Radio.Group,
   Rate,
+  Richtext,
   Row,
   Scroll,
   Select,
@@ -141,7 +143,7 @@ const iview = {
   iTable: Table,
 };
 
-const install = function(Vue, opts = {}) {
+const install = function _install(Vue, opts = {}) {
   if (install.installed) {
     return;
   }
@@ -181,7 +183,7 @@ API.lang = (code) => {
   if (code === langObject.i.locale) {
     locale.use(langObject);
   } else {
-    // eslint-disable-next-line no-console
+    /* eslint-disable-next-line no-console */
     console.log(`The ${code} language pack is not loaded.`);
   }
 };

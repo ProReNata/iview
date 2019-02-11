@@ -5,15 +5,15 @@
     @mouseenter="handleMouseenter"
     @mouseleave="handleMouseleave"
   >
-    <div 
-      ref="reference" 
-      :class="[prefixCls + '-rel']" 
+    <div
+      ref="reference"
+      :class="[prefixCls + '-rel']"
       @click="handleClick"
     >
       <slot></slot>
     </div>
     <transition name="transition-drop">
-      <Drop
+      <drop
         v-show="currentVisible"
         ref="drop"
         v-transfer-dom
@@ -25,10 +25,11 @@
       >
         <slot name="list">
         </slot>
-      </Drop>
+      </drop>
     </transition>
   </div>
 </template>
+
 <script>
 import {directive as clickOutside} from 'v-click-outside-x';
 import Drop from '../select/dropdown.vue';
@@ -39,11 +40,15 @@ const prefixCls = 'ivu-dropdown';
 
 export default {
   name: 'Dropdown',
+
   directives: {clickOutside, TransferDom},
+
   components: {Drop},
+
   props: {
     placement: {
       default: 'bottom',
+      type: String,
       validator(value) {
         return oneOf(value, [
           'top',
@@ -67,6 +72,7 @@ export default {
     },
     trigger: {
       default: 'hover',
+      type: String,
       validator(value) {
         return oneOf(value, ['click', 'hover', 'custom']);
       },
@@ -76,12 +82,14 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     return {
       currentVisible: this.visible,
       prefixCls,
     };
   },
+
   computed: {
     dropdownCls() {
       return {
@@ -92,6 +100,7 @@ export default {
       return ['bottom-start', 'bottom', 'bottom-end'].indexOf(this.placement) > -1 ? 'slide-up' : 'fade';
     },
   },
+
   watch: {
     currentVisible(val) {
       if (val) {
@@ -106,6 +115,7 @@ export default {
       this.currentVisible = val;
     },
   },
+
   mounted() {
     this.$on('on-click', (key) => {
       const $parent = this.hasParent();
@@ -120,7 +130,7 @@ export default {
       if ($parent) {
         this.$nextTick(() => {
           if (this.trigger === 'custom') {
-            return false;
+            return;
           }
 
           this.currentVisible = false;
@@ -129,7 +139,7 @@ export default {
       } else {
         this.$nextTick(() => {
           if (this.trigger === 'custom') {
-            return false;
+            return;
           }
 
           this.currentVisible = false;
@@ -139,7 +149,7 @@ export default {
     this.$on('on-haschild-click', () => {
       this.$nextTick(() => {
         if (this.trigger === 'custom') {
-          return false;
+          return;
         }
 
         this.currentVisible = true;
@@ -151,36 +161,37 @@ export default {
       }
     });
   },
+
   methods: {
     handleClick() {
       if (this.trigger === 'custom') {
-        return false;
+        return;
       }
 
       if (this.trigger !== 'click') {
-        return false;
+        return;
       }
 
       this.currentVisible = !this.currentVisible;
     },
     handleClose() {
       if (this.trigger === 'custom') {
-        return false;
+        return;
       }
 
       if (this.trigger !== 'click') {
-        return false;
+        return;
       }
 
       this.currentVisible = false;
     },
     handleMouseenter() {
       if (this.trigger === 'custom') {
-        return false;
+        return;
       }
 
       if (this.trigger !== 'hover') {
-        return false;
+        return;
       }
 
       if (this.timeout) {
@@ -193,11 +204,11 @@ export default {
     },
     handleMouseleave() {
       if (this.trigger === 'custom') {
-        return false;
+        return;
       }
 
       if (this.trigger !== 'hover') {
-        return false;
+        return;
       }
 
       if (this.timeout) {

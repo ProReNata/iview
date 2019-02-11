@@ -1,15 +1,15 @@
 <template>
-  <Submenu :name="`${parentName}`">
+  <submenu :name="`${parentName}`">
     <template slot="title">
       <span>{{ parentItem.name }}</span>
     </template>
     <template v-for="item in children">
-      <custem-menu-item
+      <custom-menu-item
         v-if="item.children && item.children.length !== 0"
         :key="`menu-${item.name}`"
         :parent-item="item"
       >
-      </custem-menu-item>
+      </custom-menu-item>
       <menu-item
         v-else
         :key="`menu-${item.name}`"
@@ -18,21 +18,30 @@
         {{ item.name }}
       </menu-item>
     </template>
-  </Submenu>
+  </submenu>
 </template>
+
 <script>
 import stubObject from 'lodash/stubObject';
 
 export default {
-  name: 'custemMenuItem',
+  name: 'CustomMenuItem',
+
   props: {
-    iconSize: Number,
+    iconSize: {
+      default: undefined,
+      type: Number,
+    },
     parentItem: {
       default: stubObject,
       type: Object,
     },
-    theme: String,
+    theme: {
+      default: undefined,
+      type: String,
+    },
   },
+
   computed: {
     children() {
       return this.parentItem.children;

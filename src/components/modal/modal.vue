@@ -31,8 +31,8 @@
               @click="close"
             >
               <slot name="close">
-                <Icon type="ios-close-empty">
-                </Icon>
+                <icon type="ios-close-empty">
+                </icon>
               </slot>
             </a>
             <div
@@ -76,6 +76,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Icon from '../icon';
 import iButton from '../button/button.vue';
@@ -88,14 +89,20 @@ const prefixCls = 'ivu-modal';
 
 export default {
   name: 'Modal',
+
   components: {iButton, Icon},
+
   directives: {TransferDom},
+
   mixins: [Locale, Emitter, ScrollbarMixins],
+
   props: {
     cancelText: {
+      default: undefined,
       type: String,
     },
     className: {
+      default: undefined,
       type: String,
     },
     closable: {
@@ -116,6 +123,7 @@ export default {
       type: Boolean,
     },
     okText: {
+      default: undefined,
       type: String,
     },
     scrollable: {
@@ -123,9 +131,11 @@ export default {
       type: Boolean,
     },
     styles: {
+      default: undefined,
       type: Object,
     },
     title: {
+      default: undefined,
       type: String,
     },
     transfer: {
@@ -147,6 +157,7 @@ export default {
       type: [Number, String],
     },
   },
+
   data() {
     return {
       buttonLoading: false,
@@ -156,6 +167,7 @@ export default {
       wrapShow: false,
     };
   },
+
   computed: {
     classes() {
       return `${prefixCls}`;
@@ -201,6 +213,7 @@ export default {
       ];
     },
   },
+
   watch: {
     loading(val) {
       if (!val) {
@@ -246,6 +259,7 @@ export default {
       this.$emit('on-visible-change', val);
     },
   },
+
   mounted() {
     if (this.visible) {
       this.wrapShow = true;

@@ -16,6 +16,7 @@
     </span><slot>{{ label }}</slot>
   </label>
 </template>
+
 <script>
 import {findComponentUpward, oneOf} from '../../utils/assist';
 import Emitter from '../../mixins/emitter';
@@ -24,7 +25,9 @@ const prefixCls = 'ivu-radio';
 
 export default {
   name: 'Radio',
+
   mixins: [Emitter],
+
   props: {
     disabled: {
       default: false,
@@ -35,12 +38,16 @@ export default {
       type: [String, Number, Boolean],
     },
     label: {
+      default: undefined,
       type: [String, Number],
     },
     name: {
+      default: undefined,
       type: String,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
@@ -54,6 +61,7 @@ export default {
       type: [String, Number, Boolean],
     },
   },
+
   data() {
     return {
       currentValue: this.value,
@@ -64,6 +72,7 @@ export default {
       parent: findComponentUpward(this, 'RadioGroup'),
     };
   },
+
   computed: {
     innerClasses() {
       return [
@@ -98,6 +107,7 @@ export default {
       ];
     },
   },
+
   watch: {
     value(val) {
       if (val === this.trueValue || val === this.falseValue) {
@@ -107,16 +117,17 @@ export default {
       }
     },
   },
+
   mounted() {
     if (this.parent) {
       this.group = true;
 
       if (this.name && this.name !== this.parent.name) {
-        /* eslint-disable no-console */
+        /* eslint-disable-next-line no-console */
         if (console.warn) {
+          /* eslint-disable-next-line no-console */
           console.warn('[iview] Name does not match Radio Group name.');
         }
-        /* eslint-enable no-console */
       } else {
         this.groupName = this.parent.name;
       }
@@ -131,7 +142,7 @@ export default {
   methods: {
     change(event) {
       if (this.disabled) {
-        return false;
+        return;
       }
 
       const {checked} = event.target;

@@ -65,6 +65,7 @@ const csv = {
       oWin.document.close();
       oWin.document.execCommand('SaveAs', filename);
       oWin.close();
+      /* eslint-disable-next-line no-underscore-dangle */
     } else if (has('ie') === 10 || this._isIE11() || this._isEdge()) {
       const BOM = '\uFEFF';
       const csvData = new Blob([BOM + text], {type: 'text/csv'});
@@ -72,6 +73,7 @@ const csv = {
     } else {
       const link = document.createElement('a');
       link.download = filename;
+      /* eslint-disable-next-line no-underscore-dangle */
       link.href = this._getDownloadUrl(text);
       document.body.appendChild(link);
       link.click();

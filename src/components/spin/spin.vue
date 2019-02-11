@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
-    <div 
-      v-if="fullscreenVisible" 
+    <div
+      v-if="fullscreenVisible"
       :class="classes"
     >
       <div :class="mainClasses">
@@ -14,6 +14,7 @@
     </div>
   </transition>
 </template>
+
 <script>
 import {oneOf} from '../../utils/assist';
 import ScrollbarMixins from '../modal/mixins-scrollbar';
@@ -22,7 +23,9 @@ const prefixCls = 'ivu-spin';
 
 export default {
   name: 'Spin',
+
   mixins: [ScrollbarMixins],
+
   props: {
     fix: {
       default: false,
@@ -33,11 +36,14 @@ export default {
       type: Boolean,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large']);
       },
     },
   },
+
   data() {
     return {
       showText: false,
@@ -45,6 +51,7 @@ export default {
       visible: false,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -74,6 +81,7 @@ export default {
       return `${prefixCls}-text`;
     },
   },
+
   watch: {
     visible(val) {
       if (val) {
@@ -83,6 +91,7 @@ export default {
       }
     },
   },
+
   mounted() {
     this.showText = this.$slots.default !== undefined;
   },

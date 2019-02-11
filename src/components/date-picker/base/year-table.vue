@@ -1,7 +1,8 @@
 <template>
   <div :class="classes">
     <span
-      v-for="cell in cells"
+      v-for="(cell, i) in cells"
+      :key="i"
       :class="getCellCls(cell)"
       @click="handleClick(cell)"
       @mouseenter="handleMouseMove(cell)"
@@ -10,6 +11,7 @@
     </span>
   </div>
 </template>
+
 <script>
 import {clearHours} from '../util';
 import {deepCopy} from '../../../utils/assist';
@@ -22,10 +24,11 @@ export default {
   props: {
     /* in mixin */
   },
+
   computed: {
     cells() {
       const cells = [];
-      const cell_tmpl = {
+      const cellTmpl = {
         disabled: false,
         selected: false,
         text: '',
@@ -34,8 +37,8 @@ export default {
       const selectedDays = this.dates.filter(Boolean).map((date) => clearHours(new Date(date.getFullYear(), 0, 1)));
       const focusedDate = clearHours(new Date(this.focusedDate.getFullYear(), 0, 1));
 
-      for (let i = 0; i < 10; i++) {
-        const cell = deepCopy(cell_tmpl);
+      for (let i = 0; i < 10; i += 1) {
+        const cell = deepCopy(cellTmpl);
         cell.date = new Date(this.startYear + i, 0, 1);
         cell.disabled = typeof this.disabledDate === 'function' && this.disabledDate(cell.date) && this.selectionMode === 'year';
         const day = clearHours(cell.date);

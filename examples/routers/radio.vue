@@ -1,92 +1,92 @@
 <template>
   <div>
-    <Radio 
-      v-model="single" 
+    <radio
+      v-model="single"
       size="large"
     >
       Radio
-    </Radio>
-    <Radio 
-      v-model="single" 
+    </radio>
+    <radio
+      v-model="single"
       size="default"
     >
       Radio
-    </Radio>
-    <Radio 
-      v-model="single" 
+    </radio>
+    <radio
+      v-model="single"
       size="small"
     >
       Radio
-    </Radio>
+    </radio>
     <br><br>
-    <Radio-group v-model="phone">
-      <Radio label="apple">
-        <Icon type="social-apple">
-        </Icon>
+    <radio-group v-model="phone">
+      <radio label="apple">
+        <icon type="social-apple">
+        </icon>
         <span>Apple</span>
-      </Radio>
-      <Radio label="android">
-        <Icon type="social-android">
-        </Icon>
+      </radio>
+      <radio label="android">
+        <icon type="social-android">
+        </icon>
         <span>Android</span>
-      </Radio>
-      <Radio label="windows">
-        <Icon type="social-windows">
-        </Icon>
+      </radio>
+      <radio label="windows">
+        <icon type="social-windows">
+        </icon>
         <span>Windows</span>
-      </Radio>
-    </Radio-group>
-    <Radio-group 
-      v-model="button2" 
-      type="button" 
+      </radio>
+    </radio-group>
+    <radio-group
+      v-model="button2"
+      type="button"
       size="large"
     >
-      <Radio label="北京">
-      </Radio>
-      <Radio 
-        label="上海" 
+      <radio label="北京">
+      </radio>
+      <radio
+        label="上海"
         disabled
       >
-      </Radio>
-      <Radio label="深圳">
-      </Radio>
-      <Radio label="杭州">
-      </Radio>
-    </Radio-group>
-    <Radio-group 
-      v-model="button2" 
-      type="button" 
+      </radio>
+      <radio label="深圳">
+      </radio>
+      <radio label="杭州">
+      </radio>
+    </radio-group>
+    <radio-group
+      v-model="button2"
+      type="button"
       size="default"
     >
-      <Radio label="北京">
-      </Radio>
-      <Radio 
-        label="上海" 
+      <radio label="北京">
+      </radio>
+      <radio
+        label="上海"
         disabled
       >
-      </Radio>
-      <Radio label="深圳">
-      </Radio>
-      <Radio label="杭州">
-      </Radio>
-    </Radio-group>
-    <Radio-group 
-      v-model="button2" 
-      type="button" 
+      </radio>
+      <radio label="深圳">
+      </radio>
+      <radio label="杭州">
+      </radio>
+    </radio-group>
+    <radio-group
+      v-model="button2"
+      type="button"
       size="small"
     >
-      <Radio label="北京">
-      </Radio>
-      <Radio 
-        label="上海" 
+      <radio label="北京">
+      </radio>
+      <radio
+        label="上海"
         disabled
       >
-      </Radio>
-      <Radio label="深圳">
-      </Radio>
-      <Radio label="杭州">
-      </Radio>
-    </Radio-group>
+      </radio>
+      <radio label="深圳">
+      </radio>
+      <radio label="杭州">
+      </radio>
+    </radio-group>
   </div>
 </template>
 <script>

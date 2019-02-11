@@ -1,91 +1,91 @@
 <template>
   <div>
-    <Page 
-      :total="total" 
-      show-sizer 
-      show-elevator 
-      show-total 
-      transfer 
+    <page
+      :total="total"
+      show-sizer
+      show-elevator
+      show-total
+      transfer
       :current.sync="current"
     >
-    </Page>
+    </page>
     {{ current }}
-    <Button 
-      type="primary" 
+    <i-button
+      type="primary"
       @click="subject"
     >
       - 1
-    </Button>
-    <Button 
-      type="primary" 
+    </i-button>
+    <i-button
+      type="primary"
       @click="change"
     >
       Change
-    </Button>
-    <Page 
-      :current="2" 
-      :total="50" 
+    </i-button>
+    <page
+      :current="2"
+      :total="50"
       simple
     >
-    </Page>
+    </page>
 
     <div style="margin:10px 0">
-      <Page 
-        :total="1000"  
-        show-sizer 
-        show-elevator 
-        show-total 
-        transfer 
+      <page
+        :total="1000"
+        show-sizer
+        show-elevator
+        show-total
+        transfer
         :current="12"
       >
-      </Page>
+      </page>
     </div>
     <div style="margin:10px 0">
-      <Page 
-        :total="1000" 
-        show-sizer 
-        show-elevator 
-        show-total 
-        transfer 
+      <page
+        :total="1000"
+        show-sizer
+        show-elevator
+        show-total
+        transfer
         :current="12"
       >
-      </Page>
+      </page>
     </div>
     <div style="margin:100px 0">
-      <Page 
-        :total="500" 
-        show-sizer 
-        show-elevator 
-        show-total 
+      <page
+        :total="500"
+        show-sizer
+        show-elevator
+        show-total
         transfer
       >
-      </Page>
+      </page>
     </div>
     <div style="margin:100px 0">
-      <Page 
-        :total="500" 
-        show-sizer 
-        show-elevator 
+      <page
+        :total="500"
+        show-sizer
+        show-elevator
         transfer
       >
-      </Page>
+      </page>
     </div>
     <div style="margin:100px 0">
-      <Page 
-        :total="500" 
-        show-sizer 
-        show-elevator  
+      <page
+        :total="500"
+        show-sizer
+        show-elevator
         transfer
       >
-      </Page>
+      </page>
     </div>
     <div style="margin:10px 0">
-      <Page 
-        :total="500" 
-        show-sizer 
+      <page
+        :total="500"
+        show-sizer
         transfer
       >
-      </Page>
+      </page>
     </div>
   </div>
 </template>

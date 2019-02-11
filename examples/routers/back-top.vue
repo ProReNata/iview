@@ -4,8 +4,8 @@ body {
 }
 </style>
 <template>
-  <BackTop>
-  </BackTop>
+  <back-top>
+  </back-top>
 </template>
 <script>
 export default {

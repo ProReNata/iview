@@ -1,105 +1,105 @@
 <template>
   <div>
-    <Select
+    <select
       v-model="model1"
       size="small"
       style="width:200px;"
     >
-      <Option
+      <option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </Option>
-    </Select>
-    <Select
+      </option>
+    </select>
+    <select
       v-model="model10"
       size="small"
       multiple
       style="width:260px"
     >
-      <Option
+      <option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </Option>
-    </Select>
+      </option>
+    </select>
 
     <br><br>
 
-    <Select
+    <select
       v-model="model1"
       size="large"
       style="width:200px"
       clearable
       @on-clear="onClear"
     >
-      <Option
+      <option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </Option>
-    </Select>
-    <Select
+      </option>
+    </select>
+    <select
       v-model="model10"
       size="large"
       multiple
       style="width:260px"
     >
-      <Option
+      <option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </Option>
-    </Select>
+      </option>
+    </select>
 
     <br><br>
 
-    <Select
+    <select
       v-model="model1"
       style="width:200px"
     >
-      <Option
+      <option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </Option>
-    </Select>
-    <Select
+      </option>
+    </select>
+    <select
       v-model="model11"
       multiple
       style="width:260px"
     >
-      <Option
+      <option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </Option>
-    </Select>
-    <Select
+      </option>
+    </select>
+    <select
       v-model="model10"
       multiple
       style="width:260px"
     >
-      <Option
+      <option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </Option>
-    </Select>
+      </option>
+    </select>
 
     <br><br>
 
@@ -111,19 +111,19 @@
     <br><br>
     <br><br>
     <br><br>
-    <Select
+    <select
       v-model="model10"
       multiple
       style="width:260px"
     >
-      <Option
+      <option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </Option>
-    </Select>
+      </option>
+    </select>
     <br><br>
 
     <br><br>
@@ -134,19 +134,19 @@
     <br><br>
     <br><br>
     <br><br>
-    <Select
+    <select
       v-model="model10"
       multiple
       style="width:260px"
     >
-      <Option
+      <option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </Option>
-    </Select>
+      </option>
+    </select>
   </div>
 </template>
 <script>

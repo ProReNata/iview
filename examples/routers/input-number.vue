@@ -1,13 +1,13 @@
 <template>
   <div>
-    <InputNumber
+    <input-number
       v-model="valueNull"
       style="width: 200px"
       :min="0"
       :max="10000"
       :precision="2"
     >
-    </InputNumber>
+    </input-number>
   </div>
 </template>
 <script>

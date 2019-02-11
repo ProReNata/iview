@@ -26,6 +26,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import noop from 'lodash/noop';
 import AsyncValidator from 'async-validator';
@@ -33,15 +34,15 @@ import Emitter from '../../mixins/emitter';
 
 const prefixCls = 'ivu-form-item';
 
-function getPropByPath(obj, path) {
+function getPropByPath(obj, pathString) {
   let tempObj = obj;
-  path = path.replace(/\[(\w+)\]/g, '.$1');
+  let path = pathString.replace(/\[(\w+)]/g, '.$1');
   path = path.replace(/^\./, '');
 
   const keyArr = path.split('.');
   let i = 0;
 
-  for (let len = keyArr.length; i < len - 1; ++i) {
+  for (let len = keyArr.length; i < len - 1; i += 1) {
     const key = keyArr[i];
 
     if (key in tempObj) {
@@ -60,9 +61,12 @@ function getPropByPath(obj, path) {
 
 export default {
   name: 'FormItem',
+
   mixins: [Emitter],
+
   props: {
     error: {
+      default: undefined,
       type: String,
     },
     label: {
@@ -70,12 +74,15 @@ export default {
       type: String,
     },
     labelFor: {
+      default: undefined,
       type: String,
     },
     labelWidth: {
+      default: undefined,
       type: Number,
     },
     prop: {
+      default: undefined,
       type: String,
     },
     required: {
@@ -83,6 +90,7 @@ export default {
       type: Boolean,
     },
     rules: {
+      default: undefined,
       type: [Object, Array],
     },
     showMessage: {
@@ -93,6 +101,7 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     return {
       isRequired: false,
@@ -103,6 +112,7 @@ export default {
       validator: {},
     };
   },
+
   computed: {
     classes() {
       return [
@@ -137,7 +147,7 @@ export default {
         const {model} = this.form;
 
         if (!model || !this.prop) {
-          return;
+          return undefined;
         }
 
         let path = this.prop;
@@ -160,6 +170,7 @@ export default {
       return style;
     },
   },
+
   watch: {
     error(val) {
       this.validateMessage = val;
@@ -169,7 +180,9 @@ export default {
       this.validateState = val;
     },
   },
+
   inject: ['form'],
+
   mounted() {
     if (this.prop) {
       this.dispatch('iForm', 'on-form-item-add', this);
@@ -187,6 +200,8 @@ export default {
 
             return false;
           }
+
+          return undefined;
         });
         this.$on('on-form-blur', this.onFieldBlur);
         this.$on('on-form-change', this.onFieldChange);
@@ -257,7 +272,7 @@ export default {
       if (!rules || rules.length === 0) {
         callback();
 
-        return true;
+        return;
       }
 
       this.validateState = 'validating';

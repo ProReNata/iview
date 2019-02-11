@@ -1,12 +1,13 @@
 <template>
-  <Transfer
+  <transfer
     :data="data1"
     :target-keys="targetKeys1"
     :render-format="render1"
     @on-change="handleChange1"
   >
-  </Transfer>
+  </transfer>
 </template>
+
 <script>
 export default {
   data() {
@@ -15,10 +16,11 @@ export default {
       targetKeys1: this.getTargetKeys(),
     };
   },
+
   methods: {
     getMockData() {
       const mockData = [];
-      for (let i = 1; i <= 20; i++) {
+      for (let i = 1; i <= 20; i += 1) {
         mockData.push({
           description: `内容${i}的描述信息`,
           disabled: Math.random() * 3 < 1,

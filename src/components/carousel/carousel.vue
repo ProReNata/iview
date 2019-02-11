@@ -6,8 +6,8 @@
       class="left"
       @click="arrowEvent(-1)"
     >
-      <Icon type="chevron-left">
-      </Icon>
+      <icon type="chevron-left">
+      </icon>
     </button>
     <div :class="[prefixCls + '-list']">
       <div
@@ -31,12 +31,13 @@
       class="right"
       @click="arrowEvent(1)"
     >
-      <Icon type="chevron-right">
-      </Icon>
+      <icon type="chevron-right">
+      </icon>
     </button>
     <ul :class="dotsClasses">
       <template v-for="n in slides.length">
         <li
+          :key="n"
           :class="[n - 1 === currentIndex ? prefixCls + '-active' : '']"
           @click="dotsEvent('click', n - 1)"
           @mouseover="dotsEvent('hover', n - 1)"
@@ -51,6 +52,7 @@
     </ul>
   </div>
 </template>
+
 <script>
 import Icon from '../icon/icon.vue';
 import {getStyle, oneOf} from '../../utils/assist';
@@ -60,7 +62,9 @@ const prefixCls = 'ivu-carousel';
 
 export default {
   name: 'Carousel',
+
   components: {Icon},
+
   props: {
     arrow: {
       default: 'hover',
@@ -115,6 +119,7 @@ export default {
       type: Number,
     },
   },
+
   data() {
     return {
       copyTrackIndex: this.value,
@@ -134,6 +139,7 @@ export default {
       trackWidth: 0,
     };
   },
+
   computed: {
     arrowClasses() {
       return [`${prefixCls}-arrow`, `${prefixCls}-arrow-${this.arrow}`];
@@ -161,6 +167,7 @@ export default {
       };
     },
   },
+
   watch: {
     autoplay() {
       this.setAutoplay();
@@ -182,6 +189,7 @@ export default {
       this.trackIndex = val;
     },
   },
+
   mounted() {
     this.updateSlides(true);
     this.handleResize();
@@ -189,10 +197,12 @@ export default {
     //            window.addEventListener('resize', this.handleResize, false);
     on(window, 'resize', this.handleResize);
   },
+
   beforeDestroy() {
     //            window.removeEventListener('resize', this.handleResize, false);
     off(window, 'resize', this.handleResize);
   },
+
   methods: {
     add(offset) {
       // 获取单个轨道的图片数
@@ -251,7 +261,7 @@ export default {
     },
     // find option component
     findChild(cb) {
-      const find = function(child) {
+      const find = function _find(child) {
         const name = child.$options.componentName;
 
         if (name) {
@@ -328,7 +338,8 @@ export default {
         slides.push({
           $el: child.$el,
         });
-        child.index = index++;
+        child.index = index;
+        index += 1;
 
         if (init) {
           this.slideInstances.push(child);

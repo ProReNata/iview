@@ -1,6 +1,6 @@
 <template>
   <div :class="classes">
-    <Input-number
+    <input-number
       v-if="!range && showInput"
       :min="min"
       :size="inputSize"
@@ -10,20 +10,21 @@
       :disabled="disabled"
       @on-change="handleInputChange"
     >
-    </Input-number>
+    </input-number>
     <div
       ref="slider"
-      :class="[prefixCls + '-wrap']" 
+      :class="[prefixCls + '-wrap']"
       @click.self="sliderClick"
     >
-      <input 
-        type="hidden" 
-        :name="name" 
+      <input
+        type="hidden"
+        :name="name"
         :value="exportValue"
       >
       <template v-if="showStops">
         <div
-          v-for="item in stops"
+          v-for="(item, i) in stops"
+          :key="i"
           :class="[prefixCls + '-stop']"
           :style="{ 'left': item + '%' }"
           @click.self="sliderClick"
@@ -42,7 +43,7 @@
         @touchstart="onPointerDown($event, 'min')"
         @mousedown="onPointerDown($event, 'min')"
       >
-        <Tooltip
+        <tooltip
           ref="minTooltip"
           :controlled="pointerDown === 'min'"
           placement="top"
@@ -58,16 +59,16 @@
             @keydown="onKeydown($event, 'min')"
           >
           </div>
-        </Tooltip>
+        </tooltip>
       </div>
-      <div 
+      <div
         v-if="range"
         :class="[prefixCls + '-button-wrap']"
         :style="{left: maxPosition + '%'}"
         @touchstart="onPointerDown($event, 'max')"
         @mousedown="onPointerDown($event, 'max')"
       >
-        <Tooltip
+        <tooltip
           ref="maxTooltip"
           :controlled="pointerDown === 'max'"
           placement="top"
@@ -83,12 +84,15 @@
             @keydown="onKeydown($event, 'max')"
           >
           </div>
-        </Tooltip>
+        </tooltip>
       </div>
     </div>
   </div>
 </template>
+
 <script>
+import head from 'lodash/head';
+import at from 'lodash/at';
 import InputNumber from '../input-number/input-number.vue';
 import Tooltip from '../tooltip/tooltip.vue';
 import {getStyle, oneOf} from '../../utils/assist';
@@ -99,8 +103,11 @@ const prefixCls = 'ivu-slider';
 
 export default {
   name: 'Slider',
+
   components: {InputNumber, Tooltip},
+
   mixins: [Emitter],
+
   props: {
     disabled: {
       default: false,
@@ -122,6 +129,7 @@ export default {
       type: Number,
     },
     name: {
+      default: undefined,
       type: String,
     },
     range: {
@@ -158,6 +166,7 @@ export default {
       type: [Number, Array],
     },
   },
+
   data() {
     const val = this.checkLimits(Array.isArray(this.value) ? this.value : [this.value]);
 
@@ -176,6 +185,7 @@ export default {
       },
     };
   },
+
   computed: {
     barStyle() {
       const style = {
@@ -237,7 +247,7 @@ export default {
       const stopCount = this.valueRange / this.step;
       const result = [];
       const stepWidth = (100 * this.step) / this.valueRange;
-      for (let i = 1; i < stopCount; i++) {
+      for (let i = 1; i < stopCount; i += 1) {
         result.push(i * stepWidth);
       }
 
@@ -250,6 +260,7 @@ export default {
       return this.max - this.min;
     },
   },
+
   watch: {
     exportValue(values) {
       this.$nextTick(() => {
@@ -263,14 +274,15 @@ export default {
       this.$emit('input', value);
       this.$emit('on-input', value);
     },
-    value(val) {
-      val = this.checkLimits(Array.isArray(val) ? val : [val]);
+    value(value) {
+      const val = this.checkLimits(Array.isArray(value) ? value : [value]);
 
       if (val[0] !== this.currentValue[0] || val[1] !== this.currentValue[1]) {
         this.currentValue = val;
       }
     },
   },
+
   mounted() {
     // #2852
     this.$on('on-visible-change', (val) => {
@@ -291,15 +303,17 @@ export default {
       }
     });
   },
+
   methods: {
-    changeButtonPosition(newPos, forceType) {
+    changeButtonPosition(newPosition, forceType) {
+      let newPos = newPosition;
       const type = forceType || this.pointerDown;
       const index = type === 'min' ? 0 : 1;
 
       if (type === 'min') {
-        newPos = this.checkLimits([newPos, this.max])[0];
+        newPos = head(this.checkLimits([newPos, this.max]));
       } else {
-        newPos = this.checkLimits([this.min, newPos])[1];
+        newPos = at(this.checkLimits([this.min, newPos]), 1);
       }
 
       const modulus = this.handleDecimal(newPos, this.step);
@@ -314,29 +328,29 @@ export default {
         }
       }
     },
-    checkLimits([min, max]) {
-      min = Math.max(this.min, min);
+    checkLimits([minimum, maximum]) {
+      let min = Math.max(this.min, minimum);
       min = Math.min(this.max, min);
 
-      max = Math.max(this.min, min, max);
+      let max = Math.max(this.min, min, maximum);
       max = Math.min(this.max, max);
 
       return [min, max];
     },
     emitChange() {
-      const value = this.range ? this.exportValue : this.exportValue[0];
+      const value = this.range ? this.exportValue : head(this.exportValue);
       this.$emit('on-change', value);
       this.dispatch('FormItem', 'on-form-change', value);
     },
     getCurrentValue(event, type) {
       if (this.disabled) {
-        return;
+        return undefined;
       }
 
       const index = this.valueIndex[type];
 
       if (typeof index === 'undefined') {
-        return;
+        return undefined;
       }
 
       return this.currentValue[index];
@@ -358,7 +372,7 @@ export default {
           m = 0;
         }
 
-        multiple = Math.pow(10, m);
+        multiple = 10 ** m;
 
         return ((pos * multiple) % (step * multiple)) / multiple;
       }

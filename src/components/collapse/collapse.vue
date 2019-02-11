@@ -3,30 +3,36 @@
     <slot></slot>
   </div>
 </template>
+
 <script>
 const prefixCls = 'ivu-collapse';
 
 export default {
   name: 'Collapse',
+
   props: {
     accordion: {
       default: false,
       type: Boolean,
     },
     value: {
+      default: undefined,
       type: [Array, String],
     },
   },
+
   data() {
     return {
       currentValue: this.value,
     };
   },
+
   computed: {
     classes() {
       return `${prefixCls}`;
     },
   },
+
   watch: {
     currentValue() {
       this.setActive();
@@ -35,9 +41,11 @@ export default {
       this.currentValue = val;
     },
   },
+
   mounted() {
     this.setActive();
   },
+
   methods: {
     getActiveKey() {
       let activeKey = this.currentValue || [];
@@ -51,7 +59,7 @@ export default {
         activeKey = [activeKey[0]];
       }
 
-      for (let i = 0; i < activeKey.length; i++) {
+      for (let i = 0; i < activeKey.length; i += 1) {
         activeKey[i] = activeKey[i].toString();
       }
 

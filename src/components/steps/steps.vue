@@ -11,24 +11,27 @@ const prefixCls = 'ivu-steps';
 function debounce(fn) {
   let waiting;
 
-  return function(...args) {
+  return function _debounced(...args) {
     if (waiting) {
       return;
     }
 
     waiting = true;
+    /* eslint-disable-next-line babel/no-invalid-this */
     const context = this;
-    const later = function() {
+    const later = function _later() {
       waiting = false;
       fn.apply(context, args);
     };
 
+    /* eslint-disable-next-line babel/no-invalid-this */
     this.$nextTick(later);
   };
 }
 
 export default {
   name: 'Steps',
+
   props: {
     current: {
       default: 0,
@@ -41,17 +44,21 @@ export default {
       },
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small']);
       },
     },
     status: {
       default: 'process',
+      type: String,
       validator(value) {
         return oneOf(value, ['wait', 'process', 'finish', 'error']);
       },
     },
   },
+
   computed: {
     classes() {
       return [
@@ -63,6 +70,7 @@ export default {
       ];
     },
   },
+
   watch: {
     current() {
       this.updateChildProps();
@@ -71,14 +79,17 @@ export default {
       this.updateCurrent();
     },
   },
+
   mounted() {
     this.updateSteps();
     this.$on('append', this.debouncedAppendRemove());
     this.$on('remove', this.debouncedAppendRemove());
   },
+
   methods: {
     debouncedAppendRemove() {
-      return debounce(function() {
+      return debounce(function _debounced() {
+        /* eslint-disable-next-line babel/no-invalid-this */
         this.updateSteps();
       });
     },
@@ -124,9 +135,9 @@ export default {
       }
 
       if (isInit) {
-        const current_status = this.$children[this.current].currentStatus;
+        const {currentStatus} = this.$children[this.current];
 
-        if (!current_status) {
+        if (!currentStatus) {
           this.$children[this.current].currentStatus = this.status;
         }
       } else {

@@ -7,17 +7,19 @@
       <span>{{ naturalIndex + 1 }}</span>
     </template>
     <template v-if="renderType === 'selection'">
-      <Checkbox
+      <checkbox
         :value="checked"
         :disabled="disabled"
         @click.native.stop="handleClick"
         @on-change="toggleSelect"
       >
-      </Checkbox>
+      </checkbox>
     </template>
     <template v-if="renderType === 'html'">
+      <!-- eslint-disable vue/no-v-html -->
       <span v-html="row[column.key]">
       </span>
+      <!-- eslint-enable vue/no-v-html -->
     </template>
     <template v-if="renderType === 'normal'">
       <span>{{ row[column.key] }}</span>
@@ -27,20 +29,21 @@
         :class="expandCls"
         @click="toggleExpand"
       >
-        <Icon type="ios-arrow-right">
-        </Icon>
+        <icon type="ios-arrow-right">
+        </icon>
       </div>
     </template>
-    <Cell
+    <cell
       v-if="renderType === 'render'"
       :row="row"
       :column="column"
       :index="index"
       :render="column.render"
     >
-    </Cell>
+    </cell>
   </div>
 </template>
+
 <script>
 import noop from 'lodash/noop';
 import Cell from './expand';
@@ -49,23 +52,50 @@ import Checkbox from '../checkbox/checkbox.vue';
 
 export default {
   name: 'TableCell',
+
   components: {Cell, Checkbox, Icon},
+
   props: {
-    checked: Boolean,
-    column: Object,
-    disabled: Boolean,
-    expanded: Boolean,
+    checked: {
+      default: false,
+      type: Boolean,
+    },
+    column: {
+      default: undefined,
+      type: Object,
+    },
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
+    expanded: {
+      default: false,
+      type: Boolean,
+    },
     fixed: {
       default: false,
       type: [Boolean, String],
     },
     // _index of data
-    index: Number,
+    index: {
+      default: undefined,
+      type: Number,
+    },
     // index of rebuildData
-    naturalIndex: Number,
-    prefixCls: String,
-    row: Object,
+    naturalIndex: {
+      default: undefined,
+      type: Number,
+    },
+    prefixCls: {
+      default: undefined,
+      type: String,
+    },
+    row: {
+      default: undefined,
+      type: Object,
+    },
   },
+
   data() {
     return {
       context: this.$parent.$parent.$parent.currentContext,
@@ -73,6 +103,7 @@ export default {
       uid: -1,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -94,6 +125,7 @@ export default {
       ];
     },
   },
+
   created() {
     if (this.column.type === 'index') {
       this.renderType = 'index';
@@ -109,6 +141,7 @@ export default {
       this.renderType = 'normal';
     }
   },
+
   methods: {
     handleClick: noop,
     // handleClick() {

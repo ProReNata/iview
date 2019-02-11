@@ -1,11 +1,14 @@
 <template>
-  <Scroll :on-reach-edge="loadData">
-    <section v-for="item in list">
+  <scroll :on-reach-edge="loadData">
+    <section
+      v-for="(item, i) in list"
+      :key="i"
+    >
       <div class="city">
         <p>{{ item }}</p>
       </div>
     </section>
-  </Scroll>
+  </scroll>
 </template>
 <script>
 export default {
@@ -20,12 +23,12 @@ export default {
         setTimeout(() => {
           if (dir > 0) {
             const first = this.list[0];
-            for (let i = 1; i < 11; i++) {
+            for (let i = 1; i < 11; i += 1) {
               this.list.unshift(first - i);
             }
           } else {
             const last = this.list[this.list.length - 1];
-            for (let i = 1; i < 11; i++) {
+            for (let i = 1; i < 11; i += 1) {
               this.list.push(last + i);
             }
           }
@@ -44,7 +47,6 @@ section {
 section > div {
   width: 300px;
   padding: 15px;
-  margin: 5px;
   background-color: #ddf;
   border: 1px solid #446;
   border-radius: 5px;

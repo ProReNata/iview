@@ -1,6 +1,6 @@
 <template>
-  <div 
-    :class="classes" 
+  <div
+    :class="classes"
     @mousedown.prevent
   >
     <div :class="[prefixCls + '-body']">
@@ -54,15 +54,16 @@
         >
         </time-spinner>
       </div>
-      <Confirm
+      <confirm
         v-if="confirm"
         @on-pick-clear="handlePickClear"
         @on-pick-success="handlePickSuccess"
       >
-      </Confirm>
+      </confirm>
     </div>
   </div>
 </template>
+
 <script>
 import TimeSpinner from '../../base/time-spinner.vue';
 import Confirm from '../../base/confirm.vue';
@@ -80,8 +81,11 @@ const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
 
 export default {
   name: 'RangeTimePickerPanel',
+
   components: {Confirm, TimeSpinner},
+
   mixins: [Mixin, Locale, Options],
+
   props: {
     format: {
       default: 'HH:mm:ss',
@@ -96,6 +100,7 @@ export default {
       type: Array,
     },
   },
+
   data() {
     const [dateStart, dateEnd] = this.value.slice();
 
@@ -107,6 +112,7 @@ export default {
       timePrefixCls,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -127,6 +133,7 @@ export default {
       return !(this.format || '').match(/mm$/);
     },
   },
+
   watch: {
     value(dates) {
       const [dateStart, dateEnd] = dates.slice();
@@ -134,11 +141,13 @@ export default {
       this.dateEnd = dateEnd || initTimeDate();
     },
   },
+
   mounted() {
     if (this.$parent && this.$parent.$options.name === 'DatePicker') {
       this.showDate = true;
     }
   },
+
   methods: {
     handleChange(start, end, emit = true) {
       const dateStart = new Date(this.dateStart);

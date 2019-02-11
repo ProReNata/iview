@@ -19,13 +19,13 @@ function loading(options) {
   instance.show(options);
 }
 
-Spin.show = function(props = {}) {
+Spin.show = function _show(props = {}) {
   return loading(props);
 };
 
-Spin.hide = function() {
+Spin.hide = function _hide() {
   if (!spinInstance) {
-    return false;
+    return;
   }
 
   const instance = getSpinInstance();

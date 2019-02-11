@@ -1,75 +1,75 @@
 <template>
   <div>
-    <Checkbox
+    <checkbox
       :indeterminate="true"
       :value="false"
       size="large"
     >
       全选
-    </Checkbox>
-    <Checkbox
+    </checkbox>
+    <checkbox
       :indeterminate="true"
       :value="false"
       size="default"
     >
       全选
-    </Checkbox>
-    <Checkbox
+    </checkbox>
+    <checkbox
       :indeterminate="true"
       :value="false"
       size="small"
     >
       全选
-    </Checkbox>
+    </checkbox>
     <div>
-      <Checkbox 
-        v-model="testValue1" 
-        size="large" 
-        true-value="true" 
+      <checkbox
+        v-model="testValue1"
+        size="large"
+        true-value="true"
         false-value="false"
       >
         Apple
-      </Checkbox>
-      <Checkbox 
-        v-model="testValue1" 
-        true-value="true" 
-        false-value="false" 
+      </checkbox>
+      <checkbox
+        v-model="testValue1"
+        true-value="true"
+        false-value="false"
         disabled
       >
         Apple
-      </Checkbox>
-      <Checkbox 
-        v-model="testValue1" 
-        size="small" 
-        true-value="true" 
+      </checkbox>
+      <checkbox
+        v-model="testValue1"
+        size="small"
+        true-value="true"
         false-value="false"
       >
         Apple
-      </Checkbox>
+      </checkbox>
       {{ testValue1 }}
     </div>
     <div>
-      <Checkbox 
-        v-model="testValue2" 
-        :true-value="0" 
+      <checkbox
+        v-model="testValue2"
+        :true-value="0"
         :false-value="1"
       >
         test number
-      </Checkbox>
+      </checkbox>
       {{ testValue2 }}
     </div>
-    <Checkbox-group 
-      v-model="fruit" 
+    <checkbox-group
+      v-model="fruit"
       size="large"
     >
-      <Checkbox 
-        v-for="item in tags" 
-        :key="item.label" 
-        :label="item.label" 
+      <checkbox
+        v-for="item in tags"
+        :key="item.label"
+        :label="item.label"
         true-value="true"
       >
-      </Checkbox>
-    </Checkbox-group>
+      </checkbox>
+    </checkbox-group>
     <div>{{ fruit }}</div>
   </div>
 </template>

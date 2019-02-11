@@ -76,7 +76,11 @@ export default {
         return;
       }
 
-      this.popperJS ? this.popperJS.update() : this.createPopper();
+      if (this.popperJS) {
+        this.popperJS.update();
+      } else {
+        this.createPopper();
+      }
     },
   },
   props: {

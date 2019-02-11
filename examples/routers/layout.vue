@@ -1,10 +1,10 @@
 <template>
   <div class="layout-demo-con">
-    <Button @click="change">
+    <i-button @click="change">
       修改Sider绑定的变量来控制收缩
-    </Button>
-    <Layout :style="{minHeight: '100vh'}">
-      <Sider
+    </i-button>
+    <layout :style="{minHeight: '100vh'}">
+      <sider
         ref="side"
         v-model="isCollapsed"
         collapsed-width="0"
@@ -14,55 +14,55 @@
         width="200"
         @on-collapse="changed"
       >
-        <Menu
+        <menu
           width="auto"
           theme="dark"
           active-name="1"
         >
-          <MenuGroup title="内容管理">
-            <MenuItem name="1">
-              <Icon type="document-text">
-              </Icon>
+          <menu-group title="内容管理">
+            <menu-item name="1">
+              <icon type="document-text">
+              </icon>
               文章管理
-            </MenuItem>
-            <MenuItem name="2">
-              <Icon type="chatbubbles">
-              </Icon>
+            </menu-item>
+            <menu-item name="2">
+              <icon type="chatbubbles">
+              </icon>
               评论管理
-            </MenuItem>
-          </MenuGroup>
-          <MenuGroup title="统计分析">
-            <MenuItem name="3">
-              <Icon type="heart">
-              </Icon>
+            </menu-item>
+          </menu-group>
+          <menu-group title="统计分析">
+            <menu-item name="3">
+              <icon type="heart">
+              </icon>
               用户留存
-            </MenuItem>
-            <MenuItem name="4">
-              <Icon type="heart-broken">
-              </Icon>
+            </menu-item>
+            <menu-item name="4">
+              <icon type="heart-broken">
+              </icon>
               流失用户
-            </MenuItem>
-          </MenuGroup>
-        </Menu>
+            </menu-item>
+          </menu-group>
+        </menu>
         <!-- <div slot="trigger"><Icon type="document-text"></Icon></div> -->
-      </Sider>
-      <Layout class-name="test-class">
-        <Header :style="{background: '#eee'}">
-          <Button @click="toggleCollapse">
+      </sider>
+      <layout class-name="test-class">
+        <header :style="{background: '#eee'}">
+          <i-button @click="toggleCollapse">
             菜单
-          </Button>
-        </Header>
-        <Content :style="{background:'#FFCF9E'}">
+          </i-button>
+        </header>
+        <content :style="{background:'#FFCF9E'}">
           <p
             v-for="i in 100"
             :key="i"
           >
             {{ i }}
           </p>
-        </Content>
-        <Footer>sdfsdsdfsdfs</Footer>
-      </Layout>
-    </Layout>
+        </content>
+        <footer>sdfsdsdfsdfs</footer>
+      </layout>
+    </layout>
   </div>
 </template>
 <script>

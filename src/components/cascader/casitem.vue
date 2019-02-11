@@ -1,26 +1,38 @@
 <template>
   <li :class="classes">
     {{ data.label }}
-    <i 
-      v-if="showArrow" 
+    <i
+      v-if="showArrow"
       class="ivu-icon ivu-icon-ios-arrow-right"
     >
     </i>
-    <i 
-      v-if="showLoading" 
+    <i
+      v-if="showLoading"
       class="ivu-icon ivu-icon-load-c ivu-load-loop"
     >
     </i>
   </li>
 </template>
+
 <script>
 export default {
   name: 'Casitem',
+
   props: {
-    data: Object,
-    prefixCls: String,
-    tmpItem: Object,
+    data: {
+      default: undefined,
+      type: Object,
+    },
+    prefixCls: {
+      default: undefined,
+      type: String,
+    },
+    tmpItem: {
+      default: undefined,
+      type: Object,
+    },
   },
+
   computed: {
     classes() {
       return [

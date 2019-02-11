@@ -5,20 +5,20 @@
     :disabled="disabled"
     @click="handleClick"
   >
-    <Icon
+    <icon
       v-if="loading"
       type="circle-notch"
-      spin="true"
-      fw="true"
+      :spin="true"
+      :fw="true"
     >
-    </Icon>
-    <Icon
+    </icon>
+    <icon
       v-if="icon && !loading"
       :type="icon"
       :weight="iconWeight"
-      fw="true"
+      :fw="true"
     >
-    </Icon>
+    </icon>
     <span
       v-if="showSlot"
       ref="slot"
@@ -27,6 +27,7 @@
     </span>
   </button>
 </template>
+
 <script>
 import Icon from '../icon';
 import {oneOf} from '../../utils/assist';
@@ -35,7 +36,9 @@ const prefixCls = 'byx-btn';
 
 export default {
   name: 'Button',
+
   components: {Icon},
+
   props: {
     disabled: Boolean,
     htmlType: {
@@ -44,29 +47,41 @@ export default {
         return oneOf(value, ['button', 'submit', 'reset']);
       },
     },
-    icon: String,
-    iconWeight: String,
+    icon: {
+      default: undefined,
+      type: String,
+    },
+    iconWeight: {
+      default: undefined,
+      type: String,
+    },
     loading: Boolean,
     long: {
       default: false,
       type: Boolean,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
     type: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['primary', 'text', 'info', 'success', 'warning', 'error', 'default']);
       },
     },
   },
+
   data() {
     return {
       showSlot: true,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -81,9 +96,11 @@ export default {
       ];
     },
   },
+
   mounted() {
     this.showSlot = this.$slots.default !== undefined;
   },
+
   methods: {
     handleClick(event) {
       this.$emit('click', event);

@@ -12,11 +12,11 @@
     >
       <slot name="title">
       </slot>
-      <Icon
+      <icon
         type="ios-arrow-down"
         :class="[prefixCls + '-submenu-title-icon']"
       >
-      </Icon>
+      </icon>
     </div>
     <collapse-transition v-if="mode === 'vertical'">
       <ul
@@ -30,7 +30,7 @@
       v-else
       name="slide-up"
     >
-      <Drop
+      <drop
         v-show="opened"
         ref="drop"
         placement="bottom"
@@ -39,10 +39,11 @@
         <ul :class="[prefixCls + '-drop-list']">
           <slot></slot>
         </ul>
-      </Drop>
+      </drop>
     </transition>
   </li>
 </template>
+
 <script>
 import Drop from '../select/dropdown.vue';
 import Icon from '../icon/icon.vue';
@@ -55,8 +56,11 @@ const prefixCls = 'ivu-menu';
 
 export default {
   name: 'Submenu',
+
   components: {CollapseTransition, Drop, Icon},
+
   mixins: [Emitter, mixin],
+
   props: {
     disabled: {
       default: false,
@@ -67,6 +71,7 @@ export default {
       type: [String, Number],
     },
   },
+
   data() {
     return {
       active: false,
@@ -75,6 +80,7 @@ export default {
       prefixCls,
     };
   },
+
   computed: {
     accordion() {
       return this.menu.accordion;
@@ -108,6 +114,7 @@ export default {
         : {};
     },
   },
+
   watch: {
     mode(val) {
       if (val === 'horizontal') {
@@ -128,6 +135,7 @@ export default {
       }
     },
   },
+
   mounted() {
     this.$on('on-menu-item-select', (name) => {
       if (this.mode === 'horizontal') {
@@ -152,6 +160,7 @@ export default {
       this.active = status;
     });
   },
+
   methods: {
     handleClick() {
       if (this.disabled) {

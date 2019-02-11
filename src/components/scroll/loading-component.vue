@@ -1,20 +1,20 @@
 <template lang="html">
   <div :class="wrapperClasses">
     <div :class="spinnerClasses">
-      <Spin fix>
-        <Icon
+      <spin fix>
+        <icon
           type="load-c"
           size="18"
           :class="iconClasses"
         >
-        </Icon>
+        </icon>
         <div
           v-if="text"
           :class="textClasses"
         >
           {{ text }}
         </div>
-      </Spin>
+      </spin>
     </div>
   </div>
 </template>
@@ -37,6 +37,7 @@ export default {
       type: String,
     },
   },
+
   computed: {
     iconClasses() {
       return `${prefixCls}-spinner-icon`;

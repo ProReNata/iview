@@ -95,6 +95,7 @@
     </template>
   </div>
 </template>
+
 <script>
 import {oneOf, findComponentUpward} from '../../utils/assist';
 import calcTextareaHeight from '../../utils/calcTextareaHeight';
@@ -104,7 +105,9 @@ const prefixCls = 'ivu-input';
 
 export default {
   name: 'Input',
+
   mixins: [Emitter],
+
   props: {
     autocomplete: {
       default: 'off',
@@ -129,13 +132,19 @@ export default {
       type: Boolean,
     },
     elementId: {
+      default: undefined,
       type: String,
     },
-    icon: String,
+    icon: {
+      default: undefined,
+      type: String,
+    },
     maxlength: {
+      default: undefined,
       type: Number,
     },
     name: {
+      default: undefined,
       type: String,
     },
     number: {
@@ -155,6 +164,8 @@ export default {
       type: Number,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
@@ -165,6 +176,7 @@ export default {
     },
     type: {
       default: 'text',
+      type: String,
       validator(value) {
         return oneOf(value, ['text', 'textarea', 'password', 'url', 'email', 'date']);
       },
@@ -175,11 +187,13 @@ export default {
     },
     wrap: {
       default: 'soft',
+      type: String,
       validator(value) {
         return oneOf(value, ['hard', 'soft']);
       },
     },
   },
+
   data() {
     return {
       append: true,
@@ -190,6 +204,7 @@ export default {
       textareaStyles: {},
     };
   },
+
   computed: {
     inputClasses() {
       return [
@@ -223,11 +238,13 @@ export default {
       ];
     },
   },
+
   watch: {
     value(val) {
       this.setCurrentValue(val);
     },
   },
+
   mounted() {
     if (this.type !== 'textarea') {
       this.prepend = this.$slots.prepend !== undefined;
@@ -240,6 +257,7 @@ export default {
     this.slotReady = true;
     this.resizeTextarea();
   },
+
   methods: {
     blur() {
       if (this.type === 'textarea') {
@@ -311,7 +329,7 @@ export default {
       const {autosize} = this;
 
       if (!autosize || this.type !== 'textarea') {
-        return false;
+        return;
       }
 
       const {minRows} = autosize;

@@ -1,11 +1,12 @@
 <template>
-  <div 
-    :class="classes" 
+  <div
+    :class="classes"
     :name="name"
   >
     <slot></slot>
   </div>
 </template>
+
 <script>
 import {oneOf, findComponentsDownward} from '../../utils/assist';
 import Emitter from '../../mixins/emitter';
@@ -14,22 +15,34 @@ const prefixCls = 'ivu-radio-group';
 
 let seed = 0;
 const now = Date.now();
-const getUuid = () => `ivuRadioGroup_${now}_${seed++}`;
+const getUuid = () => {
+  const value = `ivuRadioGroup_${now}_${(seed += 1)}`;
+
+  seed += 1;
+
+  return value;
+};
 
 export default {
   name: 'RadioGroup',
+
   mixins: [Emitter],
+
   props: {
     name: {
       default: getUuid,
       type: String,
     },
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
     type: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['button']);
       },
@@ -43,12 +56,14 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     return {
       childrens: [],
       currentValue: this.value,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -62,6 +77,7 @@ export default {
       ];
     },
   },
+
   watch: {
     value() {
       if (this.currentValue !== this.value) {
@@ -70,9 +86,11 @@ export default {
       }
     },
   },
+
   mounted() {
     this.updateValue();
   },
+
   methods: {
     change(data) {
       this.currentValue = data.value;

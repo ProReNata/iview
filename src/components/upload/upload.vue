@@ -28,7 +28,10 @@
     </upload-list>
   </div>
 </template>
+
 <script>
+import stubArray from 'lodash/stubArray';
+import stubObject from 'lodash/stubObject';
 import noop from 'lodash/noop';
 import UploadList from './upload-list.vue';
 import ajax from './ajax';
@@ -39,39 +42,42 @@ const prefixCls = 'ivu-upload';
 
 export default {
   name: 'Upload',
+
   components: {UploadList},
+
   mixins: [Emitter],
+
   props: {
     accept: {
+      default: undefined,
       type: String,
     },
     action: {
       required: true,
       type: String,
     },
-    beforeUpload: Function,
+    beforeUpload: {
+      default: undefined,
+      type: Function,
+    },
     data: {
+      default: undefined,
       type: Object,
     },
     defaultFileList: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     format: {
-      default() {
-        return [];
-      },
+      default: stubArray,
       type: Array,
     },
     headers: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Object,
     },
     maxSize: {
+      default: undefined,
       type: Number,
     },
     multiple: {
@@ -83,45 +89,31 @@ export default {
       type: String,
     },
     onError: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Function,
     },
     onExceededSize: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Function,
     },
     onFormatError: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Function,
     },
     onPreview: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Function,
     },
     onProgress: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Function,
     },
     onRemove: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Function,
     },
     onSuccess: {
-      default() {
-        return {};
-      },
+      default: stubObject,
       type: Function,
     },
     showUploadList: {
@@ -140,6 +132,7 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     return {
       dragOver: false,
@@ -148,6 +141,7 @@ export default {
       tempIndex: 1,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -160,13 +154,15 @@ export default {
       ];
     },
   },
+
   watch: {
     defaultFileList: {
       handler(fileList) {
         this.fileList = fileList.map((item) => {
           item.status = 'finished';
           item.percentage = 100;
-          item.uid = Date.now() + this.tempIndex++;
+          item.uid = Date.now() + this.tempIndex;
+          this.tempIndex += 1;
 
           return item;
         });
@@ -174,6 +170,7 @@ export default {
       immediate: true,
     },
   },
+
   methods: {
     clearFiles() {
       this.fileList = [];
@@ -203,12 +200,12 @@ export default {
       this.$refs.input.click();
     },
     handleError(err, response, file) {
-      const _file = this.getFile(file);
+      const item = this.getFile(file);
       const {fileList} = this;
 
-      _file.status = 'fail';
+      item.status = 'fail';
 
-      fileList.splice(fileList.indexOf(_file), 1);
+      fileList.splice(fileList.indexOf(item), 1);
 
       this.onError(err, response, file);
     },
@@ -218,9 +215,9 @@ export default {
       }
     },
     handleProgress(e, file) {
-      const _file = this.getFile(file);
-      this.onProgress(e, _file, this.fileList);
-      _file.percentage = e.percent || 0;
+      const item = this.getFile(file);
+      this.onProgress(e, item, this.fileList);
+      item.percentage = e.percent || 0;
     },
     handleRemove(file) {
       const {fileList} = this;
@@ -228,8 +225,9 @@ export default {
       this.onRemove(file, fileList);
     },
     handleStart(file) {
-      file.uid = Date.now() + this.tempIndex++;
-      const _file = {
+      file.uid = Date.now() + this.tempIndex;
+      this.tempIndex += 1;
+      const item = {
         name: file.name,
         percentage: 0,
         showProgress: true,
@@ -238,20 +236,20 @@ export default {
         uid: file.uid,
       };
 
-      this.fileList.push(_file);
+      this.fileList.push(item);
     },
     handleSuccess(res, file) {
-      const _file = this.getFile(file);
+      const item = this.getFile(file);
 
-      if (_file) {
-        _file.status = 'finished';
-        _file.response = res;
+      if (item) {
+        item.status = 'finished';
+        item.response = res;
 
-        this.dispatch('FormItem', 'on-form-change', _file);
-        this.onSuccess(res, _file, this.fileList);
+        this.dispatch('FormItem', 'on-form-change', item);
+        this.onSuccess(res, item, this.fileList);
 
         setTimeout(() => {
-          _file.showProgress = false;
+          item.showProgress = false;
         }, 1000);
       }
     },
@@ -262,16 +260,16 @@ export default {
     post(file) {
       // check format
       if (this.format.length) {
-        const _file_format = file.name
+        const fileFormat = file.name
           .split('.')
           .pop()
           .toLocaleLowerCase();
-        const checked = this.format.some((item) => item.toLocaleLowerCase() === _file_format);
+        const checked = this.format.some((item) => item.toLocaleLowerCase() === fileFormat);
 
         if (!checked) {
           this.onFormatError(file, this.fileList);
 
-          return false;
+          return;
         }
       }
 
@@ -280,7 +278,7 @@ export default {
         if (file.size > this.maxSize * 1024) {
           this.onExceededSize(file, this.fileList);
 
-          return false;
+          return;
         }
       }
 
@@ -308,25 +306,33 @@ export default {
     },
     upload(file) {
       if (!this.beforeUpload) {
-        return this.post(file);
+        this.post(file);
+
+        return;
       }
 
       const before = this.beforeUpload(file);
 
       if (before && before.then) {
-        before.then(
-          (processedFile) => {
-            if (Object.prototype.toString.call(processedFile) === '[object File]') {
-              this.post(processedFile);
-            } else {
-              this.post(file);
-            }
-          },
-          noop,
-          // () => {
-          //   this.$emit('cancel', file);
-          // },
-        );
+        before
+          .then(
+            (processedFile) => {
+              if (Object.prototype.toString.call(processedFile) === '[object File]') {
+                this.post(processedFile);
+              } else {
+                this.post(file);
+              }
+
+              return null;
+            },
+            noop,
+            // () => {
+            //   this.$emit('cancel', file);
+            // },
+          )
+          .catch((error) => {
+            throw error;
+          });
       } else if (before !== false) {
         this.post(file);
       } else {

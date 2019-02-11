@@ -42,6 +42,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import iSelect from '../select/select.vue';
 import iOption from '../select/option.vue';
@@ -55,25 +56,60 @@ function isValueNumber(value) {
 
 export default {
   name: 'PageOption',
+
   components: {iOption, iSelect},
+
   mixins: [Locale],
+
   props: {
-    allPages: Number,
-    current: Number,
-    isSmall: Boolean,
-    pageSize: Number,
-    pageSizeOpts: Array,
-    placement: String,
-    scoreCurrent: Number,
-    showElevator: Boolean,
-    showSizer: Boolean,
-    transfer: Boolean,
+    allPages: {
+      default: undefined,
+      type: Number,
+    },
+    current: {
+      default: undefined,
+      type: Number,
+    },
+    isSmall: {
+      default: undefined,
+      type: Boolean,
+    },
+    pageSize: {
+      default: undefined,
+      type: Number,
+    },
+    pageSizeOpts: {
+      default: undefined,
+      type: Array,
+    },
+    placement: {
+      default: undefined,
+      type: String,
+    },
+    scoreCurrent: {
+      default: undefined,
+      type: Number,
+    },
+    showElevator: {
+      default: undefined,
+      type: Boolean,
+    },
+    showSizer: {
+      default: undefined,
+      type: Boolean,
+    },
+    transfer: {
+      default: undefined,
+      type: Boolean,
+    },
   },
+
   data() {
     return {
       currentPageSize: this.pageSize,
     };
   },
+
   computed: {
     ElevatorClasses() {
       return [`${prefixCls}-options-elevator`];
@@ -88,11 +124,13 @@ export default {
       return [`${prefixCls}-options-sizer`];
     },
   },
+
   watch: {
     pageSize(val) {
       this.currentPageSize = val;
     },
   },
+
   methods: {
     changePage(event) {
       let val = event.target.value.trim();
@@ -102,7 +140,7 @@ export default {
         val = Number(val);
 
         if (val !== this.current) {
-          const allPages = this.allPages;
+          const {allPages} = this;
 
           if (val > allPages) {
             page = allPages;

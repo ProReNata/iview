@@ -27,12 +27,12 @@
         >
         </time-spinner>
       </div>
-      <Confirm
+      <confirm
         v-if="confirm"
         @on-pick-clear="handlePickClear"
         @on-pick-success="handlePickSuccess"
       >
-      </Confirm>
+      </confirm>
     </div>
   </div>
 </template>
@@ -97,9 +97,11 @@ export default {
       const disabledTypes = ['disabledHours', 'disabledMinutes', 'disabledSeconds'];
 
       if (this.disabledDate === returnFalse || !this.value[0]) {
-        const disabled = disabledTypes.reduce((obj, type) => ((obj[type] = this[type]), obj), {});
+        return disabledTypes.reduce((obj, type) => {
+          obj[type] = this[type];
 
-        return disabled;
+          return obj;
+        }, {});
       }
 
       const slots = [24, 60, 60];
@@ -108,7 +110,7 @@ export default {
         const slot = slots[j];
         const toDisable = preDisabled;
         for (let i = 0; i < slot; i += this.steps[j] || 1) {
-          const hms = this.timeSlots.map((slot, x) => (x === j ? i : slot));
+          const hms = this.timeSlots.map((timeSlot, x) => (x === j ? i : timeSlot));
           const testDateTime = mergeDateHMS(this.date, ...hms);
 
           if (this.disabledDate(testDateTime, true)) {
@@ -119,7 +121,11 @@ export default {
         return toDisable.filter(unique);
       });
 
-      return disabledTypes.reduce((obj, type, i) => ((obj[type] = disabledHMS[i]), obj), {});
+      return disabledTypes.reduce((obj, type, i) => {
+        obj[type] = disabledHMS[i];
+
+        return obj;
+      }, {});
     },
     showSeconds() {
       return !(this.format || '').match(/mm$/);

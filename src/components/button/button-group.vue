@@ -10,13 +10,17 @@ const prefixCls = 'byx-btn-group';
 
 export default {
   name: 'ButtonGroup',
+
   props: {
     size: {
+      default: undefined,
+      type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
       },
     },
   },
+
   computed: {
     classes() {
       return [

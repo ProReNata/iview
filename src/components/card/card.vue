@@ -1,35 +1,36 @@
 <template>
   <div :class="classes">
-    <div 
-      v-if="showHead" 
+    <div
+      v-if="showHead"
       :class="headClasses"
     >
       <slot name="title">
         <p v-if="title">
-          <Icon 
-            v-if="icon" 
+          <icon
+            v-if="icon"
             :type="icon"
           >
-          </Icon>
+          </icon>
           {{ title }}
         </p>
       </slot>
     </div>
-    <div 
-      v-if="showExtra" 
+    <div
+      v-if="showExtra"
       :class="extraClasses"
     >
       <slot name="extra">
       </slot>
     </div>
-    <div 
-      :class="bodyClasses" 
+    <div
+      :class="bodyClasses"
       :style="bodyStyles"
     >
       <slot></slot>
     </div>
   </div>
 </template>
+
 <script>
 import Icon from '../icon/icon.vue';
 
@@ -38,7 +39,9 @@ const defaultPadding = 16;
 
 export default {
   name: 'Card',
+
   components: {Icon},
+
   props: {
     bordered: {
       default: true,
@@ -49,6 +52,7 @@ export default {
       type: Boolean,
     },
     icon: {
+      default: undefined,
       type: String,
     },
     padding: {
@@ -60,15 +64,18 @@ export default {
       type: Boolean,
     },
     title: {
+      default: undefined,
       type: String,
     },
   },
+
   data() {
     return {
       showExtra: true,
       showHead: true,
     };
   },
+
   computed: {
     bodyClasses() {
       return `${prefixCls}-body`;
@@ -99,9 +106,10 @@ export default {
       return `${prefixCls}-head`;
     },
   },
+
   mounted() {
-    this.showHead = this.title || this.$slots.title !== undefined;
-    this.showExtra = this.$slots.extra !== undefined;
+    this.showHead = this.title || typeof this.$slots.title !== 'undefined';
+    this.showExtra = typeof this.$slots.extra !== 'undefined';
   },
 };
 </script>

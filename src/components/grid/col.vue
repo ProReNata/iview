@@ -1,6 +1,6 @@
 <template>
-  <div 
-    :class="classes" 
+  <div
+    :class="classes"
     :style="styles"
   >
     <slot></slot>
@@ -12,24 +12,57 @@ import {findComponentUpward} from '../../utils/assist';
 const prefixCls = 'ivu-col';
 
 export default {
-  name: 'iCol',
+  name: 'ICol',
+
   props: {
-    className: String,
-    lg: [Number, Object],
-    md: [Number, Object],
-    offset: [Number, String],
-    order: [Number, String],
-    pull: [Number, String],
-    push: [Number, String],
-    sm: [Number, Object],
-    span: [Number, String],
-    xs: [Number, Object],
+    className: {
+      default: undefined,
+      type: String,
+    },
+    lg: {
+      default: undefined,
+      type: [Number, Object],
+    },
+    md: {
+      default: undefined,
+      type: [Number, Object],
+    },
+    offset: {
+      default: undefined,
+      type: [Number, String],
+    },
+    order: {
+      default: undefined,
+      type: [Number, String],
+    },
+    pull: {
+      default: undefined,
+      type: [Number, String],
+    },
+    push: {
+      default: undefined,
+      type: [Number, String],
+    },
+    sm: {
+      default: undefined,
+      type: [Number, Object],
+    },
+    span: {
+      default: undefined,
+      type: [Number, String],
+    },
+    xs: {
+      default: undefined,
+      type: [Number, Object],
+    },
   },
+
   data() {
     return {
       gutter: 0,
     };
   },
+
   computed: {
     classes() {
       const classList = [
@@ -72,12 +105,15 @@ export default {
       return style;
     },
   },
+
   mounted() {
     this.updateGutter();
   },
+
   beforeDestroy() {
     this.updateGutter();
   },
+
   methods: {
     updateGutter() {
       const Row = findComponentUpward(this, 'Row');

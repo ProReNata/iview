@@ -4,8 +4,9 @@
  *    https://github.com/Matt-Esch/string-template/index.js
  */
 import isNil from 'lodash/isNil';
+import head from 'lodash/head';
 
-const RE_NARGS = /(%|)\{([0-9a-zA-Z_]+)\}/g;
+const RE_NARGS = /(%|){([0-9a-zA-Z_]+)}/g;
 
 export default function() {
   // const { hasOwn } = Vue.util;
@@ -17,13 +18,15 @@ export default function() {
    * template
    *
    * @param {String} string
-   * @param {Array} args
+   * @param {Array} templateArgs
    * @return {String}
    */
 
-  function template(string, ...args) {
+  function template(string, ...templateArgs) {
+    let args = templateArgs;
+
     if (args.length === 1 && typeof args[0] === 'object') {
-      args = args[0];
+      args = head(args);
     }
 
     if (!args || !args.hasOwnProperty) {

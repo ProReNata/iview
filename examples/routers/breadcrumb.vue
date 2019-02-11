@@ -6,34 +6,34 @@
 </style>
 <template>
   <div>
-    <Breadcrumb separator="<b class='demo-breadcrumb-separator'>=></b>">
-      <Breadcrumb-item to="/">
+    <breadcrumb separator="<b class='demo-breadcrumb-separator'>=></b>">
+      <breadcrumb-item to="/">
         Home4
-      </Breadcrumb-item>
-      <Breadcrumb-item :to="{name: 'user', params: { userId: 123 }}">
+      </breadcrumb-item>
+      <breadcrumb-item :to="{name: 'user', params: { userId: 123 }}">
         Components
-      </Breadcrumb-item>
-      <Breadcrumb-item>Breadcrumb</Breadcrumb-item>
-    </Breadcrumb>
-    <Breadcrumb separator="">
-      <Breadcrumb-item href="/">
+      </breadcrumb-item>
+      <breadcrumb-item>Breadcrumb</breadcrumb-item>
+    </breadcrumb>
+    <breadcrumb separator="">
+      <breadcrumb-item href="/">
         <template>Home</template>
         <template slot="separator">
           <b style="color: #f50;">
             ->
           </b>
         </template>
-      </Breadcrumb-item>
-      <Breadcrumb-item href="/components/page">
+      </breadcrumb-item>
+      <breadcrumb-item href="/components/page">
         <template>Breadcrumb</template>
         <template slot="separator">
           <b style="color: #f50;">
             ->
           </b>
         </template>
-      </Breadcrumb-item>
-      <Breadcrumb-item>Breadcrumb</Breadcrumb-item>
-    </Breadcrumb>
+      </breadcrumb-item>
+      <breadcrumb-item>Breadcrumb</breadcrumb-item>
+    </breadcrumb>
   </div>
 </template>
 <script>

@@ -1,236 +1,237 @@
 <template>
   <div>
-    <Tag checkable>
+    <tag checkable>
       标签一
-    </Tag>
-    <Tag>标签二</Tag>
-    <Tag 
-      v-if="show" 
-      closable 
+    </tag>
+    <tag>标签二</tag>
+    <tag
+      v-if="show"
+      closable
       @on-close="handleClose"
     >
       标签三
-    </Tag>
+    </tag>
     <br><br>
-    <Tag 
-      type="border" 
+    <tag
+      type="border"
       checkable
     >
       标签三
-    </Tag>
-    <Tag 
-      type="border" 
+    </tag>
+    <tag
+      type="border"
       closable
     >
       标签四
-    </Tag>
-    <Tag type="dot">
+    </tag>
+    <tag type="dot">
       标签一
-    </Tag>
-    <Tag 
-      type="dot" 
+    </tag>
+    <tag
+      type="dot"
       closable
     >
       标签二
-    </Tag>
+    </tag>
     <br><br>
-    <Tag 
-      closable 
-      color="blue" 
+    <tag
+      closable
+      color="blue"
       checkable
     >
       标签一
-    </Tag>
-    <Tag 
-      closable 
-      color="green" 
+    </tag>
+    <tag
+      closable
+      color="green"
       checkable
     >
       标签二
-    </Tag>
-    <Tag 
-      closable 
-      color="red" 
+    </tag>
+    <tag
+      closable
+      color="red"
       checkable
     >
       标签三
-    </Tag>
-    <Tag 
-      closable 
-      color="yellow" 
+    </tag>
+    <tag
+      closable
+      color="yellow"
       checkable
     >
       标签四
-    </Tag>
+    </tag>
     <br><br>
-    <Tag 
-      color="blue" 
+    <tag
+      color="blue"
       checkable
     >
       标签一
-    </Tag>
-    <Tag 
-      color="green" 
+    </tag>
+    <tag
+      color="green"
       checkable
     >
       标签二
-    </Tag>
-    <Tag 
-      color="red" 
+    </tag>
+    <tag
+      color="red"
       checkable
     >
       标签三
-    </Tag>
-    <Tag 
-      color="yellow" 
+    </tag>
+    <tag
+      color="yellow"
       checkable
     >
       标签四
-    </Tag>
+    </tag>
     <br><br>
-    <Tag 
-      closable 
-      color="#EF6AFF" 
+    <tag
+      closable
+      color="#EF6AFF"
       checkable
     >
       标签一
-    </Tag>
-    <Tag 
-      color="#EF6AFF" 
+    </tag>
+    <tag
+      color="#EF6AFF"
       checkable
     >
       标签一
-    </Tag>
-    <Tag 
-      type="border" 
-      closable 
-      color="#EF6AFF" 
+    </tag>
+    <tag
+      type="border"
+      closable
+      color="#EF6AFF"
       checkable
     >
       标签二
-    </Tag>
-    <Tag 
-      type="dot" 
-      closable 
-      color="#EF6AFF" 
+    </tag>
+    <tag
+      type="dot"
+      closable
+      color="#EF6AFF"
       checkable
     >
       标签三
-    </Tag>
-    <Tag 
-      closable 
-      color="default" 
+    </tag>
+    <tag
+      closable
+      color="default"
       checkable
     >
       标签四
-    </Tag>
+    </tag>
     <br><br>
-    <Tag 
-      closable 
+    <tag
+      closable
       color="#EF6AFF"
     >
       标签一
-    </Tag>
-    <Tag 
-      type="border" 
-      closable 
+    </tag>
+    <tag
+      type="border"
+      closable
       color="#EF6AFF"
     >
       标签二
-    </Tag>
-    <Tag 
-      type="dot" 
-      closable 
+    </tag>
+    <tag
+      type="dot"
+      closable
       color="#EF6AFF"
     >
       标签三
-    </Tag>
-    <Tag 
-      closable 
+    </tag>
+    <tag
+      closable
       color="default"
     >
       标签四
-    </Tag>
+    </tag>
     <br><br>
-    <Tag 
-      type="border" 
-      closable 
-      color="blue" 
+    <tag
+      type="border"
+      closable
+      color="blue"
       checkable
     >
       标签一
-    </Tag>
-    <Tag 
-      type="border" 
-      closable 
+    </tag>
+    <tag
+      type="border"
+      closable
       color="green"
     >
       标签二
-    </Tag>
-    <Tag 
-      type="border" 
-      closable 
+    </tag>
+    <tag
+      type="border"
+      closable
       color="red"
     >
       标签三
-    </Tag>
-    <Tag 
-      type="border" 
-      closable 
+    </tag>
+    <tag
+      type="border"
+      closable
       color="yellow"
     >
       标签四
-    </Tag>
+    </tag>
     <br><br>
-    <Tag 
-      type="dot" 
-      closable 
-      color="blue" 
+    <tag
+      type="dot"
+      closable
+      color="blue"
       checkable
     >
       标签一
-    </Tag>
-    <Tag 
-      type="dot" 
-      closable 
+    </tag>
+    <tag
+      type="dot"
+      closable
       color="green"
     >
       标签二
-    </Tag>
-    <Tag 
-      type="dot" 
-      closable 
+    </tag>
+    <tag
+      type="dot"
+      closable
       color="red"
     >
       标签三
-    </Tag>
-    <Tag 
-      type="dot" 
-      closable 
+    </tag>
+    <tag
+      type="dot"
+      closable
       color="yellow"
     >
       标签四
-    </Tag>
+    </tag>
     <br><br>
-    <Tag 
-      v-for="item in count" 
-      :key="item" 
-      :name="item" 
-      closable 
+    <tag
+      v-for="item in count"
+      :key="item"
+      :name="item"
+      closable
       @on-close="handleClose2"
     >
       标签{{ item + 1 }}
-    </Tag>
-    <Button 
-      icon="ios-plus-empty" 
-      type="dashed" 
-      size="small" 
+    </tag>
+    <i-button
+      icon="ios-plus-empty"
+      type="dashed"
+      size="small"
       @click="handleAdd"
     >
       添加标签
-    </Button>
+    </i-button>
   </div>
 </template>
+
 <script>
 export default {
   data() {
