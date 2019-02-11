@@ -45,7 +45,7 @@
         Rebel base, in range.
       </template>
       You may fire when ready.
-      <button
+      <i-button
         slot="action"
         icon="rocket"
         icon-weight="solid"
@@ -53,7 +53,7 @@
         type="text"
       >
         Fire
-      </button>
+      </i-button>
     </alert>
 
     <alert
@@ -76,14 +76,14 @@
         I sense something...
       </template>
       A presence I haven't felt since...
-      <button
+      <i-button
         slot="action"
         size="small"
         icon="check"
         icon-weight="solid"
       >
         Got it
-      </button>
+      </i-button>
     </alert>
 
     <h2>Toasts</h2>
@@ -119,13 +119,13 @@
       >
       </icon>
       Do. Or do not. There is no try.
-      <button
+      <i-button
         slot="action"
         size="small"
         type="text"
       >
         Try again
-      </button>
+      </i-button>
     </alert>
   </div>
 </template>
