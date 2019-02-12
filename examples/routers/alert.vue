@@ -116,6 +116,7 @@
         slot="icon"
         type="sword"
         weight="regular"
+        spin
       >
       </icon>
       Do. Or do not. There is no try.

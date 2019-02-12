@@ -1,3 +1,4 @@
+import 'Global/Config';
 import Affix from './components/affix';
 import Alert from './components/alert';
 import AutoComplete from './components/auto-complete';

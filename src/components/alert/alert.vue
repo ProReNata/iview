@@ -81,7 +81,7 @@ export default {
     type: {
       default: 'default',
       validator(value) {
-        return Boolean(oneOf(value, ['default', 'success', 'info', 'warning', 'danger', 'update', 'tip']));
+        return oneOf(value, ['default', 'success', 'info', 'warning', 'danger', 'update', 'tip']);
       },
     },
   },

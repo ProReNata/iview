@@ -25,7 +25,7 @@ module.exports = {
    */
   overrides: [
     {
-      files: ['build/**/*.js', 'examples/**/*.{js,vue}'],
+      files: ['cssnano.config.js', 'examples/**/*.{js,vue}'],
       rules: {
         'import/no-extraneous-dependencies': [
           'error',
@@ -65,7 +65,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       webpack: {
-        config: './build/webpack.dev.config.js',
+        config: './webpack.config.js',
       },
     },
     polyfills: ['promises'],

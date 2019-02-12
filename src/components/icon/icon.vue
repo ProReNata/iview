@@ -1,12 +1,35 @@
 <template>
-  <i
-    :class="classes"
-    @click="handleClick"
-  >
-  </i>
+  <font-awesome-icon
+    :icon="icon"
+    :fixed-width="fw"
+    v-bind="$attrs"
+    v-on="$listeners"
+  ></font-awesome-icon>
 </template>
 
 <script>
+import isOneOf from 'Global/Assets/isOneOf';
+
+const SOLID = 'solid';
+const REGULAR = 'regular';
+const LIGHT = 'light';
+const ivuWeights = Object.freeze([SOLID, REGULAR, LIGHT]);
+const FAS = 'fas';
+const FAR = 'far';
+const FAL = 'fal';
+// const faWeights = Object.freeze([FAS, FAR, FAL]);
+const weightMap = Object.create(null, {
+  [SOLID]: {
+    value: FAS,
+  },
+  [REGULAR]: {
+    value: FAR,
+  },
+  [LIGHT]: {
+    value: FAL,
+  },
+});
+
 export default {
   name: 'Icon',
 
@@ -15,56 +38,29 @@ export default {
       default: false,
       type: Boolean,
     },
-    size: {
-      default: undefined,
-      type: String,
-    },
-    spin: {
-      default: false,
-      type: Boolean,
-    },
     type: {
-      default: undefined,
+      required: true,
       type: String,
     },
     weight: {
-      default: undefined,
+      default: REGULAR,
       type: String,
+      validator(value) {
+        return isOneOf(value, ivuWeights);
+      },
     },
   },
 
   computed: {
-    weightClass() {
-      const weightMap = {
-        solid: 'fas',
-        regular: 'far',
-        light: 'fal',
-      };
+    icon() {
+      const weightClass = weightMap[this.weight] || weightMap[REGULAR];
+      const definition = [weightClass];
 
-      return weightMap[this.weight || 'regular'];
-    },
-    classes() {
-      let styles = '';
-
-      if (this.size) {
-        styles += ` fa-${this.size}`;
+      if (this.type) {
+        definition.push(this.type);
       }
 
-      if (this.fw) {
-        styles += ' fa-fw';
-      }
-
-      if (this.spin) {
-        styles += ' fa-spin';
-      }
-
-      return `${this.weightClass} fa-${this.type} ${styles}`;
-    },
-  },
-
-  methods: {
-    handleClick(event) {
-      this.$emit('click', event);
+      return definition;
     },
   },
 };

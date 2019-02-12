@@ -76,9 +76,4 @@ export default {
     },
   },
 };
-</script>~
-
-<!--suppress CssUnknownTarget -->
-<style lang="less">
-@import '~./redactor-3_1_6/redactor/redactor.css';
-</style>
+</script>

@@ -1,12 +1,580 @@
-!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t(require("vue")):"function"==typeof define&&define.amd?define("iview/locale",["vue"],t):"object"==typeof exports?exports["iview/locale"]=t(require("vue")):e["iview/locale"]=t(e.Vue)}(window,function(e){return function(e){var t={};function n(o){if(t[o])return t[o].exports;var r=t[o]={i:o,l:!1,exports:{}};return e[o].call(r.exports,r,r.exports,n),r.l=!0,r.exports}return n.m=e,n.c=t,n.d=function(e,t,o){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:o})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var o=Object.create(null);if(n.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var r in e)n.d(o,r,function(t){return e[t]}.bind(null,r));return o},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/dist/locale/",n(n.s=19)}({0:function(e,t){e.exports=function(e){return e&&e.__esModule?e:{default:e}}},1:function(e,t,n){var o,r;
 /*!
+{
+  "copywrite": "",
+  "date": "2019-02-12T18:54:17.657Z",
+  "describe": "",
+  "description": "A high quality UI components Library with Vue.js",
+  "file": "locale/ro-RO.js",
+  "hash": "f59b96b86de0a67b2f0b",
+  "license": "MIT",
+  "version": "3.0.0-alpha.1"
+}
+*/
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("vue"));
+	else if(typeof define === 'function' && define.amd)
+		define("iview", ["vue"], factory);
+	else if(typeof exports === 'object')
+		exports["iview"] = factory(require("vue"));
+	else
+		root["iview"] = factory(root["Vue"]);
+})((function () {
+  'use strict';
+
+  if (typeof self !== 'undefined') {
+    return self;
+  }
+
+  if (typeof window !== 'undefined') {
+    return window;
+  }
+
+  if (typeof global !== 'undefined') {
+    return global;
+  }
+
+  return Function('return this')();
+}()), function(__WEBPACK_EXTERNAL_MODULE__5__) {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/dist/";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 683);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * js-logger - http://github.com/jonnyreeves/js-logger
  * Jonny Reeves, http://jonnyreeves.co.uk/
  * js-logger may be freely distributed under the MIT license.
  */
-/*!
- * js-logger - http://github.com/jonnyreeves/js-logger
- * Jonny Reeves, http://jonnyreeves.co.uk/
- * js-logger may be freely distributed under the MIT license.
- */!function(i){"use strict";var l,a={VERSION:"1.6.0"},u={},c=function(e,t){return function(){return t.apply(e,arguments)}},f=function(){var e,t,n=arguments,o=n[0];for(t=1;t<n.length;t++)for(e in n[t])e in o||!n[t].hasOwnProperty(e)||(o[e]=n[t][e]);return o},s=function(e,t){return{value:e,name:t}};a.TRACE=s(1,"TRACE"),a.DEBUG=s(2,"DEBUG"),a.INFO=s(3,"INFO"),a.TIME=s(4,"TIME"),a.WARN=s(5,"WARN"),a.ERROR=s(8,"ERROR"),a.OFF=s(99,"OFF");var m=function(e){this.context=e,this.setLevel(e.filterLevel),this.log=this.info};m.prototype={setLevel:function(e){e&&"value"in e&&(this.context.filterLevel=e)},getLevel:function(){return this.context.filterLevel},enabledFor:function(e){var t=this.context.filterLevel;return e.value>=t.value},trace:function(){this.invoke(a.TRACE,arguments)},debug:function(){this.invoke(a.DEBUG,arguments)},info:function(){this.invoke(a.INFO,arguments)},warn:function(){this.invoke(a.WARN,arguments)},error:function(){this.invoke(a.ERROR,arguments)},time:function(e){"string"==typeof e&&e.length>0&&this.invoke(a.TIME,[e,"start"])},timeEnd:function(e){"string"==typeof e&&e.length>0&&this.invoke(a.TIME,[e,"end"])},invoke:function(e,t){l&&this.enabledFor(e)&&l(t,f({level:e},this.context))}};var d,v=new m({filterLevel:a.OFF});(d=a).enabledFor=c(v,v.enabledFor),d.trace=c(v,v.trace),d.debug=c(v,v.debug),d.time=c(v,v.time),d.timeEnd=c(v,v.timeEnd),d.info=c(v,v.info),d.warn=c(v,v.warn),d.error=c(v,v.error),d.log=d.info,a.setHandler=function(e){l=e},a.setLevel=function(e){for(var t in v.setLevel(e),u)u.hasOwnProperty(t)&&u[t].setLevel(e)},a.getLevel=function(){return v.getLevel()},a.get=function(e){return u[e]||(u[e]=new m(f({name:e},v.context)))},a.createDefaultHandler=function(e){(e=e||{}).formatter=e.formatter||function(e,t){t.name&&e.unshift("["+t.name+"]")};var t={},n=function(e,t){Function.prototype.apply.call(e,console,t)};return"undefined"==typeof console?function(){}:function(o,r){o=Array.prototype.slice.call(o);var i,l=console.log;r.level===a.TIME?(i=(r.name?"["+r.name+"] ":"")+o[0],"start"===o[1]?console.time?console.time(i):t[i]=(new Date).getTime():console.timeEnd?console.timeEnd(i):n(l,[i+": "+((new Date).getTime()-t[i])+"ms"])):(r.level===a.WARN&&console.warn?l=console.warn:r.level===a.ERROR&&console.error?l=console.error:r.level===a.INFO&&console.info?l=console.info:r.level===a.DEBUG&&console.debug?l=console.debug:r.level===a.TRACE&&console.trace&&(l=console.trace),e.formatter(o,r),n(l,o))}},a.useDefaults=function(e){a.setLevel(e&&e.defaultLevel||a.DEBUG),a.setHandler(a.createDefaultHandler(e))},void 0===(r="function"==typeof(o=a)?o.call(t,n,t,e):o)||(e.exports=r)}()},19:function(e,t,n){"use strict";var o=n(0);Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=o(n(2)),i=(n(1).get("iview:locale:lang:ro-RO"),{i:{datepicker:{clear:"Anulează",datePanelLabel:"[mmmm] [yyyy]",endTime:"Ora finală",month:"Lună",month1:"Ianuarie",month10:"Octombrie",month11:"Noiembrie",month12:"Decembrie",month2:"Februarie",month3:"Martie",month4:"Aprilia",month5:"Mai",month6:"Iunie",month7:"Iulie",month8:"August",month9:"Septembrie",months:{m1:"Ian",m10:"Oct",m11:"Noi",m12:"Dec",m2:"Feb",m3:"Mar",m4:"Apr",m5:"Mai",m6:"Iun",m7:"Iul",m8:"Aug",m9:"Sep"},ok:"OK",selectDate:"Selectează data",selectTime:"Selectează timpul",startTime:"Ora inițială",weeks:{fri:"Vin",mon:"Lun",sat:"Sâm",sun:"Dum",thu:"Joi",tue:"Mar",wed:"Mie"},weekStartDay:"1",year:"An"},locale:"ro-RO",modal:{cancelText:"Renunță",okText:"OK"},page:{goto:"Du-te la",item:"element",items:"elemente",next:"Pagina urmatoare",next5:"Urmatoarele 5 Pagini",p:"",page:"/pagina",prev:"Pagina precedentă",prev5:"5 Pagini precedente",total:"Total"},poptip:{cancelText:"Renunță",okText:"OK"},rate:{star:"Stea",stars:"Stele"},select:{loading:"Încărcare",noMatch:"Niciun rezultat",placeholder:"Selectează"},table:{clearFilter:"Tot",confirmFilter:"Confirmă",noDataText:"Fără date",noFilteredDataText:"Filtru fără rezultate",resetFilter:"Resetează"},transfer:{filterPlaceholder:"Caută",notFoundText:"Niciun rezultat",titles:{source:"Origine",target:"Destinație"}},tree:{emptyText:"Fără date"}}});(0,r.default)(i);var l=i;t.default=l},2:function(e,t,n){"use strict";var o=n(0);Object.defineProperty(t,"__esModule",{value:!0}),t.default=function(e){i||"undefined"!=typeof iview&&("langs"in iview||(iview.langs={}),iview.langs[e.i.locale]=e)};var r=o(n(3)),i=(n(1).get("iview:locale:lang"),r.default.prototype.$isServer)},3:function(t,n){t.exports=e}})});
+(function (global) {
+	"use strict";
+
+	// Top level module for the global, static logger instance.
+	var Logger = { };
+
+	// For those that are at home that are keeping score.
+	Logger.VERSION = "1.6.0";
+
+	// Function which handles all incoming log messages.
+	var logHandler;
+
+	// Map of ContextualLogger instances by name; used by Logger.get() to return the same named instance.
+	var contextualLoggersByNameMap = {};
+
+	// Polyfill for ES5's Function.bind.
+	var bind = function(scope, func) {
+		return function() {
+			return func.apply(scope, arguments);
+		};
+	};
+
+	// Super exciting object merger-matron 9000 adding another 100 bytes to your download.
+	var merge = function () {
+		var args = arguments, target = args[0], key, i;
+		for (i = 1; i < args.length; i++) {
+			for (key in args[i]) {
+				if (!(key in target) && args[i].hasOwnProperty(key)) {
+					target[key] = args[i][key];
+				}
+			}
+		}
+		return target;
+	};
+
+	// Helper to define a logging level object; helps with optimisation.
+	var defineLogLevel = function(value, name) {
+		return { value: value, name: name };
+	};
+
+	// Predefined logging levels.
+	Logger.TRACE = defineLogLevel(1, 'TRACE');
+	Logger.DEBUG = defineLogLevel(2, 'DEBUG');
+	Logger.INFO = defineLogLevel(3, 'INFO');
+	Logger.TIME = defineLogLevel(4, 'TIME');
+	Logger.WARN = defineLogLevel(5, 'WARN');
+	Logger.ERROR = defineLogLevel(8, 'ERROR');
+	Logger.OFF = defineLogLevel(99, 'OFF');
+
+	// Inner class which performs the bulk of the work; ContextualLogger instances can be configured independently
+	// of each other.
+	var ContextualLogger = function(defaultContext) {
+		this.context = defaultContext;
+		this.setLevel(defaultContext.filterLevel);
+		this.log = this.info;  // Convenience alias.
+	};
+
+	ContextualLogger.prototype = {
+		// Changes the current logging level for the logging instance.
+		setLevel: function (newLevel) {
+			// Ensure the supplied Level object looks valid.
+			if (newLevel && "value" in newLevel) {
+				this.context.filterLevel = newLevel;
+			}
+		},
+		
+		// Gets the current logging level for the logging instance
+		getLevel: function () {
+			return this.context.filterLevel;
+		},
+
+		// Is the logger configured to output messages at the supplied level?
+		enabledFor: function (lvl) {
+			var filterLevel = this.context.filterLevel;
+			return lvl.value >= filterLevel.value;
+		},
+
+		trace: function () {
+			this.invoke(Logger.TRACE, arguments);
+		},
+
+		debug: function () {
+			this.invoke(Logger.DEBUG, arguments);
+		},
+
+		info: function () {
+			this.invoke(Logger.INFO, arguments);
+		},
+
+		warn: function () {
+			this.invoke(Logger.WARN, arguments);
+		},
+
+		error: function () {
+			this.invoke(Logger.ERROR, arguments);
+		},
+
+		time: function (label) {
+			if (typeof label === 'string' && label.length > 0) {
+				this.invoke(Logger.TIME, [ label, 'start' ]);
+			}
+		},
+
+		timeEnd: function (label) {
+			if (typeof label === 'string' && label.length > 0) {
+				this.invoke(Logger.TIME, [ label, 'end' ]);
+			}
+		},
+
+		// Invokes the logger callback if it's not being filtered.
+		invoke: function (level, msgArgs) {
+			if (logHandler && this.enabledFor(level)) {
+				logHandler(msgArgs, merge({ level: level }, this.context));
+			}
+		}
+	};
+
+	// Protected instance which all calls to the to level `Logger` module will be routed through.
+	var globalLogger = new ContextualLogger({ filterLevel: Logger.OFF });
+
+	// Configure the global Logger instance.
+	(function() {
+		// Shortcut for optimisers.
+		var L = Logger;
+
+		L.enabledFor = bind(globalLogger, globalLogger.enabledFor);
+		L.trace = bind(globalLogger, globalLogger.trace);
+		L.debug = bind(globalLogger, globalLogger.debug);
+		L.time = bind(globalLogger, globalLogger.time);
+		L.timeEnd = bind(globalLogger, globalLogger.timeEnd);
+		L.info = bind(globalLogger, globalLogger.info);
+		L.warn = bind(globalLogger, globalLogger.warn);
+		L.error = bind(globalLogger, globalLogger.error);
+
+		// Don't forget the convenience alias!
+		L.log = L.info;
+	}());
+
+	// Set the global logging handler.  The supplied function should expect two arguments, the first being an arguments
+	// object with the supplied log messages and the second being a context object which contains a hash of stateful
+	// parameters which the logging function can consume.
+	Logger.setHandler = function (func) {
+		logHandler = func;
+	};
+
+	// Sets the global logging filter level which applies to *all* previously registered, and future Logger instances.
+	// (note that named loggers (retrieved via `Logger.get`) can be configured independently if required).
+	Logger.setLevel = function(level) {
+		// Set the globalLogger's level.
+		globalLogger.setLevel(level);
+
+		// Apply this level to all registered contextual loggers.
+		for (var key in contextualLoggersByNameMap) {
+			if (contextualLoggersByNameMap.hasOwnProperty(key)) {
+				contextualLoggersByNameMap[key].setLevel(level);
+			}
+		}
+	};
+
+	// Gets the global logging filter level
+	Logger.getLevel = function() {
+		return globalLogger.getLevel();
+	};
+
+	// Retrieve a ContextualLogger instance.  Note that named loggers automatically inherit the global logger's level,
+	// default context and log handler.
+	Logger.get = function (name) {
+		// All logger instances are cached so they can be configured ahead of use.
+		return contextualLoggersByNameMap[name] ||
+			(contextualLoggersByNameMap[name] = new ContextualLogger(merge({ name: name }, globalLogger.context)));
+	};
+
+	// CreateDefaultHandler returns a handler function which can be passed to `Logger.setHandler()` which will
+	// write to the window's console object (if present); the optional options object can be used to customise the
+	// formatter used to format each log message.
+	Logger.createDefaultHandler = function (options) {
+		options = options || {};
+
+		options.formatter = options.formatter || function defaultMessageFormatter(messages, context) {
+			// Prepend the logger's name to the log message for easy identification.
+			if (context.name) {
+				messages.unshift("[" + context.name + "]");
+			}
+		};
+
+		// Map of timestamps by timer labels used to track `#time` and `#timeEnd()` invocations in environments
+		// that don't offer a native console method.
+		var timerStartTimeByLabelMap = {};
+
+		// Support for IE8+ (and other, slightly more sane environments)
+		var invokeConsoleMethod = function (hdlr, messages) {
+			Function.prototype.apply.call(hdlr, console, messages);
+		};
+
+		// Check for the presence of a logger.
+		if (typeof console === "undefined") {
+			return function () { /* no console */ };
+		}
+
+		return function(messages, context) {
+			// Convert arguments object to Array.
+			messages = Array.prototype.slice.call(messages);
+
+			var hdlr = console.log;
+			var timerLabel;
+
+			if (context.level === Logger.TIME) {
+				timerLabel = (context.name ? '[' + context.name + '] ' : '') + messages[0];
+
+				if (messages[1] === 'start') {
+					if (console.time) {
+						console.time(timerLabel);
+					}
+					else {
+						timerStartTimeByLabelMap[timerLabel] = new Date().getTime();
+					}
+				}
+				else {
+					if (console.timeEnd) {
+						console.timeEnd(timerLabel);
+					}
+					else {
+						invokeConsoleMethod(hdlr, [ timerLabel + ': ' +
+							(new Date().getTime() - timerStartTimeByLabelMap[timerLabel]) + 'ms' ]);
+					}
+				}
+			}
+			else {
+				// Delegate through to custom warn/error loggers if present on the console.
+				if (context.level === Logger.WARN && console.warn) {
+					hdlr = console.warn;
+				} else if (context.level === Logger.ERROR && console.error) {
+					hdlr = console.error;
+				} else if (context.level === Logger.INFO && console.info) {
+					hdlr = console.info;
+				} else if (context.level === Logger.DEBUG && console.debug) {
+					hdlr = console.debug;
+				} else if (context.level === Logger.TRACE && console.trace) {
+					hdlr = console.trace;
+				}
+
+				options.formatter(messages, context);
+				invokeConsoleMethod(hdlr, messages);
+			}
+		};
+	};
+
+	// Configure and example a Default implementation which writes to the `window.console` (if present).  The
+	// `options` hash can be used to configure the default logLevel and provide a custom message formatter.
+	Logger.useDefaults = function(options) {
+		Logger.setLevel(options && options.defaultLevel || Logger.DEBUG);
+		Logger.setHandler(Logger.createDefaultHandler(options));
+	};
+
+	// Export to popular environments boilerplate.
+	if (true) {
+		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (Logger),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	}
+	else {}
+}(this));
+
+
+/***/ }),
+
+/***/ 1:
+/***/ (function(module, exports) {
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}
+
+module.exports = _interopRequireDefault;
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__5__;
+
+/***/ }),
+
+/***/ 683:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(1);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _lang = _interopRequireDefault(__webpack_require__(7));
+
+var logger = __webpack_require__(0).get("iview:locale:lang:ro-RO");
+
+var lang = {
+  i: {
+    datepicker: {
+      clear: 'Anulează',
+      datePanelLabel: '[mmmm] [yyyy]',
+      endTime: 'Ora finală',
+      month: 'Lună',
+      month1: 'Ianuarie',
+      month10: 'Octombrie',
+      month11: 'Noiembrie',
+      month12: 'Decembrie',
+      month2: 'Februarie',
+      month3: 'Martie',
+      month4: 'Aprilia',
+      month5: 'Mai',
+      month6: 'Iunie',
+      month7: 'Iulie',
+      month8: 'August',
+      month9: 'Septembrie',
+      months: {
+        m1: 'Ian',
+        m10: 'Oct',
+        m11: 'Noi',
+        m12: 'Dec',
+        m2: 'Feb',
+        m3: 'Mar',
+        m4: 'Apr',
+        m5: 'Mai',
+        m6: 'Iun',
+        m7: 'Iul',
+        m8: 'Aug',
+        m9: 'Sep'
+      },
+      ok: 'OK',
+      selectDate: 'Selectează data',
+      selectTime: 'Selectează timpul',
+      startTime: 'Ora inițială',
+      weeks: {
+        fri: 'Vin',
+        mon: 'Lun',
+        sat: 'Sâm',
+        sun: 'Dum',
+        thu: 'Joi',
+        tue: 'Mar',
+        wed: 'Mie'
+      },
+      weekStartDay: '1',
+      year: 'An'
+    },
+    locale: 'ro-RO',
+    modal: {
+      cancelText: 'Renunță',
+      okText: 'OK'
+    },
+    page: {
+      goto: 'Du-te la',
+      item: 'element',
+      items: 'elemente',
+      next: 'Pagina urmatoare',
+      next5: 'Urmatoarele 5 Pagini',
+      p: '',
+      page: '/pagina',
+      prev: 'Pagina precedentă',
+      prev5: '5 Pagini precedente',
+      total: 'Total'
+    },
+    poptip: {
+      cancelText: 'Renunță',
+      okText: 'OK'
+    },
+    rate: {
+      star: 'Stea',
+      stars: 'Stele'
+    },
+    select: {
+      loading: 'Încărcare',
+      noMatch: 'Niciun rezultat',
+      placeholder: 'Selectează'
+    },
+    table: {
+      clearFilter: 'Tot',
+      confirmFilter: 'Confirmă',
+      noDataText: 'Fără date',
+      noFilteredDataText: 'Filtru fără rezultate',
+      resetFilter: 'Resetează'
+    },
+    transfer: {
+      filterPlaceholder: 'Caută',
+      notFoundText: 'Niciun rezultat',
+      titles: {
+        source: 'Origine',
+        target: 'Destinație'
+      }
+    },
+    tree: {
+      emptyText: 'Fără date'
+    }
+  }
+};
+(0, _lang.default)(lang);
+var _default = lang;
+exports.default = _default;
+
+/***/ }),
+
+/***/ 7:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(1);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _vue = _interopRequireDefault(__webpack_require__(5));
+
+var logger = __webpack_require__(0).get("iview:locale:lang");
+
+var isServer = _vue.default.prototype.$isServer;
+
+function _default(lang) {
+  if (!isServer) {
+    if (typeof iview !== 'undefined') {
+      if (!('langs' in iview)) {
+        iview.langs = {};
+      }
+
+      iview.langs[lang.i.locale] = lang;
+    }
+  }
+}
+
+/***/ })
+
+/******/ });
+});
 //# sourceMappingURL=ro-RO.js.map
