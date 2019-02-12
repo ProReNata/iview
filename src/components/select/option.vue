@@ -95,7 +95,7 @@ export default {
   },
 
   mounted() {
-    const Select = findComponentUpward(this, 'iSelect');
+    const Select = findComponentUpward(this, 'ISelect');
 
     if (Select) {
       this.autoComplete = Select.autoComplete;
