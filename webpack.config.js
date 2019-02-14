@@ -408,7 +408,7 @@ module.exports = (env = {}) => {
 
     entry: utils.IS_PRODUCTION
       ? {
-          iview: [path.join(__dirname, utils.getStringOption(PACKAGE, 'module')), path.join(__dirname, 'src/styles/index.less')],
+          iview: [path.join(__dirname, utils.getStringOption(PACKAGE, 'main')), path.join(__dirname, 'src/styles/index.less')],
           ...localeEntries,
         }
       : {
@@ -490,11 +490,6 @@ module.exports = (env = {}) => {
           loaders: [utils.IS_PRODUCTION ? miniCssExtactLoader : styleLoader, cssLoader, postcssLoader, lessLoader],
           test: /\.less$/,
         },
-
-        // {
-        //   loader: 'html-loader',
-        //   test: /\.html$/,
-        // },
 
         /**
          * This package allows transpiling JavaScript files using Babel and webpack.

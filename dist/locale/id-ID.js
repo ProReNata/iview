@@ -1,7 +1,7 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-14T19:14:03.816Z",
+  "date": "2019-02-14T20:46:09.581Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/id-ID.js",
