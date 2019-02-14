@@ -17,7 +17,6 @@ const ivuWeights = Object.freeze([SOLID, REGULAR, LIGHT]);
 const FAS = 'fas';
 const FAR = 'far';
 const FAL = 'fal';
-// const faWeights = Object.freeze([FAS, FAR, FAL]);
 const weightMap = Object.create(null, {
   [SOLID]: {
     value: FAS,
