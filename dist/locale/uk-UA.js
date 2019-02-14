@@ -1,11 +1,11 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-12T18:54:17.657Z",
+  "date": "2019-02-14T18:23:47.708Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/uk-UA.js",
-  "hash": "f59b96b86de0a67b2f0b",
+  "hash": "96a870cbecd341d22b4f",
   "license": "MIT",
   "version": "3.0.0-alpha.1"
 }

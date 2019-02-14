@@ -14,9 +14,9 @@ Object.assign(Vue.config, {
    * @param {string} info - The Vue-specific error info; which lifecycle hook the error was found in.
    * @see https://vuejs.org/v2/api/#errorHandler
    */
-  errorHandler(error, vm, info) {
-    logger.error(error, info);
-  },
+  // errorHandler(error, vm, info) {
+  //   logger.error(error, info);
+  // },
 
   performance: false,
 
@@ -33,7 +33,7 @@ Object.assign(Vue.config, {
    * @param {string} trace - The component hierarchy trace.
    * @see https://vuejs.org/v2/api/#warnHandler
    */
-  warnHandler(message, vm, trace) {
-    logger.warn(message, trace);
-  },
+  // warnHandler(message, vm, trace) {
+  //   logger.warn(message, trace);
+  // },
 });
