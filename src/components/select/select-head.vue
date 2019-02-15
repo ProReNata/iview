@@ -47,7 +47,8 @@
     </icon>
     <icon
       v-if="!resetSelect && !remote && !disabled"
-      type="arrow-down-b"
+      type="arrow-down"
+      weight="solid"
       :class="[prefixCls + '-arrow']"
     >
     </icon>

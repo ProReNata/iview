@@ -270,7 +270,7 @@ export default {
     arrowClasses() {
       return [
         this.iconPrefixCls,
-        `${this.iconPrefixCls}-arrow-down-b`,
+        `${this.iconPrefixCls}-arrow-down`,
         `${this.inputPrefixCls}-icon`,
         `${this.inputPrefixCls}-icon-normal`,
       ];

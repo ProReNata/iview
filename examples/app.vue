@@ -58,14 +58,24 @@
             Alert
           </router-link>
         </li>
-        <!-- <li>
-          <router-link to="/badge">
-            Badge
-          </router-link>
-        </li>
         <li>
           <router-link to="/tag">
             Tag
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/select">
+            Select
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/icon">
+            Icon
+          </router-link>
+        </li>
+        <!-- <li>
+          <router-link to="/badge">
+            Badge
           </router-link>
         </li>
         <li>
@@ -156,11 +166,6 @@
         <li>
           <router-link to="/cascader">
             Cascader
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/select">
-            Select
           </router-link>
         </li>
         <li>

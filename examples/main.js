@@ -31,6 +31,11 @@ const router = new VueRouter({
     },
     {
       /* eslint-disable-next-line import/no-dynamic-require,global-require */
+      component: (resolve) => require(['./routers/icon.vue'], resolve),
+      path: '/icon',
+    },
+    {
+      /* eslint-disable-next-line import/no-dynamic-require,global-require */
       component: (resolve) => require(['./routers/grid.vue'], resolve),
       path: '/grid',
     },
