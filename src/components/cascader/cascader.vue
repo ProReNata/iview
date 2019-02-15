@@ -40,7 +40,7 @@
         >
         </icon>
         <icon
-          type="arrow-down"
+          type="chevron-down"
           :class="[prefixCls + '-arrow']"
         >
         </icon>

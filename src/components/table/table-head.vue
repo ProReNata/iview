@@ -76,7 +76,7 @@
                 >
                 </icon>
                 <icon
-                  type="arrow-down"
+                  type="chevron-down"
                   weight="solid"
                   :class="{on: getColumn(rowIndex, index)._sortType === 'desc'}"
                   @click="handleSort(getColumn(rowIndex, index)._index, 'desc')"

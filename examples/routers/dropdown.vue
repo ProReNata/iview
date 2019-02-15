@@ -8,7 +8,7 @@
       >
         <a href="javascript:void(0)">
           right-start
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -26,7 +26,7 @@
       >
         <a href="javascript:void(0)">
           right-end
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -45,7 +45,7 @@
       >
         <a href="javascript:void(0)">
           bottom-start
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -63,7 +63,7 @@
       >
         <a href="javascript:void(0)">
           bottom-end
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -82,7 +82,7 @@
       >
         <a href="javascript:void(0)">
           top-start
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -100,7 +100,7 @@
       >
         <a href="javascript:void(0)">
           top-end
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -119,7 +119,7 @@
       >
         <a href="javascript:void(0)">
           left-start
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -138,7 +138,7 @@
       >
         <a href="javascript:void(0)">
           left-end
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -157,7 +157,7 @@
       >
         <a href="javascript:void(0)">
           top
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -175,7 +175,7 @@
       >
         <a href="javascript:void(0)">
           bottom
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -193,7 +193,7 @@
       >
         <a href="javascript:void(0)">
           left
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -221,7 +221,7 @@
       >
         <a href="javascript:void(0)">
           right
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -242,7 +242,7 @@
       >
         <a href="javascript:void(0)">
           right-start
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -260,7 +260,7 @@
       >
         <a href="javascript:void(0)">
           right-end
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -279,7 +279,7 @@
       >
         <a href="javascript:void(0)">
           bottom-start
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -297,7 +297,7 @@
       >
         <a href="javascript:void(0)">
           bottom-end
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -316,7 +316,7 @@
       >
         <a href="javascript:void(0)">
           top-start
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -334,7 +334,7 @@
       >
         <a href="javascript:void(0)">
           top-end
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -353,7 +353,7 @@
       >
         <a href="javascript:void(0)">
           left-start
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -372,7 +372,7 @@
       >
         <a href="javascript:void(0)">
           left-end
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -391,7 +391,7 @@
       >
         <a href="javascript:void(0)">
           top
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -409,7 +409,7 @@
       >
         <a href="javascript:void(0)">
           bottom
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -427,7 +427,7 @@
       >
         <a href="javascript:void(0)">
           left
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">
@@ -455,7 +455,7 @@
       >
         <a href="javascript:void(0)">
           right
-          <icon type="arrow-down">
+          <icon type="chevron-down">
           </icon>
         </a>
         <dropdown-menu slot="list">

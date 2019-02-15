@@ -13,7 +13,7 @@
       weight="solid"
     ></icon>
     <icon
-      type="arrow-down"
+      type="chevron-down"
       weight="solid"
     >
     </icon>
