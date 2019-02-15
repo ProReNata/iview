@@ -23,7 +23,7 @@
     padding: @notice-padding;
     // border: 1px solid @border-color-split;
     border-radius: @border-radius-small;
-    box-shadow: @shadow-base;
+    box-shadow: @shadow-small;
     background: #fff;
     line-height: 1;
     position: relative;
@@ -75,7 +75,7 @@
   &-desc {
     font-size: 12px;
     //color: @legend-color;
-    color: @text-color;
+    color: @color-text;
     text-align: justify;
     line-height: 1.5;
   }
@@ -94,16 +94,16 @@
     font-size: 16px;
 
     &-success {
-      color: @success-color;
+      color: @color-success;
     }
     &-info {
       color: @primary-color;
     }
     &-warning {
-      color: @warning-color;
+      color: @color-warning;
     }
     &-error {
-      color: @error-color;
+      color: @color-error;
     }
   }
   &-with-desc &-icon {
@@ -133,17 +133,17 @@
   }
   &-with-success {
     &::after {
-      background: @success-color;
+      background: @color-success;
     }
   }
   &-with-warning {
     &::after {
-      background: @warning-color;
+      background: @color-warning;
     }
   }
   &-with-error {
     &::after {
-      background: @error-color;
+      background: @color-error;
     }
   }
 }
