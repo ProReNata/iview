@@ -1,4 +1,10 @@
 import 'Global/Config';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {fas} from '@fortawesome/pro-solid-svg-icons';
+import {far} from '@fortawesome/pro-regular-svg-icons';
+import {fal} from '@fortawesome/pro-light-svg-icons';
+// noinspection ES6CheckImport
+import {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText} from '@fortawesome/vue-fontawesome';
 import Affix from './components/affix';
 import Alert from './components/alert';
 import AutoComplete from './components/auto-complete';
@@ -53,6 +59,10 @@ import Upload from './components/upload';
 import {Row, Col} from './components/grid';
 import {Select, Option, OptionGroup} from './components/select';
 import * as locale from './locale/index';
+
+library.add(fas);
+library.add(far);
+library.add(fal);
 
 const components = {
   Affix,
@@ -155,6 +165,10 @@ const install = function _install(Vue, opts = {}) {
   Object.keys(iview).forEach((key) => {
     Vue.component(key, iview[key]);
   });
+
+  Vue.component('font-awesome-icon', FontAwesomeIcon);
+  Vue.component('font-awesome-layers', FontAwesomeLayers);
+  Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
 
   Vue.prototype.$Loading = LoadingBar;
   Vue.prototype.$Message = Message;
