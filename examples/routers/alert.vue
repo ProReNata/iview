@@ -142,7 +142,7 @@
     </alert>
 
     <!--Condensed Closable small width-->
-    <div style="max-width: 15rem">
+    <div style="max-width: 13em">
       <alert
         type="warning"
         closable

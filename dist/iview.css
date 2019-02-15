@@ -1,11 +1,11 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-15T12:40:14.808Z",
+  "date": "2019-02-15T13:25:20.411Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "iview.css",
-  "hash": "276de634c112fe92a3fb",
+  "hash": "2abce21dd56b6a0f8a39",
   "license": "MIT",
   "version": "3.0.0-alpha.1"
 }
@@ -3817,6 +3817,7 @@ fieldset[disabled] .byx-btn-info.active > a:only-child::after {
 .byx-alert-message-condensed {
   max-width: unset;
   flex-basis: unset;
+  font-weight: 500;
 }
 .byx-alert-action {
   display: flex;
@@ -3844,7 +3845,9 @@ fieldset[disabled] .byx-btn-info.active > a:only-child::after {
   cursor: pointer;
 }
 .byx-alert-close-condensed {
-  top: 0;
+  right: 1rem;
+  width: 1.5rem;
+  line-height: 1.5rem;
 }
 .byx-form .byx-form-item-label {
   text-align: right;
