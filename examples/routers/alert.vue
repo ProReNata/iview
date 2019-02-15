@@ -94,6 +94,7 @@
       Now let's blow this thing and go home!
     </alert>
 
+
     <alert
       type="danger"
       show-icon
@@ -111,6 +112,50 @@
 
     <alert
       show-icon
+    >
+      <icon
+        slot="icon"
+        type="sword"
+        weight="regular"
+        spin
+      >
+      </icon>
+      Do. Or do not. There is no try.
+      <i-button
+        slot="action"
+        size="small"
+        type="text"
+      >
+        Try again
+      </i-button>
+    </alert>
+
+    <h3>Condensed</h3>
+
+    <!--Condensed Closable-->
+    <alert
+      type="success"
+      closable
+      condensed
+    >
+      Without precise calculations we could fly right through a star or bounce too close to a supernova and that'd end your trip real quick, wouldn't it?
+    </alert>
+
+    <!--Condensed Closable small width-->
+    <div style="max-width: 13em">
+      <alert
+        type="warning"
+        closable
+        condensed
+      >
+        Now let's go home!
+      </alert>
+    </div>
+
+    <!--Condensed Icon Action-->
+    <alert
+      show-icon
+      condensed
     >
       <icon
         slot="icon"

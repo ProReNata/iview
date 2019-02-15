@@ -2,7 +2,7 @@
   <transition name="fade">
     <div
       v-if="!closed"
-      :class="wrapClasses"
+      :class="baseClasses"
     >
       <div
         v-if="showIcon"
@@ -22,6 +22,7 @@
         <h4 v-if="hasHeader">
           <slot name="header"></slot>
         </h4>
+
         <slot>
         </slot>
       </div>
@@ -33,7 +34,7 @@
         <slot name="action"></slot>
       </div>
 
-      <a
+      <div
         v-if="closable"
         :class="closeClasses"
         @click="close"
@@ -45,7 +46,7 @@
           >
           </icon>
         </slot>
-      </a>
+      </div>
     </div>
   </transition>
 </template>
@@ -78,6 +79,10 @@ export default {
       default: undefined,
       type: String,
     },
+    condensed: {
+      default: false,
+      type: Boolean,
+    },
     type: {
       default: 'default',
       validator(value) {
@@ -95,27 +100,47 @@ export default {
   },
 
   computed: {
+    baseClasses() {
+      const prefix = this.prefixConstructor('');
+      const classes = this.classesConstructor(prefix, false);
+
+      classes.push(`${prefix}-${this.type}`);
+
+      return classes;
+    },
+    iconClasses() {
+      const prefix = this.prefixConstructor('icon');
+      const classes = this.classesConstructor(prefix, false);
+
+      if (this.size === 'large') {
+        classes.push(`${prefix}-large`);
+      }
+
+      return classes;
+    },
+    messageClasses() {
+      const classes = this.classesConstructor('message');
+
+      return classes;
+    },
     actionClasses() {
-      return `${prefixCls}-action`;
+      const classes = this.classesConstructor('action');
+
+      return classes;
     },
     closeClasses() {
-      return `${prefixCls}-close`;
+      const classes = this.classesConstructor('close');
+
+      return classes;
     },
+
     hasAction() {
       return this.$slots.action !== undefined;
     },
     hasHeader() {
       return this.$slots.header !== undefined;
     },
-    iconClasses() {
-      let iconClasses = `${prefixCls}-icon`;
 
-      if (this.size === 'large') {
-        iconClasses += ` ${prefixCls}-icon-large`;
-      }
-
-      return iconClasses;
-    },
     iconType() {
       let type = '';
 
@@ -149,16 +174,9 @@ export default {
 
       return type;
     },
-    messageClasses() {
-      return `${prefixCls}-message`;
-    },
-    wrapClasses() {
-      return [`${prefixCls}`, `${prefixCls}-${this.type}`];
-    },
   },
 
   mounted() {
-    this.header = this.$slots.header !== undefined;
     const standardWeight = this.size === 'large' ? 'light' : 'solid';
     this.iconWeightData = this.iconWeight || standardWeight;
   },
@@ -167,6 +185,44 @@ export default {
     close(e) {
       this.closed = true;
       this.$emit('on-close', e);
+    },
+
+    /**
+     * Generates a new prefix based on the component prefix and a suffix.
+     *
+     * @param {string} suffix - Add this to the prefix.
+     *
+     * @returns {string} - Prefix based on custom String.
+     */
+    prefixConstructor(suffix) {
+      return suffix === '' ? prefixCls : `${prefixCls}-${suffix}`;
+    },
+
+    /**
+     * Generates a classname based on the prefix.
+     * Adds any extra classes based on props.
+     *
+     * @param {string} suffix - Used to generate the prefix.
+     * @param {boolean} generatePrefix - Set to false if you pass in the whole prefix as suffix.
+     *
+     * @returns {Array} - All classes with the prefix.
+     */
+    classesConstructor(suffix, generatePrefix = true) {
+      let prefix;
+
+      if (generatePrefix) {
+        prefix = this.prefixConstructor(suffix);
+      } else {
+        prefix = suffix;
+      }
+
+      const classes = [prefix];
+
+      if (this.condensed) {
+        classes.push(`${prefix}-condensed`);
+      }
+
+      return classes;
     },
   },
 };
