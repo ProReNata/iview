@@ -1,11 +1,11 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-15T04:50:00.627Z",
+  "date": "2019-02-15T11:11:48.747Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "iview.css",
-  "hash": "9688d079559fa5a64472",
+  "hash": "53bd8c0b7a37c09f704f",
   "license": "MIT",
   "version": "3.0.0-alpha.1"
 }
@@ -3744,8 +3744,8 @@ fieldset[disabled] .byx-btn-info.active > a:only-child::after {
 }
 .byx-alert {
   display: flex;
-  align-items: stretch;
   justify-content: flex-start;
+  align-items: stretch;
   flex-wrap: wrap;
   padding: 1rem;
   margin-bottom: 0.5rem;
@@ -3753,6 +3753,10 @@ fieldset[disabled] .byx-btn-info.active > a:only-child::after {
   border-left: 0.25rem solid #859BA0;
   border-radius: 0.25rem;
   box-shadow: 0px 2px 12px rgba(36, 28, 21, 0.06), 0px 1px 2px rgba(36, 28, 21, 0.06);
+}
+.byx-alert-condensed {
+  padding: 0 1rem;
+  height: 2.5rem;
 }
 .byx-alert-info {
   background-color: #c5dbf2;
@@ -3790,8 +3794,6 @@ fieldset[disabled] .byx-btn-info.active > a:only-child::after {
 .byx-alert-icon {
   flex-grow: 0;
   flex-shrink: 0;
-  padding-right: 1rem;
-  margin: -1rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3802,6 +3804,9 @@ fieldset[disabled] .byx-btn-info.active > a:only-child::after {
   font-size: 2.84rem;
   width: 5rem;
 }
+.byx-alert-icon-condensed {
+  font-size: 1rem;
+}
 .byx-alert-message {
   max-width: 33rem;
   flex-grow: 1;
@@ -3809,13 +3814,9 @@ fieldset[disabled] .byx-btn-info.active > a:only-child::after {
   flex-basis: 70%;
   align-self: center;
 }
-.byx-alert-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  text-align: center;
-  width: 2.5rem;
-  line-height: 2.5rem;
+.byx-alert-message-condensed {
+  max-width: unset;
+  flex-basis: unset;
 }
 .byx-alert-action {
   display: flex;
@@ -3827,6 +3828,23 @@ fieldset[disabled] .byx-btn-info.active > a:only-child::after {
 }
 .byx-alert-action > button[class*="btn"] {
   margin: 0;
+}
+.byx-alert-action-condensed {
+  align-items: center;
+}
+.byx-alert-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  text-align: center;
+  width: 2.5rem;
+  line-height: 2.5rem;
+}
+.byx-alert-close:hover {
+  cursor: pointer;
+}
+.byx-alert-close-condensed {
+  top: 0;
 }
 .byx-form .byx-form-item-label {
   text-align: right;
