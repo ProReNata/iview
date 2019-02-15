@@ -1,156 +1,129 @@
 <template>
   <div>
-    <select
+    <h1>Selects</h1>
+    <p class="text-muted">
+      @PARAM {string} size - [small, large]
+    </p>
+    <p class="text-muted">
+      @PARAM {string} placeholder - undefined
+    </p>
+    <p class="text-muted">
+      @PARAM {boolean} multiple - default: false - Big box
+    </p>
+
+    <h2>Default</h2>
+    <i-select
       v-model="model1"
-      size="small"
-      style="width:200px;"
+      placeholder="Placeholder"
+      style="width:296px"
     >
-      <option
+      <i-option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </option>
-    </select>
-    <select
+      </i-option>
+    </i-select>
+    <h3>Multiple</h3>
+    <i-select
+      v-model="model11"
+      multiple
+      style="width:260px"
+    >
+      <i-option
+        v-for="item in cityList"
+        :key="item.value"
+        :value="item.value"
+      >
+        {{ item.label }}
+      </i-option>
+    </i-select>
+    <h2>Small</h2>
+    <i-select
+      v-model="model1"
+      size="small"
+      style="width:200px;"
+    >
+      <i-option
+        v-for="item in cityList"
+        :key="item.value"
+        :value="item.value"
+      >
+        {{ item.label }}
+      </i-option>
+    </i-select>
+    <h3>Multiple</h3>
+    <i-select
       v-model="model10"
       size="small"
       multiple
       style="width:260px"
     >
-      <option
+      <i-option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </option>
-    </select>
+      </i-option>
+    </i-select>
 
     <br><br>
 
-    <select
+    <h2>Large</h2>
+    <i-select
+      v-model="model1"
+      size="large"
+      style="width:200px"
+      @on-clear="onClear"
+    >
+      <i-option
+        v-for="item in cityList"
+        :key="item.value"
+        :value="item.value"
+      >
+        {{ item.label }}
+      </i-option>
+    </i-select>
+    <h3>Clearable</h3>
+    <i-select
       v-model="model1"
       size="large"
       style="width:200px"
       clearable
       @on-clear="onClear"
     >
-      <option
+      <i-option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </option>
-    </select>
-    <select
+      </i-option>
+    </i-select>
+
+    <h3>Multiple</h3>
+    <i-select
       v-model="model10"
       size="large"
       multiple
       style="width:260px"
     >
-      <option
+      <i-option
         v-for="item in cityList"
         :key="item.value"
         :value="item.value"
       >
         {{ item.label }}
-      </option>
-    </select>
-
-    <br><br>
-
-    <select
-      v-model="model1"
-      style="width:200px"
-    >
-      <option
-        v-for="item in cityList"
-        :key="item.value"
-        :value="item.value"
-      >
-        {{ item.label }}
-      </option>
-    </select>
-    <select
-      v-model="model11"
-      multiple
-      style="width:260px"
-    >
-      <option
-        v-for="item in cityList"
-        :key="item.value"
-        :value="item.value"
-      >
-        {{ item.label }}
-      </option>
-    </select>
-    <select
-      v-model="model10"
-      multiple
-      style="width:260px"
-    >
-      <option
-        v-for="item in cityList"
-        :key="item.value"
-        :value="item.value"
-      >
-        {{ item.label }}
-      </option>
-    </select>
-
-    <br><br>
-
-    <br><br>
-
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <select
-      v-model="model10"
-      multiple
-      style="width:260px"
-    >
-      <option
-        v-for="item in cityList"
-        :key="item.value"
-        :value="item.value"
-      >
-        {{ item.label }}
-      </option>
-    </select>
-    <br><br>
-
-    <br><br>
-
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <select
-      v-model="model10"
-      multiple
-      style="width:260px"
-    >
-      <option
-        v-for="item in cityList"
-        :key="item.value"
-        :value="item.value"
-      >
-        {{ item.label }}
-      </option>
-    </select>
+      </i-option>
+    </i-select>
   </div>
 </template>
 <script>
 export default {
+  name: 'ExampleSelects',
+
   data() {
     return {
       cityList: [

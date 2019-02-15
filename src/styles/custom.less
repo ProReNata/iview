@@ -28,9 +28,13 @@
 @font-weight-bolder: 800;
 @line-height-normal: 1.5rem;
 
+// Borders
+@border-color-base: @color-s500;
+
 // Radius
-@radius-normal: 0.25rem;
-@radius-big: 0.5rem;
+@radius-normal: .25rem;
+@radius-big:    .5rem;
+@radius-rounded: .75rem;
 
 // Shadows
 @shadow-small: 0 2px 12px fade(@color-dark100, 6%), 0 1px 2px fade(@color-dark100, 6%);
@@ -63,9 +67,9 @@
 @btn-primary-bg: @color-p500;
 
 // Input
-@input-height-base: 32px;
-@input-height-large: 36px;
-@input-height-small: 24px;
+@input-height-small : 24px;
+@input-height-base : 32px;
+@input-height-large : 36px;
 
 @input-padding-horizontal: 7px;
 @input-padding-vertical-base: 4px;
@@ -80,3 +84,9 @@
 @input-hover-border-color: @color-p500;
 @input-focus-border-color: @color-p500;
 @input-disabled-bg: @color-s200;
+
+
+// Tag
+@tag-border-radius: @radius-rounded;
+@tag-bg: @color-s600;
+@tag-font-size: 0.85rem;
