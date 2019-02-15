@@ -190,9 +190,9 @@ export default {
     /**
      * Generates a new prefix based on the component prefix and a suffix.
      *
-     * @param {string} suffix
+     * @param {string} suffix - Add this to the prefix.
      *
-     * @returns {string}
+     * @returns {string} - Prefix based on custom String.
      */
     prefixConstructor(suffix) {
       return suffix === '' ? prefixCls : `${prefixCls}-${suffix}`;
@@ -202,16 +202,16 @@ export default {
      * Generates a classname based on the prefix.
      * Adds any extra classes based on props.
      *
-     * @param {string} suffix
-     * @param {boolean} generatePrefix - Takes the suffix to generate a new prefix.
+     * @param {string} suffix - Used to generate the prefix.
+     * @param {boolean} generatePrefix - Set to false if you pass in the whole prefix as suffix.
      *
-     * @returns {Array}
+     * @returns {Array} - All classes with the prefix.
      */
     classesConstructor(suffix, generatePrefix = true) {
       let prefix;
 
       if (generatePrefix) {
-        prefix = this.prefixConstructor(prefix);
+        prefix = this.prefixConstructor(suffix);
       } else {
         prefix = suffix;
       }
