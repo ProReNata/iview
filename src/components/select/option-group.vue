@@ -17,7 +17,7 @@
   </li>
 </template>
 <script>
-const prefixCls = 'ivu-select-group';
+const prefixCls = 'byx-select-group';
 
 export default {
   name: 'OptionGroup',
