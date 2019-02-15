@@ -68,18 +68,20 @@
                 v-if="column.sortable"
                 :class="[prefixCls + '-sort']"
               >
-                <i
-                  class="ivu-icon ivu-icon-arrow-up-b"
+                <icon
+                  type="arrow-up"
+                  weight="solid"
                   :class="{on: getColumn(rowIndex, index)._sortType === 'asc'}"
                   @click="handleSort(getColumn(rowIndex, index)._index, 'asc')"
                 >
-                </i>
-                <i
-                  class="ivu-icon ivu-icon-arrow-down-b"
+                </icon>
+                <icon
+                  type="chevron-down"
+                  weight="solid"
                   :class="{on: getColumn(rowIndex, index)._sortType === 'desc'}"
                   @click="handleSort(getColumn(rowIndex, index)._index, 'desc')"
                 >
-                </i>
+                </icon>
               </span>
               <poptip
                 v-if="isPopperShow(column)"
