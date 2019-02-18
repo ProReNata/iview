@@ -183,7 +183,7 @@ if (utils.IS_PRODUCTION) {
   PLUGINS.push(MINI_CSS_EXTRACT_PLUGIN_INSTANCE);
 } else {
   const html = new HtmlWebpackPlugin({
-    template: path.join(__dirname, 'examples/index.html'),
+    template: path.join(__dirname, PACKAGE.prorenata.examples.template),
   });
 
   PLUGINS.push(html);
@@ -408,11 +408,15 @@ module.exports = (env = {}) => {
 
     entry: utils.IS_PRODUCTION
       ? {
-          iview: [path.join(__dirname, 'src/index.js'), path.join(__dirname, 'src/styles/index.less')],
+          [PACKAGE.prorenata.name]: [
+            path.join(__dirname, PACKAGE.prorenata.entry.less),
+            /* js must come last in list otherwise you get an empty object */
+            path.join(__dirname, PACKAGE.prorenata.entry.js),
+          ],
           ...localeEntries,
         }
       : {
-          iview: path.join(__dirname, 'examples/main.js'),
+          [PACKAGE.prorenata.name]: path.join(__dirname, PACKAGE.prorenata.examples.entry),
           vendors: ['vue', 'vue-router'],
         },
 
@@ -607,16 +611,15 @@ module.exports = (env = {}) => {
           filename: '[name].js',
           // https://github.com/webpack/webpack/issues/6525
           globalObject: `(${getGlobal.toString()}())`,
-          library: 'iview',
+          library: PACKAGE.prorenata.name,
           libraryTarget: 'umd',
-          path: path.resolve(__dirname, 'dist'),
-          publicPath: '/dist/',
+          path: path.resolve(__dirname, PACKAGE.prorenata.outputPath),
           umdNamedDefine: true,
         }
       : {
           chunkFilename: '[name].chunk.js',
           filename: '[name].js',
-          path: path.join(__dirname, 'examples/dist'),
+          path: path.join(__dirname, PACKAGE.prorenata.examples.outputPath),
           publicPath: '',
         },
 
@@ -649,6 +652,7 @@ module.exports = (env = {}) => {
        */
       alias: {
         iview: path.join(__dirname, 'src/index'),
+        Components: path.join(__dirname, 'src/components'),
         Global: path.join(__dirname, 'Global'),
         RootDir: __dirname,
         Stories: path.join(__dirname, 'Storybook/Stories'),

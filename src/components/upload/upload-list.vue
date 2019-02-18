@@ -12,7 +12,8 @@
       </span>
       <icon
         v-show="file.status === 'finished'"
-        type="ios-close-empty"
+        type="times"
+        weight="regular"
         :class="[prefixCls + '-list-remove']"
         @click.native="handleRemove(file)"
       >

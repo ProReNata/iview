@@ -9,7 +9,8 @@
         {{ item.label }}
       </span>
       <icon
-        type="ios-close-empty"
+        type="times"
+        weight="regular"
         @click.native.stop="removeTag(item)"
       >
       </icon>

@@ -24,7 +24,8 @@
         v-if="closable"
         :class="iconClass"
         :color="lineColor"
-        type="ios-close-empty"
+        type="times"
+        weight="regular"
         @click.native.stop="close"
       >
       </icon>
@@ -52,7 +53,8 @@
       v-if="closable"
       :class="iconClass"
       :color="lineColor"
-      type="ios-close-empty"
+      type="times"
+      weight="regular"
       @click.native.stop="close"
     >
     </icon>
