@@ -1,6 +1,6 @@
 {
   "name": "iview",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "title": "iView",
   "description": "A high quality UI components Library with Vue.js",
   "homepage": "http://www.iviewui.com",
@@ -13,7 +13,7 @@
     "ui",
     "framework"
   ],
-  "main": "dist/iview.js",
+  "main": "src/index.js",
   "files": [
     "dist",
     "src"
