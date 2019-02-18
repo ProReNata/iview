@@ -1,13 +1,13 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-15T16:02:40.144Z",
+  "date": "2019-02-18T06:59:30.026Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/hi-IN.js",
-  "hash": "022b32f1b5ff4e555a81",
+  "hash": "73c9f7406c1d7b905811",
   "license": "MIT",
-  "version": "3.0.0-alpha.1"
+  "version": "3.0.0-alpha.2"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -19,7 +19,7 @@
 		exports["iview"] = factory(require("vue"));
 	else
 		root["iview"] = factory(root["Vue"]);
-})((function() {
+})((function () {
   'use strict';
 
   if (typeof self !== 'undefined') {

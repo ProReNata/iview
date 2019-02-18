@@ -408,7 +408,7 @@ module.exports = (env = {}) => {
 
     entry: utils.IS_PRODUCTION
       ? {
-          iview: [path.join(__dirname, utils.getStringOption(PACKAGE, 'main')), path.join(__dirname, 'src/styles/index.less')],
+          iview: [path.join(__dirname, 'src/index.js'), path.join(__dirname, 'src/styles/index.less')],
           ...localeEntries,
         }
       : {
