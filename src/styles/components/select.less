@@ -78,14 +78,13 @@
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
       display: block;
-      height: @input-height-base - 2px;
-      line-height: @input-height-base - 2px;
-      //font-size: @font-size-small;
+      height: @input-height-base;
+      line-height: @input-height-base;
+
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding-left: 8px;
-      padding-right: 24px;
+      padding-left: 0.5rem;
     }
   }
 
@@ -95,15 +94,14 @@
 
     .@{select-prefix-cls}-placeholder {
       display: block;
-      height: @input-height-base - 2px;
-      line-height: @input-height-base - 2px;
+      height: @input-height-base;
+      line-height: @input-height-base;
       color: @input-placeholder-color;
-      //font-size: @font-size-small;
+
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding-left: 4px;
-      padding-right: 22px;
+      padding-left: 0.5rem;
     }
   }
 
@@ -112,8 +110,8 @@
 
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
-      height: @input-height-large - 2px;
-      line-height: @input-height-large - 2px;
+      height: @input-height-large;
+      line-height: @input-height-large;
       //font-size: @font-size-base;
     }
   }
@@ -123,8 +121,8 @@
 
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
-      min-height: @input-height-large - 2px;
-      line-height: @input-height-large - 2px;
+      min-height: @input-height-large;
+      line-height: @input-height-large;
       //font-size: @font-size-base;
     }
   }
@@ -135,8 +133,8 @@
 
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
-      height: @input-height-small - 2px;
-      line-height: @input-height-small - 2px;
+      height: @input-height-small;
+      line-height: @input-height-small;
     }
   }
 
@@ -147,8 +145,8 @@
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
       height: auto;
-      min-height: @input-height-small - 2px;
-      line-height: @input-height-small - 2px;
+      min-height: @input-height-small;
+      line-height: @input-height-small;
     }
   }
 
@@ -184,8 +182,8 @@
   }
 
   &-small &-input {
-    height: @input-height-small - 2px;
-    line-height: @input-height-small - 2px;
+    height: @input-height-small;
+    line-height: @input-height-small;
   }
 
   &-multiple &-input {

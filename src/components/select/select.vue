@@ -242,7 +242,7 @@ export default {
       type: Function,
     },
     size: {
-      default: undefined,
+      default: 'default',
       type: String,
       validator(value) {
         return oneOf(value, ['small', 'large', 'default']);
