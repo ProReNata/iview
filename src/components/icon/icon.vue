@@ -38,12 +38,15 @@ export function isOneOfIconNames(value) {
 
 const WEIGHT_MAP = Object.create(null, {
   [SOLID]: {
+    enumerable: true,
     value: FAS,
   },
   [REGULAR]: {
+    enumerable: true,
     value: FAR,
   },
   [LIGHT]: {
+    enumerable: true,
     value: FAL,
   },
 });

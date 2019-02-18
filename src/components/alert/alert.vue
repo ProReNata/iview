@@ -11,7 +11,7 @@
         <slot name="icon">
           <icon
             :type="iconType"
-            :fw="true"
+            fw
             :weight="iconWeightData"
           >
           </icon>
@@ -52,10 +52,48 @@
 </template>
 
 <script>
-import Icon from '../icon';
-import {oneOf} from '../../utils/assist';
+import Icon, {isOneOfIconWeights} from 'Components/icon';
+import isOneOf from 'Global/Assets/isOneOf';
 
 const prefixCls = 'byx-alert';
+const EMPTY_STRING = '';
+const DEFAULT = 'default';
+const SUCCESS = 'success';
+const INFO = 'info';
+const WARNING = 'warning';
+const DANGER = 'danger';
+const UPDATE = 'update';
+const TIP = 'tip';
+const TYPES = Object.freeze([DEFAULT, SUCCESS, INFO, WARNING, DANGER, UPDATE, TIP]);
+const LARGE = 'large';
+const LIGHT = 'light';
+const SOLID = 'solid';
+const ICON_TYPE_MAP = Object.create(null, {
+  [SUCCESS]: {
+    enumerable: true,
+    value: 'thumbs-up',
+  },
+  [INFO]: {
+    enumerable: true,
+    value: 'info-circle',
+  },
+  [WARNING]: {
+    enumerable: true,
+    value: 'exclamation-circle',
+  },
+  [DANGER]: {
+    enumerable: true,
+    value: 'exclamation-triangle',
+  },
+  [UPDATE]: {
+    enumerable: true,
+    value: 'star',
+  },
+  [TIP]: {
+    enumerable: true,
+    value: 'lightbulb-exclamation',
+  },
+});
 
 export default {
   name: 'Alert',
@@ -70,6 +108,7 @@ export default {
     iconWeight: {
       default: undefined,
       type: String,
+      validator: isOneOfIconWeights,
     },
     showIcon: {
       default: false,
@@ -78,15 +117,18 @@ export default {
     size: {
       default: undefined,
       type: String,
+      validator(value) {
+        return value === LARGE;
+      },
     },
     condensed: {
       default: false,
       type: Boolean,
     },
     type: {
-      default: 'default',
+      default: DEFAULT,
       validator(value) {
-        return oneOf(value, ['default', 'success', 'info', 'warning', 'danger', 'update', 'tip']);
+        return isOneOf(value, TYPES);
       },
     },
   },
@@ -95,13 +137,12 @@ export default {
     return {
       closed: false,
       desc: false,
-      iconWeightData: this.iconWeight,
     };
   },
 
   computed: {
     baseClasses() {
-      const prefix = this.prefixConstructor('');
+      const prefix = this.prefixConstructor(EMPTY_STRING);
       const classes = this.classesConstructor(prefix, false);
 
       classes.push(`${prefix}-${this.type}`);
@@ -112,79 +153,42 @@ export default {
       const prefix = this.prefixConstructor('icon');
       const classes = this.classesConstructor(prefix, false);
 
-      if (this.size === 'large') {
+      if (this.size === LARGE) {
         classes.push(`${prefix}-large`);
       }
 
       return classes;
     },
     messageClasses() {
-      const classes = this.classesConstructor('message');
-
-      return classes;
+      return this.classesConstructor('message');
     },
     actionClasses() {
-      const classes = this.classesConstructor('action');
-
-      return classes;
+      return this.classesConstructor('action');
     },
     closeClasses() {
-      const classes = this.classesConstructor('close');
-
-      return classes;
+      return this.classesConstructor('close');
     },
-
     hasAction() {
-      return this.$slots.action !== undefined;
+      return Boolean(this.$slots.action);
     },
     hasHeader() {
-      return this.$slots.header !== undefined;
+      return Boolean(this.$slots.header);
     },
-
     iconType() {
-      let type = '';
-
-      switch (this.type) {
-        case 'success':
-          type = 'thumbs-up';
-          break;
-
-        case 'info':
-          type = 'info-circle';
-          break;
-
-        case 'warning':
-          type = 'exclamation-circle';
-          break;
-
-        case 'danger':
-          type = 'exclamation-triangle';
-          break;
-
-        case 'update':
-          type = 'star';
-          break;
-
-        case 'tip':
-          type = 'lightbulb-exclamation';
-          break;
-
-        default:
-      }
-
-      return type;
+      return ICON_TYPE_MAP[this.type] || EMPTY_STRING;
     },
-  },
-
-  mounted() {
-    const standardWeight = this.size === 'large' ? 'light' : 'solid';
-    this.iconWeightData = this.iconWeight || standardWeight;
+    iconWeightData() {
+      return this.iconWeight || this.standardWeight;
+    },
+    standardWeight() {
+      return this.size === LARGE ? LIGHT : SOLID;
+    },
   },
 
   methods: {
-    close(e) {
+    close(event) {
       this.closed = true;
-      this.$emit('on-close', e);
+      this.$emit('on-close', event);
     },
 
     /**
@@ -195,7 +199,7 @@ export default {
      * @returns {string} - Prefix based on custom String.
      */
     prefixConstructor(suffix) {
-      return suffix === '' ? prefixCls : `${prefixCls}-${suffix}`;
+      return suffix === EMPTY_STRING ? prefixCls : `${prefixCls}-${suffix}`;
     },
 
     /**
@@ -208,14 +212,7 @@ export default {
      * @returns {Array} - All classes with the prefix.
      */
     classesConstructor(suffix, generatePrefix = true) {
-      let prefix;
-
-      if (generatePrefix) {
-        prefix = this.prefixConstructor(suffix);
-      } else {
-        prefix = suffix;
-      }
-
+      const prefix = generatePrefix ? this.prefixConstructor(suffix) : suffix;
       const classes = [prefix];
 
       if (this.condensed) {
