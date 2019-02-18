@@ -1,13 +1,13 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-18T06:59:30.026Z",
+  "date": "2019-02-18T12:30:24.462Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/ko-KR.js",
-  "hash": "73c9f7406c1d7b905811",
+  "hash": "8141d55865da837c8c0f",
   "license": "MIT",
-  "version": "3.0.0-alpha.2"
+  "version": "3.0.0-alpha.3"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
