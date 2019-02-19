@@ -1,13 +1,13 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-18T21:28:56.749Z",
+  "date": "2019-02-19T20:56:16.235Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/fa-IR.js",
-  "hash": "f81946e3261a3ed7dcba",
+  "hash": "3fa1932fa9ce0a7d2b94",
   "license": "MIT",
-  "version": "3.0.0-alpha.5"
+  "version": "3.0.0-alpha.6"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -119,7 +119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 681);
+/******/ 	return __webpack_require__(__webpack_require__.s = 691);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -420,7 +420,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__5__;
 
 /***/ }),
 
-/***/ 681:
+/***/ 691:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

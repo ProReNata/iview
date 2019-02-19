@@ -17982,14 +17982,12 @@ $R.add('class', 'video.component', {
 });
 
 
-    // we don't want to expose via the global object.
-    // window.Redactor = window.$R = $R;
-    // Export as a module.
-    module.exports = $R;
+    window.Redactor = window.$R = $R;
 
     // Data attribute load
     window.addEventListener('load', function()
     {
         $R('[data-redactor]');
     });
+
 }());

@@ -16,6 +16,7 @@ module.exports = {
    */
   globals: {
     iview: false,
+    $R: false,
   },
 
   /**

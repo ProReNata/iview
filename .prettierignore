@@ -4,4 +4,5 @@
 dist/
 node_modules/
 test/
+redactor-3_1_6/
 package-lock.json

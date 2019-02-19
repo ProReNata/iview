@@ -1,1 +1,1 @@
-export {default, isOneOfIconNames, isOneOfIconWeights} from './icon.vue';
+export {default, getIconAsHTML, isOneOfIconNames, isOneOfIconWeights} from './icon.vue';

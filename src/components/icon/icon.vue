@@ -8,7 +8,9 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import findKey from 'lodash/findKey';
+import memoize from 'lodash/memoize';
 import {fas} from '@fortawesome/pro-solid-svg-icons';
 import {far} from '@fortawesome/pro-regular-svg-icons';
 import {fal} from '@fortawesome/pro-light-svg-icons';
@@ -51,7 +53,7 @@ const WEIGHT_MAP = Object.create(null, {
   },
 });
 
-export default {
+const vueObject = {
   name: 'Icon',
 
   props: {
@@ -84,4 +86,19 @@ export default {
     },
   },
 };
+
+const el = document.createElement('div');
+const createHTML = function createHTML(props = {}) {
+  return new Vue({
+    ...vueObject,
+
+    propsData: {
+      ...props,
+    },
+  }).$mount(el).$el.outerHTML;
+};
+
+export const getIconAsHTML = memoize(createHTML);
+
+export default vueObject;
 </script>

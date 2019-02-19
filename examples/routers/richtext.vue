@@ -1,23 +1,24 @@
 <template>
-  <richtext
-    v-model="model"
-    :placeholder="placeholder"
-    :name="name"
-    :config="config"
-  ></richtext>
+  <div>
+    <richtext
+      v-model="model"
+      name="my-redactor"
+      placeholder="Enter text..."
+      :disabled="disabled"
+    >
+    </richtext>
+    <br>
+    <div>{{ model }}</div>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      disabled: false,
       model: '',
-      placeholder: 'Edit stuff here',
-      name: 'my-redactor',
-      config: {},
     };
   },
-
-  methods: {},
 };
 </script>

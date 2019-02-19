@@ -6,9 +6,9 @@
   align-items: stretch;
   flex-wrap: wrap;
   padding: 1rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   position: relative;
-  border-left: .25rem solid @color-border;
+  border-left: 0.25rem solid @color-border;
   border-radius: @radius-normal;
   box-shadow: @shadow-small;
 
@@ -23,18 +23,30 @@
     border-left-color: lighten(@color, 5%);
   }
 
-  &-info { .colorToast(@color-info, @color-info-dark) }
-  &-danger { .colorToast(@color-danger, @color-danger-dark) }
-  &-warning { .colorToast(@color-warning, @color-warning-dark) }
-  &-success { .colorToast(@color-success, @color-success-dark) }
-  &-update { .colorToast(@color-update, @color-update-dark) }
+  &-info {
+    .colorToast(@color-info, @color-info-dark);
+  }
+  &-danger {
+    .colorToast(@color-danger, @color-danger-dark);
+  }
+  &-warning {
+    .colorToast(@color-warning, @color-warning-dark);
+  }
+  &-success {
+    .colorToast(@color-success, @color-success-dark);
+  }
+  &-update {
+    .colorToast(@color-update, @color-update-dark);
+  }
 
   &-tip {
     .colorToast(@color-s100, @color-s900);
-    > [class*="icon"] { color:@color-p500; }
+    > [class*='icon'] {
+      color: @color-p500;
+    }
   }
 
-  &-icon{
+  &-icon {
     flex-grow: 0;
     flex-shrink: 0;
     //padding-right: $padding;
@@ -76,7 +88,7 @@
     flex-basis: 30%;
     justify-content: flex-end;
     align-items: flex-end;
-    > button[class*="btn"] {
+    > button[class*='btn'] {
       margin: 0;
     }
 
@@ -87,8 +99,8 @@
 
   &-close {
     position: absolute;
-    top: .5rem;
-    right: .5rem;
+    top: 0.5rem;
+    right: 0.5rem;
     text-align: center;
     width: 2.5rem;
     line-height: 2.5rem;

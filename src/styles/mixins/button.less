@@ -26,14 +26,13 @@
 .button-variant(@color; @background) {
   .button-color(@color; @background);
 
-  &:hover
-    //&:focus
- {
-    .button-color(@color ; tint(@background, 40%) );
+  //&:focus,
+  &:hover {
+    .button-color(@color ; tint(@background, 40%));
   }
   &:active,
   &.active {
-    .button-color(@color ; shade(@background, 5%) );
+    .button-color(@color ; shade(@background, 5%));
   }
 
   &.disabled,
@@ -44,7 +43,7 @@
     &:focus,
     &:active,
     &.active {
-      .button-color(@btn-disable-color; @btn-disable-bg );
+      .button-color(@btn-disable-color; @btn-disable-bg);
     }
   }
 }
@@ -56,10 +55,10 @@
   > .@{btnClassName} {
     position: relative;
     float: left;
+    //&:focus,
     &:hover,
-        //&:focus,
-        &:active,
-        &.active {
+    &:active,
+    &.active {
       z-index: 2;
     }
   }
@@ -69,7 +68,7 @@
     padding: 0.5rem 0;
     text-align: center;
     width: 2.5rem;
-    & > i[class^="fa"] {
+    & > i[class^='fa'] {
       margin: 0;
     }
   }
@@ -92,8 +91,8 @@
 
 .btn() {
   display: inline-block;
-  margin-bottom: .5rem;
-  margin-right: .5rem;
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
   font-weight: @btn-font-weight;
   .capitals;
 
@@ -149,7 +148,7 @@
     padding: 0.5rem 0;
     text-align: center;
     width: 2.5rem;
-    > i[class^="fa"]:first-child:last-child {
+    > i[class^='fa']:first-child:last-child {
       margin: 0;
     }
   }
@@ -159,14 +158,13 @@
 .btn-default() {
   .button-variant(@btn-default-color; @btn-default-bg);
 
-  &:hover
-    //&:focus
- {
-    .button-color(@color-dark100 ; @color-s300; );
+  //&:focus,
+  &:hover {
+    .button-color(@color-dark100 ; @color-s300;);
   }
   &:active,
   &.active {
-    .button-color(@color-dark100 ; @color-s400; );
+    .button-color(@color-dark100 ; @color-s400;);
   }
   .active-btn-color(@color-p900);
 }
@@ -175,10 +173,10 @@
 .btn-primary() {
   .button-variant(@btn-primary-color; @btn-primary-bg);
 
+  //&:focus,
   &:hover,
-    //&:focus,
-    &:active,
-    &.active {
+  &:active,
+  &.active {
     color: @btn-primary-color;
   }
   .active-btn-color(@color-p900);
@@ -201,9 +199,8 @@
     }
   }
 
-  &:hover
-        //&:focus
- {
+  //&:focus,
+  &:hover {
     .button-color(@color-dark75 ; fade(@color-s0, 15%));
 
     box-shadow: @shadow-small;
@@ -225,10 +222,10 @@
 .btn-color(@color, @background) {
   .button-variant(@color; @background);
 
+  //&:focus,
   &:hover,
-        //&:focus,
-    &:active,
-    &.active {
+  &:active,
+  &.active {
     color: @color-light100;
   }
 

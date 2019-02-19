@@ -1,1 +1,73 @@
-@import '../../components/richtext/redactor-3_1_6/redactor/redactor.css';
+@import '~Components/richtext/redactor-3_1_6/redactor/redactor.css';
+
+div.redactor-box {
+  display: inline-flex;
+
+  & > textarea.redactor-source {
+    min-width: 34rem;
+    min-height: 3rem;
+    resize: both;
+  }
+}
+
+span.re-button-tooltip {
+  color: @color-light100;
+  background: @color-s900;
+
+  &::after {
+    border-bottom-color: @color-s900;
+  }
+}
+
+.byx-richtext {
+  min-width: 34rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: @radius-normal;
+  background: @color-s0;
+  transition: color @transition-time linear, background-color @transition-time linear, box-shadow @transition-time linear;
+
+  & > p {
+    margin-bottom: 0;
+  }
+
+  &:focus {
+    .active-btn-color(@color-p900);
+  }
+}
+
+div.redactor-air {
+  padding: 0;
+  color: @color-light100;
+  border-radius: @radius-normal;
+
+  & > a.re-button {
+    margin: 0;
+    border: 0;
+    border-radius: @radius-normal;
+    background: @color-s600;
+
+    &:hover {
+      background: @color-s300;
+    }
+
+    &:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:not(:last-child) {
+      border-right-width: 0.125rem;
+      border-style: solid;
+      border-color: @color-border;
+    }
+
+    &:last-child {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &:not(:first-child):not(:last-child) {
+      border-radius: 0;
+    }
+  }
+}

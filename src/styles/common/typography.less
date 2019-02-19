@@ -3,7 +3,8 @@
 @import (css) url('https://rsms.me/inter/inter-ui.css');
 @import (css) url('https://fonts.googleapis.com/css?family=Corben:400,700');
 
-html, body {
+html,
+body {
   font-family: @font-family;
   font-feature-settings: 'calt' 1, 'ss01' 1, 'ss02' 1;
   font-size: 20px;
@@ -29,7 +30,6 @@ html, body {
     // Mobile
     font-size: 12px;
   }
-
 }
 @supports (font-variation-settings: normal) {
   html {
@@ -37,7 +37,8 @@ html, body {
   }
 }
 
-h1, .h1 {
+h1,
+.h1 {
   font-size: 4rem;
   font-weight: 400;
   // letter-spacing: -0.017em;
@@ -46,7 +47,8 @@ h1, .h1 {
   font-family: @font-family-header;
 }
 
-h2, .h2 {
+h2,
+.h2 {
   font-size: 2.827rem;
   font-weight: @font-weight-light;
   letter-spacing: -0.017em;
@@ -54,7 +56,8 @@ h2, .h2 {
   line-height: 3rem;
 }
 
-h3, .h3 {
+h3,
+.h3 {
   font-size: 2rem;
   font-weight: @font-weight-bold;
   letter-spacing: -0.016em;
@@ -62,15 +65,17 @@ h3, .h3 {
   line-height: 2.5rem;
 }
 
-h4, .h4 {
+h4,
+.h4 {
   font-size: 1.414rem;
   font-weight: @font-weight-light;
   letter-spacing: -0.013em;
-  margin: .5rem 0;
+  margin: 0.5rem 0;
   line-height: 1.5rem;
 }
 
-h5, .h5 {
+h5,
+.h5 {
   font-size: 1rem;
   font-weight: @font-weight-bold;
   letter-spacing: -0.005em;
@@ -78,7 +83,8 @@ h5, .h5 {
   line-height: 1.5rem;
 }
 
-h6, .h6 {
+h6,
+.h6 {
   font-size: 0.707rem;
   font-weight: @font-weight-bold;
   .capitals;
@@ -91,17 +97,19 @@ p {
   max-width: 33rem;
 }
 
-code, pre {
+code,
+pre {
   font-family: monospace;
   background: @color-s100;
-  padding: 0 .25rem;
+  padding: 0 0.25rem;
   border-radius: @radius-normal;
 }
 
 .strong() {
   font-weight: @font-weight-bold;
 }
-strong, b {
+strong,
+b {
   .strong;
 }
 
@@ -122,7 +130,8 @@ strong, b {
   &-error {
     color: @color-danger-dark;
   }
-  &-small, &-caption {
+  &-small,
+  &-caption {
     .small;
   }
   &-align {

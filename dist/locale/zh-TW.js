@@ -1,13 +1,13 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-18T21:28:56.749Z",
+  "date": "2019-02-19T20:56:16.235Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/zh-TW.js",
-  "hash": "f81946e3261a3ed7dcba",
+  "hash": "3fa1932fa9ce0a7d2b94",
   "license": "MIT",
-  "version": "3.0.0-alpha.5"
+  "version": "3.0.0-alpha.6"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -119,7 +119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 698);
+/******/ 	return __webpack_require__(__webpack_require__.s = 708);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -420,7 +420,40 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__5__;
 
 /***/ }),
 
-/***/ 698:
+/***/ 7:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(1);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _vue = _interopRequireDefault(__webpack_require__(5));
+
+var logger = __webpack_require__(0).get("iview:locale:lang");
+
+var isServer = _vue.default.prototype.$isServer;
+
+function _default(lang) {
+  if (!isServer) {
+    if (typeof iview !== 'undefined') {
+      if (!('langs' in iview)) {
+        iview.langs = {};
+      }
+
+      iview.langs[lang.i.locale] = lang;
+    }
+  }
+}
+
+/***/ }),
+
+/***/ 708:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -539,39 +572,6 @@ var lang = {
 (0, _lang.default)(lang);
 var _default = lang;
 exports.default = _default;
-
-/***/ }),
-
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(1);
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-var _vue = _interopRequireDefault(__webpack_require__(5));
-
-var logger = __webpack_require__(0).get("iview:locale:lang");
-
-var isServer = _vue.default.prototype.$isServer;
-
-function _default(lang) {
-  if (!isServer) {
-    if (typeof iview !== 'undefined') {
-      if (!('langs' in iview)) {
-        iview.langs = {};
-      }
-
-      iview.langs[lang.i.locale] = lang;
-    }
-  }
-}
 
 /***/ })
 
