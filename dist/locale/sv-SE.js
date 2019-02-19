@@ -1,13 +1,13 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-19T20:56:16.235Z",
+  "date": "2019-02-19T21:05:44.128Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/sv-SE.js",
-  "hash": "3fa1932fa9ce0a7d2b94",
+  "hash": "df743714253c83f1300a",
   "license": "MIT",
-  "version": "3.0.0-alpha.6"
+  "version": "3.0.0-alpha.7"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
