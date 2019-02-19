@@ -69,7 +69,8 @@
                 </template>
                 <icon
                   v-if="showClose(item)"
-                  type="ios-close-empty"
+                  type="times"
+                  weight="regular"
                   @click.native.stop="handleRemove(index)"
                 >
                 </icon>

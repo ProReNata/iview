@@ -3,7 +3,7 @@
     :type="htmlType"
     :class="classes"
     :disabled="disabled"
-    @click="handleClick"
+    v-on="$listeners"
   >
     <icon
       v-if="loading"
@@ -13,7 +13,7 @@
     >
     </icon>
     <icon
-      v-if="icon && !loading"
+      v-if="showIcon"
       :type="icon"
       :weight="iconWeight"
       :fw="true"
@@ -29,10 +29,30 @@
 </template>
 
 <script>
-import Icon from '../icon';
-import {oneOf} from '../../utils/assist';
+import Icon, {isOneOfIconNames, isOneOfIconWeights} from 'Components/icon';
+import isOneOf from 'Global/Assets/isOneOf';
+import not from 'Global/Assets/not';
 
 const prefixCls = 'byx-btn';
+const DEFAULT = 'default';
+const BUTTON = 'button';
+const SUBMIT = 'submit';
+const RESET = 'RESET';
+const HTML_TYPES = Object.freeze([BUTTON, SUBMIT, RESET]);
+const SMALL = 'small';
+const LARGE = 'large';
+const SIZES = Object.freeze([SMALL, LARGE, DEFAULT]);
+export function isOneOfSizes(value) {
+  return isOneOf(value, SIZES);
+}
+
+const PRIMARY = 'primary';
+const TEXT = 'text';
+const INFO = 'info';
+const SUCCESS = 'success';
+const WARNING = 'warning';
+const ERROR = 'error';
+const TYPES = Object.freeze([PRIMARY, TEXT, INFO, SUCCESS, WARNING, ERROR, DEFAULT]);
 
 export default {
   name: 'Button',
@@ -40,22 +60,30 @@ export default {
   components: {Icon},
 
   props: {
-    disabled: Boolean,
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
     htmlType: {
-      default: 'button',
+      default: BUTTON,
       validator(value) {
-        return oneOf(value, ['button', 'submit', 'reset']);
+        return isOneOf(value, HTML_TYPES);
       },
     },
     icon: {
       default: undefined,
       type: String,
+      validator: isOneOfIconNames,
     },
     iconWeight: {
       default: undefined,
       type: String,
+      validator: isOneOfIconWeights,
     },
-    loading: Boolean,
+    loading: {
+      default: false,
+      type: Boolean,
+    },
     long: {
       default: false,
       type: Boolean,
@@ -64,22 +92,16 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, SIZES);
       },
     },
     type: {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['primary', 'text', 'info', 'success', 'warning', 'error', 'default']);
+        return isOneOf(value, TYPES);
       },
     },
-  },
-
-  data() {
-    return {
-      showSlot: true,
-    };
   },
 
   computed: {
@@ -87,23 +109,19 @@ export default {
       return [
         `${prefixCls}`,
         {
-          [`${prefixCls}-${this.type}`]: !!this.type,
+          [`${prefixCls}-${this.type}`]: this.type,
           [`${prefixCls}-long`]: this.long,
-          [`${prefixCls}-${this.size}`]: !!this.size,
-          [`${prefixCls}-loading`]: this.loading != null && this.loading,
-          [`${prefixCls}-icon-only`]: !this.showSlot && (!!this.icon || this.loading),
+          [`${prefixCls}-${this.size}`]: this.size,
+          [`${prefixCls}-loading`]: this.loading,
+          [`${prefixCls}-icon-only`]: not(this.showSlot) && (this.icon || this.loading),
         },
       ];
     },
-  },
-
-  mounted() {
-    this.showSlot = this.$slots.default !== undefined;
-  },
-
-  methods: {
-    handleClick(event) {
-      this.$emit('click', event);
+    showIcon() {
+      return Boolean(this.icon) && not(this.loading);
+    },
+    showSlot() {
+      return Boolean(this.$slots.default);
     },
   },
 };

@@ -1,3 +1,1 @@
-import Icon from './icon.vue';
-
-export default Icon;
+export {default, isOneOfIconNames, isOneOfIconWeights} from './icon.vue';

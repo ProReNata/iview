@@ -3,8 +3,9 @@
     <slot></slot>
   </div>
 </template>
+
 <script>
-import {oneOf} from '../../utils/assist';
+import {isOneOfSizes} from './button.vue';
 
 const prefixCls = 'byx-btn-group';
 
@@ -15,9 +16,7 @@ export default {
     size: {
       default: undefined,
       type: String,
-      validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
-      },
+      validator: isOneOfSizes,
     },
   },
 
@@ -26,7 +25,7 @@ export default {
       return [
         `${prefixCls}`,
         {
-          [`${prefixCls}-${this.size}`]: !!this.size,
+          [`${prefixCls}-${this.size}`]: this.size,
         },
       ];
     },

@@ -1,13 +1,13 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-15T18:13:49.510Z",
+  "date": "2019-02-19T08:10:37.023Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/vi-VN.js",
-  "hash": "e9fbd6ac087790613bec",
+  "hash": "7eb336810ceab4cd6603",
   "license": "MIT",
-  "version": "3.0.0-alpha.1"
+  "version": "3.0.0-alpha.5"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -19,7 +19,7 @@
 		exports["iview"] = factory(require("vue"));
 	else
 		root["iview"] = factory(root["Vue"]);
-})((function() {
+})((function () {
   'use strict';
 
   if (typeof self !== 'undefined') {
@@ -115,11 +115,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/dist/";
+/******/ 	__webpack_require__.p = "";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 689);
+/******/ 	return __webpack_require__(__webpack_require__.s = 697);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -420,7 +420,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__5__;
 
 /***/ }),
 
-/***/ 689:
+/***/ 697:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

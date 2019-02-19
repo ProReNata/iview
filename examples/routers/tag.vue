@@ -1,37 +1,37 @@
 <template>
   <div>
     <tag checkable>
-      标签一
+      Label 1
     </tag>
-    <tag>标签二</tag>
+    <tag>Label 2</tag>
     <tag
       v-if="show"
       closable
       @on-close="handleClose"
     >
-      标签三
+      Label 3
     </tag>
     <br><br>
     <tag
       type="border"
       checkable
     >
-      标签三
+      Label 3
     </tag>
     <tag
       type="border"
       closable
     >
-      标签四
+      Label 4
     </tag>
     <tag type="dot">
-      标签一
+      Label 1
     </tag>
     <tag
       type="dot"
       closable
     >
-      标签二
+      Label 2
     </tag>
     <br><br>
     <tag
@@ -39,53 +39,53 @@
       color="blue"
       checkable
     >
-      标签一
+      Label 1
     </tag>
     <tag
       closable
       color="green"
       checkable
     >
-      标签二
+      Label 2
     </tag>
     <tag
       closable
       color="red"
       checkable
     >
-      标签三
+      Label 3
     </tag>
     <tag
       closable
       color="yellow"
       checkable
     >
-      标签四
+      Label 4
     </tag>
     <br><br>
     <tag
       color="blue"
       checkable
     >
-      标签一
+      Label 1
     </tag>
     <tag
       color="green"
       checkable
     >
-      标签二
+      Label 2
     </tag>
     <tag
       color="red"
       checkable
     >
-      标签三
+      Label 3
     </tag>
     <tag
       color="yellow"
       checkable
     >
-      标签四
+      Label 4
     </tag>
     <br><br>
     <tag
@@ -93,13 +93,13 @@
       color="#EF6AFF"
       checkable
     >
-      标签一
+      Label 1
     </tag>
     <tag
       color="#EF6AFF"
       checkable
     >
-      标签一
+      Label 1
     </tag>
     <tag
       type="border"
@@ -107,7 +107,7 @@
       color="#EF6AFF"
       checkable
     >
-      标签二
+      Label 2
     </tag>
     <tag
       type="dot"
@@ -115,41 +115,41 @@
       color="#EF6AFF"
       checkable
     >
-      标签三
+      Label 3
     </tag>
     <tag
       closable
       color="default"
       checkable
     >
-      标签四
+      Label 4
     </tag>
     <br><br>
     <tag
       closable
       color="#EF6AFF"
     >
-      标签一
+      Label 1
     </tag>
     <tag
       type="border"
       closable
       color="#EF6AFF"
     >
-      标签二
+      Label 2
     </tag>
     <tag
       type="dot"
       closable
       color="#EF6AFF"
     >
-      标签三
+      Label 3
     </tag>
     <tag
       closable
       color="default"
     >
-      标签四
+      Label 4
     </tag>
     <br><br>
     <tag
@@ -158,28 +158,28 @@
       color="blue"
       checkable
     >
-      标签一
+      Label 1
     </tag>
     <tag
       type="border"
       closable
       color="green"
     >
-      标签二
+      Label 2
     </tag>
     <tag
       type="border"
       closable
       color="red"
     >
-      标签三
+      Label 3
     </tag>
     <tag
       type="border"
       closable
       color="yellow"
     >
-      标签四
+      Label 4
     </tag>
     <br><br>
     <tag
@@ -188,28 +188,28 @@
       color="blue"
       checkable
     >
-      标签一
+      Label 1
     </tag>
     <tag
       type="dot"
       closable
       color="green"
     >
-      标签二
+      Label 2
     </tag>
     <tag
       type="dot"
       closable
       color="red"
     >
-      标签三
+      Label 3
     </tag>
     <tag
       type="dot"
       closable
       color="yellow"
     >
-      标签四
+      Label 4
     </tag>
     <br><br>
     <tag
@@ -219,15 +219,15 @@
       closable
       @on-close="handleClose2"
     >
-      标签{{ item + 1 }}
+      Label {{ item + 1 }}
     </tag>
     <i-button
-      icon="ios-plus-empty"
-      type="dashed"
+      icon="plus"
+      icon-weight="regular"
       size="small"
       @click="handleAdd"
     >
-      添加标签
+      Add Tag
     </i-button>
   </div>
 </template>
@@ -240,6 +240,7 @@ export default {
       show: true,
     };
   },
+
   methods: {
     handleAdd() {
       if (this.count.length) {
@@ -253,6 +254,7 @@ export default {
     },
     handleClose2(event, name) {
       const index = this.count.indexOf(name);
+
       this.count.splice(index, 1);
     },
   },

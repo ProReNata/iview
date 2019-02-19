@@ -1,13 +1,13 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-15T18:13:49.510Z",
+  "date": "2019-02-19T08:10:37.023Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "iview.css",
-  "hash": "bccc05cc38c6b9fe64f0",
+  "hash": "822bcc1006c4b3677d5d",
   "license": "MIT",
-  "version": "3.0.0-alpha.1"
+  "version": "3.0.0-alpha.5"
 }
 */
 @import url(https://rsms.me/inter/inter-ui.css);
@@ -3931,14 +3931,14 @@ fieldset[disabled] .byx-btn-info.active > a:only-child::after {
   transition: border 0.2s ease-in-out, background 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 .byx-input::-moz-placeholder {
-  color: #D0D8DA;
+  color: rgba(36, 28, 21, 0.3);
   opacity: 1;
 }
 .byx-input:-ms-input-placeholder {
-  color: #D0D8DA;
+  color: rgba(36, 28, 21, 0.3);
 }
 .byx-input::-webkit-input-placeholder {
-  color: #D0D8DA;
+  color: rgba(36, 28, 21, 0.3);
 }
 .byx-input:hover {
   border-color: #fbc149;
@@ -3962,7 +3962,7 @@ fieldset[disabled] .byx-input:hover {
 textarea.byx-input {
   max-width: 100%;
   height: auto;
-  min-height: 32px;
+  min-height: 2.5rem;
   vertical-align: bottom;
   font-size: 1rem;
 }
@@ -3985,8 +3985,8 @@ textarea.byx-input {
 }
 .byx-input-icon {
   width: 32px;
-  height: 32px;
-  line-height: 32px;
+  height: 2.5rem;
+  line-height: 2.5rem;
   font-size: 16px;
   text-align: center;
   color: rgba(36, 28, 21, 0.75);
@@ -4259,60 +4259,58 @@ textarea.byx-input {
   display: inline-block;
 }
 .byx-select-single .byx-select-selection {
-  height: 32px;
+  height: 2.5rem;
   position: relative;
 }
 .byx-select-single .byx-select-selection .byx-select-placeholder {
-  color: #D0D8DA;
+  color: rgba(36, 28, 21, 0.3);
 }
 .byx-select-single .byx-select-selection .byx-select-placeholder,
 .byx-select-single .byx-select-selection .byx-select-selected-value {
   display: block;
-  height: 32px - 2px;
-  line-height: 32px - 2px;
+  height: 2.5rem;
+  line-height: 2.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-left: 8px;
-  padding-right: 24px;
+  padding-left: 0.5rem;
 }
 .byx-select-multiple .byx-select-selection {
   padding: 0 24px 0 4px;
 }
 .byx-select-multiple .byx-select-selection .byx-select-placeholder {
   display: block;
-  height: 32px - 2px;
-  line-height: 32px - 2px;
-  color: #D0D8DA;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  color: rgba(36, 28, 21, 0.3);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-left: 4px;
-  padding-right: 22px;
+  padding-left: 0.5rem;
 }
 .byx-select-large.byx-select-single .byx-select-selection {
   height: 36px;
 }
 .byx-select-large.byx-select-single .byx-select-selection .byx-select-placeholder,
 .byx-select-large.byx-select-single .byx-select-selection .byx-select-selected-value {
-  height: 36px - 2px;
-  line-height: 36px - 2px;
+  height: 36px;
+  line-height: 36px;
 }
 .byx-select-large.byx-select-multiple .byx-select-selection {
   min-height: 36px;
 }
 .byx-select-large.byx-select-multiple .byx-select-selection .byx-select-placeholder,
 .byx-select-large.byx-select-multiple .byx-select-selection .byx-select-selected-value {
-  min-height: 36px - 2px;
-  line-height: 36px - 2px;
+  min-height: 36px;
+  line-height: 36px;
 }
 .byx-select-small.byx-select-single .byx-select-selection {
   height: 24px;
 }
 .byx-select-small.byx-select-single .byx-select-selection .byx-select-placeholder,
 .byx-select-small.byx-select-single .byx-select-selection .byx-select-selected-value {
-  height: 24px - 2px;
-  line-height: 24px - 2px;
+  height: 24px;
+  line-height: 24px;
 }
 .byx-select-small.byx-select-multiple .byx-select-selection {
   min-height: 24px;
@@ -4320,13 +4318,13 @@ textarea.byx-input {
 .byx-select-small.byx-select-multiple .byx-select-selection .byx-select-placeholder,
 .byx-select-small.byx-select-multiple .byx-select-selection .byx-select-selected-value {
   height: auto;
-  min-height: 24px - 2px;
-  line-height: 24px - 2px;
+  min-height: 24px;
+  line-height: 24px;
 }
 .byx-select-input {
   display: inline-block;
-  height: 32px;
-  line-height: 32px;
+  height: 2.5rem;
+  line-height: 2.5rem;
   padding: 0 24px 0 8px;
   outline: none;
   border: none;
@@ -4337,14 +4335,14 @@ textarea.byx-input {
   cursor: pointer;
 }
 .byx-select-input::-moz-placeholder {
-  color: #D0D8DA;
+  color: rgba(36, 28, 21, 0.3);
   opacity: 1;
 }
 .byx-select-input:-ms-input-placeholder {
-  color: #D0D8DA;
+  color: rgba(36, 28, 21, 0.3);
 }
 .byx-select-input::-webkit-input-placeholder {
-  color: #D0D8DA;
+  color: rgba(36, 28, 21, 0.3);
 }
 .byx-select-input[disabled] {
   color: #ccc;
@@ -4356,12 +4354,12 @@ textarea.byx-input {
   height: 36px;
 }
 .byx-select-small .byx-select-input {
-  height: 24px - 2px;
-  line-height: 24px - 2px;
+  height: 24px;
+  line-height: 24px;
 }
 .byx-select-multiple .byx-select-input {
-  height: 32px - 3px;
-  line-height: 32px;
+  height: 2.5rem - 3px;
+  line-height: 2.5rem;
   padding: 0 0 0 4px;
 }
 .byx-select-not-found {

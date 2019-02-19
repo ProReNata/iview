@@ -31,7 +31,10 @@
               @click="close"
             >
               <slot name="close">
-                <icon type="ios-close-empty">
+                <icon
+                  type="times"
+                  weight="regular"
+                >
                 </icon>
               </slot>
             </a>

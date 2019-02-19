@@ -4,7 +4,8 @@
     </i-progress>
     <i-button-group size="large">
       <i-button
-        icon="ios-plus-empty"
+        type="plus"
+        weight="regular"
         @click.native="add"
       >
       </i-button>
