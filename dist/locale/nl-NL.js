@@ -1,11 +1,11 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-20T08:54:29.235Z",
+  "date": "2019-02-20T20:59:28.624Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/nl-NL.js",
-  "hash": "5e745fe2a0374ba8396c",
+  "hash": "96b15cfd5846450a6870",
   "license": "MIT",
   "version": "3.0.0-alpha.8"
 }
@@ -18,7 +18,7 @@
 	else if(typeof exports === 'object')
 		exports["iview"] = factory(require("vue"));
 	else
-		root["iview"] = factory(root["Vue"]);
+		root["iview"] = factory(root["vue"]);
 })((function () {
   'use strict';
 

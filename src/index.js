@@ -1,10 +1,10 @@
 import 'Global/Config';
-import * as CoreFontAwesome from '@fortawesome/fontawesome-svg-core';
-import * as SolidFontAwesome from '@fortawesome/pro-solid-svg-icons';
-import * as RegularFontAwesome from '@fortawesome/pro-regular-svg-icons';
-import * as LightFontAwesome from '@fortawesome/pro-light-svg-icons';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {fas} from '@fortawesome/pro-solid-svg-icons';
+import {far} from '@fortawesome/pro-regular-svg-icons';
+import {fal} from '@fortawesome/pro-light-svg-icons';
 // noinspection ES6CheckImport
-import * as VueFontAwesome from '@fortawesome/vue-fontawesome';
+import {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText} from '@fortawesome/vue-fontawesome';
 import Affix from 'Components/affix';
 import Alert from 'Components/alert';
 import AutoComplete from 'Components/auto-complete';
@@ -60,9 +60,9 @@ import {Row, Col} from 'Components/grid';
 import {Select, Option, OptionGroup} from 'Components/select';
 import * as locale from './locale';
 
-CoreFontAwesome.library.add(SolidFontAwesome.fas);
-CoreFontAwesome.library.add(RegularFontAwesome.far);
-CoreFontAwesome.library.add(LightFontAwesome.fal);
+library.add(fas);
+library.add(far);
+library.add(fal);
 
 const components = {
   Affix,
@@ -166,7 +166,6 @@ const install = function _install(Vue, opts = {}) {
     Vue.component(key, iview[key]);
   });
 
-  const {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText} = VueFontAwesome;
   Vue.component('font-awesome-icon', FontAwesomeIcon);
   Vue.component('font-awesome-layers', FontAwesomeLayers);
   Vue.component('font-awesome-layers-text', FontAwesomeLayersText);

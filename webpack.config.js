@@ -23,6 +23,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const PeerDepsExternalsPlugin = require('peer-deps-externals-webpack-plugin');
 const utils = require('./DevTools/Build/utils');
 const PACKAGE = require('./package.json');
 
@@ -181,6 +182,10 @@ if (utils.IS_PRODUCTION) {
   });
 
   PLUGINS.push(MINI_CSS_EXTRACT_PLUGIN_INSTANCE);
+
+  const PEER_DEPS_EXTERNALS_PLUGIN = new PeerDepsExternalsPlugin();
+
+  PLUGINS.push(PEER_DEPS_EXTERNALS_PLUGIN);
 } else {
   const html = new HtmlWebpackPlugin({
     template: path.join(__dirname, PACKAGE.prorenata.examples.template),
@@ -419,47 +424,6 @@ module.exports = (env = {}) => {
           [PACKAGE.prorenata.name]: path.join(__dirname, PACKAGE.prorenata.examples.entry),
           vendors: ['vue', 'vue-router'],
         },
-
-    externals: utils.IS_PRODUCTION
-      ? {
-          '@fortawesome/fontawesome-svg-core': {
-            amd: 'CoreFontAwesome',
-            commonjs: 'CoreFontAwesome',
-            commonjs2: 'CoreFontAwesome',
-            root: 'fontawesome-svg-core',
-          },
-          '@fortawesome/pro-light-svg-icons': {
-            amd: 'LightFontAwesome',
-            commonjs: 'LightFontAwesome',
-            commonjs2: 'LightFontAwesome',
-            root: 'pro-light-svg-icons',
-          },
-          '@fortawesome/pro-regular-svg-icons': {
-            amd: 'RegularFontAwesome',
-            commonjs: 'RegularFontAwesome',
-            commonjs2: 'RegularFontAwesome',
-            root: 'pro-regular-svg-icons',
-          },
-          '@fortawesome/pro-solid-svg-icons': {
-            amd: 'SolidFontAwesome',
-            commonjs: 'SolidFontAwesome',
-            commonjs2: 'SolidFontAwesome',
-            root: 'pro-solid-svg-icons',
-          },
-          '@fortawesome/vue-fontawesome': {
-            amd: 'VueFontAwesome',
-            commonjs: 'VueFontAwesome',
-            commonjs2: 'VueFontAwesome',
-            root: 'vue-fontawesome',
-          },
-          vue: {
-            amd: 'vue',
-            commonjs: 'vue',
-            commonjs2: 'vue',
-            root: 'Vue',
-          },
-        }
-      : {},
 
     mode: ENVIRONMENT,
 

@@ -41,7 +41,8 @@
     </label>
     <icon
       v-if="resetSelect"
-      type="ios-close"
+      type="chevron-down"
+      weight="solid"
       :class="[prefixCls + '-arrow']"
       @click.native.stop="onClear"
     >
