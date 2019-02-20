@@ -12,17 +12,22 @@ import Vue from 'vue';
 import {getIconAsHTML} from 'Components/icon';
 import isProduction from 'Global/Assets/isProduction';
 import not from 'Global/Assets/not';
+import deepFreeze from 'Global/Assets/deepFreeze';
 import './redactor-3_1_6/redactor/redactor';
 import './redactor-3_1_6/redactor/_langs/sv';
 
 const prefixCls = 'byx-richtext';
 const NAME = 'Richtext';
+const DEFAULT_LANG = 'sv';
+const INPUT = 'input';
+const CALLBACKS = 'callbacks';
 const EMPTY_STRING = '';
 const BOLD = 'bold';
 const ITALIC = 'italic';
 const UNDERLINE = 'underline';
 const LINK = 'link';
 const HTML = 'html';
+const CODE = 'code';
 const BUTTONS_ICON_MAP = Object.create(null, {
   [BOLD]: {
     enumerable: true,
@@ -42,12 +47,12 @@ const BUTTONS_ICON_MAP = Object.create(null, {
   },
   [HTML]: {
     enumerable: true,
-    value: 'code',
+    value: CODE,
   },
 });
 
 const BUTTONS = Object.freeze([BOLD, ITALIC, UNDERLINE, LINK, HTML]);
-const buttons = JSON.parse(JSON.stringify($R.buttons));
+const buttons = deepFreeze(JSON.parse(JSON.stringify($R.buttons)));
 
 export default {
   name: NAME,
@@ -75,11 +80,11 @@ export default {
 
   data() {
     return {
-      BUTTON_ICON_HTML_MAP: null,
+      buttonIconHtmlMap: null,
       options: this.config || {
         air: true,
         buttons: BUTTONS,
-        lang: 'sv',
+        lang: DEFAULT_LANG,
         placeholder: this.placeholder,
         styles: false,
         source: not(isProduction),
@@ -108,15 +113,7 @@ export default {
   },
 
   created() {
-    this.BUTTON_ICON_HTML_MAP = BUTTONS.reduce((accumulator, button) => {
-      return Object.defineProperty(accumulator, button, {
-        enumerable: true,
-        value: getIconAsHTML({
-          fw: true,
-          type: BUTTONS_ICON_MAP[button],
-        }),
-      });
-    }, Object.create(null));
+    this.buttonIconHtmlMap = this.getButtonHTMLMap();
   },
 
   mounted() {
@@ -124,20 +121,32 @@ export default {
   },
 
   methods: {
-    handleInput(val) {
-      this.$emit('input', val);
+    getButtonHTMLMap() {
+      return BUTTONS.reduce((accumulator, button) => {
+        return Object.defineProperty(accumulator, button, {
+          enumerable: true,
+          value: getIconAsHTML({
+            fw: true,
+            type: BUTTONS_ICON_MAP[button],
+          }),
+        });
+      }, Object.create(null));
     },
-    init() {
-      const callbacks = {
+    getCallbacks() {
+      return {
         changed: (html) => {
           this.handleInput(html);
 
           return html;
         },
       };
-
+    },
+    handleInput(val) {
+      this.$emit(INPUT, val);
+    },
+    init() {
       // extend config
-      Vue.set(this.options, 'callbacks', callbacks);
+      Vue.set(this.options, CALLBACKS, this.getCallbacks());
 
       // call Redactor
       const app = $R(this.$refs.redactor, this.options);
@@ -146,10 +155,13 @@ export default {
       this.redactor = app;
       this.$parent.redactor = app;
       this.redactor.api(this.editorState);
+      this.setButtonIcons();
+    },
+    setButtonIcons() {
       BUTTONS.forEach((button) => {
         const reButton = this.redactor.toolbar.getButton(button);
 
-        reButton.setIcon(this.BUTTON_ICON_HTML_MAP[button]);
+        reButton.setIcon(this.buttonIconHtmlMap[button]);
         const {tooltip, title} = buttons[button];
         reButton.setTooltip(this.redactor.lang.parse(tooltip || title));
       });

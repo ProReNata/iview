@@ -1,13 +1,13 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-19T21:05:44.128Z",
+  "date": "2019-02-20T08:54:29.235Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "locale/cs-CZ.js",
-  "hash": "df743714253c83f1300a",
+  "hash": "5e745fe2a0374ba8396c",
   "license": "MIT",
-  "version": "3.0.0-alpha.7"
+  "version": "3.0.0-alpha.8"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -119,7 +119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 686);
+/******/ 	return __webpack_require__(__webpack_require__.s = 673);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -420,7 +420,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__5__;
 
 /***/ }),
 
-/***/ 686:
+/***/ 673:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -433,7 +433,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _lang = _interopRequireDefault(__webpack_require__(7));
+var _lang = _interopRequireDefault(__webpack_require__(8));
 
 var logger = __webpack_require__(0).get("iview:locale:lang:cs-CZ");
 
@@ -517,8 +517,8 @@ var lang = {
       stars: 'hvězdy' // Plural form for 2-4 items
 
       /* TODO: add third plural form for Czech,
-             * If there is 5 or more items the translation should be "hvězd"
-             */
+       * If there is 5 or more items the translation should be "hvězd"
+       */
 
     },
     select: {
@@ -558,6 +558,25 @@ exports.default = _default;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = not;
+
+var logger = __webpack_require__(0).get("iview:Assets:not");
+
+function not(value) {
+  return !value;
+}
+
+/***/ }),
+
+/***/ 8:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _interopRequireDefault = __webpack_require__(1);
 
 Object.defineProperty(exports, "__esModule", {
@@ -567,14 +586,16 @@ exports.default = _default;
 
 var _vue = _interopRequireDefault(__webpack_require__(5));
 
+var _not = _interopRequireDefault(__webpack_require__(7));
+
 var logger = __webpack_require__(0).get("iview:locale:lang");
 
 var isServer = _vue.default.prototype.$isServer;
 
 function _default(lang) {
-  if (!isServer) {
+  if ((0, _not.default)(isServer)) {
     if (typeof iview !== 'undefined') {
-      if (!('langs' in iview)) {
+      if ((0, _not.default)('langs' in iview)) {
         iview.langs = {};
       }
 

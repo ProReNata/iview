@@ -1,6 +1,6 @@
 {
   "name": "iview",
-  "version": "3.0.0-alpha.7",
+  "version": "3.0.0-alpha.8",
   "title": "iView",
   "description": "A high quality UI components Library with Vue.js",
   "homepage": "http://www.iviewui.com",
@@ -42,19 +42,36 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/iview/iview"
+    "url": "https://github.com/ProReNata/iview"
   },
   "author": "Aresn",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/iview/iview/issues"
+    "url": "https://prorenata.atlassian.net"
   },
+  "contributors": [
+    {
+      "name": "Sergio Crisostomo",
+      "email": "sergio.crisostomo@prorenata.se"
+    },
+    {
+      "name": "Graham Fairweather",
+      "email": "graham.fairweather@prorenata.se"
+    },
+    {
+      "name": "piroska barjak",
+      "email": "Piroska.Barjak@prorenata.se"
+    },
+    {
+      "name": "Jordy Pereira",
+      "email": "jordy.pereira@prorenata.se"
+    },
+    {
+      "name": "Alfred Beckman",
+      "email": "alfred.beckman@prorenata.se"
+    }
+  ],
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.15",
-    "@fortawesome/pro-light-svg-icons": "^5.7.2",
-    "@fortawesome/pro-regular-svg-icons": "^5.7.2",
-    "@fortawesome/pro-solid-svg-icons": "^5.7.2",
-    "@fortawesome/vue-fontawesome": "^0.1.5",
     "async-validator": "^1.10.1",
     "bcp-47": "^1.0.4",
     "deepmerge": "^3.2.0",
@@ -70,6 +87,11 @@
     "v-click-outside-x": "^3.7.1"
   },
   "peerDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.15",
+    "@fortawesome/pro-light-svg-icons": "^5.7.2",
+    "@fortawesome/pro-regular-svg-icons": "^5.7.2",
+    "@fortawesome/pro-solid-svg-icons": "^5.7.2",
+    "@fortawesome/vue-fontawesome": "^0.1.5",
     "vue": "^2.6.6"
   },
   "devDependencies": {
@@ -85,8 +107,13 @@
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
     "@babel/runtime": "^7.3.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.15",
+    "@fortawesome/pro-light-svg-icons": "^5.7.2",
+    "@fortawesome/pro-regular-svg-icons": "^5.7.2",
+    "@fortawesome/pro-solid-svg-icons": "^5.7.2",
+    "@fortawesome/vue-fontawesome": "^0.1.5",
     "@prorenata/eslint-config-vue": "^1.11.0",
-    "autoprefixer": "^9.4.7",
+    "autoprefixer": "^9.4.8",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^10.0.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",

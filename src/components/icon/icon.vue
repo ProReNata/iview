@@ -11,9 +11,9 @@
 import Vue from 'vue';
 import findKey from 'lodash/findKey';
 import memoize from 'lodash/memoize';
-import {fas} from '@fortawesome/pro-solid-svg-icons';
-import {far} from '@fortawesome/pro-regular-svg-icons';
-import {fal} from '@fortawesome/pro-light-svg-icons';
+import * as SolidFontAwesome from '@fortawesome/pro-solid-svg-icons';
+import * as RegularFontAwesome from '@fortawesome/pro-regular-svg-icons';
+import * as LightFontAwesome from '@fortawesome/pro-light-svg-icons';
 import isOneOf from 'Global/Assets/isOneOf';
 
 const SOLID = 'solid';
@@ -27,7 +27,7 @@ export function isOneOfIconWeights(value) {
 const FAS = 'fas';
 const FAR = 'far';
 const FAL = 'fal';
-const ICON_LIBRARIES = Object.freeze([fas, far, fal]);
+const ICON_LIBRARIES = Object.freeze([SolidFontAwesome.fas, RegularFontAwesome.far, LightFontAwesome.fal]);
 export function isOneOfIconNames(value) {
   const isIconName = function isIconName({iconName}) {
     return iconName === value;

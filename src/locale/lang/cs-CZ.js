@@ -79,8 +79,8 @@ const lang = {
       star: 'hvězda',
       stars: 'hvězdy', // Plural form for 2-4 items
       /* TODO: add third plural form for Czech,
-             * If there is 5 or more items the translation should be "hvězd"
-             */
+       * If there is 5 or more items the translation should be "hvězd"
+       */
     },
     select: {
       loading: 'Nahrávám',

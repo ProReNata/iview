@@ -422,6 +422,36 @@ module.exports = (env = {}) => {
 
     externals: utils.IS_PRODUCTION
       ? {
+          '@fortawesome/fontawesome-svg-core': {
+            amd: 'CoreFontAwesome',
+            commonjs: 'CoreFontAwesome',
+            commonjs2: 'CoreFontAwesome',
+            root: 'fontawesome-svg-core',
+          },
+          '@fortawesome/pro-light-svg-icons': {
+            amd: 'LightFontAwesome',
+            commonjs: 'LightFontAwesome',
+            commonjs2: 'LightFontAwesome',
+            root: 'pro-light-svg-icons',
+          },
+          '@fortawesome/pro-regular-svg-icons': {
+            amd: 'RegularFontAwesome',
+            commonjs: 'RegularFontAwesome',
+            commonjs2: 'RegularFontAwesome',
+            root: 'pro-regular-svg-icons',
+          },
+          '@fortawesome/pro-solid-svg-icons': {
+            amd: 'SolidFontAwesome',
+            commonjs: 'SolidFontAwesome',
+            commonjs2: 'SolidFontAwesome',
+            root: 'pro-solid-svg-icons',
+          },
+          '@fortawesome/vue-fontawesome': {
+            amd: 'VueFontAwesome',
+            commonjs: 'VueFontAwesome',
+            commonjs2: 'VueFontAwesome',
+            root: 'vue-fontawesome',
+          },
           vue: {
             amd: 'vue',
             commonjs: 'vue',
