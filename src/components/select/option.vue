@@ -108,7 +108,7 @@ export default {
         return;
       }
 
-      this.dispatch('iSelect', 'on-select-selected', {
+      this.dispatch('ISelect', 'on-select-selected', {
         label: this.optionLabel,
         value: this.value,
       });

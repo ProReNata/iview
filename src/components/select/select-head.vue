@@ -265,7 +265,7 @@ export default {
         return;
       }
 
-      this.dispatch('iSelect', 'on-select-selected', value);
+      this.dispatch('ISelect', 'on-select-selected', value);
     },
     resetInputState() {
       this.inputLength = this.$refs.input.value.length * 12 + 20;
