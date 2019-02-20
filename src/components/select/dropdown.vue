@@ -1,6 +1,6 @@
 <template>
   <div
-    class="ivu-select-dropdown"
+    class="byx-select-dropdown"
     :class="className"
     :style="styles"
   >

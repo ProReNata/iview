@@ -65,7 +65,7 @@
 import Icon from '../icon';
 import {oneOf} from '../../utils/assist';
 
-const prefixCls = 'ivu-tag';
+const prefixCls = 'byx-tag';
 const initColorList = ['blue', 'green', 'red', 'yellow', 'default'];
 export default {
   name: 'Tag',

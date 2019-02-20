@@ -48,9 +48,9 @@
     </icon>
     <icon
       v-if="!resetSelect && !remote && !disabled"
-      type="chevron-down"
+      type="sort"
       weight="solid"
-      :class="[prefixCls + '-arrow']"
+      :class="iconClasses"
     >
     </icon>
   </div>
@@ -63,7 +63,7 @@ import Emitter from '../../mixins/emitter';
 import Locale from '../../mixins/locale';
 import {oneOf} from '../../utils/assist';
 
-const prefixCls = 'ivu-select';
+const prefixCls = 'byx-select';
 
 export default {
   name: 'ISelectHead',
@@ -125,6 +125,10 @@ export default {
     };
   },
   computed: {
+    iconClasses() {
+      return [`${prefixCls}-arrow`];
+    },
+
     inputStyle() {
       const style = {};
 
@@ -261,7 +265,7 @@ export default {
         return;
       }
 
-      this.dispatch('iSelect', 'on-select-selected', value);
+      this.dispatch('ISelect', 'on-select-selected', value);
     },
     resetInputState() {
       this.inputLength = this.$refs.input.value.length * 12 + 20;

@@ -7,8 +7,8 @@
   width: 100%;
   box-sizing: border-box;
   vertical-align: middle;
-  color: @text-color;
-  font-size: @font-size-base;
+  color: @color-text;
+  //font-size: @font-size-base;
   //position: relative;
   line-height: normal;
 
@@ -78,14 +78,13 @@
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
       display: block;
-      height: @input-height-base - 2px;
-      line-height: @input-height-base - 2px;
-      font-size: @font-size-small;
+      height: @input-height-base;
+      line-height: @input-height-base;
+
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding-left: 8px;
-      padding-right: 24px;
+      padding-left: 0.5rem;
     }
   }
 
@@ -95,15 +94,14 @@
 
     .@{select-prefix-cls}-placeholder {
       display: block;
-      height: @input-height-base - 2px;
-      line-height: @input-height-base - 2px;
+      height: @input-height-base;
+      line-height: @input-height-base;
       color: @input-placeholder-color;
-      font-size: @font-size-small;
+
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding-left: 4px;
-      padding-right: 22px;
+      padding-left: 0.5rem;
     }
   }
 
@@ -112,9 +110,9 @@
 
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
-      height: @input-height-large - 2px;
-      line-height: @input-height-large - 2px;
-      font-size: @font-size-base;
+      height: @input-height-large;
+      line-height: @input-height-large;
+      //font-size: @font-size-base;
     }
   }
 
@@ -123,32 +121,32 @@
 
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
-      min-height: @input-height-large - 2px;
-      line-height: @input-height-large - 2px;
-      font-size: @font-size-base;
+      min-height: @input-height-large;
+      line-height: @input-height-large;
+      //font-size: @font-size-base;
     }
   }
 
   &-small&-single &-selection {
     height: @input-height-small;
-    border-radius: @btn-border-radius-small;
+    //border-radius: @btn-border-radius-small;
 
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
-      height: @input-height-small - 2px;
-      line-height: @input-height-small - 2px;
+      height: @input-height-small;
+      line-height: @input-height-small;
     }
   }
 
   &-small&-multiple &-selection {
     min-height: @input-height-small;
-    border-radius: @btn-border-radius-small;
+    //border-radius: @btn-border-radius-small;
 
     .@{select-prefix-cls}-placeholder,
     .@{select-prefix-cls}-selected-value {
       height: auto;
-      min-height: @input-height-small - 2px;
-      line-height: @input-height-small - 2px;
+      min-height: @input-height-small;
+      line-height: @input-height-small;
     }
   }
 
@@ -158,7 +156,7 @@
     height: @input-height-base;
     line-height: @input-height-base;
     padding: 0 24px 0 8px;
-    font-size: @font-size-small;
+    //font-size: @font-size-small;
     outline: none;
     border: none;
     box-sizing: border-box;
@@ -169,7 +167,7 @@
     .placeholder();
 
     &[disabled] {
-      cursor: @cursor-disabled;
+      //cursor: @cursor-disabled;
       color: #ccc;
     }
   }
@@ -179,13 +177,13 @@
   }
 
   &-large &-input {
-    font-size: @font-size-base;
+    //font-size: @font-size-base;
     height: @input-height-large;
   }
 
   &-small &-input {
-    height: @input-height-small - 2px;
-    line-height: @input-height-small - 2px;
+    height: @input-height-small;
+    line-height: @input-height-small;
   }
 
   &-multiple &-input {
@@ -215,13 +213,13 @@
   &-large&-multiple .@{css-prefix}tag {
     height: 28px;
     line-height: 26px;
-    font-size: @font-size-base;
+    //font-size: @font-size-base;
   }
 
   &-small&-multiple .@{css-prefix}tag {
     height: 17px;
     line-height: 15px;
-    font-size: @font-size-small;
+    //font-size: @font-size-small;
     padding: 0 6px;
     margin: 3px 4px 2px 0;
   }
@@ -238,16 +236,16 @@
 .@{select-prefix-cls}-multiple .@{select-item-prefix-cls} {
   position: relative;
   &-selected {
-    color: @selected-color;
+    //color: @selected-color;
     background: #fff;
   }
   &-focus,
   &-selected:hover {
-    background: @background-color-select-hover;
+    //background: @background-color-select-hover;
   }
 
   &-selected&-focus {
-    color: shade(@selected-color, 10%);
+    //color: shade(@selected-color, 10%);
     background: #fff;
   }
 
@@ -256,7 +254,7 @@
     //float: right;
     font-size: 24px;
     content: '\F3FD';
-    color: @selected-color;
+    //color: @selected-color;
     position: absolute;
     top: 2px;
     right: 16px;
@@ -271,7 +269,7 @@
   &-title {
     padding-left: 8px;
     font-size: 12px;
-    color: @legend-color;
+    //color: @legend-color;
     height: 30px;
     line-height: 30px;
   }
@@ -280,10 +278,10 @@
 .@{form-item-prefix-cls}-error {
   .@{select-prefix-cls} {
     &-selection {
-      border: 1px solid @error-color;
+      border: 1px solid @color-error;
     }
     &-arrow {
-      color: @error-color;
+      color: @color-error;
     }
     &-visible .@{select-prefix-cls}-selection {
       .active-error;

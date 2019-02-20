@@ -24,7 +24,7 @@
 import Emitter from '../../mixins/emitter';
 import {findComponentUpward} from '../../utils/assist';
 
-const prefixCls = 'ivu-select-item';
+const prefixCls = 'byx-select-item';
 
 export default {
   name: 'IOption',
@@ -108,7 +108,7 @@ export default {
         return;
       }
 
-      this.dispatch('iSelect', 'on-select-selected', {
+      this.dispatch('ISelect', 'on-select-selected', {
         label: this.optionLabel,
         value: this.value,
       });
