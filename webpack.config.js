@@ -186,12 +186,6 @@ if (utils.IS_PRODUCTION) {
   const PEER_DEPS_EXTERNALS_PLUGIN = new PeerDepsExternalsPlugin();
 
   PLUGINS.push(PEER_DEPS_EXTERNALS_PLUGIN);
-} else {
-  const html = new HtmlWebpackPlugin({
-    template: path.join(__dirname, PACKAGE.prorenata.examples.template),
-  });
-
-  PLUGINS.push(html);
 }
 
 /**
@@ -380,6 +374,19 @@ module.exports = (env = {}) => {
      * @see {@link https://vue-loader.vuejs.org/guide/}
      */
     PLUGINS.push(new VueLoaderPlugin());
+
+    if (!utils.IS_PRODUCTION) {
+      /**
+       * Required for the examples to run with the router.
+       *
+       * @type {HtmlWebpackPlugin}
+       */
+      const html = new HtmlWebpackPlugin({
+        template: path.join(__dirname, PACKAGE.prorenata.examples.template),
+      });
+
+      PLUGINS.push(html);
+    }
   }
 
   const base = {
@@ -649,6 +656,8 @@ module.exports = (env = {}) => {
         Components: path.join(__dirname, 'src/components'),
         Global: path.join(__dirname, 'Global'),
         RootDir: __dirname,
+        Src: path.join(__dirname, 'src'),
+        Storybook: path.join(__dirname, 'Storybook'),
         Stories: path.join(__dirname, 'Storybook/Stories'),
         /**
          * ES module builds are intended for use with modern bundlers like webpack 2 or rollup.
