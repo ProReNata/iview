@@ -3,9 +3,9 @@
     <div
       v-for="(item, i) in selectedMultiple"
       :key="i"
-      class="ivu-tag ivu-tag-checked"
+      :class="`${globalPrefix}-tag ${globalPrefix}-tag-checked`"
     >
-      <span class="ivu-tag-text">
+      <span :class="`${globalPrefix}-tag-text`">
         {{ item.label }}
       </span>
       <icon
@@ -63,8 +63,9 @@ import isOneOf from 'Global/Assets/isOneOf';
 import Icon from 'Components/icon';
 import Emitter from 'Src/mixins/emitter';
 import Locale from 'Src/mixins/locale';
+import globalPrefix from 'Global/Config/globalPrefix';
 
-const prefixCls = 'byx-select';
+const prefixCls = `${globalPrefix}-select`;
 
 export default {
   name: 'ISelectHead',
@@ -120,6 +121,7 @@ export default {
     return {
       inputLength: 20,
       prefixCls,
+      globalPrefix,
       preventRemoteCall: false,
       query: '',
       remoteInitialLabel: this.initialLabel,
