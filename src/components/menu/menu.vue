@@ -9,8 +9,9 @@
 
 <script>
 import stubArray from 'lodash/stubArray';
-import {oneOf, findComponentsDownward, findComponentsUpward} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentsDownward, findComponentsUpward} from 'Src/utils/assist';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-menu';
 
@@ -32,7 +33,7 @@ export default {
       default: 'vertical',
       type: String,
       validator(value) {
-        return oneOf(value, ['horizontal', 'vertical']);
+        return isOneOf(value, ['horizontal', 'vertical']);
       },
     },
     openNames: {
@@ -43,7 +44,7 @@ export default {
       default: 'light',
       type: String,
       validator(value) {
-        return oneOf(value, ['light', 'dark', 'primary']);
+        return isOneOf(value, ['light', 'dark', 'primary']);
       },
     },
     width: {

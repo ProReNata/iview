@@ -29,11 +29,16 @@
 </template>
 
 <script>
-import {on, off} from '../../utils/dom';
-import {oneOf, dimensionMap, setMatchMedia} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
 
 const prefixCls = 'ivu-layout-sider';
-setMatchMedia();
+const dimensionMap = {
+  lg: '1200px',
+  md: '992px',
+  sm: '768px',
+  xl: '1600px',
+  xs: '480px',
+};
 
 export default {
   name: 'Sider',
@@ -43,7 +48,7 @@ export default {
       default: undefined,
       type: String,
       validator(val) {
-        return oneOf(val, ['xs', 'sm', 'md', 'lg', 'xl']);
+        return isOneOf(val, ['xs', 'sm', 'md', 'lg', 'xl']);
       },
     },
     collapsedWidth: {
@@ -141,13 +146,13 @@ export default {
     }
 
     if (this.breakpoint !== undefined) {
-      on(window, 'resize', this.onWindowResize);
+      window.addEventListener('resize', this.onWindowResize);
       this.matchMedia();
     }
   },
   beforeDestroy() {
     if (this.breakpoint !== undefined) {
-      off(window, 'resize', this.onWindowResize);
+      window.removeEventListener('resize', this.onWindowResize);
     }
   },
   methods: {

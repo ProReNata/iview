@@ -1,7 +1,7 @@
 <template>
-  <div 
-    :class="classes" 
-    :style="styles" 
+  <div
+    :class="classes"
+    :style="styles"
     @click="back"
   >
     <slot>
@@ -12,9 +12,9 @@
     </slot>
   </div>
 </template>
+
 <script>
-import {scrollTop} from '../../utils/assist';
-import {on, off} from '../../utils/dom';
+import {scrollTop} from 'Src/utils/assist';
 
 const prefixCls = 'ivu-back-top';
 
@@ -37,11 +37,13 @@ export default {
       type: Number,
     },
   },
+
   data() {
     return {
       backTop: false,
     };
   },
+
   computed: {
     classes() {
       return [
@@ -61,18 +63,17 @@ export default {
       };
     },
   },
+
   mounted() {
-    //            window.addEventListener('scroll', this.handleScroll, false);
-    //            window.addEventListener('resize', this.handleScroll, false);
-    on(window, 'scroll', this.handleScroll);
-    on(window, 'resize', this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll, false);
+    window.addEventListener('resize', this.handleScroll, false);
   },
+
   beforeDestroy() {
-    //            window.removeEventListener('scroll', this.handleScroll, false);
-    //            window.removeEventListener('resize', this.handleScroll, false);
-    off(window, 'scroll', this.handleScroll);
-    off(window, 'resize', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll, false);
+    window.removeEventListener('resize', this.handleScroll, false);
   },
+
   methods: {
     back() {
       const sTop = document.documentElement.scrollTop || document.body.scrollTop;

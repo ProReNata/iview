@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import iSelect from '../select/select.vue';
-import iOption from '../select/option.vue';
-import Locale from '../../mixins/locale';
+import iSelect from 'Components/select/select.vue';
+import iOption from 'Components/select/option.vue';
+import Locale from 'Src/mixins/locale';
 
 const prefixCls = 'ivu-page';
 

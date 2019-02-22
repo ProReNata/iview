@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import Icon from '../icon';
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import Icon from 'Components/icon';
 
 const prefixCls = 'ivu-avatar';
 
@@ -40,13 +40,13 @@ export default {
     shape: {
       default: 'circle',
       validator(value) {
-        return oneOf(value, ['circle', 'square']);
+        return isOneOf(value, ['circle', 'square']);
       },
     },
     size: {
       default: 'default',
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     src: {

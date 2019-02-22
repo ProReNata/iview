@@ -1,3 +1,1 @@
-import Content from '../layout/content.vue';
-
-export default Content;
+export {default} from 'Components/layout/content.vue';

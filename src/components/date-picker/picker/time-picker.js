@@ -1,9 +1,9 @@
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentsDownward} from 'Src/utils/assist';
 import Picker from '../picker.vue';
 import TimePickerPanel from '../panel/Time/time.vue';
 import RangeTimePickerPanel from '../panel/Time/time-range.vue';
 import Options from '../time-mixins';
-
-import {findComponentsDownward, oneOf} from '../../../utils/assist';
 
 export default {
   components: {RangeTimePickerPanel, TimePickerPanel},
@@ -27,7 +27,7 @@ export default {
     type: {
       default: 'time',
       validator(value) {
-        return oneOf(value, ['time', 'timerange']);
+        return isOneOf(value, ['time', 'timerange']);
       },
     },
   },

@@ -3,8 +3,9 @@
     <slot></slot>
   </div>
 </template>
+
 <script>
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
 
 const prefixCls = 'ivu-steps';
 
@@ -40,21 +41,21 @@ export default {
     direction: {
       default: 'horizontal',
       validator(value) {
-        return oneOf(value, ['horizontal', 'vertical']);
+        return isOneOf(value, ['horizontal', 'vertical']);
       },
     },
     size: {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small']);
+        return isOneOf(value, ['small']);
       },
     },
     status: {
       default: 'process',
       type: String,
       validator(value) {
-        return oneOf(value, ['wait', 'process', 'finish', 'error']);
+        return isOneOf(value, ['wait', 'process', 'finish', 'error']);
       },
     },
   },

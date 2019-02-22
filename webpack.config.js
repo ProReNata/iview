@@ -9,7 +9,7 @@
 
 const path = require('path');
 const os = require('os');
-const {readdirSync} = require('fs');
+const {existsSync, lstatSync, readdirSync} = require('fs');
 const childProcess = require('child_process');
 const {BannerPlugin, EnvironmentPlugin} = require('webpack');
 const merge = require('webpack-merge');
@@ -38,6 +38,33 @@ const localeEntries = readdirSync('./src/locale/lang').reduce(
     return {
       ...entries,
       [`locale/${name}`]: `./src/locale/lang/${file}`,
+    };
+  },
+  {},
+);
+
+const components = readdirSync('./src/components').reduce(
+  /**
+   * @param {!Object} entries - The file entries.
+   * @param {string} name - The file name.
+   */
+  function(entries, name) {
+    const filePath = `./src/components/${name}`;
+    const isDirectory = lstatSync(filePath).isDirectory();
+
+    if (!isDirectory) {
+      return entries;
+    }
+
+    const isImportable = existsSync(`${filePath}/index.js`);
+
+    if (!isImportable) {
+      return entries;
+    }
+
+    return {
+      ...entries,
+      [`components/${name}`]: filePath,
     };
   },
   {},
@@ -426,6 +453,8 @@ module.exports = (env = {}) => {
             path.join(__dirname, PACKAGE.prorenata.entry.js),
           ],
           ...localeEntries,
+          ...components,
+          'components/API': path.join(__dirname, 'src/API.js'),
         }
       : {
           [PACKAGE.prorenata.name]: path.join(__dirname, PACKAGE.prorenata.examples.entry),

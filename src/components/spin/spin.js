@@ -6,6 +6,7 @@ Spin.newInstance = (properties) => {
 
   const Instance = new Vue({
     data: {...props},
+
     render(h) {
       let vnode = '';
 
@@ -61,6 +62,7 @@ Spin.newInstance = (properties) => {
 
   return {
     component: spin,
+
     remove(cb) {
       spin.visible = false;
       setTimeout(() => {
@@ -73,6 +75,7 @@ Spin.newInstance = (properties) => {
         cb();
       }, 500);
     },
+
     show() {
       spin.visible = true;
     },

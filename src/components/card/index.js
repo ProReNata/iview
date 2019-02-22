@@ -1,3 +1,1 @@
-import Card from './card.vue';
-
-export default Card;
+export {default} from './card.vue';

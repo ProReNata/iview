@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import {findComponentUpward} from '../../utils/assist';
+import {findComponentUpward} from 'Src/utils/assist';
 
 const prefixCls = 'ivu-col';
 

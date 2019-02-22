@@ -24,20 +24,7 @@ module.exports = {
    * for files within the same directory have to be different.
    * @see {@link https://eslint.org/docs/user-guide/configuring#configuration-based-on-glob-patterns|overrides}
    */
-  overrides: [
-    {
-      files: ['cssnano.config.js', 'examples/**/*.{js,vue}'],
-      rules: {
-        'import/no-extraneous-dependencies': [
-          'error',
-          {
-            devDependencies: true,
-          },
-        ],
-        'no-console': 'off',
-      },
-    },
-  ],
+  overrides: [],
 
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#specifying-parser-options|parserOptions}
@@ -69,6 +56,6 @@ module.exports = {
         config: './webpack.config.js',
       },
     },
-    polyfills: ['promises'],
+    polyfills: [],
   },
 };

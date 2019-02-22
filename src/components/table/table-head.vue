@@ -172,13 +172,13 @@
 </template>
 
 <script>
-import CheckboxGroup from '../checkbox/checkbox-group.vue';
-import Checkbox from '../checkbox/checkbox.vue';
-import Poptip from '../poptip/poptip.vue';
-import iButton from '../button/button.vue';
+import CheckboxGroup from 'Components/checkbox/checkbox-group.vue';
+import Checkbox from 'Components/checkbox/checkbox.vue';
+import Poptip from 'Components/poptip/poptip.vue';
+import iButton from 'Components/button/button.vue';
+import Locale from 'Src/mixins/locale';
 import renderHeader from './header';
 import Mixin from './mixin';
-import Locale from '../../mixins/locale';
 
 export default {
   name: 'TableHead',

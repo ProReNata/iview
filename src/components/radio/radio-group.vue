@@ -8,8 +8,9 @@
 </template>
 
 <script>
-import {oneOf, findComponentsDownward} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentsDownward} from 'Src/utils/assist';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-radio-group';
 
@@ -37,14 +38,14 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     type: {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['button']);
+        return isOneOf(value, ['button']);
       },
     },
     value: {

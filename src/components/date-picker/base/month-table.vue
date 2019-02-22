@@ -11,9 +11,10 @@
     </span>
   </div>
 </template>
+
 <script>
+import cloneDeep from 'lodash/cloneDeep';
 import {clearHours} from '../util';
-import {deepCopy} from '../../../utils/assist';
 import Locale from '../../../mixins/locale';
 import mixin from './mixin';
 import prefixCls from './prefixCls';
@@ -37,7 +38,7 @@ export default {
       const focusedDate = clearHours(new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth(), 1));
 
       for (let i = 0; i < 12; i += 1) {
-        const cell = deepCopy(cellTmpl);
+        const cell = cloneDeep(cellTmpl);
         cell.date = new Date(tableYear, i, 1);
         cell.text = this.tCell(i + 1);
         const day = clearHours(cell.date);

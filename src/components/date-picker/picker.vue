@@ -85,11 +85,12 @@ import stubArray from 'lodash/stubArray';
 import stubObject from 'lodash/stubObject';
 import castArray from 'lodash/castArray';
 import {directive as clickOutside} from 'v-click-outside-x';
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentsDownward} from 'Src/utils/assist';
 import iInput from '../input/input.vue';
 import Drop from '../select/dropdown.vue';
 import TransferDom from '../../directives/transfer-dom';
 import {DEFAULT_FORMATS, RANGE_SEPARATOR, TYPE_VALUE_RESOLVER_MAP, getDayCountOfMonth} from './util';
-import {findComponentsDownward, oneOf} from '../../utils/assist';
 import Emitter from '../../mixins/emitter';
 
 const prefixCls = 'ivu-date-picker';
@@ -193,7 +194,7 @@ export default {
     placement: {
       default: 'bottom-start',
       validator(value) {
-        return oneOf(value, [
+        return isOneOf(value, [
           'top',
           'top-start',
           'top-end',
@@ -221,7 +222,7 @@ export default {
       default: 'default',
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     splitPanels: {
@@ -818,7 +819,7 @@ export default {
         type = 'date';
       }
 
-      this.selectionMode = oneOf(type, ['year', 'month', 'date', 'time']) && type;
+      this.selectionMode = isOneOf(type, ['year', 'month', 'date', 'time']) && type;
 
       return this.selectionMode;
     },

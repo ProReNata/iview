@@ -66,8 +66,8 @@
 </template>
 
 <script>
+import Checkbox from 'Components/checkbox/checkbox.vue';
 import Search from './search.vue';
-import Checkbox from '../checkbox/checkbox.vue';
 
 export default {
   name: 'TransferList',

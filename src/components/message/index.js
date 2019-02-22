@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import noop from 'lodash/noop';
 import Notification from '../base/notification';
 
@@ -71,7 +72,7 @@ function notice(content = '', duration = defaults.duration, type, onClose = noop
   })();
 }
 
-export default {
+const API = {
   config(options) {
     if (options.top || options.top === 0) {
       defaults.top = options.top;
@@ -87,15 +88,19 @@ export default {
     messageInstance = null;
     instance.destroy('ivu-message');
   },
+
   error(options) {
     return this.message('error', options);
   },
+
   info(options) {
     return this.message('info', options);
   },
+
   loading(options) {
     return this.message('loading', options);
   },
+
   message(type, opts) {
     let options = opts;
 
@@ -115,3 +120,7 @@ export default {
     return this.message('warning', options);
   },
 };
+
+Vue.prototype.$Message = API;
+
+export default API;

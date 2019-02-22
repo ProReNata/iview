@@ -1,4 +1,4 @@
-import {oneOf} from '../../../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
 import {initTimeDate} from '../../util';
 
 export default {
@@ -33,7 +33,7 @@ export default {
       default: 'date',
       type: String,
       validator(value) {
-        return oneOf(value, ['year', 'month', 'date', 'time']);
+        return isOneOf(value, ['year', 'month', 'date', 'time']);
       },
     },
     shortcuts: {

@@ -99,12 +99,12 @@
 <script>
 import stubArray from 'lodash/stubArray';
 import {directive as clickOutside} from 'v-click-outside-x';
-import iInput from '../input/input.vue';
-import Drop from '../select/dropdown.vue';
-import Icon from '../icon/icon.vue';
+import isOneOf from 'Global/Assets/isOneOf';
+import iInput from 'Components/input/input.vue';
+import Drop from 'Components/select/dropdown.vue';
+import Icon from 'Components/icon';
 import Caspanel from './caspanel.vue';
 import TransferDom from '../../directives/transfer-dom';
-import {oneOf} from '../../utils/assist';
 import Emitter from '../../mixins/emitter';
 import Locale from '../../mixins/locale';
 
@@ -171,7 +171,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large']);
+        return isOneOf(value, ['small', 'large']);
       },
     },
     transfer: {
@@ -182,7 +182,7 @@ export default {
       default: 'click',
       type: String,
       validator(value) {
-        return oneOf(value, ['click', 'hover']);
+        return isOneOf(value, ['click', 'hover']);
       },
     },
     value: {

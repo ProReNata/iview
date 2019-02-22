@@ -45,11 +45,11 @@
 </template>
 
 <script>
-import Drop from '../select/dropdown.vue';
-import Icon from '../icon/icon.vue';
-import CollapseTransition from '../base/collapse-transition';
-import {getStyle, findComponentUpward, findComponentsDownward} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
+import {findComponentUpward, findComponentsDownward} from 'Src/utils/assist';
+import Drop from 'Components/select/dropdown.vue';
+import Icon from 'Components/icon';
+import CollapseTransition from 'Components/base/collapse-transition';
+import Emitter from 'Src/mixins/emitter';
 import mixin from './mixin';
 
 const prefixCls = 'ivu-menu';
@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       active: false,
-      dropWidth: parseFloat(getStyle(this.$el, 'width')),
+      dropWidth: parseFloat(window.getComputedStyle(this.$el, 'width')),
       opened: false,
       prefixCls,
     };
@@ -128,7 +128,7 @@ export default {
 
       if (val) {
         // set drop a width to fixed when menu has fixed position
-        this.dropWidth = parseFloat(getStyle(this.$el, 'width'));
+        this.dropWidth = parseFloat(window.getComputedStyle(this.$el, 'width'));
         this.$refs.drop.update();
       } else {
         this.$refs.drop.destroy();

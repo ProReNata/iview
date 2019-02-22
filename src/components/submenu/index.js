@@ -1,3 +1,1 @@
-import Submenu from '../menu/submenu.vue';
-
-export default Submenu;
+export {default} from 'Components/menu/submenu.vue';

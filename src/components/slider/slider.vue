@@ -93,11 +93,10 @@
 <script>
 import head from 'lodash/head';
 import at from 'lodash/at';
-import InputNumber from '../input-number/input-number.vue';
-import Tooltip from '../tooltip/tooltip.vue';
-import {getStyle, oneOf} from '../../utils/assist';
-import {on, off} from '../../utils/dom';
-import Emitter from '../../mixins/emitter';
+import isOneOf from 'Global/Assets/isOneOf';
+import InputNumber from 'Components/input-number';
+import Tooltip from 'Components/tooltip';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-slider';
 
@@ -117,7 +116,7 @@ export default {
       default: 'default',
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     max: {
@@ -148,7 +147,7 @@ export default {
       default: 'hover',
       type: String,
       validator(value) {
-        return oneOf(value, ['hover', 'always', 'never']);
+        return isOneOf(value, ['hover', 'always', 'never']);
       },
     },
     step: {
@@ -241,7 +240,7 @@ export default {
       return ((val[0] - this.min) / this.valueRange) * 100;
     },
     sliderWidth() {
-      return parseInt(getStyle(this.$refs.slider, 'width'), 10);
+      return parseInt(window.getComputedStyle(this.$refs.slider, 'width'), 10);
     },
     stops() {
       const stopCount = this.valueRange / this.step;
@@ -389,13 +388,13 @@ export default {
     onKeydown(event, range) {
       const {key} = event;
 
-      if (oneOf(key, ['Up', 'ArrowUp'])) {
+      if (isOneOf(key, ['Up', 'ArrowUp'])) {
         this.onKeyRight(event, range);
-      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+      } else if (isOneOf(key, ['Down', 'ArrowDown'])) {
         this.onKeyLeft(event, range);
-      } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+      } else if (isOneOf(key, ['Left', 'ArrowLeft'])) {
         this.onKeyLeft(event, range);
-      } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+      } else if (isOneOf(key, ['Right', 'ArrowRight'])) {
         this.onKeyRight(event, range);
       }
     },
@@ -423,10 +422,10 @@ export default {
       this.pointerDown = type;
 
       this.onPointerDragStart(event);
-      on(window, 'mousemove', this.onPointerDrag);
-      on(window, 'touchmove', this.onPointerDrag);
-      on(window, 'mouseup', this.onPointerDragEnd);
-      on(window, 'touchend', this.onPointerDragEnd);
+      window.addEventListener('mousemove', this.onPointerDrag);
+      window.addEventListener('touchmove', this.onPointerDrag);
+      window.addEventListener('mouseup', this.onPointerDragEnd);
+      window.addEventListener('touchend', this.onPointerDragEnd);
     },
 
     onPointerDrag(event) {
@@ -446,10 +445,10 @@ export default {
       }
 
       this.pointerDown = '';
-      off(window, 'mousemove', this.onPointerDrag);
-      off(window, 'touchmove', this.onPointerDrag);
-      off(window, 'mouseup', this.onPointerDragEnd);
-      off(window, 'touchend', this.onPointerDragEnd);
+      window.removeEventListener('mousemove', this.onPointerDrag);
+      window.removeEventListener('touchmove', this.onPointerDrag);
+      window.removeEventListener('mouseup', this.onPointerDragEnd);
+      window.removeEventListener('touchend', this.onPointerDragEnd);
     },
 
     onPointerDragStart(event) {

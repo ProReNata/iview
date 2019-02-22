@@ -46,10 +46,10 @@
 </template>
 
 <script>
-import iSelect from '../select/select.vue';
-import iOption from '../select/option.vue';
-import iInput from '../input/input.vue';
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import iSelect from 'Components/select/select.vue';
+import iOption from 'Components/select/option.vue';
+import iInput from 'Components/input/input.vue';
 import Emitter from '../../mixins/emitter';
 
 export default {
@@ -100,14 +100,14 @@ export default {
       default: 'bottom',
       type: String,
       validator(value) {
-        return oneOf(value, ['top', 'bottom']);
+        return isOneOf(value, ['top', 'bottom']);
       },
     },
     size: {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     transfer: {

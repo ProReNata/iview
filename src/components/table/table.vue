@@ -191,15 +191,16 @@
 <script>
 import stubArray from 'lodash/stubArray';
 import get from 'lodash/get';
+import cloneDeep from 'lodash/cloneDeep';
 import elementResizeDetectorMaker from 'element-resize-detector';
+import isOneOf from 'Global/Assets/isOneOf';
+import {getScrollBarSize} from 'Src/utils/assist';
+import Spin from 'Components/spin/spin.vue';
+import csv from 'Src/utils/csv';
+import Locale from 'Src/mixins/locale';
 import tableHead from './table-head.vue';
 import tableBody from './table-body.vue';
-import Spin from '../spin/spin.vue';
-import {oneOf, getStyle, deepCopy, getScrollBarSize} from '../../utils/assist';
-import {on, off} from '../../utils/dom';
-import csv from '../../utils/csv';
 import ExportCsv from './export-csv';
-import Locale from '../../mixins/locale';
 import {getAllColumns, convertToRows, convertColumnOrder, getRandomStr} from './util';
 
 const prefixCls = 'ivu-table';
@@ -268,7 +269,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     stripe: {
@@ -290,7 +291,7 @@ export default {
       bodyHeight: 0,
       cloneColumns: this.makeColumns(colsWithId),
       // when Cell has a button to delete row data, clickCurrentRow will throw an error, so clone a data
-      cloneData: deepCopy(this.data),
+      cloneData: cloneDeep(this.data),
       columnRows: this.makeColumnRows(false, colsWithId),
       columnsWidth: {},
       compiledUids: [],
@@ -504,7 +505,7 @@ export default {
 
         // here will trigger before clickCurrentRow, so use async
         setTimeout(() => {
-          this.cloneData = deepCopy(this.data);
+          this.cloneData = cloneDeep(this.data);
         }, 0);
       },
     },
@@ -533,7 +534,7 @@ export default {
       this.ready = true;
     });
 
-    on(window, 'resize', this.handleResize);
+    window.addEventListener('resize', this.handleResize);
     this.observer = elementResizeDetectorMaker();
     this.observer.listenTo(this.$el, this.handleResize);
 
@@ -544,7 +545,7 @@ export default {
     });
   },
   beforeDestroy() {
-    off(window, 'resize', this.handleResize);
+    window.removeEventListener('resize', this.handleResize);
     this.observer.removeListener(this.$el, this.handleResize);
   },
   methods: {
@@ -675,9 +676,9 @@ export default {
     fixedHeader() {
       if (this.height) {
         this.$nextTick(() => {
-          const titleHeight = parseInt(getStyle(this.$refs.title, 'height'), 10) || 0;
-          const headerHeight = parseInt(getStyle(this.$refs.header, 'height'), 10) || 0;
-          const footerHeight = parseInt(getStyle(this.$refs.footer, 'height'), 10) || 0;
+          const titleHeight = parseInt(window.getComputedStyle(this.$refs.title, 'height'), 10) || 0;
+          const headerHeight = parseInt(window.getComputedStyle(this.$refs.header, 'height'), 10) || 0;
+          const footerHeight = parseInt(window.getComputedStyle(this.$refs.footer, 'height'), 10) || 0;
           this.bodyHeight = this.height - titleHeight - headerHeight - footerHeight;
           this.$nextTick(() => this.fixedBody());
         });
@@ -1026,7 +1027,7 @@ export default {
     },
     makeColumns(cols) {
       // 在 data 时，this.allColumns 暂时为 undefined
-      const columns = deepCopy(getAllColumns(cols));
+      const columns = cloneDeep(getAllColumns(cols));
       const left = [];
       const right = [];
       const center = [];
@@ -1093,7 +1094,7 @@ export default {
       });
     },
     makeData() {
-      const data = deepCopy(this.data);
+      const data = cloneDeep(this.data);
       data.forEach((row, index) => {
         /* eslint-disable-next-line no-underscore-dangle */
         row._index = index;
@@ -1146,7 +1147,7 @@ export default {
     makeObjData() {
       const data = {};
       this.data.forEach((row, index) => {
-        const newRow = deepCopy(row); // todo 直接替换
+        const newRow = cloneDeep(row); // todo 直接替换
         /* eslint-disable-next-line no-underscore-dangle */
         newRow._isHover = false;
 

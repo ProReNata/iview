@@ -1,3 +1,1 @@
-import Scroll from './scroll.vue';
-
-export default Scroll;
+export {default} from './scroll.vue';

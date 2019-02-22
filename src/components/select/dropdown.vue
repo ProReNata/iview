@@ -11,7 +11,6 @@
 <script>
 import Vue from 'vue';
 import noop from 'lodash/noop';
-import {getStyle} from '../../utils/assist';
 
 const isServer = Vue.prototype.$isServer;
 
@@ -126,7 +125,7 @@ export default {
 
       // set a height for parent is Modal and Select's width is 100%
       if (this.$parent.$options.name === 'ISelect') {
-        this.width = parseInt(getStyle(this.$parent.$el, 'width'), 10);
+        this.width = parseInt(window.getComputedStyle(this.$parent.$el, 'width'), 10);
       }
     },
   },

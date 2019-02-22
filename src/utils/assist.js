@@ -1,30 +1,13 @@
 import Vue from 'vue';
-import noop from 'lodash/noop';
-
-const isServer = Vue.prototype.$isServer;
-// 判断参数是否是其中之一
-export function oneOf(value, validList) {
-  for (let i = 0; i < validList.length; i += 1) {
-    if (value === validList[i]) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-export function camelcaseToHyphen(str) {
-  return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-}
 
 // For Modal scrollBar hidden
 let cached;
 export function getScrollBarSize(fresh) {
-  if (isServer) {
+  if (Vue.prototype.$isServer) {
     return 0;
   }
 
-  if (fresh || cached === undefined) {
+  if (fresh || typeof cached === 'undefined') {
     const inner = document.createElement('div');
     inner.style.width = '100%';
     inner.style.height = '200px';
@@ -61,119 +44,8 @@ export function getScrollBarSize(fresh) {
   return cached;
 }
 
-// watch DOM change
-export const MutationObserver = isServer
-  ? false
-  : window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver || false;
-
-const SPECIAL_CHARS_REGEXP = /([:_-]+(.))/g;
-const MOZ_HACK_REGEXP = /^moz([A-Z])/;
-
-function camelCase(name) {
-  return name
-    .replace(SPECIAL_CHARS_REGEXP, (_, separator, letter, offset) => (offset ? letter.toUpperCase() : letter))
-    .replace(MOZ_HACK_REGEXP, 'Moz$1');
-}
-
-// getStyle
-export function getStyle(element, style) {
-  let styleName = style;
-
-  if (!element || !styleName) {
-    return null;
-  }
-
-  styleName = camelCase(styleName);
-
-  if (styleName === 'float') {
-    styleName = 'cssFloat';
-  }
-
-  try {
-    const computed = document.defaultView.getComputedStyle(element, '');
-
-    return element.style[styleName] || computed ? computed[styleName] : null;
-  } catch (e) {
-    return element.style[styleName];
-  }
-}
-
-// firstUpperCase
-function firstUpperCase(str) {
-  return str.toString()[0].toUpperCase() + str.toString().slice(1);
-}
-
-export {firstUpperCase};
-
-// Warn
-export function warnProp(component, prop, cType, wType) {
-  const correctType = firstUpperCase(cType);
-  const wrongType = firstUpperCase(wType);
-  /* eslint-disable-next-line no-console */
-  console.error(
-    `[iView warn]: Invalid prop: type check failed for prop ${prop}. Expected ${correctType}, got ${wrongType}. (found in component: ${component})`,
-  );
-}
-
-function typeOf(obj) {
-  const {toString} = Object.prototype;
-  const map = {
-    '[object Boolean]': 'boolean',
-    '[object Number]': 'number',
-    '[object String]': 'string',
-    '[object Function]': 'function',
-    '[object Array]': 'array',
-    '[object Date]': 'date',
-    '[object RegExp]': 'regExp',
-    '[object Undefined]': 'undefined',
-    '[object Null]': 'null',
-    '[object Object]': 'object',
-  };
-
-  return map[toString.call(obj)];
-}
-
-// deepCopy
-function deepCopy(data) {
-  const t = typeOf(data);
-  let o;
-
-  if (t === 'array') {
-    o = [];
-  } else if (t === 'object') {
-    o = {};
-  } else {
-    return data;
-  }
-
-  if (t === 'array') {
-    for (let i = 0; i < data.length; i += 1) {
-      o.push(deepCopy(data[i]));
-    }
-  } else if (t === 'object') {
-    /* eslint-disable-next-line guard-for-in,no-restricted-syntax */
-    for (const i in data) {
-      o[i] = deepCopy(data[i]);
-    }
-  }
-
-  return o;
-}
-
-export {deepCopy};
-
 // scrollTop animation
 export function scrollTop(el, from = 0, to, duration = 500) {
-  if (!window.requestAnimationFrame) {
-    window.requestAnimationFrame =
-      window.webkitRequestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      window.msRequestAnimationFrame ||
-      function requestAnimationFrame(callback) {
-        return window.setTimeout(callback, 1000 / 60);
-      };
-  }
-
   const difference = Math.abs(from - to);
   const step = Math.ceil((difference / duration) * 50);
 
@@ -291,105 +163,4 @@ export function findBrothersComponents(context, componentName, exceptMe = true) 
   }
 
   return res;
-}
-
-/* istanbul ignore next */
-const trim = function trim(string) {
-  return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
-};
-
-/* istanbul ignore next */
-export function hasClass(el, cls) {
-  if (!el || !cls) {
-    return false;
-  }
-
-  if (cls.indexOf(' ') !== -1) {
-    throw new Error('className should not contain space.');
-  }
-
-  if (el.classList) {
-    return el.classList.contains(cls);
-  }
-
-  return ` ${el.className} `.indexOf(` ${cls} `) > -1;
-}
-
-/* istanbul ignore next */
-export function addClass(el, cls) {
-  if (!el) {
-    return;
-  }
-
-  let curClass = el.className;
-  const classes = (cls || '').split(' ');
-
-  for (let i = 0, j = classes.length; i < j; i += 1) {
-    const clsName = classes[i];
-
-    if (!clsName) {
-      /* eslint-disable-next-line no-continue */
-      continue;
-    }
-
-    if (el.classList) {
-      el.classList.add(clsName);
-    } else if (!hasClass(el, clsName)) {
-      curClass += ` ${clsName}`;
-    }
-  }
-
-  if (!el.classList) {
-    el.className = curClass;
-  }
-}
-
-/* istanbul ignore next */
-export function removeClass(el, cls) {
-  if (!el || !cls) {
-    return;
-  }
-
-  const classes = cls.split(' ');
-  let curClass = ` ${el.className} `;
-
-  for (let i = 0, j = classes.length; i < j; i += 1) {
-    const clsName = classes[i];
-
-    if (!clsName) {
-      /* eslint-disable-next-line no-continue */
-      continue;
-    }
-
-    if (el.classList) {
-      el.classList.remove(clsName);
-    } else if (hasClass(el, clsName)) {
-      curClass = curClass.replace(` ${clsName} `, ' ');
-    }
-  }
-
-  if (!el.classList) {
-    el.className = trim(curClass);
-  }
-}
-
-export const dimensionMap = {
-  lg: '1200px',
-  md: '992px',
-  sm: '768px',
-  xl: '1600px',
-  xs: '480px',
-};
-
-export function setMatchMedia() {
-  if (typeof window !== 'undefined') {
-    const matchMediaPolyfill = (mediaQuery) => ({
-      matches: false,
-      media: mediaQuery,
-      off: noop,
-      on: noop,
-    });
-
-    window.matchMedia = window.matchMedia || matchMediaPolyfill;
-  }
 }

@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import Modal from './confirm';
 
 let modalInstance;
@@ -71,5 +72,7 @@ Modal.remove = function _remove() {
 
   instance.remove();
 };
+
+Vue.prototype.$Modal = Modal;
 
 export default Modal;

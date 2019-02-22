@@ -1,3 +1,1 @@
-import Panel from '../collapse/panel.vue';
-
-export default Panel;
+export {default} from '../collapse/panel.vue';

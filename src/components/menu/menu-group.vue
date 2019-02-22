@@ -1,7 +1,7 @@
 <template>
   <li :class="[prefixCls + '-item-group']">
-    <div 
-      :class="[prefixCls + '-item-group-title']" 
+    <div
+      :class="[prefixCls + '-item-group-title']"
       :style="groupStyle"
     >
       {{ title }}
@@ -9,6 +9,7 @@
     <ul><slot></slot></ul>
   </li>
 </template>
+
 <script>
 import mixin from './mixin';
 

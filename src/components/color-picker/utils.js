@@ -1,6 +1,6 @@
 import isNil from 'lodash/isNil';
 import tinycolor from 'tinycolor2';
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
 
 function setAlpha(data, alpha) {
   const color = tinycolor(data);
@@ -78,7 +78,7 @@ export function clamp(value, min, max) {
 }
 
 export function getIncrement(key, keys, increment) {
-  return oneOf(key, keys) ? increment : 0;
+  return isOneOf(key, keys) ? increment : 0;
 }
 
 export function getTouches(e, prop) {

@@ -175,9 +175,9 @@
 </template>
 
 <script>
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import Locale from 'Src/mixins/locale';
 import Options from './options.vue';
-import Locale from '../../mixins/locale';
 
 const prefixCls = 'ivu-page';
 
@@ -211,7 +211,7 @@ export default {
       default: 'bottom',
       type: String,
       validator(value) {
-        return oneOf(value, ['top', 'bottom']);
+        return isOneOf(value, ['top', 'bottom']);
       },
     },
     showElevator: {
@@ -234,7 +234,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small']);
+        return isOneOf(value, ['small']);
       },
     },
     styles: {

@@ -1,3 +1,1 @@
-import Cascader from './cascader.vue';
-
-export default Cascader;
+export {default} from './cascader.vue';

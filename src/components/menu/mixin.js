@@ -1,4 +1,4 @@
-import {findComponentUpward, findComponentsUpward} from '../../utils/assist';
+import {findComponentUpward, findComponentsUpward} from 'Src/utils/assist';
 
 export default {
   computed: {

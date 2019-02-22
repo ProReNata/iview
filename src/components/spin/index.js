@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import Spin from './spin';
 
 let spinInstance;
@@ -34,5 +35,7 @@ Spin.hide = function _hide() {
     spinInstance = null;
   });
 };
+
+Vue.prototype.$Spin = Spin;
 
 export default Spin;

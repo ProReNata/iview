@@ -3,17 +3,20 @@
     <slot></slot>
   </ul>
 </template>
+
 <script>
 const prefixCls = 'ivu-timeline';
 
 export default {
   name: 'Timeline',
+
   props: {
     pending: {
       default: false,
       type: Boolean,
     },
   },
+
   computed: {
     classes() {
       return [

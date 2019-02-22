@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import {oneOf} from '../../utils/assist';
-import ScrollbarMixins from '../modal/mixins-scrollbar';
+import isOneOf from 'Global/Assets/isOneOf';
+import ScrollbarMixins from 'Components/modal/mixins-scrollbar';
 
 const prefixCls = 'ivu-spin';
 
@@ -39,7 +39,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large']);
+        return isOneOf(value, ['small', 'large']);
       },
     },
   },

@@ -27,11 +27,10 @@
 </template>
 
 <script>
+import isOneOf from 'Global/Assets/isOneOf';
 import HSAMixin from './hsaMixin';
 import Prefixes from './prefixMixin';
 import {clamp, getIncrement} from './utils';
-import {on, off} from '../../utils/dom';
-import {oneOf} from '../../utils/assist';
 
 export default {
   name: 'Saturation',
@@ -78,8 +77,7 @@ export default {
     },
     handleMouseDown(e) {
       HSAMixin.methods.handleMouseDown.call(this, e);
-      //            window.addEventListener('mouseup', this.handleChange, false);
-      on(window, 'mouseup', this.handleChange);
+      window.addEventListener('mouseup', this.handleChange);
     },
     handleSlide(e, direction, key) {
       e.preventDefault();
@@ -96,22 +94,21 @@ export default {
     onKeydown(event) {
       const {key} = event;
 
-      if (oneOf(key, ['Esc', 'Escape'])) {
+      if (isOneOf(key, ['Esc', 'Escape'])) {
         this.handleEscape(event);
-      } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+      } else if (isOneOf(key, ['Up', 'ArrowUp'])) {
         this.handleUp(event);
-      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+      } else if (isOneOf(key, ['Down', 'ArrowDown'])) {
         this.handleDown(event);
-      } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+      } else if (isOneOf(key, ['Left', 'ArrowLeft'])) {
         this.handleLeft(event);
-      } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+      } else if (isOneOf(key, ['Right', 'ArrowRight'])) {
         this.handleRight(event);
       }
     },
     unbindEventListeners(e) {
       HSAMixin.methods.unbindEventListeners.call(this, e);
-      //            window.removeEventListener('mouseup', this.handleChange);
-      off(window, 'mouseup', this.handleChange);
+      window.removeEventListener('mouseup', this.handleChange);
     },
   },
 };

@@ -92,10 +92,10 @@
 
 <script>
 import elementResizeDetectorMaker from 'element-resize-detector';
+import isOneOf from 'Global/Assets/isOneOf';
+import Emitter from 'Src/mixins/emitter';
 import Icon from '../icon/icon.vue';
 import Render from '../base/render';
-import {oneOf, MutationObserver} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
 
 const prefixCls = 'ivu-tabs';
 const transitionTime = 300; // from CSS
@@ -158,14 +158,14 @@ export default {
       default: 'default',
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'default']);
+        return isOneOf(value, ['small', 'default']);
       },
     },
     type: {
       default: 'line',
       type: String,
       validator(value) {
-        return oneOf(value, ['line', 'card']);
+        return isOneOf(value, ['line', 'card']);
       },
     },
     value: {
@@ -404,7 +404,7 @@ export default {
     onKeydown(event) {
       const {key} = event;
 
-      if (oneOf(key, [' ', 'Space', 'Spacebar'])) {
+      if (isOneOf(key, [' ', 'Space', 'Spacebar'])) {
         event.preventDefault();
         this.handleTabKeyboardSelect(false);
       } else {

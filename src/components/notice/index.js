@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import noop from 'lodash/noop';
 import get from 'lodash/get';
 import Notification from '../base/notification';
@@ -92,7 +93,7 @@ function notice(type, options) {
   });
 }
 
-export default {
+const API = {
   close(noticeName) {
     if (noticeName) {
       if (noticeInstance) {
@@ -100,6 +101,7 @@ export default {
       }
     }
   },
+
   config(options) {
     if (options.top) {
       top = get(options, 'top');
@@ -109,24 +111,34 @@ export default {
       defaultDuration = options.duration;
     }
   },
+
   destroy() {
     const instance = getNoticeInstance();
     noticeInstance = null;
     instance.destroy('ivu-notice');
   },
+
   error(options) {
     return notice('error', options);
   },
+
   info(options) {
     return notice('info', options);
   },
+
   open(options) {
     return notice('normal', options);
   },
+
   success(options) {
     return notice('success', options);
   },
+
   warning(options) {
     return notice('warning', options);
   },
 };
+
+Vue.prototype.$Notice = API;
+
+export default API;

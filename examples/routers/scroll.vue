@@ -19,6 +19,7 @@ export default {
   },
   methods: {
     loadData(dir) {
+      /* eslint-disable-next-line compat/compat */
       return new Promise((resolve) => {
         setTimeout(() => {
           if (dir > 0) {

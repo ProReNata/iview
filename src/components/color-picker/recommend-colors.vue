@@ -34,11 +34,11 @@
 </template>
 
 <script>
-import Emitter from '../../mixins/emitter';
+import isOneOf from 'Global/Assets/isOneOf';
+import Emitter from 'Src/mixins/emitter';
 import HandleEscapeMixin from './handleEscapeMixin';
 import Prefixes from './prefixMixin';
 import {clamp} from './utils';
-import {oneOf} from '../../utils/assist';
 
 export default {
   name: 'RecommendedColors',
@@ -154,17 +154,17 @@ export default {
     onKeydown(event) {
       const {key} = event;
 
-      if (oneOf(key, ['Esc', 'Escape'])) {
+      if (isOneOf(key, ['Esc', 'Escape'])) {
         this.handleEscape(event);
       } else if (key === 'Enter') {
         this.handleEnter(event);
-      } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+      } else if (isOneOf(key, ['Up', 'ArrowUp'])) {
         this.handleArrow(event, 'y', this.up);
-      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+      } else if (isOneOf(key, ['Down', 'ArrowDown'])) {
         this.handleArrow(event, 'y', this.down);
-      } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+      } else if (isOneOf(key, ['Left', 'ArrowLeft'])) {
         this.handleArrow(event, 'x', this.left);
-      } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+      } else if (isOneOf(key, ['Right', 'ArrowRight'])) {
         this.handleArrow(event, 'x', this.right);
       }
     },

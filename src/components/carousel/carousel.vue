@@ -54,9 +54,8 @@
 </template>
 
 <script>
+import isOneOf from 'Global/Assets/isOneOf';
 import Icon from '../icon/icon.vue';
-import {getStyle, oneOf} from '../../utils/assist';
-import {on, off} from '../../utils/dom';
 
 const prefixCls = 'ivu-carousel';
 
@@ -70,7 +69,7 @@ export default {
       default: 'hover',
       type: String,
       validator(value) {
-        return oneOf(value, ['hover', 'always', 'never']);
+        return isOneOf(value, ['hover', 'always', 'never']);
       },
     },
     autoplay: {
@@ -85,7 +84,7 @@ export default {
       default: 'inside',
       type: String,
       validator(value) {
-        return oneOf(value, ['inside', 'outside', 'none']);
+        return isOneOf(value, ['inside', 'outside', 'none']);
       },
     },
     easing: {
@@ -111,7 +110,7 @@ export default {
       default: 'click',
       type: String,
       validator(value) {
-        return oneOf(value, ['click', 'hover']);
+        return isOneOf(value, ['click', 'hover']);
       },
     },
     value: {
@@ -194,13 +193,11 @@ export default {
     this.updateSlides(true);
     this.handleResize();
     this.setAutoplay();
-    //            window.addEventListener('resize', this.handleResize, false);
-    on(window, 'resize', this.handleResize);
+    window.addEventListener('resize', this.handleResize, false);
   },
 
   beforeDestroy() {
-    //            window.removeEventListener('resize', this.handleResize, false);
-    off(window, 'resize', this.handleResize);
+    window.removeEventListener('resize', this.handleResize, false);
   },
 
   methods: {
@@ -284,7 +281,7 @@ export default {
       }
     },
     handleResize() {
-      this.listWidth = parseInt(getStyle(this.$el, 'width'), 10);
+      this.listWidth = parseInt(window.getComputedStyle(this.$el, 'width'), 10);
       this.updatePos();
       this.updateOffset();
     },

@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import Emitter from '../../mixins/emitter';
-import {findComponentUpward} from '../../utils/assist';
+import {findComponentUpward} from 'Src/utils/assist';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'byx-select-item';
 

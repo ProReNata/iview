@@ -3,16 +3,19 @@
     <slot></slot>
   </div>
 </template>
+
 <script>
 const prefixCls = 'ivu-layout';
 
 export default {
   name: 'Layout',
+
   data() {
     return {
       hasSider: false,
     };
   },
+
   computed: {
     wrapClasses() {
       return [

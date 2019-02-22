@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import noop from 'lodash/noop';
+import Button from 'Components/button';
+import Locale from 'Src/mixins/locale';
 import Modal from './modal.vue';
-import Button from '../button/button.vue';
-import Locale from '../../mixins/locale';
 
 const prefixCls = 'ivu-modal-confirm';
 
@@ -11,6 +11,7 @@ Modal.newInstance = (properties) => {
 
   const Instance = new Vue({
     mixins: [Locale],
+
     data: {
       ...props,
       ...{
@@ -29,6 +30,7 @@ Modal.newInstance = (properties) => {
         width: 416,
       },
     },
+
     computed: {
       iconNameCls() {
         return ['ivu-icon', `ivu-icon-${this.iconName}`];
@@ -51,6 +53,7 @@ Modal.newInstance = (properties) => {
         return this.t('i.modal.okText');
       },
     },
+
     methods: {
       cancel() {
         this.$children[0].visible = false;
@@ -82,6 +85,7 @@ Modal.newInstance = (properties) => {
         }, 300);
       },
     },
+
     render(h) {
       const footerVNodes = [];
 
@@ -232,11 +236,13 @@ Modal.newInstance = (properties) => {
 
   return {
     component: modal,
+
     remove() {
       modal.visible = false;
       modal.$parent.buttonLoading = false;
       modal.$parent.remove();
     },
+
     show(showProps) {
       modal.$parent.showCancel = showProps.showCancel;
       modal.$parent.iconType = showProps.icon;

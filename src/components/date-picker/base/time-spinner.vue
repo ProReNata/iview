@@ -54,8 +54,10 @@
 
 <script>
 import stubArray from 'lodash/stubArray';
+import cloneDeep from 'lodash/cloneDeep';
+import upperFirst from 'lodash/upperFirst';
+import {scrollTop} from 'Src/utils/assist';
 import Options from '../time-mixins';
-import {deepCopy, scrollTop, firstUpperCase} from '../../../utils/assist';
 
 const prefixCls = 'ivu-time-picker-cells';
 const timeParts = ['hours', 'minutes', 'seconds'];
@@ -121,7 +123,7 @@ export default {
       };
 
       for (let i = 0; i < 24; i += step) {
-        const hour = deepCopy(hourTmpl);
+        const hour = cloneDeep(hourTmpl);
         hour.text = i;
         hour.focused = i === focusedHour;
 
@@ -154,7 +156,7 @@ export default {
       };
 
       for (let i = 0; i < 60; i += step) {
-        const minute = deepCopy(minuteTmpl);
+        const minute = cloneDeep(minuteTmpl);
         minute.text = i;
         minute.focused = i === focusedMinute;
 
@@ -187,7 +189,7 @@ export default {
       };
 
       for (let i = 0; i < 60; i += step) {
-        const second = deepCopy(secondTmpl);
+        const second = cloneDeep(secondTmpl);
         second.text = i;
         second.focused = i === focusedMinute;
 
@@ -288,7 +290,7 @@ export default {
     },
     getScrollIndex(type, idx) {
       let index = idx;
-      const Type = firstUpperCase(type);
+      const Type = upperFirst(type);
       const disabled = this[`disabled${Type}`];
 
       if (disabled.length && this.hideDisabledOptions) {

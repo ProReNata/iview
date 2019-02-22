@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Icon from '../icon/icon.vue';
+import Icon from 'Components/icon';
 
 const prefixCls = 'ivu-card';
 const defaultPadding = 16;

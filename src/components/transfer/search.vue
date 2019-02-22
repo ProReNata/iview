@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import iInput from '../input/input.vue';
+import iInput from 'Components/input/input.vue';
 
 export default {
   name: 'Search',

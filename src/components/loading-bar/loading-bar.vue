@@ -1,29 +1,24 @@
 <template>
   <transition name="fade">
-    <div 
-      v-show="show" 
-      :class="classes" 
+    <div
+      v-show="show"
+      :class="classes"
       :style="outerStyles"
     >
-      <div 
-        :class="innerClasses" 
+      <div
+        :class="innerClasses"
         :style="styles"
       >
       </div>
     </div>
   </transition>
 </template>
-<script>
-//    import { oneOf } from '../../utils/assist';
 
+<script>
 const prefixCls = 'ivu-loading-bar';
 
 export default {
   props: {
-    //            percent: {
-    //                type: Number,
-    //                default: 0
-    //            },
     color: {
       default: 'primary',
       type: String,
@@ -36,28 +31,16 @@ export default {
       default: 2,
       type: Number,
     },
-    //            status: {
-    //                type: String,
-    //                validator (value) {
-    //                    return oneOf(value, ['success', 'error']);
-    //                },
-    //                default: 'success'
-    //            },
-    //            show: {
-    //                type: Boolean,
-    //                default: false
-    //            }
   },
+
   data() {
     return {
       percent: 0,
       show: false,
-      //                color: 'primary',
-      //                failedColor: 'error',
-      //                height: 2,
       status: 'success',
     };
   },
+
   computed: {
     classes() {
       return `${prefixCls}`;

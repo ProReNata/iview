@@ -30,7 +30,7 @@
 <script>
 import noop from 'lodash/noop';
 import AsyncValidator from 'async-validator';
-import Emitter from '../../mixins/emitter';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-form-item';
 

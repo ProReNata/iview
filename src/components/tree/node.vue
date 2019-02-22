@@ -65,12 +65,12 @@
 
 <script>
 import stubObject from 'lodash/stubObject';
-import Checkbox from '../checkbox/checkbox.vue';
-import Icon from '../icon/icon.vue';
+import {findComponentUpward} from 'Src/utils/assist';
+import Checkbox from 'Components/checkbox/checkbox.vue';
+import Icon from 'Components/icon';
+import CollapseTransition from 'Components/base/collapse-transition';
+import Emitter from 'Src/mixins/emitter';
 import Render from './render';
-import CollapseTransition from '../base/collapse-transition';
-import Emitter from '../../mixins/emitter';
-import {findComponentUpward} from '../../utils/assist';
 
 const prefixCls = 'ivu-tree';
 

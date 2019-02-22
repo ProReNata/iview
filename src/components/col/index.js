@@ -1,3 +1,1 @@
-import Col from '../grid/col.vue';
-
-export default Col;
+export {default} from 'Components/grid/col.vue';

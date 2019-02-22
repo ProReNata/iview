@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import {oneOf} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
+import isOneOf from 'Global/Assets/isOneOf';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-input-number';
 const iconPrefixCls = 'ivu-icon';
@@ -140,7 +140,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     step: {

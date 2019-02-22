@@ -21,9 +21,9 @@
 
 <script>
 import stubArray from 'lodash/stubArray';
+import Emitter from 'Src/mixins/emitter';
+import Locale from 'Src/mixins/locale';
 import TreeNode from './node.vue';
-import Emitter from '../../mixins/emitter';
-import Locale from '../../mixins/locale';
 
 const prefixCls = 'ivu-tree';
 

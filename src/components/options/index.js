@@ -1,3 +1,1 @@
-import Options from '../page/options.vue';
-
-export default Options;
+export {default} from 'Components/page/options.vue';

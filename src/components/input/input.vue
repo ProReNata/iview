@@ -97,9 +97,10 @@
 </template>
 
 <script>
-import {oneOf, findComponentUpward} from '../../utils/assist';
-import calcTextareaHeight from '../../utils/calcTextareaHeight';
-import Emitter from '../../mixins/emitter';
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentUpward} from 'Src/utils/assist';
+import calcTextareaHeight from 'Src/utils/calcTextareaHeight';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-input';
 
@@ -112,7 +113,7 @@ export default {
     autocomplete: {
       default: 'off',
       validator(value) {
-        return oneOf(value, ['on', 'off']);
+        return isOneOf(value, ['on', 'off']);
       },
     },
     autofocus: {
@@ -167,7 +168,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     spellcheck: {
@@ -178,7 +179,7 @@ export default {
       default: 'text',
       type: String,
       validator(value) {
-        return oneOf(value, ['text', 'textarea', 'password', 'url', 'email', 'date']);
+        return isOneOf(value, ['text', 'textarea', 'password', 'url', 'email', 'date']);
       },
     },
     value: {
@@ -189,7 +190,7 @@ export default {
       default: 'soft',
       type: String,
       validator(value) {
-        return oneOf(value, ['hard', 'soft']);
+        return isOneOf(value, ['hard', 'soft']);
       },
     },
   },

@@ -16,17 +16,20 @@
     </ul>
   </li>
 </template>
+
 <script>
 const prefixCls = 'byx-select-group';
 
 export default {
   name: 'OptionGroup',
+
   props: {
     label: {
       default: '',
       type: String,
     },
   },
+
   data() {
     return {
       // for search
@@ -34,6 +37,7 @@ export default {
       prefixCls,
     };
   },
+
   mounted() {
     this.$on('on-query-change', () => {
       this.queryChange();
@@ -41,6 +45,7 @@ export default {
       return true;
     });
   },
+
   methods: {
     queryChange() {
       this.$nextTick(() => {

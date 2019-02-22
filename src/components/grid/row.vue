@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import {oneOf, findComponentDownward, findBrothersComponents} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentDownward, findBrothersComponents} from 'Src/utils/assist';
 
 const prefixCls = 'ivu-row';
 
@@ -20,7 +21,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['top', 'middle', 'bottom']);
+        return isOneOf(value, ['top', 'middle', 'bottom']);
       },
     },
     className: {
@@ -35,14 +36,14 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['start', 'end', 'center', 'space-around', 'space-between']);
+        return isOneOf(value, ['start', 'end', 'center', 'space-around', 'space-between']);
       },
     },
     type: {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['flex']);
+        return isOneOf(value, ['flex']);
       },
     },
   },

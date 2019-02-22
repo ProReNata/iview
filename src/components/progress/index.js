@@ -1,3 +1,1 @@
-import Progress from './progress.vue';
-
-export default Progress;
+export {default} from './progress.vue';

@@ -82,11 +82,11 @@
 
 <script>
 import {directive as clickOutside} from 'v-click-outside-x';
+import isOneOf from 'Global/Assets/isOneOf';
+import TransferDom from 'Src/directives/transfer-dom';
+import Emitter from 'Src/mixins/emitter';
+import Locale from 'Src/mixins/locale';
 import Drop from './dropdown.vue';
-import TransferDom from '../../directives/transfer-dom';
-import {oneOf} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
-import Locale from '../../mixins/locale';
 import SelectHead from './select-head.vue';
 import FunctionalOptions from './functional-options.vue';
 
@@ -234,7 +234,7 @@ export default {
       default: 'bottom',
       type: String,
       validator(value) {
-        return oneOf(value, ['top', 'bottom']);
+        return isOneOf(value, ['top', 'bottom']);
       },
     },
     remoteMethod: {
@@ -245,7 +245,7 @@ export default {
       default: 'default',
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     transfer: {
@@ -658,7 +658,7 @@ export default {
     handleKeydown(e) {
       const {key} = e;
 
-      if (oneOf(key, ['Backspace', 'Delete'])) {
+      if (isOneOf(key, ['Backspace', 'Delete'])) {
         return; // so we don't call preventDefault
       }
 
@@ -670,18 +670,18 @@ export default {
         }
 
         // Esc slide-up
-        if (oneOf(key, ['Esc', 'Escape'])) {
+        if (isOneOf(key, ['Esc', 'Escape'])) {
           e.stopPropagation();
           this.hideMenu();
         }
 
         // next
-        if (oneOf(key, ['Up', 'ArrowUp'])) {
+        if (isOneOf(key, ['Up', 'ArrowUp'])) {
           this.navigateOptions(-1);
         }
 
         // prev
-        if (oneOf(key, ['Down', 'ArrowDown'])) {
+        if (isOneOf(key, ['Down', 'ArrowDown'])) {
           this.navigateOptions(1);
         }
 
@@ -799,19 +799,19 @@ export default {
     onKeydown(event) {
       const {key} = event;
 
-      if (oneOf(key, ['Esc', 'Escape'])) {
+      if (isOneOf(key, ['Esc', 'Escape'])) {
         this.handleKeydown(event);
       } else if (key === 'Enter') {
         this.handleKeydown(event);
-      } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+      } else if (isOneOf(key, ['Up', 'ArrowUp'])) {
         event.preventDefault();
         this.handleKeydown(event);
-      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+      } else if (isOneOf(key, ['Down', 'ArrowDown'])) {
         event.preventDefault();
         this.handleKeydown(event);
       } else if (key === 'Tab') {
         this.handleKeydown(event);
-      } else if (oneOf(key, ['Backspace', 'Delete'])) {
+      } else if (isOneOf(key, ['Backspace', 'Delete'])) {
         this.handleKeydown(event);
       }
     },

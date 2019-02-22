@@ -1,3 +1,1 @@
-import BreadcrumbItem from '../breadcrumb/breadcrumb-item.vue';
-
-export default BreadcrumbItem;
+export {default} from 'Components/breadcrumb/breadcrumb-item.vue';

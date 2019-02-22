@@ -18,8 +18,9 @@
 </template>
 
 <script>
-import {findComponentUpward, oneOf} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentUpward} from 'Src/utils/assist';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-radio';
 
@@ -49,7 +50,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     trueValue: {
@@ -123,11 +124,7 @@ export default {
       this.group = true;
 
       if (this.name && this.name !== this.parent.name) {
-        /* eslint-disable-next-line no-console */
-        if (console.warn) {
-          /* eslint-disable-next-line no-console */
-          console.warn('[iview] Name does not match Radio Group name.');
-        }
+        logger.warn('[iview] Name does not match Radio Group name.');
       } else {
         this.groupName = this.parent.name;
       }

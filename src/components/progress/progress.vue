@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import Icon from '../icon';
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import Icon from 'Components/icon';
 
 const prefixCls = 'ivu-progress';
 
@@ -53,7 +53,7 @@ export default {
     status: {
       default: 'normal',
       validator(value) {
-        return oneOf(value, ['normal', 'active', 'wrong', 'success']);
+        return isOneOf(value, ['normal', 'active', 'wrong', 'success']);
       },
     },
     strokeWidth: {

@@ -29,9 +29,9 @@
 
 <script>
 import stubArray from 'lodash/stubArray';
+import {findComponentUpward, findComponentDownward} from 'Src/utils/assist';
 import Casitem from './casitem.vue';
 import Emitter from '../../mixins/emitter';
-import {findComponentUpward, findComponentDownward} from '../../utils/assist';
 
 let key = 1;
 

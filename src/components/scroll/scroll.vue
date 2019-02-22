@@ -46,9 +46,8 @@
 <script>
 import noop from 'lodash/noop';
 import throttle from 'lodash/throttle';
+import Locale from 'Src/mixins/locale';
 import loader from './loading-component.vue';
-import {on, off} from '../../utils/dom';
-import Locale from '../../mixins/locale';
 
 const prefixCls = 'ivu-scroll';
 const dragConfig = {
@@ -198,12 +197,15 @@ export default {
         }
       }
 
+      /* eslint-disable-next-line compat/compat */
       const callbacks = [this.waitOneSecond(), this.onReachEdge ? this.onReachEdge(dir) : Promise.resolve()];
       let cb;
 
       if (dir > 0) {
+        /* eslint-disable-next-line compat/compat */
         cb = this.onReachTop ? this.onReachTop() : Promise.resolve();
       } else {
+        /* eslint-disable-next-line compat/compat */
         cb = this.onReachBottom ? this.onReachBottom() : Promise.resolve();
       }
 
@@ -213,6 +215,7 @@ export default {
         this.reset();
       }, 5000);
 
+      /* eslint-disable-next-line compat/compat */
       Promise.all(callbacks)
         .then(() => {
           clearTimeout(tooSlow);
@@ -249,7 +252,7 @@ export default {
       }
 
       this.pointerTouchDown = this.getTouchCoordinates(e);
-      on(window, 'touchend', this.pointerUpHandler);
+      window.addEventListener('touchend', this.pointerUpHandler);
       this.$refs.scrollContainer.parentElement.addEventListener(
         'touchmove',
         (evt) => {
@@ -341,7 +344,7 @@ export default {
       // if we remove the handler too soon the screen will bump
       if (this.touchScroll) {
         setTimeout(() => {
-          off(window, 'touchend', this.pointerUpHandler);
+          window.removeEventListener('touchend', this.pointerUpHandler);
           this.$refs.scrollContainer.removeEventListener('touchmove', this.pointerMoveHandler);
           this.touchScroll = false;
         }, 500);
@@ -389,6 +392,7 @@ export default {
 
     // just to improve feeling of loading and avoid scroll trailing events fired by the browser
     waitOneSecond() {
+      /* eslint-disable-next-line compat/compat */
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

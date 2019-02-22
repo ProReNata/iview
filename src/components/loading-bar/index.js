@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import get from 'lodash/get';
 import LoadingBar from './loading-bar';
 
@@ -45,7 +46,7 @@ function clearTimer() {
   }
 }
 
-export default {
+const API = {
   config(options) {
     if (options.color) {
       color = get(options, 'color');
@@ -59,12 +60,14 @@ export default {
       height = get(options, 'height');
     }
   },
+
   destroy() {
     clearTimer();
     const instance = getLoadingBarInstance();
     loadingBarInstance = null;
     instance.destroy();
   },
+
   error() {
     clearTimer();
     update({
@@ -74,6 +77,7 @@ export default {
     });
     hide();
   },
+
   finish() {
     clearTimer();
     update({
@@ -83,6 +87,7 @@ export default {
     });
     hide();
   },
+
   start() {
     if (timer) {
       return;
@@ -110,6 +115,7 @@ export default {
       });
     }, 200);
   },
+
   update(percent) {
     clearTimer();
     update({
@@ -119,3 +125,7 @@ export default {
     });
   },
 };
+
+Vue.prototype.$Loading = API;
+
+export default API;

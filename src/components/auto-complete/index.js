@@ -1,3 +1,1 @@
-import AutoComplete from './auto-complete.vue';
-
-export default AutoComplete;
+export {default} from './auto-complete.vue';

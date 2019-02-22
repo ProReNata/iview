@@ -1,3 +1,1 @@
-import {use} from '../../locale/index';
-
-export default use;
+export {use as default} from '../../locale/index';

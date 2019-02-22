@@ -13,8 +13,8 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash/cloneDeep';
 import {clearHours} from '../util';
-import {deepCopy} from '../../../utils/assist';
 import mixin from './mixin';
 import prefixCls from './prefixCls';
 
@@ -38,7 +38,7 @@ export default {
       const focusedDate = clearHours(new Date(this.focusedDate.getFullYear(), 0, 1));
 
       for (let i = 0; i < 10; i += 1) {
-        const cell = deepCopy(cellTmpl);
+        const cell = cloneDeep(cellTmpl);
         cell.date = new Date(this.startYear + i, 0, 1);
         cell.disabled = typeof this.disabledDate === 'function' && this.disabledDate(cell.date) && this.selectionMode === 'year';
         const day = clearHours(cell.date);

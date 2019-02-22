@@ -1,17 +1,15 @@
 // Thanks to https://github.com/ElemeFE/element/blob/dev/src/transitions/collapse-transition.js
 
-import {addClass, removeClass} from '../../utils/assist';
-
 const Transition = {
   afterEnter(el) {
     // for safari: remove class then reset height is necessary
-    removeClass(el, 'collapse-transition');
+    el.classList.remove('collapse-transition');
     el.style.height = '';
     el.style.overflow = el.dataset.oldOverflow;
   },
 
   afterLeave(el) {
-    removeClass(el, 'collapse-transition');
+    el.classList.remove('collapse-transition');
     el.style.height = '';
     el.style.overflow = el.dataset.oldOverflow;
     el.style.paddingTop = el.dataset.oldPaddingTop;
@@ -19,7 +17,7 @@ const Transition = {
   },
 
   beforeEnter(el) {
-    addClass(el, 'collapse-transition');
+    el.classList.add('collapse-transition');
 
     if (!el.dataset) {
       el.dataset = {};
@@ -65,7 +63,7 @@ const Transition = {
   leave(el) {
     if (el.scrollHeight !== 0) {
       // for safari: add class after set height, or it will jump to zero height suddenly, weired
-      addClass(el, 'collapse-transition');
+      el.classList.add('collapse-transition');
       el.style.height = 0;
       el.style.paddingTop = 0;
       el.style.paddingBottom = 0;

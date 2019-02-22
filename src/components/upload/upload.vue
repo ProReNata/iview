@@ -33,10 +33,10 @@
 import stubArray from 'lodash/stubArray';
 import stubObject from 'lodash/stubObject';
 import noop from 'lodash/noop';
+import isOneOf from 'Global/Assets/isOneOf';
+import Emitter from 'Src/mixins/emitter';
 import UploadList from './upload-list.vue';
 import ajax from './ajax';
-import {oneOf} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
 
 const prefixCls = 'ivu-upload';
 
@@ -124,7 +124,7 @@ export default {
       default: 'select',
       type: String,
       validator(value) {
-        return oneOf(value, ['select', 'drag']);
+        return isOneOf(value, ['select', 'drag']);
       },
     },
     withCredentials: {

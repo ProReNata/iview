@@ -9,12 +9,23 @@
 
 <script>
 import Vue from 'vue';
-import findKey from 'lodash/findKey';
-import memoize from 'lodash/memoize';
+import {library} from '@fortawesome/fontawesome-svg-core';
 import {fas} from '@fortawesome/pro-solid-svg-icons';
 import {far} from '@fortawesome/pro-regular-svg-icons';
 import {fal} from '@fortawesome/pro-light-svg-icons';
+// noinspection ES6CheckImport
+import {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText} from '@fortawesome/vue-fontawesome';
+import findKey from 'lodash/findKey';
+import memoize from 'lodash/memoize';
 import isOneOf from 'Global/Assets/isOneOf';
+
+library.add(fas);
+library.add(far);
+library.add(fal);
+
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component('font-awesome-layers', FontAwesomeLayers);
+Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
 
 const SOLID = 'solid';
 const REGULAR = 'regular';
@@ -33,8 +44,8 @@ export function isOneOfIconNames(value) {
     return iconName === value;
   };
 
-  return ICON_LIBRARIES.some(function libraryIteratee(library) {
-    return Boolean(findKey(library, isIconName));
+  return ICON_LIBRARIES.some(function libraryIteratee(iconLibrary) {
+    return Boolean(findKey(iconLibrary, isIconName));
   });
 }
 
@@ -88,7 +99,8 @@ const vueObject = {
 };
 
 const el = document.createElement('div');
-const createHTML = function createHTML(props = {}) {
+
+export const getIconAsHTML = memoize(function createHTML(props = {}) {
   return new Vue({
     ...vueObject,
 
@@ -96,9 +108,7 @@ const createHTML = function createHTML(props = {}) {
       ...props,
     },
   }).$mount(el).$el.outerHTML;
-};
-
-export const getIconAsHTML = memoize(createHTML);
+});
 
 export default vueObject;
 </script>

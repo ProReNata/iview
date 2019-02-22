@@ -46,9 +46,9 @@
 
 <script>
 import noop from 'lodash/noop';
+import Icon from 'Components/icon';
+import Checkbox from 'Components/checkbox/checkbox.vue';
 import Cell from './expand';
-import Icon from '../icon/icon.vue';
-import Checkbox from '../checkbox/checkbox.vue';
 
 export default {
   name: 'TableCell',

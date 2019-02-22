@@ -1,8 +1,8 @@
 <template>
   <div>
-    <i-switch 
-      v-model="m1" 
-      true-value="yes" 
+    <i-switch
+      v-model="m1"
+      true-value="yes"
       false-value="no"
     >
       <span slot="open">

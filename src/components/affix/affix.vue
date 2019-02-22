@@ -14,9 +14,8 @@
     </div>
   </div>
 </template>
-<script>
-import {on, off} from '../../utils/dom';
 
+<script>
 const prefixCls = 'ivu-affix';
 
 function getScroll(target, top) {
@@ -91,17 +90,13 @@ export default {
   },
 
   mounted() {
-    //            window.addEventListener('scroll', this.handleScroll, false);
-    //            window.addEventListener('resize', this.handleScroll, false);
-    on(window, 'scroll', this.handleScroll);
-    on(window, 'resize', this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll, false);
+    window.addEventListener('resize', this.handleScroll, false);
   },
 
   beforeDestroy() {
-    //            window.removeEventListener('scroll', this.handleScroll, false);
-    //            window.removeEventListener('resize', this.handleScroll, false);
-    off(window, 'scroll', this.handleScroll);
-    off(window, 'resize', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll, false);
+    window.removeEventListener('resize', this.handleScroll, false);
   },
 
   methods: {

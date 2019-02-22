@@ -1,10 +1,10 @@
 <script>
 import stubObject from 'lodash/stubObject';
 import stubArray from 'lodash/stubArray';
+import Locale from 'Src/mixins/locale';
+import Emitter from 'Src/mixins/emitter';
 import List from './list.vue';
 import Operation from './operation.vue';
-import Locale from '../../mixins/locale';
-import Emitter from '../../mixins/emitter';
 
 const prefixCls = 'ivu-transfer';
 

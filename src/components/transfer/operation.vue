@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import iButton from '../button/button.vue';
-import Icon from '../icon/icon.vue';
+import iButton from 'Components/button/button.vue';
+import Icon from 'Components/icon';
 
 export default {
   name: 'Operation',

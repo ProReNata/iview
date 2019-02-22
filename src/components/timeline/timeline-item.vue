@@ -15,22 +15,26 @@
     </div>
   </li>
 </template>
+
 <script>
 const prefixCls = 'ivu-timeline';
 
 export default {
   name: 'TimelineItem',
+
   props: {
     color: {
       default: 'blue',
       type: String,
     },
   },
+
   data() {
     return {
       dot: false,
     };
   },
+
   computed: {
     contentClasses() {
       return `${prefixCls}-item-content`;

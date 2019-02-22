@@ -36,7 +36,8 @@
 </template>
 
 <script>
-import {findComponentUpward, oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentUpward} from 'Src/utils/assist';
 import Emitter from '../../mixins/emitter';
 
 const prefixCls = 'ivu-checkbox';
@@ -71,7 +72,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     trueValue: {

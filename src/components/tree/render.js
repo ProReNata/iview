@@ -1,11 +1,23 @@
 export default {
   functional: true,
+
   name: 'RenderCell',
+
   props: {
-    data: Object,
-    node: Array,
-    render: Function,
+    data: {
+      default: undefined,
+      type: Object,
+    },
+    node: {
+      default: undefined,
+      type: Array,
+    },
+    render: {
+      default: undefined,
+      type: Function,
+    },
   },
+
   render: (h, ctx) => {
     const params = {
       data: ctx.props.data,

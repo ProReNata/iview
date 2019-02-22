@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import Icon from '../icon/icon.vue';
-import CollapseTransition from '../base/collapse-transition';
+import Icon from 'Components/icon';
+import CollapseTransition from 'Components/base/collapse-transition';
 
 const prefixCls = 'ivu-collapse';
 

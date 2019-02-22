@@ -1,3 +1,1 @@
-import DropdownMenu from '../dropdown/dropdown-menu.vue';
-
-export default DropdownMenu;
+export {default} from 'Components/dropdown/dropdown-menu.vue';

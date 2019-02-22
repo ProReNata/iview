@@ -1,11 +1,11 @@
 <template>
-  <div 
-    :class="[prefixCls]" 
-    @mouseenter="handleShowPopper" 
+  <div
+    :class="[prefixCls]"
+    @mouseenter="handleShowPopper"
     @mouseleave="handleClosePopper"
   >
-    <div 
-      ref="reference" 
+    <div
+      ref="reference"
       :class="[prefixCls + '-rel']"
     >
       <slot></slot>
@@ -33,17 +33,21 @@
     </transition>
   </div>
 </template>
+
 <script>
-import Popper from '../base/popper';
-import TransferDom from '../../directives/transfer-dom';
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import Popper from 'Components/base/popper';
+import TransferDom from 'Src/directives/transfer-dom';
 
 const prefixCls = 'ivu-tooltip';
 
 export default {
   name: 'Tooltip',
+
   directives: {TransferDom},
+
   mixins: [Popper],
+
   props: {
     always: {
       default: false,
@@ -69,7 +73,7 @@ export default {
     placement: {
       default: 'bottom',
       validator(value) {
-        return oneOf(value, [
+        return isOneOf(value, [
           'top',
           'top-start',
           'top-end',
@@ -90,16 +94,19 @@ export default {
       type: Boolean,
     },
   },
+
   data() {
     return {
       prefixCls,
     };
   },
+
   watch: {
     content() {
       this.updatePopper();
     },
   },
+
   mounted() {
     if (this.always) {
       this.updatePopper();

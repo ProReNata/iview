@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import Locale from '../../mixins/locale';
-import Emitter from '../../mixins/emitter';
+import Locale from 'Src/mixins/locale';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-rate';
 

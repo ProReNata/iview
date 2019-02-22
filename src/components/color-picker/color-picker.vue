@@ -135,15 +135,15 @@
 <script>
 import tinycolor from 'tinycolor2';
 import {directive as clickOutside} from 'v-click-outside-x';
-import TransferDom from '../../directives/transfer-dom';
-import Drop from '../select/dropdown.vue';
+import isOneOf from 'Global/Assets/isOneOf';
+import TransferDom from 'Src/directives/transfer-dom';
+import Drop from 'Components/select/dropdown.vue';
+import Locale from 'Src/mixins/locale';
+import Emitter from 'Src/mixins/emitter';
 import RecommendColors from './recommend-colors.vue';
 import Saturation from './saturation.vue';
 import Hue from './hue.vue';
 import Alpha from './alpha.vue';
-import Locale from '../../mixins/locale';
-import {oneOf} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
 import Prefixes from './prefixMixin';
 import {changeColor, toRGBAString} from './utils';
 
@@ -175,7 +175,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['hsl', 'hsv', 'hex', 'rgb']);
+        return isOneOf(value, ['hsl', 'hsv', 'hex', 'rgb']);
       },
     },
     hideDropDown: {
@@ -194,7 +194,7 @@ export default {
       default: 'bottom',
       type: String,
       validator(value) {
-        return oneOf(value, [
+        return isOneOf(value, [
           'top',
           'top-start',
           'top-end',
@@ -218,7 +218,7 @@ export default {
       default: 'default',
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     transfer: {
@@ -341,7 +341,7 @@ export default {
       },
     },
     transition() {
-      return oneOf(this.placement, ['bottom-start', 'bottom', 'bottom-end']) ? 'slide-up' : 'fade';
+      return isOneOf(this.placement, ['bottom-start', 'bottom', 'bottom-end']) ? 'slide-up' : 'fade';
     },
     wrapClasses() {
       return [
@@ -458,7 +458,7 @@ export default {
       }
     },
     onClearNative(event) {
-      if (oneOf(event.key, ['Esc', 'Escape'])) {
+      if (isOneOf(event.key, ['Esc', 'Escape'])) {
         this.closer(event);
       }
     },
@@ -470,11 +470,11 @@ export default {
     onKeydown(event) {
       const {key} = event;
 
-      if (oneOf(key, ['Esc', 'Escape'])) {
+      if (isOneOf(key, ['Esc', 'Escape'])) {
         this.onEscape(event);
-      } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+      } else if (isOneOf(key, ['Up', 'ArrowUp'])) {
         this.onArrow(event);
-      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+      } else if (isOneOf(key, ['Down', 'ArrowDown'])) {
         this.onArrow(event);
       } else if (key === 'Tab') {
         this.onTab(event);
@@ -490,7 +490,7 @@ export default {
 
       if (key === 'Tab') {
         this.handleLastTab(event);
-      } else if (oneOf(key, ['Esc', 'Escape'])) {
+      } else if (isOneOf(key, ['Esc', 'Escape'])) {
         this.closer(event);
       }
     },

@@ -33,8 +33,8 @@
 
 <script>
 import stubArray from 'lodash/stubArray';
-import Icon from '../icon/icon.vue';
-import iProgress from '../progress/progress.vue';
+import Icon from 'Components/icon';
+import iProgress from 'Components/progress/progress.vue';
 
 const prefixCls = 'ivu-upload';
 

@@ -81,11 +81,11 @@
 </template>
 
 <script>
-import Icon from '../icon';
-import iButton from '../button/button.vue';
-import TransferDom from '../../directives/transfer-dom';
-import Locale from '../../mixins/locale';
-import Emitter from '../../mixins/emitter';
+import Icon from 'Components/icon';
+import iButton from 'Components/button';
+import TransferDom from 'Src/directives/transfer-dom';
+import Locale from 'Src/mixins/locale';
+import Emitter from 'Src/mixins/emitter';
 import ScrollbarMixins from './mixins-scrollbar';
 
 const prefixCls = 'ivu-modal';

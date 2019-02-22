@@ -1,10 +1,3 @@
-import 'Global/Config';
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {fas} from '@fortawesome/pro-solid-svg-icons';
-import {far} from '@fortawesome/pro-regular-svg-icons';
-import {fal} from '@fortawesome/pro-light-svg-icons';
-// noinspection ES6CheckImport
-import {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText} from '@fortawesome/vue-fontawesome';
 import Affix from 'Components/affix';
 import Alert from 'Components/alert';
 import AutoComplete from 'Components/auto-complete';
@@ -58,11 +51,7 @@ import Tree from 'Components/tree';
 import Upload from 'Components/upload';
 import {Row, Col} from 'Components/grid';
 import {Select, Option, OptionGroup} from 'Components/select';
-import * as locale from './locale';
-
-library.add(fas);
-library.add(far);
-library.add(fal);
+import API from 'Src/API';
 
 const components = {
   Affix,
@@ -159,48 +148,17 @@ const install = function _install(Vue, opts = {}) {
     return;
   }
 
-  locale.use(opts.locale);
-  locale.i18n(opts.i18n);
+  API.install(Vue, opts);
 
   Object.keys(iview).forEach((key) => {
     Vue.component(key, iview[key]);
   });
-
-  Vue.component('font-awesome-icon', FontAwesomeIcon);
-  Vue.component('font-awesome-layers', FontAwesomeLayers);
-  Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
-
-  Vue.prototype.$Loading = LoadingBar;
-  Vue.prototype.$Message = Message;
-  Vue.prototype.$Modal = Modal;
-  Vue.prototype.$Notice = Notice;
-  Vue.prototype.$Spin = Spin;
 };
 
-// auto install
-if (typeof window !== 'undefined' && window.Vue) {
-  install(window.Vue);
-}
-
-const API = {
+export default {
+  ...API,
   ...components,
   Circle,
-  i18n: locale.i18n,
   install,
-  locale: locale.use,
   Switch,
-  version: process.env.VERSION,
 };
-
-API.lang = (code) => {
-  const langObject = window['iview/locale'].default;
-
-  if (code === langObject.i.locale) {
-    locale.use(langObject);
-  } else {
-    /* eslint-disable-next-line no-console */
-    console.log(`The ${code} language pack is not loaded.`);
-  }
-};
-
-export default API;

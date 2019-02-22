@@ -1,15 +1,15 @@
 <template>
-  <li 
-    :class="classes" 
-    :style="itemStyle" 
+  <li
+    :class="classes"
+    :style="itemStyle"
     @click.stop="handleClick"
   >
     <slot></slot>
   </li>
 </template>
 <script>
-import Emitter from '../../mixins/emitter';
-import {findComponentUpward} from '../../utils/assist';
+import {findComponentUpward} from 'Src/utils/assist';
+import Emitter from 'Src/mixins/emitter';
 import mixin from './mixin';
 
 const prefixCls = 'ivu-menu';

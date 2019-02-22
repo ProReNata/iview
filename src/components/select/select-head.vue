@@ -59,10 +59,10 @@
 
 <script>
 import stubArray from 'lodash/stubArray';
-import Icon from '../icon';
-import Emitter from '../../mixins/emitter';
-import Locale from '../../mixins/locale';
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import Icon from 'Components/icon';
+import Emitter from 'Src/mixins/emitter';
+import Locale from 'Src/mixins/locale';
 
 const prefixCls = 'byx-select';
 
@@ -255,7 +255,7 @@ export default {
       this.$emit(e.type === 'focus' ? 'on-input-focus' : 'on-input-blur');
     },
     onKeydown(event) {
-      if (oneOf(event.key, ['Backspace', 'Delete'])) {
+      if (isOneOf(event.key, ['Backspace', 'Delete'])) {
         this.handleInputDelete(event);
       }
 

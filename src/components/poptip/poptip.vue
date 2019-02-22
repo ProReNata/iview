@@ -89,14 +89,15 @@
     </transition>
   </div>
 </template>
+
 <script>
 import head from 'lodash/head';
 import {directive as clickOutside} from 'v-click-outside-x';
-import Popper from '../base/popper';
-import iButton from '../button/button.vue';
-import TransferDom from '../../directives/transfer-dom';
-import {oneOf} from '../../utils/assist';
-import Locale from '../../mixins/locale';
+import isOneOf from 'Global/Assets/isOneOf';
+import Popper from 'Components/base/popper';
+import iButton from 'Components/button';
+import TransferDom from 'Src/directives/transfer-dom';
+import Locale from 'Src/mixins/locale';
 
 const prefixCls = 'ivu-poptip';
 
@@ -129,7 +130,7 @@ export default {
     placement: {
       default: 'top',
       validator(value) {
-        return oneOf(value, [
+        return isOneOf(value, [
           'top',
           'top-start',
           'top-end',
@@ -160,7 +161,7 @@ export default {
     trigger: {
       default: 'click',
       validator(value) {
-        return oneOf(value, ['click', 'focus', 'hover']);
+        return isOneOf(value, ['click', 'focus', 'hover']);
       },
     },
     width: {

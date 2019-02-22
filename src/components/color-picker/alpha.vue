@@ -33,10 +33,10 @@
 </template>
 
 <script>
+import isOneOf from 'Global/Assets/isOneOf';
 import HSAMixin from './hsaMixin';
 import Prefixes from './prefixMixin';
 import {clamp, toRGBAString} from './utils';
-import {oneOf} from '../../utils/assist';
 
 export default {
   name: 'Alpha',
@@ -106,15 +106,15 @@ export default {
     onKeydown(event) {
       const {key} = event;
 
-      if (oneOf(key, ['Esc', 'Escape'])) {
+      if (isOneOf(key, ['Esc', 'Escape'])) {
         this.handleEscape(event);
-      } else if (oneOf(key, ['Up', 'ArrowUp'])) {
+      } else if (isOneOf(key, ['Up', 'ArrowUp'])) {
         this.handleUp(event);
-      } else if (oneOf(key, ['Down', 'ArrowDown'])) {
+      } else if (isOneOf(key, ['Down', 'ArrowDown'])) {
         this.handleDown(event);
-      } else if (oneOf(key, ['Left', 'ArrowLeft'])) {
+      } else if (isOneOf(key, ['Left', 'ArrowLeft'])) {
         this.handleLeft(event);
-      } else if (oneOf(key, ['Right', 'ArrowRight'])) {
+      } else if (isOneOf(key, ['Right', 'ArrowRight'])) {
         this.handleRight(event);
       }
     },

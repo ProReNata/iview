@@ -1,15 +1,27 @@
 export default {
   functional: true,
+
   name: 'TableExpand',
+
   props: {
     column: {
       default: null,
       type: Object,
     },
-    index: Number,
-    render: Function,
-    row: Object,
+    index: {
+      default: undefined,
+      type: Number,
+    },
+    render: {
+      default: undefined,
+      type: Function,
+    },
+    row: {
+      default: undefined,
+      type: Object,
+    },
   },
+
   render: (h, ctx) => {
     const params = {
       index: ctx.props.index,

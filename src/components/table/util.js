@@ -1,4 +1,4 @@
-import {deepCopy} from '../../utils/assist';
+import cloneDeep from 'lodash/cloneDeep';
 
 const convertColumnOrder = (columns, fixedType) => {
   const list = [];
@@ -18,7 +18,7 @@ export {convertColumnOrder};
 
 // set forTableHead to true when convertToRows, false in normal cases like table.vue
 const getAllColumns = (cols, forTableHead = false) => {
-  const columns = deepCopy(cols);
+  const columns = cloneDeep(cols);
   const result = [];
   columns.forEach((column) => {
     if (column.children) {
@@ -42,9 +42,9 @@ const convertToRows = (columns, fixedType = false) => {
 
   if (fixedType) {
     originColumns =
-      fixedType === 'left' ? deepCopy(convertColumnOrder(columns, 'left')) : deepCopy(convertColumnOrder(columns, 'right'));
+      fixedType === 'left' ? cloneDeep(convertColumnOrder(columns, 'left')) : cloneDeep(convertColumnOrder(columns, 'right'));
   } else {
-    originColumns = deepCopy(columns);
+    originColumns = cloneDeep(columns);
   }
 
   let maxLevel = 1;

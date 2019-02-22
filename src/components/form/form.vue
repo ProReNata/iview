@@ -9,7 +9,7 @@
 
 <script>
 // https://github.com/ElemeFE/element/blob/dev/packages/form/src/form.vue
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
 
 const prefixCls = 'ivu-form';
 
@@ -21,7 +21,7 @@ export default {
       default: 'off',
       type: String,
       validator(value) {
-        return oneOf(value, ['on', 'off']);
+        return isOneOf(value, ['on', 'off']);
       },
     },
     inline: {
@@ -31,7 +31,7 @@ export default {
     labelPosition: {
       default: 'right',
       validator(value) {
-        return oneOf(value, ['left', 'right', 'top']);
+        return isOneOf(value, ['left', 'right', 'top']);
       },
     },
     labelWidth: {
@@ -104,6 +104,7 @@ export default {
       });
     },
     validate(callback) {
+      /* eslint-disable-next-line compat/compat */
       return new Promise((resolve) => {
         let valid = true;
         let count = 0;

@@ -1,3 +1,1 @@
-import TimePicker from '../date-picker/picker/time-picker';
-
-export default TimePicker;
+export {default} from 'Components/date-picker/picker/time-picker';

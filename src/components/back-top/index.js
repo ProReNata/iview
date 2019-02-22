@@ -1,3 +1,1 @@
-import BackTop from './back-top.vue';
-
-export default BackTop;
+export {default} from './back-top.vue';

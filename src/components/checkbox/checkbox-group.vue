@@ -6,7 +6,8 @@
 
 <script>
 import stubArray from 'lodash/stubArray';
-import {findComponentsDownward, oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentsDownward} from 'Src/utils/assist';
 import Emitter from '../../mixins/emitter';
 
 const prefixCls = 'ivu-checkbox-group';
@@ -19,7 +20,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['small', 'large', 'default']);
+        return isOneOf(value, ['small', 'large', 'default']);
       },
     },
     value: {

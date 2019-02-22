@@ -32,9 +32,10 @@
 
 <script>
 import {directive as clickOutside} from 'v-click-outside-x';
-import Drop from '../select/dropdown.vue';
-import TransferDom from '../../directives/transfer-dom';
-import {oneOf, findComponentUpward} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import {findComponentUpward} from 'Src/utils/assist';
+import Drop from 'Components/select/dropdown.vue';
+import TransferDom from 'Src/directives/transfer-dom';
 
 const prefixCls = 'ivu-dropdown';
 
@@ -50,7 +51,7 @@ export default {
       default: 'bottom',
       type: String,
       validator(value) {
-        return oneOf(value, [
+        return isOneOf(value, [
           'top',
           'top-start',
           'top-end',
@@ -74,7 +75,7 @@ export default {
       default: 'hover',
       type: String,
       validator(value) {
-        return oneOf(value, ['click', 'hover', 'custom']);
+        return isOneOf(value, ['click', 'hover', 'custom']);
       },
     },
     visible: {

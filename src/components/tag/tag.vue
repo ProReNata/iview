@@ -62,8 +62,8 @@
 </template>
 
 <script>
-import Icon from '../icon';
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import Icon from 'Components/icon';
 
 const prefixCls = 'byx-tag';
 const initColorList = ['blue', 'green', 'red', 'yellow', 'default'];
@@ -101,7 +101,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['border', 'dot']);
+        return isOneOf(value, ['border', 'dot']);
       },
     },
   },
@@ -114,7 +114,7 @@ export default {
 
   computed: {
     bgColorStyle() {
-      return oneOf(this.color, initColorList) ? {} : {background: this.dotColor};
+      return isOneOf(this.color, initColorList) ? {} : {background: this.dotColor};
     },
     borderColor() {
       if (typeof this.color === 'undefined') {
@@ -127,7 +127,7 @@ export default {
       return [
         `${prefixCls}`,
         {
-          [`${prefixCls}-${this.color}`]: !!this.color && oneOf(this.color, initColorList),
+          [`${prefixCls}-${this.color}`]: !!this.color && isOneOf(this.color, initColorList),
           [`${prefixCls}-${this.type}`]: !!this.type,
           [`${prefixCls}-closable`]: this.closable,
           [`${prefixCls}-checked`]: this.isChecked,
@@ -137,7 +137,7 @@ export default {
     defaultTypeColor() {
       if (this.type !== 'dot' && this.type !== 'border') {
         if (typeof this.color !== 'undefined') {
-          return oneOf(this.color, initColorList) ? '' : this.color;
+          return isOneOf(this.color, initColorList) ? '' : this.color;
         }
       }
 
@@ -151,7 +151,7 @@ export default {
         return '';
       }
 
-      return oneOf(this.color, initColorList) ? '' : this.color;
+      return isOneOf(this.color, initColorList) ? '' : this.color;
     },
     iconClass() {
       if (this.type === 'dot') {
@@ -159,7 +159,7 @@ export default {
       }
 
       if (this.type === 'border') {
-        return oneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '';
+        return isOneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '';
       }
 
       if (typeof this.color === 'undefined') {
@@ -178,7 +178,7 @@ export default {
           return '';
         }
 
-        return oneOf(this.color, initColorList) ? '' : this.color;
+        return isOneOf(this.color, initColorList) ? '' : this.color;
       }
 
       if (typeof this.color === 'undefined') {
@@ -195,7 +195,7 @@ export default {
       let type2 = '';
 
       if (this.type === 'border') {
-        type1 = oneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '';
+        type1 = isOneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '';
       }
 
       if (this.type !== 'dot' && this.type !== 'border' && this.color !== 'default') {
@@ -205,7 +205,7 @@ export default {
       return [`${prefixCls}-text`, type1, type2];
     },
     textColorStyle() {
-      if (oneOf(this.color, initColorList)) {
+      if (isOneOf(this.color, initColorList)) {
         return {};
       }
 
@@ -216,7 +216,7 @@ export default {
       return {color: this.lineColor};
     },
     wraperStyles() {
-      return oneOf(this.color, initColorList)
+      return isOneOf(this.color, initColorList)
         ? {}
         : {
             background: this.isChecked ? this.defaultTypeColor : 'transparent',

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
 
 const prefixCls = 'ivu-chart-circle';
 
@@ -52,7 +52,7 @@ export default {
       default: 'round',
       type: String,
       validator(value) {
-        return oneOf(value, ['square', 'round']);
+        return isOneOf(value, ['square', 'round']);
       },
     },
     strokeWidth: {

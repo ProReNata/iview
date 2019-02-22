@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import {oneOf} from '../../utils/assist';
-import Emitter from '../../mixins/emitter';
+import isOneOf from 'Global/Assets/isOneOf';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-switch';
 
@@ -53,7 +53,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['large', 'small', 'default']);
+        return isOneOf(value, ['large', 'small', 'default']);
       },
     },
     trueValue: {
@@ -100,7 +100,7 @@ export default {
 
   methods: {
     onKeydown(event) {
-      if (oneOf(event.key, [' ', 'Space', 'Spacebar'])) {
+      if (isOneOf(event.key, [' ', 'Space', 'Spacebar'])) {
         this.toggle(event);
       }
     },

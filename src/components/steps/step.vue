@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import Emitter from '../../mixins/emitter';
-import {oneOf} from '../../utils/assist';
+import isOneOf from 'Global/Assets/isOneOf';
+import Emitter from 'Src/mixins/emitter';
 
 const prefixCls = 'ivu-steps';
 const iconPrefixCls = 'ivu-icon';
@@ -59,7 +59,7 @@ export default {
       default: undefined,
       type: String,
       validator(value) {
-        return oneOf(value, ['wait', 'process', 'finish', 'error']);
+        return isOneOf(value, ['wait', 'process', 'finish', 'error']);
       },
     },
     title: {

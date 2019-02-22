@@ -1,3 +1,1 @@
-import FormItem from '../form/form-item.vue';
-
-export default FormItem;
+export {default} from 'Components/form/form-item.vue';
