@@ -1,224 +1,70 @@
 @tag-prefix-cls: ~'@{css-prefix}tag';
-@tag-close-prefix-cls: ivu-icon-ios-close-empty;
 
 .@{tag-prefix-cls} {
-  display: inline-block;
-  height: 22px;
-  line-height: 22px;
-  margin: 2px 4px 2px 0;
-  padding: 0 8px;
-  //border: 1px solid @border-color-split;
-  border-radius: @tag-border-radius;
+  display: inline-flex;
   background: @tag-bg;
+  color: @color-light100;
   font-size: @tag-font-size;
-  vertical-align: middle;
-  //opacity: 1;
-  overflow: hidden;
-  cursor: pointer;
-  //transition: all @transition-time @ease-in-out;
+  line-height: 1.5rem;
+  font-weight: 500;
+  padding: 0 8px;
+  border-radius: @radius-rounded;
+  align-items: center;
 
-  // for color and unchecked
-  &:not(&-border):not(&-dot):not(&-checked) {
-    background: transparent;
-    border: 0;
-    color: @color-text;
-    .@{tag-close-prefix-cls} {
-      color: @color-text !important;
+  &-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    width: 1.375rem;
+    height: 1.375rem;
+    margin-right: 0.125rem;
+    margin-left: -0.25rem;
+
+    &-right {
+      margin-left: 0.125rem;
+      margin-right: -0.25rem;
     }
   }
 
-  &-color {
-    &-red {
-      color: @color-error !important;
-      border-color: @color-error;
-    }
-    &-green {
-      color: @color-success !important;
-      border-color: @color-success;
-    }
-    &-blue {
-      color: @color-link !important;
-      border-color: @color-link;
-    }
-    &-yellow {
-      color: @color-warning !important;
-      border-color: @color-warning;
-    }
-    &-white {
-      color: @color-light100 !important;
-    }
+  &-red, &-danger {
+    background: @color-danger400;
+    color: @color-danger600;
+    border-color: @color-danger600;
   }
 
-  &-dot {
-    height: 32px;
-    line-height: 32px;
-    //border: 1px solid @border-color-split !important;
-    color: @color-text !important;
-    background: #fff !important;
-    padding: 0 12px;
-
-    &-inner {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      margin-right: 8px;
-      border-radius: 50%;
-      background: @tag-bg;
-      position: relative;
-      top: 1px;
-    }
-    .@{tag-close-prefix-cls} {
-      color: #666 !important;
-      margin-left: 12px !important;
-    }
+  &-green, &-success {
+    background: @color-success400;
+    color: @color-success600;
+    border-color: @color-success600;
   }
+
+  &-blue, &-info, &-information {
+    background: @color-info400;
+    color: @color-info600;
+    border-color: @color-info600;
+  }
+
+  &-yellow, &-warning {
+    background: @color-warning400;
+    color: @color-warning600;
+    border-color: @color-warning600;
+  }
+
+  &-purple, &-update {
+    background: @color-update400;
+    color: @color-update600;
+    border-color: @color-update600;
+  }
+
+  &-primary {
+    background: @color-p500;
+    color: @color-dark100;
+  }
+
 
   &-border {
-    height: 24px;
-    line-height: 24px;
-    //border: 1px solid @border-color-split;
-    //color: @border-color-split;
-    background: #fff !important;
-    position: relative;
-
-    .@{tag-close-prefix-cls} {
-      color: #666;
-      margin-left: 12px !important;
-    }
-
-    &::after {
-      content: '';
-      display: none;
-      width: 1px;
-      background: currentColor;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 22px;
-    }
-
-    &.@{tag-prefix-cls}-closable {
-      &::after {
-        display: block;
-      }
-      .@{tag-close-prefix-cls} {
-        margin-left: 18px !important;
-      }
-    }
-
-    &.@{tag-prefix-cls}-blue {
-      color: @color-link !important;
-      border: 1px solid @color-link !important;
-
-      &::after {
-        background: @color-link;
-      }
-      .@{tag-close-prefix-cls} {
-        color: @color-link !important;
-      }
-    }
-    &.@{tag-prefix-cls}-green {
-      color: @color-success !important;
-      border: 1px solid @color-success !important;
-
-      &::after {
-        background: @color-success;
-      }
-      .@{tag-close-prefix-cls} {
-        color: @color-success !important;
-      }
-    }
-    &.@{tag-prefix-cls}-yellow {
-      color: @color-warning !important;
-      border: 1px solid @color-warning !important;
-
-      &::after {
-        background: @color-warning;
-      }
-      .@{tag-close-prefix-cls} {
-        color: @color-warning !important;
-      }
-    }
-    &.@{tag-prefix-cls}-red {
-      color: @color-error !important;
-      border: 1px solid @color-error !important;
-
-      &::after {
-        background: @color-error;
-      }
-      .@{tag-close-prefix-cls} {
-        color: @color-error !important;
-      }
-    }
-  }
-
-  &:hover {
-    opacity: 0.85;
-  }
-
-  &,
-  a,
-  a:hover {
-    // color: @color-text;
-  }
-
-  &-text {
-    a:first-child:last-child {
-      display: inline-block;
-      margin: 0 -8px;
-      padding: 0 8px;
-    }
-
-    color: @color-text;
-  }
-
-  .@{tag-close-prefix-cls} {
-    //.iconfont-size-under-12px(20px);
-
-    cursor: pointer;
-    margin-left: 8px;
-    color: #666;
-    opacity: 0.66;
-    position: relative;
-    top: 1px;
-    //transition: all @transition-time @ease-in-out;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  &-blue,
-  &-green,
-  &-yellow,
-  &-red {
-    border: 0;
-    &,
-    a,
-    a:hover,
-    .@{tag-close-prefix-cls},
-    .@{tag-close-prefix-cls}:hover {
-      color: #fff;
-    }
-  }
-
-  &-blue,
-  &-blue&-dot &-dot-inner {
-    background: @color-link;
-  }
-
-  &-green,
-  &-green&-dot &-dot-inner {
-    background: @color-success;
-  }
-
-  &-yellow,
-  &-yellow&-dot &-dot-inner {
-    background: @color-warning;
-  }
-
-  &-red,
-  &-red&-dot &-dot-inner {
-    background: @color-error;
+    border: 1px solid;
+    line-height: 1.375rem;
   }
 }
