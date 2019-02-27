@@ -1,10 +1,10 @@
 <template>
-  <div
+  <textarea
     ref="redactor"
     :class="prefixCls"
+    :value="value"
   >
-    {{ value }}
-  </div>
+  </textarea>
 </template>
 
 <script>
@@ -160,6 +160,10 @@ export default {
     setButtonIcons() {
       BUTTONS.forEach((button) => {
         const reButton = this.redactor.toolbar.getButton(button);
+
+        if (!reButton) {
+          return;
+        }
 
         reButton.setIcon(this.buttonIconHtmlMap[button]);
         const {tooltip, title} = buttons[button];

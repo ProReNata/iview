@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       disabled: false,
-      model: '',
+      model: 'Some <strong>bolded</strong> text with a {{ tag }} inside...',
     };
   },
 };

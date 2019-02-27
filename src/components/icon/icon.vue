@@ -23,9 +23,11 @@ library.add(fas);
 library.add(far);
 library.add(fal);
 
-Vue.component('font-awesome-icon', FontAwesomeIcon);
-Vue.component('font-awesome-layers', FontAwesomeLayers);
-Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
+/*
+  Vue.component('font-awesome-icon', FontAwesomeIcon);
+  Vue.component('font-awesome-layers', FontAwesomeLayers);
+  Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
+*/
 
 const SOLID = 'solid';
 const REGULAR = 'regular';
@@ -83,6 +85,8 @@ const vueObject = {
       validator: isOneOfIconWeights,
     },
   },
+
+  components: {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText},
 
   computed: {
     icon() {
