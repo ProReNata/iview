@@ -1,11 +1,11 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-22T00:32:03.339Z",
+  "date": "2019-02-27T04:51:06.220Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "components/button-group.js",
-  "hash": "083f7ff63a4e319c21e2",
+  "hash": "f6462d5dd25781dbcb91",
   "license": "MIT",
   "version": "3.0.0-alpha.10"
 }
@@ -488,12 +488,12 @@ _fontawesomeSvgCore.library.add(_proSolidSvgIcons.fas);
 _fontawesomeSvgCore.library.add(_proRegularSvgIcons.far);
 
 _fontawesomeSvgCore.library.add(_proLightSvgIcons.fal);
+/*
+  Vue.component('font-awesome-icon', FontAwesomeIcon);
+  Vue.component('font-awesome-layers', FontAwesomeLayers);
+  Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
+*/
 
-_vue.default.component('font-awesome-icon', _vueFontawesome.FontAwesomeIcon);
-
-_vue.default.component('font-awesome-layers', _vueFontawesome.FontAwesomeLayers);
-
-_vue.default.component('font-awesome-layers-text', _vueFontawesome.FontAwesomeLayersText);
 
 var SOLID = 'solid';
 var REGULAR = 'regular';
@@ -548,6 +548,11 @@ var vueObject = {
       validator: isOneOfIconWeights
     }
   },
+  components: {
+    FontAwesomeIcon: _vueFontawesome.FontAwesomeIcon,
+    FontAwesomeLayers: _vueFontawesome.FontAwesomeLayers,
+    FontAwesomeLayersText: _vueFontawesome.FontAwesomeLayersText
+  },
   computed: {
     icon: function icon() {
       var weightClass = WEIGHT_MAP[this.weight] || WEIGHT_MAP[REGULAR];
@@ -579,12 +584,12 @@ exports.default = _default;
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/icon/icon.vue?vue&type=template&id=2c7598ea&
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/icon/icon.vue?vue&type=template&id=52ceed03&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('font-awesome-icon',_vm._g(_vm._b({attrs:{"icon":_vm.icon,"fixed-width":_vm.fw}},'font-awesome-icon',_vm.$attrs,false),_vm.$listeners))}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/icon/icon.vue?vue&type=template&id=2c7598ea&
+// CONCATENATED MODULE: ./src/components/icon/icon.vue?vue&type=template&id=52ceed03&
 /* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
 /* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
 
@@ -949,7 +954,7 @@ module.exports = overArg;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _icon_vue_vue_type_template_id_2c7598ea___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony import */ var _icon_vue_vue_type_template_id_52ceed03___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var _icon_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _icon_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _icon_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
@@ -962,8 +967,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(
   _icon_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _icon_vue_vue_type_template_id_2c7598ea___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
-  _icon_vue_vue_type_template_id_2c7598ea___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
+  _icon_vue_vue_type_template_id_52ceed03___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
+  _icon_vue_vue_type_template_id_52ceed03___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
   false,
   null,
   null,
