@@ -1,65 +1,64 @@
 <template>
   <div>
-    <h1>Closable</h1>
-    <p>prop {boolean} closable.</p>
-    <p>prop {boolean=true} fade. Shows a fade effect. Is enabled on default.</p>
+    <h1>Dismissable</h1>
+    <p>prop {boolean} dismissable.</p>
     <p>Shows a button to close the tag, which emits an 'on-close' event when clicked.</p>
     <tag
       v-show="!hideDefault"
-      closable
+      dismissable
       @on-close="hideDefault = true"
     >
       Default
     </tag>
     <tag
-      v-show="!hideRed"
+      v-show="!hideDanger"
       color="danger"
       border
-      closable
-      @on-close="hideRed = true"
+      dismissable
+      @on-close="hideDanger = true"
     >
       Red / Danger
     </tag>
     <tag
-      v-show="!hideBlue"
+      v-show="!hideInfo"
       color="info"
       border
-      closable
-      @on-close="hideBlue = true"
+      dismissable
+      @on-close="hideInfo = true"
     >
       Blue / Information
     </tag>
     <tag
-      v-show="!hideGreen"
+      v-show="!hideSuccess"
       color="success"
       border
-      closable
-      @on-close="hideGreen = true"
+      dismissable
+      @on-close="hideSuccess = true"
     >
       Green / Success
     </tag>
     <tag
-      v-show="!hidePurple"
+      v-show="!hideUpdate"
       color="update"
       border
-      closable
-      @on-close="hidePurple = true"
+      dismissable
+      @on-close="hideUpdate = true"
     >
       Purple / Update
     </tag>
     <tag
-      v-show="!hideYellow"
+      v-show="!hideWarning"
       color="warning"
       border
-      closable
-      @on-close="hideYellow = true"
+      dismissable
+      @on-close="hideWarning = true"
     >
       Yellow / Warning
     </tag>
     <tag
       v-show="!hidePrimary"
       color="primary"
-      closable
+      dismissable
       @on-close="hidePrimary = true"
     >
       Primary
@@ -73,11 +72,11 @@ export default {
   data() {
     return {
       hideDefault: false,
-      hideRed: false,
-      hideBlue: false,
-      hideGreen: false,
-      hidePurple: false,
-      hideYellow: false,
+      hideDanger: false,
+      hideInfo: false,
+      hideSuccess: false,
+      hideUpdate: false,
+      hideWarning: false,
       hidePrimary: false,
     };
   },

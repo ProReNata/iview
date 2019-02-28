@@ -1,33 +1,33 @@
 <template>
   <div>
-    <h1>Colors</h1>
-    <p>prop {string} color.</p>
+    <h1>Variants</h1>
+    <p>prop {string} variant.</p>
     <p>Takes the value of one of these names in all lowercase.</p>
     <tag>Default</tag>
     <tag
       color="danger"
     >
-      Red / Danger
+      Danger
     </tag>
     <tag
       color="info"
     >
-      Blue / Info / Information
+      Info / Information
     </tag>
     <tag
       color="success"
     >
-      Green / Success
+      Success
     </tag>
     <tag
       color="update"
     >
-      Purple / Update
+      Update
     </tag>
     <tag
       color="warning"
     >
-      Yellow / Warning
+      Warning
     </tag>
     <tag
       color="primary"
@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  name: 'TagColors',
+  name: 'TagVariants',
 };
 </script>
 

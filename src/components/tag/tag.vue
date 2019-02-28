@@ -1,11 +1,9 @@
 <template>
   <transition
-    v-if="fade"
     name="fade"
   >
     <div
       :class="baseClasses"
-      @click.stop="check"
     >
       <div
         v-if="icon && iconAttributes.type"
@@ -37,7 +35,7 @@
         </slot>
       </div>
       <div
-        v-if="closable"
+        v-if="dismissable"
         :class="closableClasses"
       >
         <icon
@@ -49,52 +47,6 @@
       </div>
     </div>
   </transition>
-  <div
-    v-else
-    :class="baseClasses"
-    @click.stop="check"
-  >
-    <div
-      v-if="icon && iconAttributes.type"
-      :class="iconLeftClasses"
-    >
-      <icon
-        :type="iconAttributes.type"
-        :weight="iconAttributes.weight"
-      >
-      </icon>
-    </div>
-    <div
-      v-if="$slots['icon-left']"
-      :class="iconLeftClasses"
-    >
-      <slot
-        name="icon-left"
-      >
-      </slot>
-    </div>
-    <slot></slot>
-    <div
-      v-if="$slots['icon-right']"
-      :class="iconRightClasses"
-    >
-      <slot
-        name="icon-right"
-      >
-      </slot>
-    </div>
-    <div
-      v-if="closable"
-      :class="closableClasses"
-    >
-      <icon
-        type="times"
-        weight="regular"
-        @click.native.stop="close"
-      >
-      </icon>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -102,28 +54,14 @@ import isOneOf from 'Global/Assets/isOneOf';
 import Icon from 'Components/icon';
 
 const prefixCls = 'byx-tag';
-const initColorList = [
-  'blue',
-  'info',
-  'information',
-  'green',
-  'success',
-  'red',
-  'danger',
-  'yellow',
-  'warning',
-  'purple',
-  'update',
-  'default',
-  'primary',
-];
+const initColorList = ['info', 'information', 'success', 'danger', 'warning', 'update', 'default', 'primary'];
 export default {
   name: 'Tag',
 
   components: {Icon},
 
   props: {
-    closable: {
+    dismissable: {
       default: false,
       type: Boolean,
     },
@@ -133,10 +71,6 @@ export default {
     },
     fade: {
       default: true,
-      type: Boolean,
-    },
-    border: {
-      default: false,
       type: Boolean,
     },
     icon: {
@@ -150,8 +84,6 @@ export default {
         `${prefixCls}`,
         {
           [`${prefixCls}-${this.color}`]: isOneOf(this.color, initColorList),
-          [`${prefixCls}-border`]: this.border,
-          [`${prefixCls}-closable`]: this.closable,
         },
       ];
     },

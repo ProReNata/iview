@@ -3,7 +3,8 @@
     <h1>Icons</h1>
     <div>
       <h2>Default Icon</h2>
-      <p>Prop {boolean} icon to append the default icon, if it has one.</p>
+      <p>Prop {boolean} icon</p>
+      <p>Appends the default icon, if it has one.</p>
       <tag
         color="danger"
         border
