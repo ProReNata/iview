@@ -28,33 +28,32 @@
   }
 
   &-danger {
-    background: @color-danger400;
-    color: @color-danger600;
-    .tag-border(@color-danger600);
+    @apply bg-danger400 text-danger600 border-danger600;
+    .tag-border();
   }
 
   &-success {
     background: @color-success400;
     color: @color-success600;
-    .tag-border(@color-success600);
+    //.tag-border(@color-success600);
   }
 
   &-info, &-information {
     background: @color-info400;
     color: @color-info600;
-    .tag-border(@color-info600);
+    //.tag-border(@color-info600);
   }
 
   &-warning {
     background: @color-warning400;
     color: @color-warning600;
-    .tag-border(@color-warning600);
+    //.tag-border(@color-warning600);
   }
 
   &-update {
     background: @color-update400;
     color: @color-update600;
-    .tag-border(@color-update600);
+    //.tag-border(@color-update600);
   }
 
   &-primary {
@@ -63,7 +62,7 @@
   }
 }
 
-.tag-border(@color) {
+.tag-border() {
   line-height: 1.375rem;
-  border: 1px solid @color;
+  @apply border border-solid;
 }

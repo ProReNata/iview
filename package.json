@@ -38,7 +38,8 @@
     "clean-modules": "rimraf node_modules",
     "prepare-env": "bash DevTools/Build/prepare_env.sh",
     "prettier-check": "eslint --print-config . | eslint-config-prettier-check",
-    "css:minify": "postcss -m --config cssnano dist/iview.css -o dist/iview.min.css"
+    "css:minify": "postcss -m --config cssnano dist/iview.css -o dist/iview.min.css",
+    "export-tailwind-config": "tailwindcss-export-config --config=src/styles/less/colors.js --destination=src/styles/less/colors --format=less"
   },
   "repository": {
     "type": "git",
@@ -198,6 +199,7 @@
     "stylelint-formatter-pretty": "^1.0.3",
     "stylelint-webpack-plugin": "^0.10.5",
     "tailwindcss": "^0.7.4",
+    "tailwindcss-export-config": "^1.0.2",
     "terser-webpack-plugin": "^1.2.2",
     "url-loader": "^1.1.2",
     "vue": "^2.6.6",
