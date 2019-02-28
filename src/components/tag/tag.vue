@@ -1,64 +1,52 @@
 <template>
   <transition
-    v-if="fade"
     name="fade"
   >
     <div
-      :class="classes"
-      :style="wraperStyles"
-      @click.stop="check"
+      :class="baseClasses"
     >
-      <span
-        v-if="showDot"
-        :class="dotClasses"
-        :style="bgColorStyle"
+      <div
+        v-if="icon && iconAttributes.type"
+        :class="iconLeftClasses"
       >
-      </span>
-      <span
-        :class="textClasses"
-        :style="textColorStyle"
+        <icon
+          :type="iconAttributes.type"
+          :weight="iconAttributes.weight"
+        >
+        </icon>
+      </div>
+      <div
+        v-if="$slots['icon-left']"
+        :class="iconLeftClasses"
       >
-        <slot></slot>
-      </span>
-      <icon
-        v-if="closable"
-        :class="iconClass"
-        :color="lineColor"
-        type="times"
-        weight="regular"
-        @click.native.stop="close"
+        <slot
+          name="icon-left"
+        >
+        </slot>
+      </div>
+      <slot></slot>
+      <div
+        v-if="$slots['icon-right']"
+        :class="iconRightClasses"
       >
-      </icon>
+        <slot
+          name="icon-right"
+        >
+        </slot>
+      </div>
+      <div
+        v-if="dismissable"
+        :class="closableClasses"
+      >
+        <icon
+          type="times"
+          weight="regular"
+          @click.native.stop="close"
+        >
+        </icon>
+      </div>
     </div>
   </transition>
-  <div
-    v-else
-    :class="classes"
-    :style="wraperStyles"
-    @click.stop="check"
-  >
-    <span
-      v-if="showDot"
-      :class="dotClasses"
-      :style="bgColorStyle"
-    >
-    </span>
-    <span
-      :class="textClasses"
-      :style="textColorStyle"
-    >
-      <slot></slot>
-    </span>
-    <icon
-      v-if="closable"
-      :class="iconClass"
-      :color="lineColor"
-      type="times"
-      weight="regular"
-      @click.native.stop="close"
-    >
-    </icon>
-  </div>
 </template>
 
 <script>
@@ -66,22 +54,14 @@ import isOneOf from 'Global/Assets/isOneOf';
 import Icon from 'Components/icon';
 
 const prefixCls = 'byx-tag';
-const initColorList = ['blue', 'green', 'red', 'yellow', 'default'];
+const initColorList = ['info', 'information', 'success', 'danger', 'warning', 'update', 'default', 'primary'];
 export default {
   name: 'Tag',
 
   components: {Icon},
 
   props: {
-    checkable: {
-      default: false,
-      type: Boolean,
-    },
-    checked: {
-      default: true,
-      type: Boolean,
-    },
-    closable: {
+    dismissable: {
       default: false,
       type: Boolean,
     },
@@ -93,162 +73,64 @@ export default {
       default: true,
       type: Boolean,
     },
-    name: {
-      default: undefined,
-      type: [String, Number],
-    },
-    type: {
-      default: undefined,
-      type: String,
-      validator(value) {
-        return isOneOf(value, ['border', 'dot']);
-      },
+    icon: {
+      default: false,
+      type: Boolean,
     },
   },
-
-  data() {
-    return {
-      isChecked: this.checked,
-    };
-  },
-
   computed: {
-    bgColorStyle() {
-      return isOneOf(this.color, initColorList) ? {} : {background: this.dotColor};
-    },
-    borderColor() {
-      if (typeof this.color === 'undefined') {
-        return '';
-      }
-
-      return this.color === 'default' ? '' : this.color;
-    },
-    classes() {
+    baseClasses() {
       return [
         `${prefixCls}`,
         {
-          [`${prefixCls}-${this.color}`]: !!this.color && isOneOf(this.color, initColorList),
-          [`${prefixCls}-${this.type}`]: !!this.type,
-          [`${prefixCls}-closable`]: this.closable,
-          [`${prefixCls}-checked`]: this.isChecked,
+          [`${prefixCls}-${this.color}`]: isOneOf(this.color, initColorList),
         },
       ];
     },
-    defaultTypeColor() {
-      if (this.type !== 'dot' && this.type !== 'border') {
-        if (typeof this.color !== 'undefined') {
-          return isOneOf(this.color, initColorList) ? '' : this.color;
-        }
-      }
-
-      return '';
+    iconLeftClasses() {
+      return `${prefixCls}-icon`;
     },
-    dotClasses() {
-      return `${prefixCls}-dot-inner`;
+    iconRightClasses() {
+      return `${prefixCls}-icon ${prefixCls}-icon-right`;
     },
-    dotColor() {
-      if (typeof this.color === 'undefined') {
-        return '';
-      }
-
-      return isOneOf(this.color, initColorList) ? '' : this.color;
+    closableClasses() {
+      return [this.iconRightClasses, 'cursor-pointer'];
     },
-    iconClass() {
-      if (this.type === 'dot') {
-        return '';
+    iconAttributes() {
+      let type = '';
+      let weight = 'regular';
+
+      if (this.color === 'warning' || this.color === 'yellow') {
+        type = 'exclamation-triangle';
       }
 
-      if (this.type === 'border') {
-        return isOneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '';
+      if (this.color === 'success' || this.color === 'green') {
+        type = 'thumbs-up';
       }
 
-      if (typeof this.color === 'undefined') {
-        return '';
+      if (this.color === 'danger' || this.color === 'red') {
+        type = 'skull';
       }
 
-      return this.color === 'default' ? '' : 'rgb(255, 255, 255)';
-    },
-    lineColor() {
-      if (this.type === 'dot') {
-        return '';
+      if (this.color === 'update' || this.color === 'purple') {
+        type = 'heart';
       }
 
-      if (this.type === 'border') {
-        if (typeof this.color === 'undefined') {
-          return '';
-        }
-
-        return isOneOf(this.color, initColorList) ? '' : this.color;
+      if (this.color === 'info' || this.color === 'information' || this.color === 'blue') {
+        type = 'info-circle';
+        weight = 'solid';
       }
 
-      if (typeof this.color === 'undefined') {
-        return '';
-      }
-
-      return this.color === 'default' ? '' : 'rgb(255, 255, 255)';
-    },
-    showDot() {
-      return !!this.type && this.type === 'dot';
-    },
-    textClasses() {
-      let type1 = '';
-      let type2 = '';
-
-      if (this.type === 'border') {
-        type1 = isOneOf(this.color, initColorList) ? `${prefixCls}-color-${this.color}` : '';
-      }
-
-      if (this.type !== 'dot' && this.type !== 'border' && this.color !== 'default') {
-        type2 = this.isChecked ? `${prefixCls}-color-white` : '';
-      }
-
-      return [`${prefixCls}-text`, type1, type2];
-    },
-    textColorStyle() {
-      if (isOneOf(this.color, initColorList)) {
-        return {};
-      }
-
-      if (this.type !== 'dot' && this.type !== 'border') {
-        return this.isChecked ? {color: this.lineColor} : {};
-      }
-
-      return {color: this.lineColor};
-    },
-    wraperStyles() {
-      return isOneOf(this.color, initColorList)
-        ? {}
-        : {
-            background: this.isChecked ? this.defaultTypeColor : 'transparent',
-            borderColor: this.type !== 'dot' && this.type !== 'border' && this.isChecked ? this.borderColor : this.lineColor,
-            borderStyle: 'solid',
-            borderWidth: '1px',
-            color: this.lineColor,
-          };
+      return {
+        type,
+        weight,
+      };
     },
   },
 
   methods: {
-    check() {
-      if (!this.checkable) {
-        return;
-      }
-
-      const checked = !this.isChecked;
-      this.isChecked = checked;
-
-      if (this.name === undefined) {
-        this.$emit('on-change', checked);
-      } else {
-        this.$emit('on-change', checked, this.name);
-      }
-    },
     close(event) {
-      if (this.name === undefined) {
-        this.$emit('on-close', event);
-      } else {
-        this.$emit('on-close', event, this.name);
-      }
+      this.$emit('on-close', event);
     },
   },
 };

@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h1>Tags</h1>
+    <h2>Default</h2>
     <tag checkable>
       Label 1
     </tag>
