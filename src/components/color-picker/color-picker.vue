@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-click-outside="http://www.w3.org/1999/xhtml">
   <div
     v-click-outside.capture="handleClose"
     v-click-outside:mousedown.capture="handleClose"
@@ -103,6 +103,7 @@
                 {{ formatColor }}
               </span>
               <i-button
+                v-if="clearable"
                 ref="clear"
                 :tabindex="0"
                 size="small"
@@ -159,6 +160,10 @@ export default {
   props: {
     alpha: {
       default: false,
+      type: Boolean,
+    },
+    clearable: {
+      default: true,
       type: Boolean,
     },
     colors: {
