@@ -12,7 +12,7 @@
     </tag>
     <tag
       v-show="!hideDanger"
-      color="danger"
+      variant="danger"
       border
       dismissable
       @on-close="hideDanger = true"
@@ -21,7 +21,7 @@
     </tag>
     <tag
       v-show="!hideInfo"
-      color="info"
+      variant="info"
       border
       dismissable
       @on-close="hideInfo = true"
@@ -30,7 +30,7 @@
     </tag>
     <tag
       v-show="!hideSuccess"
-      color="success"
+      variant="success"
       border
       dismissable
       @on-close="hideSuccess = true"
@@ -39,7 +39,7 @@
     </tag>
     <tag
       v-show="!hideUpdate"
-      color="update"
+      variant="update"
       border
       dismissable
       @on-close="hideUpdate = true"
@@ -48,7 +48,7 @@
     </tag>
     <tag
       v-show="!hideWarning"
-      color="warning"
+      variant="warning"
       border
       dismissable
       @on-close="hideWarning = true"
@@ -57,7 +57,7 @@
     </tag>
     <tag
       v-show="!hidePrimary"
-      color="primary"
+      variant="primary"
       dismissable
       @on-close="hidePrimary = true"
     >

@@ -5,32 +5,32 @@
     <p>Takes the value of one of these names in all lowercase.</p>
     <tag>Default</tag>
     <tag
-      color="danger"
+      variant="danger"
     >
       Danger
     </tag>
     <tag
-      color="info"
+      variant="info"
     >
       Info / Information
     </tag>
     <tag
-      color="success"
+      variant="success"
     >
       Success
     </tag>
     <tag
-      color="update"
+      variant="update"
     >
       Update
     </tag>
     <tag
-      color="warning"
+      variant="warning"
     >
       Warning
     </tag>
     <tag
-      color="primary"
+      variant="primary"
     >
       Primary
     </tag>

@@ -7,37 +7,37 @@
       Default
     </tag>
     <tag
-      color="danger"
+      variant="danger"
       border
     >
       Red / Danger
     </tag>
     <tag
-      color="info"
+      variant="info"
       border
     >
       Blue / Information
     </tag>
     <tag
-      color="success"
+      variant="success"
       border
     >
       Green / Success
     </tag>
     <tag
-      color="update"
+      variant="update"
       border
     >
       Purple / Update
     </tag>
     <tag
-      color="warning"
+      variant="warning"
       border
     >
       Yellow / Warning
     </tag>
     <tag
-      color="primary"
+      variant="primary"
       border
     >
       Primary

@@ -6,42 +6,42 @@
       <p>Prop {boolean} icon</p>
       <p>Appends the default icon, if it has one.</p>
       <tag
-        color="danger"
+        variant="danger"
         border
         icon
       >
         Red / Danger
       </tag>
       <tag
-        color="info"
+        variant="info"
         border
         icon
       >
         Blue / Information
       </tag>
       <tag
-        color="success"
+        variant="success"
         border
         icon
       >
         Green / Success
       </tag>
       <tag
-        color="update"
+        variant="update"
         border
         icon
       >
         Purple / Update
       </tag>
       <tag
-        color="warning"
+        variant="warning"
         border
         icon
       >
         Yellow / Warning
       </tag>
       <tag
-        color="primary"
+        variant="primary"
         icon
       >
         Primary
@@ -53,7 +53,7 @@
       <div>
         <h3>icon-left</h3>
         <tag
-          color="info"
+          variant="info"
           border
         >
           Blue / Information
@@ -65,7 +65,7 @@
           </template>
         </tag>
         <tag
-          color="success"
+          variant="success"
           border
         >
           <template #icon-left>
@@ -89,7 +89,7 @@
       <div>
         <h3>icon-right</h3>
         <tag
-          color="info"
+          variant="info"
           border
         >
           Blue / Information
@@ -101,7 +101,7 @@
           </template>
         </tag>
         <tag
-          color="success"
+          variant="success"
           border
         >
           <template #icon-right>

@@ -50,11 +50,9 @@
 </template>
 
 <script>
-import isOneOf from 'Global/Assets/isOneOf';
 import Icon from 'Components/icon';
 
 const prefixCls = 'byx-tag';
-const initColorList = ['info', 'information', 'success', 'danger', 'warning', 'update', 'default', 'primary'];
 export default {
   name: 'Tag',
 
@@ -68,10 +66,9 @@ export default {
     variant: {
       default: 'default',
       type: String,
-    },
-    fade: {
-      default: true,
-      type: Boolean,
+      validator(value) {
+        return ['info', 'information', 'success', 'danger', 'warning', 'update', 'default', 'primary'].includes(value);
+      },
     },
     icon: {
       default: false,
@@ -80,12 +77,7 @@ export default {
   },
   computed: {
     baseClasses() {
-      return [
-        `${prefixCls}`,
-        {
-          [`${prefixCls}-${this.variant}`]: isOneOf(this.variant, initColorList),
-        },
-      ];
+      return [`${prefixCls} ${prefixCls}-${this.variant}`];
     },
     iconLeftClasses() {
       return `${prefixCls}-icon`;
