@@ -6,12 +6,12 @@
       :class="baseClasses"
     >
       <div
-        v-if="icon && iconAttributes.type"
+        v-if="icon && defaultIconProps.type"
         :class="iconLeftClasses"
       >
         <icon
-          :type="iconAttributes.type"
-          :weight="iconAttributes.weight"
+          :type="defaultIconProps.type"
+          :weight="defaultIconProps.weight"
           fw
         >
         </icon>
@@ -68,7 +68,7 @@ export default {
       default: 'default',
       type: String,
       validator(value) {
-        return ['info', 'information', 'success', 'danger', 'warning', 'update', 'default', 'primary'].includes(value);
+        return ['info', 'success', 'danger', 'warning', 'update', 'default', 'primary'].includes(value);
       },
     },
     icon: {
@@ -89,7 +89,7 @@ export default {
     closableClasses() {
       return [this.iconRightClasses, 'cursor-pointer'];
     },
-    iconAttributes() {
+    defaultIconProps() {
       let type = '';
       let weight = 'regular';
 
@@ -109,7 +109,7 @@ export default {
         type = 'heart';
       }
 
-      if (this.variant === 'info' || this.variant === 'information') {
+      if (this.variant === 'info') {
         type = 'info-circle';
         weight = 'solid';
       }
