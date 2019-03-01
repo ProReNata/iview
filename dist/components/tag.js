@@ -1,11 +1,11 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-27T04:51:06.220Z",
+  "date": "2019-03-01T08:40:44.979Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "components/tag.js",
-  "hash": "f6462d5dd25781dbcb91",
+  "hash": "d9106c68bfeb7e625a48",
   "license": "MIT",
   "version": "3.0.0-alpha.10"
 }
@@ -1154,22 +1154,14 @@ var _icon = _interopRequireDefault(__webpack_require__(20));
 var logger = __webpack_require__(0).get("iview:components:tag:tag.vue");
 
 var prefixCls = 'byx-tag';
-var initColorList = ['blue', 'green', 'red', 'yellow', 'default'];
+var initColorList = ['info', 'information', 'success', 'danger', 'warning', 'update', 'default', 'primary'];
 var _default = {
   name: 'Tag',
   components: {
     Icon: _icon.default
   },
   props: {
-    checkable: {
-      default: false,
-      type: Boolean
-    },
-    checked: {
-      default: true,
-      type: Boolean
-    },
-    closable: {
+    dismissable: {
       default: false,
       type: Boolean
     },
@@ -1181,157 +1173,58 @@ var _default = {
       default: true,
       type: Boolean
     },
-    name: {
-      default: undefined,
-      type: [String, Number]
-    },
-    type: {
-      default: undefined,
-      type: String,
-      validator: function validator(value) {
-        return (0, _isOneOf.default)(value, ['border', 'dot']);
-      }
+    icon: {
+      default: false,
+      type: Boolean
     }
   },
-  data: function data() {
-    return {
-      isChecked: this.checked
-    };
-  },
   computed: {
-    bgColorStyle: function bgColorStyle() {
-      return (0, _isOneOf.default)(this.color, initColorList) ? {} : {
-        background: this.dotColor
-      };
+    baseClasses: function baseClasses() {
+      return ["".concat(prefixCls), (0, _defineProperty2.default)({}, "".concat(prefixCls, "-").concat(this.color), (0, _isOneOf.default)(this.color, initColorList))];
     },
-    borderColor: function borderColor() {
-      if (typeof this.color === 'undefined') {
-        return '';
-      }
-
-      return this.color === 'default' ? '' : this.color;
+    iconLeftClasses: function iconLeftClasses() {
+      return "".concat(prefixCls, "-icon");
     },
-    classes: function classes() {
-      var _ref;
-
-      return ["".concat(prefixCls), (_ref = {}, (0, _defineProperty2.default)(_ref, "".concat(prefixCls, "-").concat(this.color), !!this.color && (0, _isOneOf.default)(this.color, initColorList)), (0, _defineProperty2.default)(_ref, "".concat(prefixCls, "-").concat(this.type), !!this.type), (0, _defineProperty2.default)(_ref, "".concat(prefixCls, "-closable"), this.closable), (0, _defineProperty2.default)(_ref, "".concat(prefixCls, "-checked"), this.isChecked), _ref)];
+    iconRightClasses: function iconRightClasses() {
+      return "".concat(prefixCls, "-icon ").concat(prefixCls, "-icon-right");
     },
-    defaultTypeColor: function defaultTypeColor() {
-      if (this.type !== 'dot' && this.type !== 'border') {
-        if (typeof this.color !== 'undefined') {
-          return (0, _isOneOf.default)(this.color, initColorList) ? '' : this.color;
-        }
-      }
-
-      return '';
+    closableClasses: function closableClasses() {
+      return [this.iconRightClasses, 'cursor-pointer'];
     },
-    dotClasses: function dotClasses() {
-      return "".concat(prefixCls, "-dot-inner");
-    },
-    dotColor: function dotColor() {
-      if (typeof this.color === 'undefined') {
-        return '';
+    iconAttributes: function iconAttributes() {
+      var type = '';
+      var weight = 'regular';
+
+      if (this.color === 'warning' || this.color === 'yellow') {
+        type = 'exclamation-triangle';
       }
 
-      return (0, _isOneOf.default)(this.color, initColorList) ? '' : this.color;
-    },
-    iconClass: function iconClass() {
-      if (this.type === 'dot') {
-        return '';
+      if (this.color === 'success' || this.color === 'green') {
+        type = 'thumbs-up';
       }
 
-      if (this.type === 'border') {
-        return (0, _isOneOf.default)(this.color, initColorList) ? "".concat(prefixCls, "-color-").concat(this.color) : '';
+      if (this.color === 'danger' || this.color === 'red') {
+        type = 'skull';
       }
 
-      if (typeof this.color === 'undefined') {
-        return '';
+      if (this.color === 'update' || this.color === 'purple') {
+        type = 'heart';
       }
 
-      return this.color === 'default' ? '' : 'rgb(255, 255, 255)';
-    },
-    lineColor: function lineColor() {
-      if (this.type === 'dot') {
-        return '';
-      }
-
-      if (this.type === 'border') {
-        if (typeof this.color === 'undefined') {
-          return '';
-        }
-
-        return (0, _isOneOf.default)(this.color, initColorList) ? '' : this.color;
-      }
-
-      if (typeof this.color === 'undefined') {
-        return '';
-      }
-
-      return this.color === 'default' ? '' : 'rgb(255, 255, 255)';
-    },
-    showDot: function showDot() {
-      return !!this.type && this.type === 'dot';
-    },
-    textClasses: function textClasses() {
-      var type1 = '';
-      var type2 = '';
-
-      if (this.type === 'border') {
-        type1 = (0, _isOneOf.default)(this.color, initColorList) ? "".concat(prefixCls, "-color-").concat(this.color) : '';
-      }
-
-      if (this.type !== 'dot' && this.type !== 'border' && this.color !== 'default') {
-        type2 = this.isChecked ? "".concat(prefixCls, "-color-white") : '';
-      }
-
-      return ["".concat(prefixCls, "-text"), type1, type2];
-    },
-    textColorStyle: function textColorStyle() {
-      if ((0, _isOneOf.default)(this.color, initColorList)) {
-        return {};
-      }
-
-      if (this.type !== 'dot' && this.type !== 'border') {
-        return this.isChecked ? {
-          color: this.lineColor
-        } : {};
+      if (this.color === 'info' || this.color === 'information' || this.color === 'blue') {
+        type = 'info-circle';
+        weight = 'solid';
       }
 
       return {
-        color: this.lineColor
-      };
-    },
-    wraperStyles: function wraperStyles() {
-      return (0, _isOneOf.default)(this.color, initColorList) ? {} : {
-        background: this.isChecked ? this.defaultTypeColor : 'transparent',
-        borderColor: this.type !== 'dot' && this.type !== 'border' && this.isChecked ? this.borderColor : this.lineColor,
-        borderStyle: 'solid',
-        borderWidth: '1px',
-        color: this.lineColor
+        type: type,
+        weight: weight
       };
     }
   },
   methods: {
-    check: function check() {
-      if (!this.checkable) {
-        return;
-      }
-
-      var checked = !this.isChecked;
-      this.isChecked = checked;
-
-      if (this.name === undefined) {
-        this.$emit('on-change', checked);
-      } else {
-        this.$emit('on-change', checked, this.name);
-      }
-    },
     close: function close(event) {
-      if (this.name === undefined) {
-        this.$emit('on-close', event);
-      } else {
-        this.$emit('on-close', event, this.name);
-      }
+      this.$emit('on-close', event);
     }
   }
 };
@@ -1482,12 +1375,12 @@ module.exports = baseFindKey;
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/tag/tag.vue?vue&type=template&id=7c48abd6&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.fade)?_c('transition',{attrs:{"name":"fade"}},[_c('div',{class:_vm.classes,style:(_vm.wraperStyles),on:{"click":function($event){$event.stopPropagation();return _vm.check($event)}}},[(_vm.showDot)?_c('span',{class:_vm.dotClasses,style:(_vm.bgColorStyle)}):_vm._e(),_vm._v(" "),_c('span',{class:_vm.textClasses,style:(_vm.textColorStyle)},[_vm._t("default")],2),_vm._v(" "),(_vm.closable)?_c('icon',{class:_vm.iconClass,attrs:{"color":_vm.lineColor,"type":"times","weight":"regular"},nativeOn:{"click":function($event){$event.stopPropagation();return _vm.close($event)}}}):_vm._e()],1)]):_c('div',{class:_vm.classes,style:(_vm.wraperStyles),on:{"click":function($event){$event.stopPropagation();return _vm.check($event)}}},[(_vm.showDot)?_c('span',{class:_vm.dotClasses,style:(_vm.bgColorStyle)}):_vm._e(),_vm._v(" "),_c('span',{class:_vm.textClasses,style:(_vm.textColorStyle)},[_vm._t("default")],2),_vm._v(" "),(_vm.closable)?_c('icon',{class:_vm.iconClass,attrs:{"color":_vm.lineColor,"type":"times","weight":"regular"},nativeOn:{"click":function($event){$event.stopPropagation();return _vm.close($event)}}}):_vm._e()],1)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/tag/tag.vue?vue&type=template&id=7399ba26&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"name":"fade"}},[_c('div',{class:_vm.baseClasses},[(_vm.icon && _vm.iconAttributes.type)?_c('div',{class:_vm.iconLeftClasses},[_c('icon',{attrs:{"type":_vm.iconAttributes.type,"weight":_vm.iconAttributes.weight}})],1):_vm._e(),_vm._v(" "),(_vm.$slots['icon-left'])?_c('div',{class:_vm.iconLeftClasses},[_vm._t("icon-left")],2):_vm._e(),_vm._v(" "),_vm._t("default"),_vm._v(" "),(_vm.$slots['icon-right'])?_c('div',{class:_vm.iconRightClasses},[_vm._t("icon-right")],2):_vm._e(),_vm._v(" "),(_vm.dismissable)?_c('div',{class:_vm.closableClasses},[_c('icon',{attrs:{"type":"times","weight":"regular"},nativeOn:{"click":function($event){$event.stopPropagation();return _vm.close($event)}}})],1):_vm._e()],2)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/tag/tag.vue?vue&type=template&id=7c48abd6&
+// CONCATENATED MODULE: ./src/components/tag/tag.vue?vue&type=template&id=7399ba26&
 /* concated harmony reexport render */__webpack_require__.d(__webpack_exports__, "a", function() { return render; });
 /* concated harmony reexport staticRenderFns */__webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
 
@@ -1755,7 +1648,7 @@ var logger = __webpack_require__(0).get("iview:components:tag:index");
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _tag_vue_vue_type_template_id_7c48abd6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(459);
+/* harmony import */ var _tag_vue_vue_type_template_id_7399ba26___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(459);
 /* harmony import */ var _tag_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(357);
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _tag_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _tag_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
@@ -1768,8 +1661,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(
   _tag_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _tag_vue_vue_type_template_id_7c48abd6___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
-  _tag_vue_vue_type_template_id_7c48abd6___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
+  _tag_vue_vue_type_template_id_7399ba26___WEBPACK_IMPORTED_MODULE_0__[/* render */ "a"],
+  _tag_vue_vue_type_template_id_7399ba26___WEBPACK_IMPORTED_MODULE_0__[/* staticRenderFns */ "b"],
   false,
   null,
   null,

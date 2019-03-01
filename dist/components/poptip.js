@@ -1,11 +1,11 @@
 /*!
 {
   "copywrite": "",
-  "date": "2019-02-27T04:51:06.220Z",
+  "date": "2019-03-01T08:40:44.979Z",
   "describe": "",
   "description": "A high quality UI components Library with Vue.js",
   "file": "components/poptip.js",
-  "hash": "f6462d5dd25781dbcb91",
+  "hash": "d9106c68bfeb7e625a48",
   "license": "MIT",
   "version": "3.0.0-alpha.10"
 }
