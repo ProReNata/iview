@@ -12,6 +12,7 @@
         <icon
           :type="iconAttributes.type"
           :weight="iconAttributes.weight"
+          fw
         >
         </icon>
       </div>

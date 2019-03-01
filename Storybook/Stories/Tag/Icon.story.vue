@@ -6,6 +6,11 @@
       <p>Prop {boolean} icon</p>
       <p>Appends the default icon, if it has one.</p>
       <tag
+        icon
+      >
+        Default
+      </tag>
+      <tag
         variant="danger"
         border
         icon
@@ -61,6 +66,7 @@
             <icon
               type="star"
               weight="solid"
+              fw
             ></icon>
           </template>
         </tag>
@@ -72,6 +78,7 @@
             <icon
               type="hotdog"
               weight="solid"
+              fw
             ></icon>
           </template>
           Green / Success
@@ -81,6 +88,7 @@
             <icon
               type="fighter-jet"
               weight="solid"
+              fw
             ></icon>
           </template>
           X-wing
@@ -97,6 +105,7 @@
             <icon
               type="star"
               weight="light"
+              fw
             ></icon>
           </template>
         </tag>
@@ -108,6 +117,7 @@
             <icon
               type="hotdog"
               weight="solid"
+              fw
             ></icon>
           </template>
           Green / Success
@@ -117,6 +127,7 @@
             <icon
               type="circle"
               weight="regular"
+              fw
             ></icon>
           </template>
           Death Star
