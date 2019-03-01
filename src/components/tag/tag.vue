@@ -65,7 +65,7 @@ export default {
       default: false,
       type: Boolean,
     },
-    color: {
+    variant: {
       default: 'default',
       type: String,
     },
@@ -83,7 +83,7 @@ export default {
       return [
         `${prefixCls}`,
         {
-          [`${prefixCls}-${this.color}`]: isOneOf(this.color, initColorList),
+          [`${prefixCls}-${this.variant}`]: isOneOf(this.variant, initColorList),
         },
       ];
     },
@@ -100,23 +100,23 @@ export default {
       let type = '';
       let weight = 'regular';
 
-      if (this.color === 'warning' || this.color === 'yellow') {
+      if (this.variant === 'warning') {
         type = 'exclamation-triangle';
       }
 
-      if (this.color === 'success' || this.color === 'green') {
+      if (this.variant === 'success') {
         type = 'thumbs-up';
       }
 
-      if (this.color === 'danger' || this.color === 'red') {
+      if (this.variant === 'danger') {
         type = 'skull';
       }
 
-      if (this.color === 'update' || this.color === 'purple') {
+      if (this.variant === 'update') {
         type = 'heart';
       }
 
-      if (this.color === 'info' || this.color === 'information' || this.color === 'blue') {
+      if (this.variant === 'info' || this.variant === 'information') {
         type = 'info-circle';
         weight = 'solid';
       }
