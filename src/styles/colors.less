@@ -1,17 +1,20 @@
 // Resources: http://mcg.mbitson.com/#!?mcgpalette0=%23fab21c&mcgpalette1=%23859ba0&mcgpalette2=%23550011&themename=PRN
 
+//PRIMARY COLORS
 @color-p100: #fee8bb;
 @color-p300: #fcc960;
 @color-p500: #fab21c; // FABRIC
 @color-p700: #f9a214;
 @color-p900: #f68a09;
 
+//ACCENT COLORS
 @color-a100: #ccb3b8;
 @color-a300: #884d58;
 @color-a500: #550011; // SOL
 @color-a700: #44000c;
 @color-a900: #2a0005;
 
+//SURFACE COLORS
 @color-s0: #ffffff;
 @color-s100: #eff2f3;
 @color-s200: #e5ebee;
@@ -23,17 +26,7 @@
 @color-s800: #586c71;
 @color-s900: #4b5c60;
 
-@color-danger: rgb(251, 207, 189);
-@color-danger-dark: darken(@color-danger, 60%);
-@color-info: rgb(197, 219, 242);
-@color-info-dark: darken(@color-info, 60%);
-@color-success: rgb(216, 234, 204);
-@color-success-dark: darken(@color-success, 60%);
-@color-warning: rgb(251, 238, 202);
-@color-warning-dark: darken(@color-warning, 60%);
-@color-update: rgb(249, 224, 250);
-@color-update-dark: darken(@color-update, 70%);
-
+//TYPOGRAPHY COLORS
 @color-dark100: rgb(36, 28, 21);
 @color-dark75: rgba(36, 28, 21, 0.75);
 @color-dark50: rgba(36, 28, 21, 0.5);
@@ -43,6 +36,40 @@
 @color-light75: rgba(255, 255, 255, 0.75);
 @color-light50: rgba(255, 255, 255, 0.5);
 @color-light30: rgba(255, 255, 255, 0.3);
+
+//MEANINGFUL COLORS
+//WARNING
+@color-warning400: @color-p100;
+@color-warning500: @color-p300;
+@color-warning600: #d6621e;
+//DANGER
+@color-danger400: #fbcfbd;
+@color-danger500: #f7a88c;
+@color-danger600: #eb5938;
+//INFORMATION
+@color-info400: #c5dbf2;
+@color-info500: #98bce5;
+@color-info600: #4576c2;
+//SUCCESS
+@color-success400: #d8eacc;
+@color-success500: #b6d6a3;
+@color-success600: #5c9642;
+//UPDATE
+@color-update400: #f9e0fa;
+@color-update500: #f3c4f5;
+@color-update600: #9a008f;
+
+//@color-danger: rgb(251, 207, 189);
+//@color-danger-dark: darken(@color-danger, 60%);
+//@color-info: rgb(197, 219, 242);
+//@color-info-dark: darken(@color-info, 60%);
+//@color-success: rgb(216, 234, 204);
+//@color-success-dark: darken(@color-success, 60%);
+//@color-warning: rgb(251, 238, 202);
+//@color-warning-dark: darken(@color-warning, 60%);
+//@color-update: rgb(249, 224, 250);
+//@color-update-dark: darken(@color-update, 70%);
+
 
 .empty-area {
   @color: fade(@color-s200, 30%);
