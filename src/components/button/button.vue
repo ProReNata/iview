@@ -1,7 +1,6 @@
 <template>
   <button
-    :type="htmlType"
-    :class="classes"
+    :class="baseClasses"
     :disabled="disabled"
     v-on="$listeners"
   >
@@ -30,29 +29,30 @@
 
 <script>
 import Icon, {isOneOfIconNames, isOneOfIconWeights} from 'Components/icon';
-import isOneOf from 'Global/Assets/isOneOf';
+// import isOneOf from 'Global/Assets/isOneOf';
 import not from 'Global/Assets/not';
 
 const prefixCls = 'byx-btn';
-const DEFAULT = 'default';
-const BUTTON = 'button';
-const SUBMIT = 'submit';
-const RESET = 'RESET';
-const HTML_TYPES = Object.freeze([BUTTON, SUBMIT, RESET]);
-const SMALL = 'small';
-const LARGE = 'large';
-const SIZES = Object.freeze([SMALL, LARGE, DEFAULT]);
-export function isOneOfSizes(value) {
-  return isOneOf(value, SIZES);
-}
+// const DEFAULT = 'default';
+// const BUTTON = 'button';
+// const SUBMIT = 'submit';
+// const RESET = 'RESET';
+// const HTML_TYPES = Object.freeze([BUTTON, SUBMIT, RESET]);
+// const SMALL = 'small';
+// const LARGE = 'large';
 
-const PRIMARY = 'primary';
-const TEXT = 'text';
-const INFO = 'info';
-const SUCCESS = 'success';
-const WARNING = 'warning';
-const ERROR = 'error';
-const TYPES = Object.freeze([PRIMARY, TEXT, INFO, SUCCESS, WARNING, ERROR, DEFAULT]);
+// const SIZES = Object.freeze([SMALL, LARGE, DEFAULT]);
+// export function isOneOfSizes(value) {
+//   return isOneOf(value, SIZES);
+// }
+
+// const PRIMARY = 'primary';
+// const TEXT = 'text';
+// const INFO = 'info';
+// const SUCCESS = 'success';
+// const WARNING = 'warning';
+// const ERROR = 'error';
+// const TYPES = Object.freeze([PRIMARY, TEXT, INFO, SUCCESS, WARNING, ERROR, DEFAULT]);
 
 export default {
   name: 'Button',
@@ -64,12 +64,12 @@ export default {
       default: false,
       type: Boolean,
     },
-    htmlType: {
-      default: BUTTON,
-      validator(value) {
-        return isOneOf(value, HTML_TYPES);
-      },
-    },
+    // htmlType: {
+    //   default: BUTTON,
+    //   validator(value) {
+    //     return isOneOf(value, HTML_TYPES);
+    //   },
+    // },
     icon: {
       default: undefined,
       type: String,
@@ -89,34 +89,44 @@ export default {
       type: Boolean,
     },
     size: {
-      default: undefined,
+      default: 'regular',
       type: String,
       validator(value) {
-        return isOneOf(value, SIZES);
+        return ['large', 'regular', 'small', 'extra-small'].includes(value);
       },
     },
-    type: {
-      default: undefined,
+    // type: {
+    //   default: undefined,
+    //   type: String,
+    //   validator(value) {
+    //     return isOneOf(value, TYPES);
+    //   },
+    // },
+    variant: {
+      default: 'primary',
       type: String,
       validator(value) {
-        return isOneOf(value, TYPES);
+        return ['primary', 'secondary', 'danger'].includes(value);
       },
     },
   },
 
   computed: {
-    classes() {
-      return [
-        `${prefixCls}`,
-        {
-          [`${prefixCls}-${this.type}`]: this.type,
-          [`${prefixCls}-long`]: this.long,
-          [`${prefixCls}-${this.size}`]: this.size,
-          [`${prefixCls}-loading`]: this.loading,
-          [`${prefixCls}-icon-only`]: not(this.showSlot) && (this.icon || this.loading),
-        },
-      ];
+    baseClasses() {
+      return [`${prefixCls} ${prefixCls}-${this.variant} ${prefixCls}-${this.size}`];
     },
+    // classes() {
+    //   return [
+    //     `${prefixCls}`,
+    //     {
+    //       [`${prefixCls}-${this.type}`]: this.type,
+    //       [`${prefixCls}-long`]: this.long,
+    //       [`${prefixCls}-${this.size}`]: this.size,
+    //       [`${prefixCls}-loading`]: this.loading,
+    //       [`${prefixCls}-icon-only`]: not(this.showSlot) && (this.icon || this.loading),
+    //     },
+    //   ];
+    // },
     showIcon() {
       return Boolean(this.icon) && not(this.loading);
     },
