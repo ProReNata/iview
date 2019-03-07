@@ -13,7 +13,7 @@
   border-collapse: unset;
   border-spacing: unset;
 
-  > thead > tr {
+  &-header-row {
     height: @sizes-56;
     color: @color-s500;
     text-transform: uppercase;
@@ -26,28 +26,32 @@
     }
   }
 
-  > tbody > tr {
+  &-body-row {
     height: @sizes-48;
     font-size: @textSizes-11;
-
-    &:hover {
-      background-color: @color-s300;
-    }
 
     > td {
       border-top: 1px solid @color-s600;
       padding-left: @sizes-12;
       padding-right: @sizes-12;
     }
-  }
 
-  &-striped {
-    > tbody > tr:nth-child(odd) {
+    &-striped:nth-child(odd):not(&-selected) {
       background-color: @color-s200;
+    }
 
-      &:hover {
-        background-color: @color-s300;
-      }
+    &:hover, &-selected {
+      background-color: @color-s300;
     }
   }
+
+  &-select-box {
+    color: @color-s500;
+    font-size: @textSizes-16;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &-selected {}
 }

@@ -3,6 +3,7 @@
     <i-table
       :columns="table1.columns"
       :rows="table1.rows"
+      :bulk-actions="table1.bulkActions"
       striped
     ></i-table>
   </div>
@@ -58,8 +59,21 @@ export default {
             planet: 'Socorro',
           },
         ],
+        bulkActions: [
+          {
+            label: 'Spara',
+            icon: 'save',
+            handler: this.saveRows,
+          },
+        ],
       },
     };
+  },
+
+  methods: {
+    saveRows(data) {
+      console.log(data);
+    },
   },
 };
 </script>
