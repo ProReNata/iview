@@ -13,11 +13,30 @@
             v-bind="selectAllBoxAttributes()"
           ></icon>
         </th>
+        <template v-if="selectedRows.length === 0">
+          <th
+            v-for="col in loadingColumns"
+            :key="col.name"
+          >
+            {{ col.label }}
+          </th>
+        </template>
         <th
-          v-for="col in loadingColumns"
-          :key="col.name"
+          v-else
+          :colspan="columns.length"
         >
-          {{ col.label }}
+          <span :class="selectedFieldsLabelClasses">{{ selectedRows.length }} valda:</span>
+          <button-group>
+            <i-button
+              v-for="bulkAction in bulkActions"
+              :key="bulkAction.label"
+              :icon="bulkAction.icon"
+              :class="selectedFieldsButtonClasses"
+              @click="bulkAction.handler(selectedRows)"
+            >
+              {{ bulkAction.label }}
+            </i-button>
+          </button-group>
         </th>
       </tr>
     </thead>
@@ -48,7 +67,8 @@
 </template>
 
 <script>
-// import IButton from '../button/button';
+import IButton from '../button/button';
+import ButtonGroup from '../button/button-group';
 import Icon from '../icon/icon';
 
 const prefixCls = 'byx-table';
@@ -82,7 +102,8 @@ export default {
   name: 'Table',
 
   components: {
-    // IButton,
+    IButton,
+    ButtonGroup,
     Icon,
   },
   props: {
@@ -140,6 +161,16 @@ export default {
     },
     selectBoxClasses() {
       return [`${prefixCls}-select-box`];
+    },
+    selectedFieldsLabelClasses() {
+      const prefix = prefixConstructor('select-field-label');
+
+      return [prefix];
+    },
+    selectedFieldsButtonClasses() {
+      const prefix = prefixConstructor('select-field-button');
+
+      return [prefix];
     },
 
     loadingColumns() {

@@ -65,6 +65,23 @@ export default {
             icon: 'save',
             handler: this.saveRows,
           },
+          {
+            label: 'Duplicera',
+            icon: 'copy',
+            handler: this.saveRows,
+          },
+          {
+            label: 'Skriva',
+            handler: this.saveRows,
+          },
+          {
+            label: 'Skriva1',
+            handler: this.saveRows,
+          },
+          {
+            label: 'Skriva2',
+            handler: this.saveRows,
+          },
         ],
       },
     };

@@ -38,6 +38,9 @@
 
     &-striped:nth-child(odd):not(&-selected) {
       background-color: @color-s200;
+      &:hover {
+        background-color: @color-s300;
+      }
     }
 
     &:hover, &-selected {
@@ -45,11 +48,28 @@
     }
   }
 
-  &-select-box {
-    color: @color-s500;
-    font-size: @textSizes-16;
-    &:hover {
-      cursor: pointer;
+  &-select {
+    &-box {
+      color: @color-s500;
+      font-size: @textSizes-16;
+      width: @sizes-40;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    
+    &-field {
+      &-label {
+        text-transform: none;
+        color: @color-dark100;
+        font-size: @textSizes-16;
+        font-weight: @fontWeights-medium;
+        margin-right: @sizes-16;
+      }
+
+      &-button {
+        margin: 0;
+      }
     }
   }
 
