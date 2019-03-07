@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div class="container">
+    <h1>Use cases</h1>
+    <h2>Default</h2>
     <i-table
       :columns="table1.columns"
       :rows="table1.rows"
@@ -7,8 +9,10 @@
     ></i-table>
   </div>
 </template>
+
 <script>
 export default {
+  name: 'TableUseCases',
   data() {
     return {
       table1: {
@@ -63,3 +67,6 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+</style>

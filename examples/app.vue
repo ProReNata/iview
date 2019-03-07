@@ -73,6 +73,11 @@
             Icon
           </router-link>
         </li>
+        <li>
+          <router-link to="/table">
+            Table
+          </router-link>
+        </li>
         <!-- <li>
           <router-link to="/badge">
             Badge
@@ -193,11 +198,7 @@
             Form
           </router-link>
         </li>
-        <li>
-          <router-link to="/table">
-            Table
-          </router-link>
-        </li>
+
         <li>
           <router-link to="/loading-bar">
             LoadingBar
