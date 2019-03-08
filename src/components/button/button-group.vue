@@ -7,7 +7,7 @@
 <script>
 import {isOneOfSizes} from './button.vue';
 
-const prefixCls = 'byx-btn-group';
+const prefixCls = 'sr-btn-group';
 
 export default {
   name: 'ButtonGroup',
