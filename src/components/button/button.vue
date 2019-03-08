@@ -43,7 +43,7 @@ import Icon, {isOneOfIconNames, isOneOfIconWeights} from 'Components/icon';
 import isOneOf from 'Global/Assets/isOneOf';
 import not from 'Global/Assets/not';
 
-const prefixCls = 'byx-btn';
+const prefixCls = 'sr-btn';
 
 const BUTTON = 'button';
 const SUBMIT = 'submit';
@@ -51,7 +51,7 @@ const RESET = 'reset';
 const HTML_TYPES = Object.freeze([BUTTON, SUBMIT, RESET]);
 
 export default {
-  name: 'Button',
+  name: 'SrButton',
 
   components: {Icon},
 
