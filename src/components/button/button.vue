@@ -1,16 +1,10 @@
 <template>
   <button
-    :class="baseClasses"
+    :class="classes"
+    :type="htmlType"
     :disabled="disabled"
     v-on="$listeners"
   >
-    <icon
-      v-if="loading"
-      type="circle-notch"
-      :spin="true"
-      :fw="true"
-    >
-    </icon>
     <icon
       v-if="showIcon"
       :type="icon"
@@ -18,41 +12,43 @@
       :fw="true"
     >
     </icon>
+
+    <icon
+      v-if="iconLeft"
+      :type="iconLeft"
+      :weight="iconLeftWeight"
+      :fw="true"
+    >
+    </icon>
+
     <span
       v-if="showSlot"
       ref="slot"
     >
       <slot></slot>
     </span>
+
+    <icon
+      v-if="iconRight"
+      :type="iconRight"
+      :weight="iconRightWeight"
+      :fw="true"
+    >
+    </icon>
   </button>
 </template>
 
 <script>
 import Icon, {isOneOfIconNames, isOneOfIconWeights} from 'Components/icon';
-// import isOneOf from 'Global/Assets/isOneOf';
+import isOneOf from 'Global/Assets/isOneOf';
 import not from 'Global/Assets/not';
 
 const prefixCls = 'byx-btn';
-// const DEFAULT = 'default';
-// const BUTTON = 'button';
-// const SUBMIT = 'submit';
-// const RESET = 'RESET';
-// const HTML_TYPES = Object.freeze([BUTTON, SUBMIT, RESET]);
-// const SMALL = 'small';
-// const LARGE = 'large';
 
-// const SIZES = Object.freeze([SMALL, LARGE, DEFAULT]);
-// export function isOneOfSizes(value) {
-//   return isOneOf(value, SIZES);
-// }
-
-// const PRIMARY = 'primary';
-// const TEXT = 'text';
-// const INFO = 'info';
-// const SUCCESS = 'success';
-// const WARNING = 'warning';
-// const ERROR = 'error';
-// const TYPES = Object.freeze([PRIMARY, TEXT, INFO, SUCCESS, WARNING, ERROR, DEFAULT]);
+const BUTTON = 'button';
+const SUBMIT = 'submit';
+const RESET = 'reset';
+const HTML_TYPES = Object.freeze([BUTTON, SUBMIT, RESET]);
 
 export default {
   name: 'Button',
@@ -64,12 +60,12 @@ export default {
       default: false,
       type: Boolean,
     },
-    // htmlType: {
-    //   default: BUTTON,
-    //   validator(value) {
-    //     return isOneOf(value, HTML_TYPES);
-    //   },
-    // },
+    htmlType: {
+      default: BUTTON,
+      validator(value) {
+        return isOneOf(value, HTML_TYPES);
+      },
+    },
     icon: {
       default: undefined,
       type: String,
@@ -80,13 +76,25 @@ export default {
       type: String,
       validator: isOneOfIconWeights,
     },
-    loading: {
-      default: false,
-      type: Boolean,
+    iconLeft: {
+      default: undefined,
+      type: String,
+      validator: isOneOfIconNames,
     },
-    long: {
-      default: false,
-      type: Boolean,
+    iconRight: {
+      default: undefined,
+      type: String,
+      validator: isOneOfIconNames,
+    },
+    iconLeftWeight: {
+      default: undefined,
+      type: String,
+      validator: isOneOfIconWeights,
+    },
+    iconRightWeight: {
+      default: undefined,
+      type: String,
+      validator: isOneOfIconWeights,
     },
     size: {
       default: 'regular',
@@ -95,15 +103,8 @@ export default {
         return ['large', 'regular', 'small', 'extra-small'].includes(value);
       },
     },
-    // type: {
-    //   default: undefined,
-    //   type: String,
-    //   validator(value) {
-    //     return isOneOf(value, TYPES);
-    //   },
-    // },
     variant: {
-      default: 'primary',
+      default: 'secondary',
       type: String,
       validator(value) {
         return ['primary', 'secondary', 'danger'].includes(value);
@@ -112,21 +113,18 @@ export default {
   },
 
   computed: {
-    baseClasses() {
-      return [`${prefixCls} ${prefixCls}-${this.variant} ${prefixCls}-${this.size}`];
+    classes() {
+      return [
+        `${prefixCls}`,
+        {
+          [`${prefixCls}-${this.variant}`]: this.variant,
+          [`${prefixCls}-${this.size}`]: this.size,
+          [`${prefixCls}-icon-only`]: not(this.showSlot) && (this.icon || this.loading),
+          [`${prefixCls}-icon`]: this.showIcon || this.iconLeft,
+          [`${prefixCls}-icon-right ${prefixCls}-icon`]: this.iconRight,
+        },
+      ];
     },
-    // classes() {
-    //   return [
-    //     `${prefixCls}`,
-    //     {
-    //       [`${prefixCls}-${this.type}`]: this.type,
-    //       [`${prefixCls}-long`]: this.long,
-    //       [`${prefixCls}-${this.size}`]: this.size,
-    //       [`${prefixCls}-loading`]: this.loading,
-    //       [`${prefixCls}-icon-only`]: not(this.showSlot) && (this.icon || this.loading),
-    //     },
-    //   ];
-    // },
     showIcon() {
       return Boolean(this.icon) && not(this.loading);
     },
