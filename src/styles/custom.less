@@ -7,29 +7,44 @@
  *  BASES
  */
 
+// sizes
+
+@sizes-4: 0.25rem;
+@sizes-8: 0.5rem;
+@sizes-12: 0.75rem;
+@sizes-16: 1rem;
+@sizes-24: 1.5rem;
+@sizes-32: 2rem;
+@sizes-40: 2.5rem;
+@sizes-48: 3rem;
+@sizes-56: 3.5rem;
+@sizes-64: 4rem;
+@sizes-auto: auto;
+
 // Colors
-@color-text: @color-dark100;
-@color-body-background: @color-s200;
-@color-html-background: @color-p500;
-@color-border: @color-s500;
-@color-link: @color-a500;
-@color-link-hover: @color-a300;
-@color-link-active: @color-a700;
+@color-text: @colors-dark100;
+@color-body-background: @colors-s200;
+@color-html-background: @colors-p500;
+@color-border: @colors-s500;
+@color-link: @colors-a500;
+@color-link-hover: @colors-a300;
+@color-link-active: @colors-a700;
 @color-error: @color-danger-dark;
 
 // Typography
 @font-family: 'Inter UI', sans-serif;
 @font-family-header: 'Corben', serif;
 @font-family-code: monospace;
-@font-weight-lighter: 200;
-@font-weight-light: 300;
-@font-weight-normal: 400;
-@font-weight-bold: 600;
-@font-weight-bolder: 800;
+
+@fontWeights-thin: 200;
+@fontWeights-light: 300;
+@fontWeights-normal: 400;
+@fontWeights-semibold: 600;
+@fontWeights-extrabold: 800;
 @line-height-normal: 1.5rem;
 
 // Borders
-@border-color-base: @color-s500;
+@border-color-base: @colors-s500;
 
 // Radius
 @radius-normal: 0.25rem;
@@ -37,7 +52,7 @@
 @radius-rounded: 0.75rem;
 
 // Shadows
-@shadow-small: 0 2px 12px fade(@color-dark100, 6%), 0 1px 2px fade(@color-dark100, 6%);
+@shadow-small: 0 2px 12px fade(@colors-dark100, 6%), 0 1px 2px fade(@colors-dark100, 6%);
 
 // Animation
 @animation-time: 0.3s;
@@ -49,22 +64,27 @@
  */
 
 // Button
-@btn-font-weight: @font-weight-bold; //changed according to Stora Rör
+@btn-font-weight: @fontWeights-semibold; //changed according to Stora Rör
+
 @btn-padding-base: 0.5rem calc(1rem - 0.1em) 0.5rem 1rem;
 @btn-padding-large: 0.5rem calc(1.5rem - 0.1em) 0.5rem 1.5rem;
 @btn-padding-small: 0.25rem calc(1rem - 0.1em) 0.25rem 1rem;
-@btn-font-size: 1rem;
-@btn-font-size-large: 1.25rem;
+@btn-padding-extra-small: 0 calc(0.75rem - 0.1em) 0 0.75rem; //added from Stora Rör
+
+@textSizes-14: 0.871rem;
+@textSizes-16: 1rem;
+@textSizes-20: 1.25rem;
+
 @btn-border-radius: @radius-normal;
 
-@btn-disable-color: @color-s500;
-@btn-disable-bg: @color-s300;
+@btn-disable-color: @colors-s500;
+@btn-disable-bg: @colors-s300;
 
-@btn-default-color: @color-dark75;
-@btn-default-bg: @color-s400;
+@btn-default-color: @colors-dark75;
+@btn-default-bg: @colors-s400;
 
-@btn-primary-color: @color-dark75;
-@btn-primary-bg: @color-p500;
+@btn-primary-color: @colors-dark75;
+@btn-primary-bg: @colors-p500;
 
 // Input
 @input-height-small: 24px;
@@ -76,16 +96,16 @@
 @input-padding-vertical-small: 1px;
 @input-padding-vertical-large: 6px;
 
-@input-placeholder-color: @color-dark30;
-@input-color: @color-dark100;
+@input-placeholder-color: @colors-dark30;
+@input-color: @colors-dark100;
 @input-border-color: @color-border;
-@input-bg: @color-s0;
+@input-bg: @colors-s0;
 
-@input-hover-border-color: @color-p500;
-@input-focus-border-color: @color-p500;
-@input-disabled-bg: @color-s200;
+@input-hover-border-color: @colors-p500;
+@input-focus-border-color: @colors-p500;
+@input-disabled-bg: @colors-s200;
 
 // Tag
 @tag-border-radius: @radius-rounded;
-@tag-bg: @color-s600;
+@tag-bg: @colors-s600;
 @tag-font-size: 0.85rem;
