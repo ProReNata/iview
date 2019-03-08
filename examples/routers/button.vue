@@ -4,153 +4,209 @@
 
     <h2>Default</h2>
     <p>
-      <i-button>Default</i-button>
-      <i-button type="primary">
+      <sr-button>Default</sr-button>
+      <sr-button variant="primary">
         Primary
-      </i-button>
-      <i-button type="text">
-        Text
-      </i-button>
+      </sr-button>
+      <sr-button
+        variant="secondary"
+      >
+        Secondary
+      </sr-button>
+      <sr-button
+        type="danger"
+        variant="danger"
+      >
+        Danger
+      </sr-button>
     </p>
 
-    <h2>Colors</h2>
-    <i-button type="info">
-      Info
-    </i-button>
-    <i-button type="success">
-      Success
-    </i-button>
-    <i-button type="warning">
-      Warning
-    </i-button>
-    <i-button type="error">
-      Error
-    </i-button>
+    <h2>Sizes</h2>
+    <p>
+      <sr-button
+        size="large"
+      >
+        A large button
+      </sr-button>
+      <sr-button
+        size="regular"
+      >
+        Regular
+      </sr-button>
+      <sr-button
+        size="small"
+      >
+        Small
+      </sr-button>
+      <sr-button
+        size="extra-small"
+      >
+        Extra Small
+      </sr-button>
+    </p>
 
     <h2>Icons</h2>
-    <i-button
+    <sr-button
+      variant="primary"
       type="primary"
-      icon="search"
+      icon-left="search"
     >
       Search
-    </i-button>
-    <i-button icon="poop">
-    </i-button>
-    <br>
-    <i-button
-      icon="mug-marshmallows"
+    </sr-button>
+    <sr-button
+      variant="primary"
+      icon="poop"
       icon-weight="solid"
-      size="large"
     >
-      Hot choclate
-    </i-button>
+    </sr-button>
+
+    <sr-button
+      icon="heart"
+      weight="light"
+    >
+      Label
+    </sr-button>
+
+    <br>
+
+    <sr-button
+      variant="primary"
+      icon-left="alicorn"
+      icon-left-weight="solid"
+      icon-right="mug-marshmallows"
+      icon-right-weight="solid"
+    >
+      Hot chocolate
+    </sr-button>
 
     <h2>States</h2>
-    <i-button>Default</i-button>
-    <i-button disabled>
+    <sr-button disabled>
       Default(Disabled)
-    </i-button>
+    </sr-button>
     <br>
-    <i-button type="primary">
-      Primary
-    </i-button>
-    <i-button
+    <sr-button
       type="primary"
+      variant="primary"
       disabled
     >
       Primary(Disabled)
-    </i-button>
-    <br>
-    <i-button type="text">
-      Text
-    </i-button>
-    <i-button
-      type="text"
+    </sr-button>
+    <sr-button
+      type="secondary"
+      variant="secondary"
       disabled
     >
-      Text(Disabled)
-    </i-button>
+      Secondary(Disabled)
+    </sr-button>
+    <sr-button
+      type="danger"
+      variant="danger"
+      disabled
+    >
+      Danger(Disabled)
+    </sr-button>
+    <br>
 
     <h2>Groups</h2>
     <h4>Basic</h4>
     <button-group>
-      <i-button>cancel</i-button>
-      <i-button type="primary">
+      <sr-button>cancel</sr-button>
+      <sr-button>
         determine
-      </i-button>
+      </sr-button>
     </button-group>
     <button-group>
-      <i-button disabled>
+      <sr-button disabled>
         Yesterday
-      </i-button>
-      <i-button disabled>
+      </sr-button>
+      <sr-button disabled>
         Today
-      </i-button>
-      <i-button disabled>
+      </sr-button>
+      <sr-button disabled>
         Tomorrow
-      </i-button>
+      </sr-button>
     </button-group>
     <button-group>
-      <i-button type="primary">
+      <sr-button type="primary">
         L
-      </i-button>
-      <i-button>M</i-button>
+      </sr-button>
+      <sr-button>M</sr-button>
     </button-group>
 
     <h4>Icons</h4>
     <button-group>
-      <i-button type="primary">
-        <icon type="chevron-left">
-        </icon>
+      <sr-button
+        icon-left="chevron-left"
+      >
         Back
-      </i-button>
-      <i-button type="primary">
+      </sr-button>
+      <sr-button
+        icon-right="chevron-right"
+      >
         Forward
-        <icon type="chevron-right">
-        </icon>
-      </i-button>
+      </sr-button>
     </button-group>
     <button-group>
-      <i-button
-        type="primary"
+      <sr-button
         icon="arrow-left"
       >
-      </i-button>
-      <i-button
-        type="primary"
+      </sr-button>
+      <sr-button
+        variant="secondary"
         icon="arrow-right"
       >
-      </i-button>
+      </sr-button>
     </button-group>
 
     <h4>Sizes</h4>
-    <button-group size="large">
-      <i-button>
-        Large
-      </i-button>
-      <i-button>
-        Large
-      </i-button>
+    <button-group
+      size="large"
+      variant="secondary"
+    >
+      <sr-button>
+        A large button
+      </sr-button>
+      <sr-button>
+        A large button
+      </sr-button>
     </button-group>
-    <button-group>
-      <i-button>
+    <button-group variant="secondary">
+      <sr-button>
         Default
-      </i-button>
-      <i-button>
+      </sr-button>
+      <sr-button>
         Default
-      </i-button>
+      </sr-button>
     </button-group>
-    <button-group size="small">
-      <i-button>
+    <button-group
+      size="small"
+      variant="secondary"
+    >
+      <sr-button>
         Small
-      </i-button>
-      <i-button>
+      </sr-button>
+      <sr-button>
         Small
-      </i-button>
+      </sr-button>
+    </button-group>
+    <button-group
+      size="extra-small"
+      variant="secondary"
+    >
+      <sr-button>
+        Extra Small
+      </sr-button>
+      <sr-button>
+        Extra Small
+      </sr-button>
     </button-group>
   </div>
 </template>
 
 <script>
-export default {};
+import SrButton from 'Components/button';
+
+export default {
+  components: {SrButton},
+};
 </script>
