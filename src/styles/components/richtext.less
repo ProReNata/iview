@@ -11,11 +11,11 @@ div.redactor-box {
 }
 
 span.re-button-tooltip {
-  color: @color-light100;
-  background: @color-s900;
+  color: @colors-light100;
+  background: @colors-s900;
 
   &::after {
-    border-bottom-color: @color-s900;
+    border-bottom-color: @colors-s900;
   }
 }
 
@@ -23,7 +23,7 @@ span.re-button-tooltip {
   min-width: 34rem;
   padding: 0.125rem 0.5rem;
   border-radius: @radius-normal;
-  background: @color-s0;
+  background: @colors-s0;
   transition: color @transition-time linear, background-color @transition-time linear, box-shadow @transition-time linear;
 
   & > p {
@@ -31,23 +31,23 @@ span.re-button-tooltip {
   }
 
   &:focus {
-    .active-btn-color(@color-p900);
+    .active-btn-color(@colors-p900);
   }
 }
 
 div.redactor-air {
   padding: 0;
-  color: @color-light100;
+  color: @colors-light100;
   border-radius: @radius-normal;
 
   & > a.re-button {
     margin: 0;
     border: 0;
     border-radius: @radius-normal;
-    background: @color-s600;
+    background: @colors-s600;
 
     &:hover {
-      background: @color-s300;
+      background: @colors-s300;
     }
 
     &:first-child {

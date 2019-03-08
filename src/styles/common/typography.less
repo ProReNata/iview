@@ -8,7 +8,7 @@ body {
   font-family: @font-family;
   font-feature-settings: 'calt' 1, 'ss01' 1, 'ss02' 1;
   font-size: 20px;
-  font-weight: @font-weight-normal;
+  font-weight: @fontWeights-normal;
   letter-spacing: -0.005em;
   line-height: 1.5rem;
   -webkit-font-smoothing: antialiased;
@@ -50,7 +50,7 @@ h1,
 h2,
 .h2 {
   font-size: 2.827rem;
-  font-weight: @font-weight-light;
+  font-weight: @fontWeights-light;
   letter-spacing: -0.017em;
   margin: 2.5rem 0 1rem;
   line-height: 3rem;
@@ -59,7 +59,7 @@ h2,
 h3,
 .h3 {
   font-size: 2rem;
-  font-weight: @font-weight-bold;
+  font-weight: @fontWeights-semibold;
   letter-spacing: -0.016em;
   margin: 1.5rem 0 1rem;
   line-height: 2.5rem;
@@ -68,7 +68,7 @@ h3,
 h4,
 .h4 {
   font-size: 1.414rem;
-  font-weight: @font-weight-light;
+  font-weight: @fontWeights-light;
   letter-spacing: -0.013em;
   margin: 0.5rem 0;
   line-height: 1.5rem;
@@ -77,7 +77,7 @@ h4,
 h5,
 .h5 {
   font-size: 1rem;
-  font-weight: @font-weight-bold;
+  font-weight: @fontWeights-semibold;
   letter-spacing: -0.005em;
   margin: 1rem 0 0;
   line-height: 1.5rem;
@@ -86,7 +86,7 @@ h5,
 h6,
 .h6 {
   font-size: 0.707rem;
-  font-weight: @font-weight-bold;
+  font-weight: @fontWeights-semibold;
   .capitals;
 
   line-height: 1.5rem;
@@ -100,13 +100,13 @@ p {
 code,
 pre {
   font-family: monospace;
-  background: @color-s100;
+  background: @colors-s100;
   padding: 0 0.25rem;
   border-radius: @radius-normal;
 }
 
 .strong() {
-  font-weight: @font-weight-bold;
+  font-weight: @fontWeights-semibold;
 }
 strong,
 b {
@@ -125,7 +125,7 @@ b {
 
 .text {
   &-muted {
-    color: @color-dark75;
+    color: @colors-dark75;
   }
   &-error {
     color: @color-danger-dark;
