@@ -8,70 +8,81 @@
   box-shadow: @shadows-default;
   padding: @sizes-8 @sizes-12 @sizes-12 @sizes-12;
   border-radius: @rounded-default;
-  width: 100%;
 
-  border-collapse: unset;
-  border-spacing: unset;
+  &-table {
+    table-layout: fixed;
+    width: 100%;
 
-  &-header-row {
-    height: @sizes-56;
-    color: @color-s500;
-    text-transform: uppercase;
-    font-size: @textSizes-11;
-    font-weight: @fontWeights-bold;
-    text-align: left;
-    > th {
-      padding-left: @sizes-12;
-      padding-right: @sizes-12;
-    }
-  }
+    border-collapse: unset;
+    border-spacing: unset;
 
-  &-body-row {
-    height: @sizes-48;
-    font-size: @textSizes-11;
-
-    > td {
-      border-top: 1px solid @color-s600;
-      padding-left: @sizes-12;
-      padding-right: @sizes-12;
+    &-header-row {
+      height: @sizes-56;
+      color: @color-s500;
+      text-transform: uppercase;
+      font-size: @textSizes-11;
+      font-weight: @fontWeights-bold;
+      text-align: left;
+      > th {
+        padding-left: @sizes-12;
+        padding-right: @sizes-12;
+      }
     }
 
-    &-striped:nth-child(odd):not(&-selected) {
-      background-color: @color-s200;
-      &:hover {
+    &-body-row {
+      height: @sizes-48;
+      font-size: @textSizes-11;
+
+      > td {
+        border-top: 1px solid @color-s600;
+        padding-left: @sizes-12;
+        padding-right: @sizes-12;
+      }
+
+      &-striped:nth-child(odd):not(&-selected) {
+        background-color: @color-s200;
+        &:hover {
+          background-color: @color-s300;
+        }
+      }
+
+      &:hover, &-selected {
         background-color: @color-s300;
       }
     }
 
-    &:hover, &-selected {
-      background-color: @color-s300;
-    }
-  }
-
-  &-select {
-    &-box {
-      color: @color-s500;
-      font-size: @textSizes-16;
-      width: @sizes-40;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    
-    &-field {
-      &-label {
-        text-transform: none;
-        color: @color-dark100;
+    &-select {
+      &-box {
+        color: @color-s500;
         font-size: @textSizes-16;
-        font-weight: @fontWeights-medium;
-        margin-right: @sizes-16;
+        width: @sizes-40;
+        &:hover {
+          cursor: pointer;
+        }
       }
 
-      &-button {
-        margin: 0;
+      &-field {
+        &-label {
+          text-transform: none;
+          color: @color-dark100;
+          font-size: @textSizes-16;
+          font-weight: @fontWeights-medium;
+          margin-right: @sizes-16;
+        }
+
+        &-button {
+          margin: 0;
+        }
       }
     }
   }
 
-  &-selected {}
+  &-pagination-row {
+    border-top: 1px solid @color-s600;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @sizes-8 @sizes-12;
+  }
 }

@@ -1,69 +1,79 @@
 <template>
-  <table
+  <div
     :class="baseClasses"
   >
-    <thead>
-      <tr :class="headerRowClasses">
-        <th
-          v-if="bulkActions.length > 0"
-          :class="selectBoxClasses"
-          @click="selectAllRows()"
-        >
-          <icon
-            v-bind="selectAllBoxAttributes()"
-          ></icon>
-        </th>
-        <template v-if="selectedRows.length === 0">
+    <table
+      :class="tableClasses"
+    >
+      <thead>
+        <tr :class="headerRowClasses">
+          <th
+            v-if="bulkActions.length > 0"
+            :class="selectBoxClasses"
+            @click="selectAllRows()"
+          >
+            <icon
+              v-bind="selectAllBoxAttributes()"
+            ></icon>
+          </th>
           <th
             v-for="col in loadingColumns"
+            v-show="selectedRows.length === 0"
             :key="col.name"
           >
             {{ col.label }}
           </th>
-        </template>
-        <th
-          v-else
-          :colspan="columns.length"
+          <th
+            v-show="selectedRows.length > 0"
+            :colspan="columns.length"
+          >
+            <span :class="selectedFieldsLabelClasses">{{ selectedRows.length }} valda:</span>
+            <button-group>
+              <i-button
+                v-for="bulkAction in bulkActions"
+                :key="bulkAction.label"
+                :icon="bulkAction.icon"
+                :class="selectedFieldsButtonClasses"
+                @click="bulkAction.handler(selectedRows)"
+              >
+                {{ bulkAction.label }}
+              </i-button>
+            </button-group>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="row in rowsPaginated"
+          :key="row.id"
+          :class="bodyRowClasses(row.id)"
         >
-          <span :class="selectedFieldsLabelClasses">{{ selectedRows.length }} valda:</span>
-          <button-group>
-            <i-button
-              v-for="bulkAction in bulkActions"
-              :key="bulkAction.label"
-              :icon="bulkAction.icon"
-              :class="selectedFieldsButtonClasses"
-              @click="bulkAction.handler(selectedRows)"
-            >
-              {{ bulkAction.label }}
-            </i-button>
-          </button-group>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="row in rows"
-        :key="row.id"
-        :class="bodyRowClasses(row.id)"
-      >
-        <td
-          v-if="bulkActions.length > 0"
-          :class="selectBoxClasses"
-          @click="selectRow(row.id)"
-        >
-          <icon
-            v-bind="selectBoxAttributes(row.id)"
-          ></icon>
-        </td>
-        <td
-          v-for="col in columns"
-          :key="col.name"
-        >
-          {{ row[col.name] }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <td
+            v-if="bulkActions.length > 0"
+            :class="selectBoxClasses"
+            @click="selectRow(row.id)"
+          >
+            <icon
+              v-bind="selectBoxAttributes(row.id)"
+            ></icon>
+          </td>
+          <td
+            v-for="col in columns"
+            :key="col.name"
+          >
+            {{ row[col.name] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div
+      v-if="pagination"
+      :class="paginationClasses"
+    >
+      <div>Visar <i-button>{{ rowsPaginated.length }}</i-button> per sida</div>
+      <div><i-button icon="arrow-left"></i-button> {{ page }} <i-button icon="arrow-right"></i-button></div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -124,10 +134,8 @@ export default {
       default: false,
     },
     pagination: {
-      type: Object,
-      default: () => {
-        return {};
-      },
+      type: [Object, Boolean],
+      default: false,
     },
     errorMessage: {
       type: Object,
@@ -149,26 +157,43 @@ export default {
   data() {
     return {
       selectedRows: [],
+      page: 0,
+      paginationRowsPerPage: this.pagination.rowsPerPage || 25,
+      paginationThreshold: this.pagination.threshold || this.pagination.rowsPerPage || 25,
     };
   },
 
   computed: {
     baseClasses() {
-      return [`${prefixCls}`];
+      return [`${prefixCls}`, {[`${prefixCls}-paginated`]: this.pagination || typeof this.pagination === 'object'}];
+    },
+    tableClasses() {
+      const prefix = prefixConstructor('table');
+
+      return [prefix];
     },
     headerRowClasses() {
-      return [`${prefixCls}-header-row`];
+      const prefix = prefixConstructor('table-header-row');
+
+      return [prefix];
     },
     selectBoxClasses() {
-      return [`${prefixCls}-select-box`];
+      const prefix = prefixConstructor('table-select-box');
+
+      return [prefix];
     },
     selectedFieldsLabelClasses() {
-      const prefix = prefixConstructor('select-field-label');
+      const prefix = prefixConstructor('table-select-field-label');
 
       return [prefix];
     },
     selectedFieldsButtonClasses() {
-      const prefix = prefixConstructor('select-field-button');
+      const prefix = prefixConstructor('table-select-field-button');
+
+      return [prefix];
+    },
+    paginationClasses() {
+      const prefix = prefixConstructor('pagination-row');
 
       return [prefix];
     },
@@ -176,11 +201,23 @@ export default {
     loadingColumns() {
       return this.loading ? loadingColumnsData : this.columns;
     },
+
+    rowsPaginated() {
+      if (!this.pagination && typeof this.pagination !== 'object') {
+        return this.rows;
+      }
+
+      if (this.rows.length < this.paginationThreshold) {
+        return this.rows;
+      }
+
+      return this.rows.slice(this.page * this.paginationRowsPerPage, (this.page + 1) * this.paginationRowsPerPage);
+    },
   },
 
   methods: {
     bodyRowClasses(rowId) {
-      const prefix = prefixConstructor('body-row');
+      const prefix = prefixConstructor('table-body-row');
 
       return [prefix, {[`${prefix}-striped`]: this.striped}, {[`${prefix}-selected`]: this.selectedRows.includes(rowId)}];
     },
@@ -192,7 +229,7 @@ export default {
       if (this.selectedRows.length > 0) {
         this.selectedRows = [];
       } else {
-        this.selectedRows = this.rows.map(({id}) => id);
+        this.selectedRows = this.rowsPaginated.map(({id}) => id);
       }
     },
     selectBoxAttributes(rowId) {
