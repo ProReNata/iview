@@ -1,31 +1,31 @@
 // Resources: http://mcg.mbitson.com/#!?mcgpalette0=%23fab21c&mcgpalette1=%23859ba0&mcgpalette2=%23550011&themename=PRN
 
-@color-p100: #fee8bb;
-@color-p300: #fcc960;
-@color-p500: #fab21c; // FABRIC
-@color-p700: #f9a214;
-@color-p900: #f68a09;
+@colors-p100: #fee8bb;
+@colors-p300: #fcc960;
+@colors-p500: #fab21c; // FABRIC
+@colors-p700: #f9a214;
+@colors-p900: #f68a09;
 
-@color-a100: #ccb3b8;
-@color-a300: #884d58;
-@color-a500: #550011; // SOL
-@color-a700: #44000c;
-@color-a900: #2a0005;
+@colors-a100: #ccb3b8;
+@colors-a300: #884d58;
+@colors-a500: #550011; // SOL
+@colors-a700: #44000c;
+@colors-a900: #2a0005;
 
-@color-s0: #ffffff;
-@color-s100: #eff2f3;
-@color-s200: #e5ebee;
-@color-s300: #d0d8da;
-@color-s400: #96a9ad;
-@color-s500: #859ba0;
-@color-s600: #748d93;
-@color-s700: #657d82;
-@color-s800: #586c71;
-@color-s900: #4b5c60;
+@colors-s0: #ffffff;
+@colors-s100: #eff2f3;
+@colors-s200: #e5ebee;
+@colors-s300: #d0d8da;
+@colors-s400: #96a9ad;
+@colors-s500: #859ba0;
+@colors-s600: #748d93;
+@colors-s700: #657d82;
+@colors-s800: #586c71;
+@colors-s900: #4b5c60;
 
-@color-danger-400: rgb(251, 207, 189);
-@color-danger-500: rgb(247, 168, 140); //new color from Stora Ror button specs
-@color-danger-600: rgb(235, 89, 56); //new color from Stora Ror button specs
+@colors-danger400: rgb(251, 207, 189);
+@colors-danger500: rgb(247, 168, 140); //new color from Stora Ror button specs
+@colors-danger600: rgb(235, 89, 56); //new color from Stora Ror button specs
 
 @color-danger: rgb(251, 207, 189);
 @color-danger-dark: darken(@color-danger, 60%);
@@ -38,22 +38,22 @@
 @color-update: rgb(249, 224, 250);
 @color-update-dark: darken(@color-update, 70%);
 
-@color-dark100: rgb(54, 48, 39); //changed according to Stora Rör button specs
-@color-dark75: rgba(54, 48, 39, 0.75);
-@color-dark50: rgba(54, 48, 39, 0.5);
-@color-dark30: rgba(54, 48, 39, 0.3);
+@colors-dark100: rgb(54, 48, 39); //changed according to Stora Rör button specs
+@colors-dark75: rgba(54, 48, 39, 0.75);
+@colors-dark50: rgba(54, 48, 39, 0.5);
+@colors-dark30: rgba(54, 48, 39, 0.3);
 
-@color-light100: rgb(255, 255, 255);
-@color-light75: rgba(255, 255, 255, 0.75);
-@color-light50: rgba(255, 255, 255, 0.5);
-@color-light30: rgba(255, 255, 255, 0.3);
+@colors-light100: rgb(255, 255, 255);
+@colors-light75: rgba(255, 255, 255, 0.75);
+@colors-light50: rgba(255, 255, 255, 0.5);
+@colors-light30: rgba(255, 255, 255, 0.3);
 
 .empty-area {
-  @color: fade(@color-s200, 30%);
+  @color: fade(@colors-s200, 30%);
 
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><path fill="@{color}" d="M104,128L0,24L0,0l128,128H104z M104,0l24,24V0L104,0z"/></svg>');
   background-size: 1rem;
-  background-color: @color-s300;
+  background-color: @colors-s300;
   min-width: 128px;
   min-height: 128px;
   border-radius: @radius-big;
