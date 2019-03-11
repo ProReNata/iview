@@ -67,10 +67,24 @@
       </tbody>
     </table>
     <section
-      v-if="amountOfPages > 1"
+      v-if="pagination"
       :class="paginationClasses"
     >
-      <div>Visar <i-button>{{ rowsPaginated.length }}</i-button> per sida</div>
+      <div>
+        <span>Visar</span>
+        <i-select
+          v-model="paginationRowsPerPage"
+        >
+          <i-option
+            v-for="item in paginationRowsPerPageOptions"
+            :key="item.value"
+            :value="item.value"
+          >
+            {{ item.label }}
+          </i-option>
+        </i-select>
+        <span>per sida</span>
+      </div>
       <nav
         v-if="amountOfPages < 15"
         aria-label="pagination"
@@ -373,6 +387,16 @@ export default {
       }
 
       return Math.ceil(this.rows.length / this.paginationRowsPerPage);
+    },
+
+    paginationRowsPerPageOptions() {
+      const options = [{label: '25', value: 25}, {label: '50', value: 50}, {label: '100', value: 100}];
+
+      if (this.rows.length > 500) {
+        options.push({label: `All ${this.rows.length}`, value: this.rows.length});
+      }
+
+      return options;
     },
 
     previousPage() {
