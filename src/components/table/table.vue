@@ -66,13 +66,15 @@
         </tr>
       </tbody>
     </table>
-    <nav
+    <section
       v-if="amountOfPages > 1"
       :class="paginationClasses"
-      aria-label="pagination"
     >
       <div>Visar <i-button>{{ rowsPaginated.length }}</i-button> per sida</div>
-      <div>
+      <nav
+        v-if="amountOfPages < 15"
+        aria-label="pagination"
+      >
         <!--Previous Page-->
         <i-button
           icon="arrow-left"
@@ -94,6 +96,7 @@
           v-if="previousPreviousPage > 1"
           icon="ellipsis-h"
           :class="paginationEllipsisClasses"
+          disabled
         >
         </i-button>
 
@@ -147,6 +150,7 @@
           v-if="nextNextPage < amountOfPages"
           icon="ellipsis-h"
           :class="paginationEllipsisClasses"
+          disabled
         >
         </i-button>
 
@@ -165,8 +169,35 @@
           :aria-label="`Goto Page ${nextPage}`"
           @click="setNextPage()"
         ></i-button>
-      </div>
-    </nav>
+      </nav>
+      <nav v-if="amountOfPages >= 15">
+        <!--Previous Page-->
+        <i-button
+          icon="arrow-left"
+          :aria-label="`Goto Page ${previousPage}`"
+          @click="setPreviousPage()"
+        ></i-button>
+
+        <i-select
+          v-model="page"
+        >
+          <i-option
+            v-for="item in amountOfPages"
+            :key="item"
+            :value="item"
+          >
+            {{ 'Sidan ' + item }}
+          </i-option>
+        </i-select>
+
+        <!--Next Page-->
+        <i-button
+          icon="arrow-right"
+          :aria-label="`Goto Page ${nextPage}`"
+          @click="setNextPage()"
+        ></i-button>
+      </nav>
+    </section>
   </div>
 </template>
 
@@ -174,6 +205,8 @@
 import IButton from '../button/button';
 import ButtonGroup from '../button/button-group';
 import Icon from '../icon/icon';
+import ISelect from '../select/select';
+import IOption from '../select/option';
 
 const prefixCls = 'byx-table';
 
@@ -209,6 +242,8 @@ export default {
     IButton,
     ButtonGroup,
     Icon,
+    ISelect,
+    IOption,
   },
   props: {
     rows: {

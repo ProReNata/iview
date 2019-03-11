@@ -86,10 +86,14 @@
     align-items: center;
     padding: @sizes-8 @sizes-12;
 
+    > nav {
+      display: flex;
+    }
+
     &-current {
       background-color: @color-s300;
     }
-    &-ellipsis {
+    &-ellipsis[disabled] {
       color: @color-s500;
       background-color: @color-s100;
     }
