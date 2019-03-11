@@ -245,6 +245,15 @@
     }
   }
 
+  &&-loading {
+    pointer-events: none;
+    position: relative;
+
+    &::before {
+      display: block;
+    }
+  }
+
   &-group {
     .btn-group(@btn-prefix-cls);
   }

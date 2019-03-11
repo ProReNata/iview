@@ -6,6 +6,13 @@
     v-on="$listeners"
   >
     <icon
+      v-if="loading"
+      type="circle-notch"
+      :spin="true"
+      :fw="true"
+    >
+    </icon>
+    <icon
       v-if="showIcon"
       :type="icon"
       :weight="iconWeight"
@@ -76,6 +83,10 @@ export default {
       type: String,
       validator: isOneOfIconWeights,
     },
+    loading: {
+      default: false,
+      type: Boolean,
+    },
     iconLeft: {
       default: undefined,
       type: String,
@@ -119,6 +130,7 @@ export default {
         {
           [`${prefixCls}-${this.variant}`]: this.variant,
           [`${prefixCls}-${this.size}`]: this.size,
+          [`${prefixCls}-loading`]: this.loading,
           [`${prefixCls}-icon-only`]: not(this.showSlot) && (this.icon || this.loading),
           [`${prefixCls}-icon`]: this.showIcon || this.iconLeft,
           [`${prefixCls}-icon-right ${prefixCls}-icon`]: this.iconRight,
