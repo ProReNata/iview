@@ -68,6 +68,7 @@
           font-size: @textSizes-16;
           font-weight: @fontWeights-medium;
           margin-right: @sizes-16;
+          font-variant-numeric: tabular-nums;
         }
 
         &-button {
@@ -84,5 +85,13 @@
     justify-content: space-between;
     align-items: center;
     padding: @sizes-8 @sizes-12;
+
+    &-current {
+      background-color: @color-s300;
+    }
+    &-ellipsis {
+      color: @color-s500;
+      background-color: @color-s100;
+    }
   }
 }

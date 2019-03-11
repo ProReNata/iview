@@ -38,6 +38,13 @@
       :bulk-actions="table1.bulkActions"
       :pagination="{ rowsPerPage: 5 }"
     ></i-table>
+    <h3>rowsPerPage: 5, rows: 32</h3>
+    <i-table
+      :columns="table1.columns"
+      :rows="[...table1.rows, ...table1.rows, ...table1.rows, ...table1.rows]"
+      :bulk-actions="table1.bulkActions"
+      :pagination="{ rowsPerPage: 5 }"
+    ></i-table>
   </div>
 </template>
 <script>
