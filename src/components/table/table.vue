@@ -10,7 +10,7 @@
           <th
             v-if="bulkActions.length > 0"
             :class="selectBoxClasses"
-            @click="selectAllRows()"
+            @click="selectAllPaginatedRows()"
           >
             <icon
               v-bind="selectAllBoxAttributes"
@@ -39,6 +39,14 @@
                 {{ bulkAction.label }}
               </i-button>
             </button-group>
+          </th>
+        </tr>
+        <tr v-if="showSelectedWarning">
+          <th
+            :colspan="columns.length + 1"
+            :class="selectedWarningClasses"
+          >
+            Alla <strong>{{ selectedRows.length }}</strong> rader på denna sida är markerade. <span @click="selectAllRows()">Markera samtliga <strong>{{ rows.length }}</strong> rader i tabellen.</span>
           </th>
         </tr>
       </thead>
@@ -303,6 +311,7 @@ export default {
       page: 1,
       paginationRowsPerPage: this.pagination.rowsPerPage || 25,
       paginationThreshold: this.pagination.threshold || this.pagination.rowsPerPage || 25,
+      showSelectedWarning: false,
     };
   },
 
@@ -327,6 +336,11 @@ export default {
     },
     selectedFieldsLabelClasses() {
       const prefix = prefixConstructor('table-select-field-label');
+
+      return [prefix];
+    },
+    selectedWarningClasses() {
+      const prefix = prefixConstructor('table-select-warning');
 
       return [prefix];
     },
@@ -426,12 +440,18 @@ export default {
       const {selectedRows} = this;
       this.selectedRows = selectedRows.includes(rowId) ? selectedRows.filter((id) => id !== rowId) : [...selectedRows, rowId];
     },
-    selectAllRows() {
+    selectAllPaginatedRows() {
       if (this.selectedRows.length > 0) {
         this.selectedRows = [];
+        this.showSelectedWarning = false;
       } else {
+        this.showSelectedWarning = this.rowsPaginated !== this.rows;
         this.selectedRows = this.rowsPaginated.map(({id}) => id);
       }
+    },
+    selectAllRows() {
+      this.showSelectedWarning = false;
+      this.selectedRows = this.rows.map(({id}) => id);
     },
     selectBoxAttributes(rowId) {
       if (this.selectedRows.includes(rowId)) {
