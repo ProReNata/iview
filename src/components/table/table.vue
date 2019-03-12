@@ -10,7 +10,7 @@
           <th
             v-if="bulkActions.length > 0"
             :class="selectBoxClasses"
-            @click="selectAllPaginatedRows()"
+            @click.left="toggleAllPaginatedRows()"
           >
             <icon
               v-bind="selectAllBoxAttributes"
@@ -34,7 +34,7 @@
                 :key="bulkAction.label"
                 :icon="bulkAction.icon"
                 :class="selectedFieldsButtonClasses"
-                @click="bulkAction.handler(selectedRows)"
+                @click.left="bulkAction.handler(selectedRows)"
               >
                 {{ bulkAction.label }}
               </i-button>
@@ -46,7 +46,7 @@
             :colspan="columns.length + 1"
             :class="selectedWarningClasses"
           >
-            Alla <strong>{{ selectedRows.length }}</strong> rader på denna sida är markerade. <span @click="selectAllRows()">Markera samtliga <strong>{{ rows.length }}</strong> rader i tabellen.</span>
+            Alla <strong>{{ selectedRows.length }}</strong> rader på denna sida är markerade. <span @click.left="selectAllRows()">Markera samtliga <strong>{{ rows.length }}</strong> rader i tabellen.</span>
           </th>
         </tr>
       </thead>
@@ -59,7 +59,7 @@
           <td
             v-if="bulkActions.length > 0"
             :class="selectBoxClasses"
-            @click="selectRow(row.id)"
+            @click.left="toggleRow(row.id)"
           >
             <icon
               v-bind="selectBoxAttributes(row.id)"
@@ -101,21 +101,21 @@
         <i-button
           icon="arrow-left"
           :aria-label="`Goto Page ${previousPage}`"
-          @click="setPreviousPage()"
+          @click.left="setPreviousPage()"
         ></i-button>
 
         <!--First Page-->
         <i-button
-          v-if="page > 1"
+          v-if="currentPage > 1"
           aria-label="Goto Page 1"
-          @click="setFirstPage()"
+          @click.left="setFirstPage()"
         >
           1
         </i-button>
 
         <!--Page Placeholder-->
         <i-button
-          v-if="previousPreviousPage > 1"
+          v-if="twoPagesBeforeCurrent > 1"
           icon="ellipsis-h"
           :class="paginationEllipsisClasses"
           disabled
@@ -124,18 +124,18 @@
 
         <!--PreviousPrevious Page-->
         <i-button
-          v-if="previousPreviousPage > 1 && page === amountOfPages"
-          :aria-label="`Goto Page ${previousPreviousPage}`"
-          @click="setPreviousPage(2)"
+          v-if="twoPagesBeforeCurrent > 1 && currentPage === amountOfPages"
+          :aria-label="`Goto Page ${twoPagesBeforeCurrent}`"
+          @click.left="setPreviousPage(2)"
         >
-          {{ previousPreviousPage }}
+          {{ twoPagesBeforeCurrent }}
         </i-button>
 
         <!--Previous Page-->
         <i-button
           v-if="previousPage > 1"
           :aria-label="`Goto Page ${previousPage}`"
-          @click="setPreviousPage()"
+          @click.left="setPreviousPage()"
         >
           {{ previousPage }}
         </i-button>
@@ -145,14 +145,14 @@
           :class="paginationCurrentClasses"
           aria-current="page"
         >
-          {{ page }}
+          {{ currentPage }}
         </i-button>
 
         <!--Next Page-->
         <i-button
           v-if="nextPage < amountOfPages"
           :aria-label="`Goto Page ${nextPage}`"
-          @click="setNextPage()"
+          @click.left="setNextPage()"
         >
           {{ nextPage }}
         </i-button>
@@ -160,16 +160,16 @@
 
         <!--NextNext Page-->
         <i-button
-          v-if="nextNextPage < amountOfPages && page === 1"
-          :aria-label="`Goto Page ${nextNextPage}`"
-          @click="setNextPage(2)"
+          v-if="twoPagesAfterCurrent < amountOfPages && currentPage === 1"
+          :aria-label="`Goto Page ${twoPagesAfterCurrent}`"
+          @click.left="setNextPage(2)"
         >
-          {{ nextNextPage }}
+          {{ twoPagesAfterCurrent }}
         </i-button>
 
         <!--Page Placeholder-->
         <i-button
-          v-if="nextNextPage < amountOfPages"
+          v-if="twoPagesAfterCurrent < amountOfPages"
           icon="ellipsis-h"
           :class="paginationEllipsisClasses"
           disabled
@@ -178,9 +178,9 @@
 
         <!--Last Page-->
         <i-button
-          v-if="page !== amountOfPages"
+          v-if="currentPage !== amountOfPages"
           :aria-label="`Goto Page ${amountOfPages}`"
-          @click="setLastPage()"
+          @click.left="setLastPage()"
         >
           {{ amountOfPages }}
         </i-button>
@@ -189,19 +189,19 @@
         <i-button
           icon="arrow-right"
           :aria-label="`Goto Page ${nextPage}`"
-          @click="setNextPage()"
+          @click.left="setNextPage()"
         ></i-button>
       </nav>
-      <nav v-if="amountOfPages >= 15">
+      <nav v-if="amountOfPages >= paginationSelectBoxThreshold">
         <!--Previous Page-->
         <i-button
           icon="arrow-left"
           :aria-label="`Goto Page ${previousPage}`"
-          @click="setPreviousPage()"
+          @click.left="setPreviousPage()"
         ></i-button>
 
         <i-select
-          v-model="page"
+          v-model="currentPage"
         >
           <i-option
             v-for="item in amountOfPages"
@@ -216,7 +216,7 @@
         <i-button
           icon="arrow-right"
           :aria-label="`Goto Page ${nextPage}`"
-          @click="setNextPage()"
+          @click.left="setNextPage()"
         ></i-button>
       </nav>
     </section>
@@ -230,9 +230,14 @@ import Icon from '../icon/icon';
 import ISelect from '../select/select';
 import IOption from '../select/option';
 
-const prefixCls = 'byx-table';
+const globalPrefix = 'byx';
+const PAGINATION_SELECT_BOX_THRESHOLD = 15;
+const PAGINATION_DEFAULT_ROWSPERPAGE = 25;
+const PAGINATION_DEFAULT_THRESHOLD = 25;
 
 const prefixConstructor = (suffix) => {
+  const prefixCls = `${globalPrefix}-table`;
+
   return suffix === '' ? prefixCls : `${prefixCls}-${suffix}`;
 };
 
@@ -308,16 +313,19 @@ export default {
   data() {
     return {
       selectedRows: [],
-      page: 1,
-      paginationRowsPerPage: this.pagination.rowsPerPage || 25,
-      paginationThreshold: this.pagination.threshold || this.pagination.rowsPerPage || 25,
+      currentPage: 1,
+      paginationRowsPerPage: this.pagination.rowsPerPage || PAGINATION_DEFAULT_ROWSPERPAGE,
+      paginationThreshold: this.pagination.threshold || this.pagination.rowsPerPage || PAGINATION_DEFAULT_THRESHOLD,
+      paginationSelectBoxThreshold: PAGINATION_SELECT_BOX_THRESHOLD,
       showSelectedWarning: false,
     };
   },
 
   computed: {
     baseClasses() {
-      return [`${prefixCls}`, {[`${prefixCls}-paginated`]: this.pagination || typeof this.pagination === 'object'}];
+      const prefix = prefixConstructor('');
+
+      return [`${prefix}`, {[`${prefix}-paginated`]: this.pagination || typeof this.pagination === 'object'}];
     },
     tableClasses() {
       const prefix = prefixConstructor('table');
@@ -366,6 +374,13 @@ export default {
     },
 
     selectAllBoxAttributes() {
+      if (this.selectedRows.length === this.rows.length) {
+        return {
+          type: 'check-square',
+          weight: 'solid',
+        };
+      }
+
       if (this.selectedRows.length > 0) {
         return {
           type: 'minus-square',
@@ -385,7 +400,7 @@ export default {
 
     rowsPaginated() {
       if (this.amountOfPages > 1) {
-        return this.rows.slice(this.previousPage * this.paginationRowsPerPage, this.page * this.paginationRowsPerPage);
+        return this.rows.slice(this.previousPage * this.paginationRowsPerPage, this.currentPage * this.paginationRowsPerPage);
       }
 
       return this.rows;
@@ -414,19 +429,19 @@ export default {
     },
 
     previousPage() {
-      return this.page - 1;
+      return this.currentPage - 1;
     },
 
     nextPage() {
-      return this.page + 1;
+      return this.currentPage + 1;
     },
 
-    previousPreviousPage() {
-      return this.page - 2;
+    twoPagesBeforeCurrent() {
+      return this.currentPage - 2;
     },
 
-    nextNextPage() {
-      return this.page + 2;
+    twoPagesAfterCurrent() {
+      return this.currentPage + 2;
     },
   },
 
@@ -436,16 +451,16 @@ export default {
 
       return [prefix, {[`${prefix}-striped`]: this.striped}, {[`${prefix}-selected`]: this.selectedRows.includes(rowId)}];
     },
-    selectRow(rowId) {
+    toggleRow(rowId) {
       const {selectedRows} = this;
       this.selectedRows = selectedRows.includes(rowId) ? selectedRows.filter((id) => id !== rowId) : [...selectedRows, rowId];
     },
-    selectAllPaginatedRows() {
+    toggleAllPaginatedRows() {
       if (this.selectedRows.length > 0) {
         this.selectedRows = [];
         this.showSelectedWarning = false;
       } else {
-        this.showSelectedWarning = this.rowsPaginated !== this.rows;
+        this.showSelectedWarning = this.rowsPaginated.length !== this.rows.length;
         this.selectedRows = this.rowsPaginated.map(({id}) => id);
       }
     },
@@ -468,23 +483,28 @@ export default {
     },
 
     setPreviousPage(amount = 1) {
-      if (this.page > 1) {
-        this.page -= amount;
+      if (this.currentPage > 1) {
+        this.setCurrentPage(this.currentPage - amount);
       }
     },
 
     setNextPage(amount = 1) {
-      if (this.page < this.amountOfPages) {
-        this.page += amount;
+      if (this.currentPage < this.amountOfPages) {
+        this.setCurrentPage(this.currentPage + amount);
       }
     },
 
     setFirstPage() {
-      this.page = 1;
+      this.setCurrentPage(1);
     },
 
     setLastPage() {
-      this.page = this.amountOfPages;
+      this.setCurrentPage(this.amountOfPages);
+    },
+
+    setCurrentPage(newPage) {
+      this.currentPage = newPage;
+      this.$emit('set-current-page', newPage);
     },
   },
 };

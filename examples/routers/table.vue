@@ -70,7 +70,7 @@ export default {
             name: 'hair-color',
             sortable: false,
             label: 'Hair Color',
-            type: 'Number',
+            type: 'String',
           },
           {
             name: 'planet',
