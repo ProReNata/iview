@@ -1,29 +1,38 @@
 import Button from './components/button';
+import Checkbox from './components/checkbox';
 import ColorPicker from './components/color-picker';
 import DatePicker from './components/date-picker';
 import Dropdown from './components/dropdown';
 import Input from './components/input';
+import InputNumber from './components/input-number';
+import Scroll from './components/scroll';
 import Radio from './components/radio';
 import Spin from './components/spin';
+import Switch from './components/switch';
 import Time from './components/time';
+import TimePicker from './components/time-picker';
 import {Select, Option} from './components/select';
 import locale from './locale/index';
 
 const components = {
     Button,
     ButtonGroup: Button.Group,
+    Checkbox,
     ColorPicker,
     DatePicker,
     Dropdown,
     DropdownItem: Dropdown.Item,
     DropdownMenu: Dropdown.Menu,
     Input,
+    InputNumber,
+    Scroll,
     Option: Option,
     Radio,
     RadioGroup: Radio.Group,
     Select,
     Spin,
     Time,
+    TimePicker,
 };
 
 const iview = {
@@ -32,6 +41,7 @@ const iview = {
     iInput: Input,
     iOption: Option,
     iSelect: Select,
+    iSwitch: Switch,
     iTime: Time
 };
 
