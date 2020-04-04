@@ -1,35 +1,18 @@
-import Vue from 'vue';
-import deepmerge from 'deepmerge';
 import isNil from 'lodash/isNil';
-import Format from './format';
-import defaultLang from './lang/zh-CN';
+import format from './format';
+import defaultLang from './lang/sv-SE';
 
-const format = Format(Vue);
-let lang = defaultLang;
-let merged = false;
-let i18nHandler = function(...args) {
-  const vuei18n = Object.getPrototypeOf(this || Vue).$t;
-
-  if (typeof vuei18n === 'function' && !!Vue.locale) {
-    if (!merged) {
-      merged = true;
-      Vue.locale(Vue.config.lang, deepmerge(lang, Vue.locale(Vue.config.lang) || {}, {clone: true}));
-    }
-
-    return vuei18n.apply(this, args);
-  }
-};
-
-export const t = function(...args) {
+const t = function(...args) {
   const [path, options] = args;
-  let value = i18nHandler.apply(this, args);
+  const array = path.split('.');
+
+  let value = array.reduce((obj, key) => obj[key], defaultLang);
 
   if (!isNil(value)) {
     return value;
   }
 
-  const array = path.split('.');
-  let current = lang;
+  let current = defaultLang;
 
   for (let i = 0, j = array.length; i < j; i++) {
     const property = array[i];
@@ -49,10 +32,4 @@ export const t = function(...args) {
   return '';
 };
 
-export const use = function(l) {
-  lang = l || lang;
-};
-
-export const i18n = function(fn) {
-  i18nHandler = fn || i18nHandler;
-};
+export default t;
