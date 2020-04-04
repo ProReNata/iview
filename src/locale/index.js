@@ -14,9 +14,6 @@ const t = function(...args) {
 
     let current = defaultLang;
 
-    const array = path.split(".");
-    let current = lang;
-
     for (let i = 0, j = array.length; i < j; i++) {
         const property = array[i];
         value = current[property];
