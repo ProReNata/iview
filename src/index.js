@@ -1,18 +1,22 @@
-import Button from './components/button';
-import Checkbox from './components/checkbox';
-import ColorPicker from './components/color-picker';
-import DatePicker from './components/date-picker';
-import Dropdown from './components/dropdown';
-import Input from './components/input';
-import InputNumber from './components/input-number';
-import Scroll from './components/scroll';
-import Radio from './components/radio';
-import Spin from './components/spin';
-import Switch from './components/switch';
-import Time from './components/time';
-import TimePicker from './components/time-picker';
-import {Select, Option} from './components/select';
-import locale from './locale/index';
+import Button from "./components/button";
+import Checkbox from "./components/checkbox";
+import ColorPicker from "./components/color-picker";
+import DatePicker from "./components/date-picker";
+import Dropdown from "./components/dropdown";
+import Input from "./components/input";
+import InputNumber from "./components/input-number";
+import Scroll from "./components/scroll";
+import Radio from "./components/radio";
+import Spin from "./components/spin";
+import Switch from "./components/switch";
+import Time from "./components/time";
+import TimePicker from "./components/time-picker";
+import Tooltip from "./components/tooltip";
+import Transfer from "./components/transfer";
+import Tree from "./components/tree";
+import Upload from "./components/upload";
+import { Row, Col } from "./components/grid";
+import { Select, Option, OptionGroup } from "./components/select";
 
 const components = {
     Button,
@@ -32,7 +36,7 @@ const components = {
     Select,
     Spin,
     Time,
-    TimePicker,
+    TimePicker
 };
 
 const iview = {
@@ -45,38 +49,33 @@ const iview = {
     iTime: Time
 };
 
-const install = function(Vue, opts = {}) {
-    if (install.installed) return;
-    locale.use(opts.locale);
-    locale.i18n(opts.i18n);
+const install = function(Vue) {
+    if (install.installed) {
+        return;
+    }
 
     Object.keys(iview).forEach(key => {
         Vue.component(key, iview[key]);
     });
 
-    Vue.prototype.$IVIEW = {
-        size: opts.size || '',
-        transfer: 'transfer' in opts ? opts.transfer : ''
-    };
+    Vue.prototype.$Loading = LoadingBar;
+    Vue.prototype.$Message = Message;
+    Vue.prototype.$Modal = Modal;
+    Vue.prototype.$Notice = Notice;
+    Vue.prototype.$Spin = Spin;
 };
 
 // auto install
-if (typeof window !== 'undefined' && window.Vue) {
+if (typeof window !== "undefined" && window.Vue) {
     install(window.Vue);
 }
 
 const API = {
-    version: process.env.VERSION, // eslint-disable-line no-undef
-    locale: locale.use,
-    i18n: locale.i18n,
+    ...components,
+    Circle,
     install,
-    ...components
+    Switch,
+    version: process.env.VERSION
 };
 
-API.lang = (code) => {
-    const langObject = window['iview/locale'].default;
-    if (code === langObject.i.locale) locale.use(langObject);
-    else console.log(`The ${code} language pack is not loaded.`); // eslint-disable-line no-console
-};
-
-module.exports.default = module.exports = API;   // eslint-disable-line no-undef
+export default API;
