@@ -39,7 +39,7 @@
     "security-fix": "npm run security -- --fix",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
-    "prepare": "npm run dist"
+    "prepare": "echo skipping prepare"
   },
   "repository": {
     "type": "git",
